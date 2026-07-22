@@ -1,0 +1,7 @@
+node_modules/
+dist/
+config.json
+.brobot-data/
+.bot-data/
+*.log
+.DS_Store

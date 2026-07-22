@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0c100d">
+    <meta name="description" content="BroBot local control room">
+    <title>BroBot Control Room</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to dashboard</a>
+
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="grass-block" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div>
+          <p class="eyebrow">LOCAL OPERATOR CONSOLE</p>
+          <h1>BroBot <span>Control Room</span></h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="sync-state" id="sync-state" role="status" aria-live="polite">
+          <span class="sync-dot"></span>
+          <span id="sync-label">Connecting locally</span>
+        </div>
+        <button class="icon-button" id="access-button" type="button" title="Set dashboard access key" aria-label="Set dashboard access key">
+          <span aria-hidden="true">⌁</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-shell">
+      <section class="world-banner panel" aria-labelledby="world-title">
+        <div class="world-identity">
+          <div class="bot-avatar" aria-hidden="true">
+            <span class="eye eye-left"></span>
+            <span class="eye eye-right"></span>
+          </div>
+          <div>
+            <div class="connection-row">
+              <span class="status-chip offline" id="connection-chip">
+                <span class="status-chip-dot"></span>
+                <span id="connection-label">OFFLINE</span>
+              </span>
+              <span class="muted" id="version-label">Waiting for bot</span>
+            </div>
+            <h2 id="world-title">BroBot</h2>
+            <p class="server-address" id="server-address">127.0.0.1:25565</p>
+          </div>
+        </div>
+
+        <div class="world-meta">
+          <div class="meta-stat">
+            <span class="meta-label">Bot uptime</span>
+            <strong id="uptime-label">00:00:00</strong>
+          </div>
+          <div class="meta-divider" aria-hidden="true"></div>
+          <div class="meta-stat">
+            <span class="meta-label">Dimension</span>
+            <strong id="dimension-label">Unknown</strong>
+          </div>
+          <div class="meta-divider" aria-hidden="true"></div>
+          <div class="meta-stat">
+            <span class="meta-label">Mode</span>
+            <strong id="gamemode-label">—</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="primary-grid" aria-label="Bot status overview">
+        <article class="panel vital-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="kicker">SURVIVAL</p>
+              <h2>Vitals</h2>
+            </div>
+            <span class="panel-glyph heart-glyph" aria-hidden="true">♥</span>
+          </div>
+
+          <div class="vital-row">
+            <div class="vital-copy">
+              <span>Health</span>
+              <strong><span id="health-value">—</span><small> / 20</small></strong>
+            </div>
+            <div class="segment-bar health-bar" id="health-bar" role="progressbar" aria-label="Health" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"></div>
+          </div>
+
+          <div class="vital-row">
+            <div class="vital-copy">
+              <span>Food</span>
+              <strong><span id="food-value">—</span><small> / 20</small></strong>
+            </div>
+            <div class="segment-bar food-bar" id="food-bar" role="progressbar" aria-label="Food" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"></div>
+          </div>
+
+          <div class="substats">
+            <div>
+              <span>Oxygen</span>
+              <strong id="oxygen-value">—</strong>
+            </div>
+            <div>
+              <span>XP level</span>
+              <strong id="experience-value">—</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel coordinate-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="kicker">LOCATION</p>
+              <h2>Coordinates</h2>
+            </div>
+            <span class="compass" aria-hidden="true">N</span>
+          </div>
+
+          <div class="coordinates" aria-label="Current coordinates">
+            <div class="coordinate x-coordinate">
+              <span>X</span>
+              <strong id="position-x">—</strong>
+            </div>
+            <div class="coordinate y-coordinate">
+              <span>Y</span>
+              <strong id="position-y">—</strong>
+            </div>
+            <div class="coordinate z-coordinate">
+              <span>Z</span>
+              <strong id="position-z">—</strong>
+            </div>
+          </div>
+          <p class="location-note" id="position-note">Position appears after the bot spawns.</p>
+        </article>
+
+        <article class="panel task-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="kicker">AUTOMATION</p>
+              <h2>Current task</h2>
+            </div>
+            <span class="task-state idle" id="task-state">IDLE</span>
+          </div>
+
+          <div class="task-empty" id="task-empty">
+            <div class="task-cube" aria-hidden="true"></div>
+            <div>
+              <strong>Ready for orders</strong>
+              <p>Send a command below to begin.</p>
+            </div>
+          </div>
+
+          <div class="task-active" id="task-active" hidden>
+            <p class="task-label" id="task-label">No active task</p>
+            <div class="task-meta">
+              <span>Task <strong id="task-id">#—</strong></span>
+              <span>Elapsed <strong id="task-elapsed">00:00</strong></span>
+            </div>
+            <div class="activity-track" aria-hidden="true"><span></span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="workspace-grid">
+        <article class="panel inventory-panel">
+          <div class="panel-heading inventory-heading">
+            <div>
+              <p class="kicker">PACK CONTENTS</p>
+              <h2>Inventory <span class="count-badge" id="inventory-count">0 items</span></h2>
+            </div>
+            <label class="search-field">
+              <span class="sr-only">Filter inventory</span>
+              <span aria-hidden="true">⌕</span>
+              <input id="inventory-search" type="search" placeholder="Filter items" autocomplete="off">
+            </label>
+          </div>
+
+          <div class="inventory-grid" id="inventory-grid" aria-live="polite"></div>
+          <div class="empty-state" id="inventory-empty">
+            <span aria-hidden="true">□</span>
+            <strong>Inventory is empty</strong>
+            <p>Collected blocks and tools will appear here.</p>
+          </div>
+        </article>
+
+        <aside class="panel players-panel" aria-labelledby="players-title">
+          <div class="panel-heading">
+            <div>
+              <p class="kicker">SERVER</p>
+              <h2 id="players-title">Online players</h2>
+            </div>
+            <span class="count-badge" id="player-count">0 online</span>
+          </div>
+          <div class="player-list" id="player-list"></div>
+          <div class="empty-state compact" id="players-empty">
+            <span aria-hidden="true">◇</span>
+            <strong>No other players</strong>
+            <p>The server is quiet right now.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel command-panel" aria-labelledby="command-title">
+        <div class="command-intro">
+          <div>
+            <p class="kicker">OPERATOR INPUT</p>
+            <h2 id="command-title">Command station</h2>
+          </div>
+          <div class="shortcut-list" aria-label="Command suggestions">
+            <button type="button" data-fill-command="status">status</button>
+            <button type="button" data-fill-command="help">help</button>
+            <button type="button" data-fill-command="stop">stop</button>
+          </div>
+        </div>
+
+        <form class="command-form" id="command-form">
+          <span class="prompt-mark" aria-hidden="true">&gt;</span>
+          <label class="sr-only" for="command-input">Bot command</label>
+          <input id="command-input" name="command" type="text" maxlength="1000" placeholder="Try “help” to see everything the bot can do…" autocomplete="off" spellcheck="false">
+          <kbd>⌘ K</kbd>
+          <button id="command-submit" type="submit">
+            <span>Run command</span>
+            <span aria-hidden="true">↵</span>
+          </button>
+        </form>
+        <div class="command-feedback" id="command-feedback" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="panel console-panel" aria-labelledby="console-title">
+        <div class="panel-heading console-heading">
+          <div>
+            <p class="kicker">LIVE FEED</p>
+            <h2 id="console-title">Activity log</h2>
+          </div>
+          <div class="console-controls">
+            <div class="level-filters" aria-label="Filter logs by level">
+              <button class="active" type="button" data-log-level="all">All</button>
+              <button type="button" data-log-level="info">Info</button>
+              <button type="button" data-log-level="warn">Warn</button>
+              <button type="button" data-log-level="error">Error</button>
+            </div>
+            <button class="pause-button" id="pause-logs" type="button" aria-pressed="false">
+              <span aria-hidden="true">Ⅱ</span>
+              <span>Pause</span>
+            </button>
+          </div>
+        </div>
+        <div class="console" id="console" role="log" aria-live="polite" aria-relevant="additions">
+          <div class="console-placeholder" id="console-placeholder">
+            <span class="terminal-caret" aria-hidden="true"></span>
+            Waiting for local activity…
+          </div>
+        </div>
+        <div class="console-footer">
+          <span><span class="live-pulse" aria-hidden="true"></span> Local event stream</span>
+          <span id="log-count">0 events</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Runs entirely on this machine. No cloud connection required.</p>
+      <p id="last-updated">Waiting for first update</p>
+    </footer>
+
+    <dialog class="access-dialog" id="access-dialog">
+      <form method="dialog" id="access-form">
+        <div class="dialog-icon" aria-hidden="true">⌁</div>
+        <p class="kicker">SECURE LOCAL ACCESS</p>
+        <h2>Dashboard access key</h2>
+        <p id="access-copy">This dashboard requires the bearer token from your local configuration.</p>
+        <label for="access-token">Access key</label>
+        <input id="access-token" type="password" autocomplete="current-password" placeholder="Paste dashboard.authToken">
+        <p class="field-error" id="access-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="access-cancel" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Unlock dashboard</button>
+        </div>
+        <p class="privacy-note">Stored only in this browser on this machine.</p>
+      </form>
+    </dialog>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>

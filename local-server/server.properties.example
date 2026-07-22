@@ -1,0 +1,52 @@
+# BroBot — loopback-only Minecraft: Java Edition server example
+#
+# Copy this file to server.properties only after the server has generated its
+# own files. This example deliberately does not include eula.txt and does not
+# accept the Minecraft EULA for you.
+
+# Bind only to this computer. Do not make an offline-mode server internet-facing.
+server-ip=127.0.0.1
+server-port=25565
+online-mode=false
+enforce-secure-profile=false
+
+# Reduce accidental joins by requiring an explicitly listed name. In offline
+# mode this does not prove identity: a reachable client can claim a listed name.
+white-list=true
+enforce-whitelist=true
+max-players=4
+
+# Bot-friendly survival defaults. spawn-protection=0 lets non-op players and
+# the bot modify blocks near world spawn; use a larger value if you prefer.
+gamemode=survival
+force-gamemode=false
+difficulty=normal
+hardcore=false
+pvp=false
+spawn-protection=0
+allow-flight=false
+
+# Conservative local resource use.
+view-distance=10
+simulation-distance=8
+max-tick-time=60000
+network-compression-threshold=256
+
+# Do not expose extra administration endpoints.
+enable-rcon=false
+enable-query=false
+enable-command-block=false
+broadcast-rcon-to-ops=false
+
+# World and status settings.
+level-name=world
+level-seed=
+motd=BroBot - local offline-mode sandbox
+enable-status=true
+hide-online-players=false
+
+# Keep the standard server safety and data-integrity behavior.
+allow-nether=true
+generate-structures=true
+sync-chunk-writes=true
+rate-limit=0
