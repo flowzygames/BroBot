@@ -1,50 +1,27 @@
 {
   "name": "brobot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "A local-first, offline-capable Minecraft Java bot with automation, commands, and a dashboard.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flowzygames/BroBot.git"
-  },
-  "homepage": "https://github.com/flowzygames/BroBot#readme",
-  "bugs": {
-    "url": "https://github.com/flowzygames/BroBot/issues"
-  },
-  "keywords": [
-    "minecraft",
-    "mineflayer",
-    "automation",
-    "bot",
-    "typescript",
-    "local-first"
-  ],
-  "main": "dist/src/index.js",
+  "description": "A Minecraft Java companion with a bounded OpenAI agent and local game controls",
+  "engines": { "node": ">=22.9" },
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "dev:watch": "tsx watch src/index.ts",
-    "start": "node dist/src/index.js",
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
-    "check": "npm run typecheck && npm run test"
-  },
-  "engines": {
-    "node": ">=22"
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "play": "node --env-file-if-exists=.env scripts/play.js",
+    "setup": "node scripts/setup.js",
+    "server:setup": "node --env-file-if-exists=.env scripts/server.js setup",
+    "server:update-bridge": "node --env-file-if-exists=.env scripts/server.js update-bridge",
+    "server": "node --env-file-if-exists=.env scripts/server.js start",
+    "doctor": "node --env-file-if-exists=.env scripts/doctor.js",
+    "test": "node --test test/*.test.js",
+    "test:live": "node --env-file-if-exists=.env scripts/smoke.js",
+    "check": "node scripts/check.js"
   },
   "dependencies": {
-    "mineflayer": "4.37.1",
-    "mineflayer-auto-eat": "5.0.3",
+    "mineflayer": "4.39.0",
     "mineflayer-pathfinder": "2.4.5",
     "mineflayer-tool": "1.2.0",
+    "openai": "7.23.0",
     "vec3": "0.1.10"
-  },
-  "devDependencies": {
-    "@types/node": "^24.0.0",
-    "tsx": "^4.20.0",
-    "typescript": "^5.8.0",
-    "vitest": "^3.2.0"
   }
 }

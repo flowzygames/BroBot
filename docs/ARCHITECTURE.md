@@ -1,175 +1,76 @@
 # Architecture
 
-BroBot is one local Node.js process controlling one Minecraft: Java Edition client. It does not contain an LLM, call a cloud service, or require a hosted control plane. Mineflayer speaks the Minecraft protocol directly to the configured server; a small HTTP server and terminal loop provide local controls.
-
-## System map
+BroBot has one physical Minecraft client, a local dashboard, and an optional OpenAI planner. The planner receives a fresh observation and the recent action results, chooses one tool, and then waits for that tool's actual result before making another decision.
 
 ```text
-Minecraft chat/whisper ─┐
-Terminal command line ──┼─> CommandRouter ─> TaskManager ─> domain services
-Local dashboard/API ────┘         │               │              │
-                                  │               │              ├─ navigation
-                                  │               │              ├─ resources/inventory
-                                  │               │              ├─ farming/building
-                                  │               │              └─ combat
-                                  │               │
-                                  │               └─ cancellation + safety timeout
-                                  │
-                                  ├─ authorization by command source
-                                  └─ validated parser and bounded flags
-
-                       BotRuntime / Mineflayer
-                                  │
-              local Minecraft: Java Edition server
-
-StateStore ── waypoints, routes, last death
-Logger ────── terminal output + bounded dashboard log buffer
+Bedrock client ── Geyser + ViaVersion ──┐
+Java 1.21.8 client ────────────────────┼── Paper 1.21.8 local world
+                                      └── Mineflayer / BroBot
+                                             │
+                            dashboard / terminal / owner chat
+                                             │
+                                      serialized actions
+                                             │
+                                   optional OpenAI planner
 ```
 
-The process is deliberately layered. Command handlers translate a human request into a bounded service call. Services own game mechanics. `BotRuntime` owns the Mineflayer connection and plugins. This keeps chat authorization, cancellation, and configuration separate from block- and entity-level work.
+## Modules
 
-## Startup and shutdown
+| File | Responsibility |
+| --- | --- |
+| `src/runtime.js` | Connections, owner authorization, command routing, snapshots, low-health pause, idle eating |
+| `src/brain.js` | Responses API requests, one decision at a time, recent history, budget accounting, pause/completion state |
+| `src/runner.js` | Exclusive action lock, deadlines, stop signal, draining before reuse |
+| `src/actions.js` | Ordinary Mineflayer navigation, inventory, gathering, building, and combat operations |
+| `src/progression.js` | Portal operations, observed eye bearings, bow trajectory calculations, bounded End combat |
+| `src/memory.js` | Atomic JSON saves, waypoints, notes, usage, and rotated event logs |
+| `src/commands.js` | Direct command parsing and owner-only prefixed in-game commands |
+| `src/web.js` | Loopback HTTP dashboard, bounded JSON requests, origin/host checks and per-process request token |
+| `scripts/server.js` | Versioned downloads, hashes, Java discovery/install, EULA, local server configuration |
+| `scripts/play.js` | Combined server/bot lifecycle and graceful world shutdown |
+| `scripts/smoke.js` | Isolated live Minecraft fixture tests |
 
-At startup, the entry point:
+## Planning and execution
 
-1. Loads built-in defaults, merges the optional JSON configuration, applies supported environment-variable overrides, and validates the result.
-2. Resolves the data directory relative to the config file (or the current directory when no config file is supplied) and loads persisted state.
-3. Creates the logger, runtime, task manager, command router, dashboard, and terminal command loop.
-4. Starts the dashboard when enabled, then begins the Mineflayer connection.
-5. On `SIGINT`/`SIGTERM`, cancels active work, clears physical controls, disconnects the bot, stops the dashboard, and closes the terminal input.
+The model cannot run arbitrary code, shell commands, or Minecraft operator commands. Its action vocabulary is the same inventory-backed tool set exposed in the dashboard. Tools use strict Responses function schemas; all schema properties are required, with nullable values for optional choices where appropriate.
 
-Connection loss is separate from process shutdown. When reconnect is enabled, `BotRuntime` uses capped exponential backoff. A `maxAttempts` value of `0` means unlimited attempts. A successful spawn resets the attempt counter. A pre-spawn network attempt is cancelled after 30 seconds so a stalled TCP/status/login path cannot hold the process indefinitely.
+Each request includes the owner's goal, current world snapshot, and up to eight recent action results. Requests use `store: false` and disable parallel tool calls. A response containing multiple function calls, malformed arguments, or an incomplete response status is rejected before game actions run. Two identical failed actions are recorded; another unchanged repetition pauses the goal.
 
-## Configuration boundary
+Direct commands skip model reasoning. Natural-language goals require an API key. An explicit `goal` requires a tool decision until the planner finishes or reports a blocker; it cannot silently complete after a planning sentence. `ask` allows an ordinary conversation response. No API request is sent merely because the bot starts.
 
-`src/config.ts` owns defaults, deep merging, validation, and environment overrides. Unknown JSON properties are not used by current code, so spelling matters. The supported environment overrides are:
+`ActionRunner` holds the physical-action lock until the underlying operation settles. A stop aborts its signal and releases movement, mining, item use, and windows. It does not pretend an inventory transaction vanished instantaneously. New physical work must wait while the old transaction drains. Death and disconnection stop the goal; reconnecting does not silently resume it.
 
-- `MC_HOST`
-- `MC_PORT`
-- `MC_USERNAME`
-- `MC_AUTH` (`offline` or `microsoft`)
-- `DASHBOARD_TOKEN`
+Movement avoids automatic digging and scaffold placement. Construction is explicit. Actions inspect actual inventory, loaded blocks, coordinates, and server updates. Collection distinguishes mined blocks from items actually obtained. A returned partial result does not mean the full request succeeded.
 
-Numeric limits are validated before the bot starts. Important limits include task duration, gather count, build size, search radius, and movement behavior. See `config.example.json` for the complete shape.
+## Progression details
 
-## Minecraft runtime and plugins
+`observeProgression(snapshot)` derives preparation guidance from observed equipment and inventory. It always labels full-game completion unverified. Inventory cannot prove that a fortress was explored or the dragon was defeated.
 
-`src/bot-runtime.ts` creates the Mineflayer bot and loads these pinned plugins:
+- `build_nether_portal`: validates a clear, supported 4×5 frame footprint, uses up to 14 owned obsidian, ignites with flint and steel, then checks for active portal blocks. A failed attempt reports partial construction; existing obsidian can be reused.
+- `enter_portal`: finds an active nearby portal and waits for the dimension to change. End portals have no solid walking surface, so the bot approaches a clear, supported rim and takes a bounded step into the verified opening. Walking near a portal is insufficient confirmation.
+- `locate_stronghold`: throws one owned eye, captures the new eye entity's movement, and persists a bearing. Separated throws feed a least-squares ray intersection. Nearly parallel, inconsistent, or backward intersections are refused. The estimate is a stronghold search location, not a portal room coordinate. Reset old bearings after changing worlds.
+- `activate_end_portal`: identifies all 12 frames with inward-facing orientation before spending eyes. It checks inventory sufficiency, approaches from outside the opening, clicks visible top faces, observes eye state updates, and checks for active portal blocks.
+- `shoot`: fully charges a bow, simulates an arrow path with drag and gravity, rejects blocked or unloaded trajectories, and reports observed results. It refuses player targets and shooting nearby explosive crystals.
+- `fight_dragon`: bounded crystal shooting and perched-body melee, with food/health checks and dragon-breath avoidance. Multipart melee is restricted to Java 1.21.8. The body-part ID offset was checked against the actual server bytecode. Protected crystals can still require deliberate climbing and bar removal before this controller can continue.
 
-| Component | Responsibility | Important caveat |
-|---|---|---|
-| `mineflayer` 4.37.1 | Protocol, world/entity state, inventory, chat, crafting, windows | The negotiated server version must be supported. This pinned release advertises Java Edition 1.8.8 through 1.21.11. |
-| `mineflayer-pathfinder` | Route planning and movement goals | It only knows loaded world data and can fail on doors, hazards, unusual blocks, unloaded chunks, or a changing world. |
-| `mineflayer-tool` | Chooses an appropriate carried tool | It cannot use an item the bot does not possess and does not make a dangerous block safe to mine. |
-| Local armor scorer | Equips strong carried armor without a background plugin | Scores armor points, toughness, protection, and durability; rejects Curse of Binding and does not auto-equip elytra. |
-| `mineflayer-auto-eat` | Hunger-triggered eating below 15 food points | The runtime bans several risky foods, including raw chicken, and disables delayed return-to-old-item behavior; food can remain selected after eating. |
+Trajectory calculations are approximations. Bow spread, target movement, latency, server conditions, and geometry can cause misses. The controller reports attacks sent separately from observed entity death. A missing dragon is not accepted as proof of victory.
 
-BroBot does not use `mineflayer-collectblock`. Its resource worker selects a bounded set of loaded targets, paths without ordinary route digging, revalidates the exact block, checks flow/falling-block and configured protections, equips a carried harvesting tool, calls core Mineflayer digging, and follows only drop entities observed beside that break for a bounded pickup window. It requires an empty inventory slot before each mining or farm-harvest break so a full inventory does not knowingly strand new drops. Veins use a bounded in-process flood search over loaded blocks.
+## State and budgets
 
-General pathfinding disables parkour, one-by-one towers, scaffolding placement, and ordinary route digging. Source and legacy flowing lava are avoided; source/flowing water can also be avoided. The configured `protectedBlocks` are added to the pathfinder's cannot-break set (including every colored shulker variant when generic `shulker_box` is listed), but this is a name-based guard, not a claim that every valuable block or modded container is automatically protected. Protection matching treats `furnace`/`lit_furnace` and `spawner`/`mob_spawner` as equivalent legacy names. Bed and wood helpers similarly recognize legacy `bed`, `log`, and `log2` registries when present.
+`.brobot/memory.json` stores notes, waypoints by dimension, owner name, recent goal status, eye bearings, and cumulative API counters. Writes use a temporary file followed by rename. The current world is the server's `.server/world` data; bot memory is not a world save and should not be copied between unrelated worlds without reviewing its waypoints and bearings.
 
-Mineflayer's connection is supplied a custom direct TCP connector so every socket, including the status client used during `version: "auto"`, can be cancelled. Consequently, `minecraft.host` and `minecraft.port` must be the actual endpoint: ordinary A/AAAA hostname resolution works, but Minecraft DNS SRV service discovery is deliberately skipped and SRV-only domains are not resolved.
+Before a request, the planner reserves input/output allowances. Successful responses reconcile the allowance using API-reported token usage. Failed or cancelled requests retain their reservation. Limits survive restarts and are reset only through an explicit user action. Token estimates and cached-input pricing mean these counters should not be treated as an exact bill.
 
-All Minecraft identifiers are resolved through the registry for the connected version. A newer server can introduce protocol or registry behavior that the pinned stack does not understand even if the TCP connection succeeds.
+The event journal rotates around 5 MB. It contains game observations and conversations; the runtime redacts its configured API key from emitted logs. `.env`, `.brobot`, `.server`, and dependencies are ignored by Git.
 
-The current production audit (`npm audit --omit=dev`) reports 8 moderate transitive findings, no high/critical findings, and no current non-breaking fix. The root is `uuid` through `prismarine-auth`/`minecraft-protocol`, plus Mineflayer-ecosystem packages inheriting the finding. Do not use `npm audit fix --force`; follow upstream, retest deliberate dependency upgrades, and retain the loopback-only network boundary.
+## Local networking
 
-## Command path and trust model
+The prepared Java server, Bedrock bridge, and dashboard bind to `127.0.0.1`. Java/offline authentication is intentional for this private same-computer setup. This configuration is not a public-server deployment recipe. Owner names are a local control convenience, not an authentication substitute for an internet-exposed offline-mode server.
 
-Every input becomes the same `ParsedCommand` and is executed by the same router:
+Geyser translates Bedrock clients onto the Java server, and ViaVersion handles the bridge's Java protocol compatibility. A successful UDP status response verifies that Geyser is listening and advertises a Bedrock protocol; it does not verify every client login or gameplay feature.
 
-- Terminal input is source `console` and needs no command prefix.
-- Dashboard/API input is source `dashboard` and needs no command prefix.
-- In-game messages are source `chat`; the application removes the configured one-character prefix before routing.
+Bedrock login still requires a signed-in Microsoft/Xbox account. Java offline mode does not turn off Geyser's Bedrock identity checks. A credential-free headless Bedrock client reached this authentication gate and was rejected as expected; its failure to spawn does not establish gameplay compatibility.
 
-The parser supports single/double quotes, backslash escaping, `--flag value`, and `--flag=value`. It rejects duplicate or malformed flags, control characters, and commands over 1,000 characters. Individual handlers reject unknown flags and bound numeric arguments.
+## Extension boundaries
 
-Console and dashboard callers are treated as local operators. Chat callers may use commands named in `commands.publicCommands`; all other non-local commands require a case-insensitive username match in `commands.allowlist`. `localOnly` commands are never accepted from chat.
-
-This is an authorization convenience, not identity security on an offline-mode server. With `online-mode=false`, the server does not prove that a connection owns its username. Anyone who can reach that server can claim an allowlisted name. The safe default is therefore to bind the game server and dashboard to `127.0.0.1`. If remote players are required, use authenticated Minecraft mode or a separately secured network and re-evaluate every trust assumption.
-
-## Task and cancellation model
-
-Movement, mining, fighting, farming, building, transfers, crafting, smelting, and similar physical work run through a single `TaskManager`.
-
-- Only one managed task runs at a time.
-- A second action is rejected with `TaskBusyError` unless it accepts `--replace` and that flag is supplied.
-- Replacement first aborts the old task and waits for its promise to settle before beginning the new worker.
-- Each task receives an `AbortSignal`, `checkpoint()`, and abort-aware `sleep()`.
-- `safety.maxTaskSeconds` creates a hard wall-clock cancellation request.
-- `stop` aborts the task and calls runtime cleanup: clear the pathfinder goal, stop digging, clear controls, deactivate the held item, and close an open window.
-
-Cancellation is cooperative. A network packet, plugin operation, or server response already in flight may finish before cleanup is observed. Treat `stop` as rapid best effort, verify the bot's state, and disconnect or stop the server if the physical outcome is safety-critical.
-
-## Domain services
-
-### Navigation
-
-Navigation validates dimensions, uses near/dynamic/avoid goals, and provides coordinate travel, player following, patrols, bounded wandering, block location, and fleeing. Commands cannot path to an unloaded world as though it were a global map. Saved coordinates preserve the dimension so accidental cross-dimension routing is rejected.
-
-### Resources and inventory
-
-Resource work validates registry names, count/radius limits, digging policy, protected blocks, health, empty-slot capacity before breaks, and available recipes or windows. It covers direct bounded block and vein mining, dropped-item pickup, recipe inspection, crafting, furnace smelting, and fishing. Inventory work groups slots, equips/holds/eats, drops or gives items, and uses the nearest supported container for inspection and transfers.
-
-These services are conservative rather than transactional. Minecraft provides no database rollback: if a task is cancelled after mining three of five blocks or depositing half a stack, those completed world changes remain.
-
-### Farming and building
-
-Farming scans known vanilla crop definitions, checks growth state, requires an empty slot before each break, directly digs mature crops, follows nearby observed drops, and replants when possible. Building first generates a bounded plan for a block, floor, wall, or hollow/solid box; it checks inventory, replaceability, protected blocks, distance, and placement support as it executes. Farming and building both stop at 6 health or lower.
-
-Plans depend on the current loaded snapshot. Another player, gravity, fluids, falling blocks, entity collision, claims plugins, spawn protection, or a server-side rollback can change the result after preflight.
-
-### Combat
-
-Combat filters and summarizes nearby entities, supports explicit mob attacks/hunts, guards against a conservative hostile-name set, and can flee. It is implemented with core Mineflayer attacks plus pathfinder rather than a shared-listener combat plugin: the service selects a carried sword/axe, bounds chase distance, aborts pursuit/attacks at low health, stops after 15 seconds without pathing progress, and enforces optional guard leashes. Low-health abort does not itself find shelter. Player attack requires both a local control source and explicit PvP configuration. Entity detection is limited to what the server has sent to the client.
-
-## Dashboard
-
-`src/dashboard.ts` is a dependency-free Node HTTP server serving static files from `public/` and four JSON endpoints:
-
-| Endpoint | Method | Purpose |
-|---|---|---|
-| `/api/health` | `GET` | Dashboard process health and uptime |
-| `/api/status` | `GET` | Bot status, task, players, and inventory |
-| `/api/logs?after=<id>&limit=<n>` | `GET` | Bounded in-memory log polling |
-| `/api/command` | `POST` | Execute `{ "command": "status" }` through the router |
-
-Static assets are public so the browser can display its token prompt. API routes require `Authorization: Bearer <token>` whenever `dashboard.authToken` is set. With an empty token, API requests are accepted only through a loopback hostname. A non-loopback bind requires at least a 32-character token, and failed authentication is rate-limited per remote address. Security headers, request-size limits, method checks, and JSON validation reduce accidental exposure; they do not turn this into an internet-facing administration product.
-
-## State and logs
-
-`StateStore` persists `.brobot-data/state.json` by default. It stores:
-
-- case-normalized waypoints;
-- named patrol routes as coordinate arrays;
-- the last observed bot death position;
-- an update timestamp.
-
-Writes are serialized and use a temporary file followed by rename. Newly written state uses owner-only mode where the platform supports POSIX permissions. Do not edit the file while the process is running; an in-memory state update can overwrite manual edits.
-
-The logger writes at or above the configured level to the terminal and retains up to `logging.maxEntries` entries in memory for dashboard polling. It is not a rotating logfile and is cleared when the process exits.
-
-## Extending the bot
-
-For a new capability:
-
-1. Put game mechanics in a service under `src/services/` and accept a `TaskContext` for physical or long-running work.
-2. Add cancellation checkpoints before and after important Mineflayer/plugin calls and inside loops.
-3. Enforce configuration limits and registry validation in the service even when the command handler already validates input.
-4. Register a small command definition in `src/commands/register.ts`, with exact usage, allowed flags, source restrictions, and spawn requirements.
-5. Add parser/service tests and run `npm run check`.
-6. Update `docs/COMMANDS.md` and any affected safety notes.
-
-Avoid calling a new capability “safe” merely because its normal path is bounded. Document partial completion, server-side permission failures, version dependence, and what cancellation can leave behind.
-
-## Deliberate non-goals
-
-- Bedrock Edition and Bedrock protocol bridges
-- bot farms or multi-account orchestration
-- bypassing authentication, anti-cheat, claims, bans, or server rules
-- a global world map or guaranteed route completion
-- autonomous goals chosen by a cloud model
-- internet exposure of the offline-mode server or dashboard
-- redistributing Minecraft or Paper server jars
-
-Use the bot only on a world/server you own or where the operator permits automation.
+A reliable fresh-world completion agent still requires repeated survival runs, obstacle-specific recovery, long-range exploration, fortress and stronghold strategies, and robust crystal-cage handling. New skills should have bounded scope, explicit cancellation, clear failure results, and real postcondition checks. A stronger model alone cannot repair a missing physical capability or a false success signal.
