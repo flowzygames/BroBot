@@ -27,10 +27,12 @@ test('setup enforces localhost and preserves the existing world and user setting
   assert.equal((text.match(/^server-ip=/gm) || []).length, 1);
   assert.match(text, /^server-port=25577$/m);
   assert.match(text, /^enable-rcon=false$/m);
+  assert.match(text, /^online-mode=false$/m);
   const geyser = await readFile(join(dir, 'plugins/Geyser-Spigot/config.yml'), 'utf8');
   assert.match(geyser, /address: 127\.0\.0\.1/);
   assert.match(geyser, /port: 19144/);
   assert.match(geyser, /auth-type: offline/);
+  assert.match(geyser, /^advanced:\n  bedrock:\n    validate-bedrock-login: false\n  java:\n    use-direct-connection: true/m);
 });
 
 test('EULA gate rejects unattended unaccepted setup without writing acceptance', async t => {

@@ -27,7 +27,7 @@ Join the world from Minecraft:
 | Minecraft for Windows / Bedrock | Play → Servers → Add Server; name `BroBot`, address `127.0.0.1`, port `19132` |
 | Minecraft Java | Use a **1.21.8** installation, then Multiplayer → Direct Connection → `127.0.0.1:25565` |
 
-For Bedrock, sign into your Microsoft/Xbox account in Minecraft. Geyser requires that Bedrock login; a separate Java account is not needed for this local offline-mode bridge.
+The local server accepts Bedrock connections **without a Microsoft/Xbox sign-in**, and BroBot does not need an account. Setup disables Geyser's Bedrock login validation as well as Java authentication, and keeps both listeners bound to `127.0.0.1`. You still need your installed, licensed Minecraft client. Client launch and signed-out menu behavior are separate from server authentication; see [validation details](docs/VALIDATION.md).
 
 After joining, set **Your name on this server** in the dashboard. Use the connected name shown there; a Bedrock name may differ from your gamertag. Then try `follow me` or `come here` in the dashboard, terminal, or `!bro follow me` in Minecraft chat.
 
@@ -45,7 +45,7 @@ Run `npm run doctor` while the server is running. It checks Java, the Java TCP p
 CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.MinecraftUWP_8wekyb3d8bbwe"
 ```
 
-This permits the Windows app to reach a server on the same computer. See [Geyser's connection guide](https://geysermc.org/wiki/geyser/fixing-unable-to-connect-to-world/). If Minecraft reports that you must log into Xbox, sign into the game's account first. Validation reached that authentication check with a headless test client; it did not operate your Minecraft client UI.
+This permits the Windows app to reach a server on the same computer. See [Geyser's connection guide](https://geysermc.org/wiki/geyser/fixing-unable-to-connect-to-world/). If the server disconnects you with “Please log into Xbox to join this server,” close BroBot and run `npm run server:setup`, then `npm run play` to apply the account-free configuration. The generated Geyser configuration has `advanced.bedrock.validate-bedrock-login: false`. A sign-in prompt in Minecraft's own menu, before connecting, is a separate client limitation.
 
 If Bedrock updates and reports an outdated server, close BroBot first, then run `npm run server:update-bridge` followed by `npm run play`. This refreshes the bridge downloads and verifies their published checksums while keeping the Java world on 1.21.8. Check [validation limits](docs/VALIDATION.md) before assuming a newly updated client has been tested.
 

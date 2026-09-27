@@ -69,7 +69,7 @@ The prepared Java server, Bedrock bridge, and dashboard bind to `127.0.0.1`. Jav
 
 Geyser translates Bedrock clients onto the Java server, and ViaVersion handles the bridge's Java protocol compatibility. A successful UDP status response verifies that Geyser is listening and advertises a Bedrock protocol; it does not verify every client login or gameplay feature.
 
-Bedrock login still requires a signed-in Microsoft/Xbox account. Java offline mode does not turn off Geyser's Bedrock identity checks. A credential-free headless Bedrock client reached this authentication gate and was rejected as expected; its failure to spawn does not establish gameplay compatibility.
+Account-free local play requires both Java offline mode and Geyser's `advanced.bedrock.validate-bedrock-login: false`. Setup writes both settings while forcing the two game listeners onto `127.0.0.1`. Java offline mode alone does not turn off the Bedrock identity check. This uses Geyser's existing configuration option, with no plugin patch or stored Microsoft credentials. Player names are local identities, so the configured owner identifies a local player rather than a verified Xbox account. The installed Minecraft client's signed-out menu behavior is a separate compatibility concern.
 
 ## Extension boundaries
 

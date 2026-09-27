@@ -44,17 +44,25 @@ The server startup and an actual Bedrock UDP status response have been observed.
 | Nether portal | 14 owned obsidian placed in survival; flint and steel ignited it; active portal blocks observed |
 | End portal | All 12 missing eyes inserted from owned inventory; the central End portal block observed |
 | End entry | Bot approached a supported rim, entered the active opening, and observed an actual Overworld → End transition |
-| Bedrock authentication gate | A headless Bedrock 1.26.51 client reached Geyser, which rejected it with “Please log into Xbox to join this server.” No user credentials were accessed and authentication was not disabled |
+| Account-free Bedrock connection | A headless Bedrock 1.26.51 client using `offline: true` and `SELF_SIGNED` login spawned without Microsoft/Xbox credentials. A Java Mineflayer observer saw the player and received its chat |
 | Launcher shutdown | `npm run play` started Paper, Geyser, and BroBot; clicking **Close BroBot** exited the bot and launcher with code 0, logged that all dimensions were saved, and closed the Java and dashboard ports |
 
-The passing full run is `2026-09-26T23-31-53-618Z-599c1813`; its `result.json` records all 16 phases with `passed: true`. The transferred plank in this full run came from the logs the bot gathered. Portal construction took approximately 10.5 seconds, End eye insertion 25.0 seconds, and End entry 1.1 seconds in the prepared arena. The headless Bedrock check used `bedrock-protocol` 3.60.1 with its native RakNet backend; Geyser logged the authentication rejection at 19:25:44 local time.
+The passing full run is `2026-09-26T23-31-53-618Z-599c1813`; its `result.json` records all 16 phases with `passed: true`. The transferred plank in this full run came from the logs the bot gathered. Portal construction took approximately 10.5 seconds, End eye insertion 25.0 seconds, and End entry 1.1 seconds in the prepared arena.
+
+### Account-free local connection
+
+The initial bridge configuration rejected unsigned Bedrock logins. The updated configuration sets `advanced.bedrock.validate-bedrock-login: false`, keeps Java `online-mode=false`, and forces both listeners to `127.0.0.1`. This uses a setting in the installed Geyser build; no game-client patch or Microsoft credential is involved.
+
+A separate isolated test on 2026-09-26 local time (`2026-09-27T01:14:43.870Z`) passed all four checks: server startup with authentication disabled, an offline Java observer joining, an unsigned Bedrock player spawning and appearing to that observer, and Bedrock chat arriving in Java. The test used `bedrock-protocol` 3.60.1, native RakNet, Bedrock 1.26.51, and isolated ports 25575/19142. It saved and stopped the server cleanly. No Microsoft authentication callback ran. Geyser was exactly 2.11.3 build 1247, upstream commit `63a4e2b79b12f0d138777d5fd80176a112b4bd72`.
+
+The user confirmed **Add Server is available while signed out** in their Minecraft for Windows menu. An actual rendered client joining and playing remains to be confirmed. The protocol test establishes the server path, not every client UI. Geyser still rejects the separate split-screen `GUEST` login type; the passing test used `SELF_SIGNED`.
 
 These tests exposed and helped repair inventory synchronization, elevated-block visibility, item-transfer timing, and portal-entry pathing defects. They exercise prepared, loaded terrain; they do not certify unrestricted autonomous survival.
 
 ## Explicitly unverified
 
 - A real OpenAI API request or model access for the user's account: no API key was available during validation. Planner behavior was tested with mocked Responses results.
-- A signed-in Minecraft for Windows client login and its rendered game UI. Network startup, UDP replies, and the observed authentication rejection are narrower checks.
+- A signed-out Minecraft for Windows client joining and its rendered game UI. Add Server availability is user-confirmed; unsigned protocol login, spawn, and cross-edition chat passed independently.
 - Survival play over arbitrary terrain and long sessions, including resource acquisition for every milestone.
 - A complete fresh-world, no-assistance dragon run.
 - Stronghold bearing capture against a naturally thrown eye in a live world, beyond pure triangulation tests.

@@ -128,8 +128,9 @@ export async function writeServerConfig(directory = SERVER_DIR, { port = Number(
   await writeFile(propertyPath, mergeProperties(previous, settings));
   const geyser = join(directory, 'plugins', 'Geyser-Spigot');
   await mkdir(geyser, { recursive: true });
-  // This file is owned by the local launcher; external bind addresses are deliberately not supported.
-  await writeFile(join(geyser, 'config.yml'), `# Managed by BroBot. This server is only accessible on this computer.\nbedrock:\n  address: 127.0.0.1\n  port: ${bedrockPort}\n  clone-remote-port: false\njava:\n  auth-type: offline\nmotd:\n  primary-motd: BroBot\n  secondary-motd: Local Minecraft companion\ngameplay:\n  server-name: BroBot\n  show-coordinates: true\nadvanced:\n  java:\n    use-direct-connection: true\nlog-player-ip-addresses: false\nsaved-user-logins: []\nconfig-version: 8\n`);
+  // Both identity checks are off for account-free play on this computer only.
+  // Keep the Bedrock and Java listeners on loopback; no public bind option.
+  await writeFile(join(geyser, 'config.yml'), `# Managed by BroBot. Account-free play is restricted to this computer.\nbedrock:\n  address: 127.0.0.1\n  port: ${bedrockPort}\n  clone-remote-port: false\njava:\n  auth-type: offline\nmotd:\n  primary-motd: BroBot\n  secondary-motd: Local Minecraft companion\ngameplay:\n  server-name: BroBot\n  show-coordinates: true\nadvanced:\n  bedrock:\n    validate-bedrock-login: false\n  java:\n    use-direct-connection: true\nlog-player-ip-addresses: false\nsaved-user-logins: []\nconfig-version: 8\n`);
   await mkdir(join(directory, 'plugins', 'bStats'), { recursive: true });
   await writeFile(join(directory, 'plugins', 'bStats', 'config.yml'), 'enabled: false\n');
 }
