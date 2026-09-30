@@ -1,0 +1,78 @@
+import { Vec3 } from 'vec3'
+
+const abortError = () => Object.assign(new Error('Action cancelled'), { name: 'AbortError' })
+
+// Use the public path generator rather than mutating the pathfinder's active goal.
+// A timeout is unknown, never evidence that a route is safe.
+export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
+  if (typeof bot.pathfinder.getPathFromTo !== 'function') throw new Error('Return-path planning is unavailable; refusing collection travel')
+  const deadline = performance.now() + planningBudget
+  const check = () => { if (signal?.aborted) throw abortError(); if (performance.now() >= deadline) throw new Error('Return-path planning budget exhausted') }
+  const plan = async (start, target) => {
+    check()
+    const remaining = Math.max(1, deadline - performance.now())
+    const generator = bot.pathfinder.getPathFromTo(movements, start, target, { timeout: remaining, tickTimeout: 25, optimizePath: false })
+    let result
+    try {
+      for (const value of generator) {
+        check(); result = value.result
+        if (result.status !== 'partial') break
+        await yieldControl()
+      }
+    } finally { generator.return?.() }
+    check()
+    if (result?.status !== 'success') throw new Error(`No verified returnable walking route (${result?.status ?? 'unknown'})`)
+    if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
+    return result
+  }
+  const forward = await plan(bot.entity.position.clone(), goal)
+  const last = forward.path.at(-1)
+  const endpoint = last ? new Vec3(last.x, last.y, last.z) : bot.entity.position.floored()
+  // Origin goal is supplied by the caller so the helper does not depend on an internal goal class.
+  const reverse = await plan(endpoint, origin)
+  return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
+}
+
+// Item-aware navigation owns its listeners/goal. No never-ending goto promise is
+// left behind when an item is acquired, disappears, or a local budget expires.
+export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75 } = {}) {
+  return new Promise((resolve, reject) => {
+    let settled = false, timer, lastMove = performance.now(), position = bot.entity.position.clone(), ownsGoal = false
+    const exists = () => !!bot.entities?.[entity.id]
+    const finish = (error, reason) => {
+      if (settled) return
+      settled = true; clearInterval(timer)
+      signal?.removeEventListener('abort', aborted)
+      bot.removeListener('entityGone', gone); bot.removeListener('playerCollect', collected)
+      bot.removeListener('goal_reached', reached); bot.removeListener('goal_updated', changed); bot.removeListener('path_update', pathUpdate)
+      // Serialization gives this pursuit exclusive movement ownership. Never clear a replacement goal.
+      if (ownsGoal && (bot.pathfinder.goal === undefined || bot.pathfinder.goal === goal)) {
+        try { bot.pathfinder.setGoal(null) } catch {}
+        try { bot.clearControlStates?.() } catch {}
+      }
+      if (error) reject(error); else resolve({ reason })
+    }
+    const aborted = () => finish(abortError())
+    const gone = e => { if (e.id === entity.id) finish(null, 'target_gone') }
+    const collected = (collector, item) => { if (collector?.id === bot.entity.id && item?.id === entity.id) finish(null, 'collected') }
+    const reached = g => { if (!g || g === goal) finish(null, 'arrived') }
+    const changed = g => { if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Pickup navigation goal replaced')) }
+    const pathUpdate = result => {
+      if (result.status === 'noPath' || result.status === 'timeout') finish(new Error(`Pickup navigation ${result.status}`))
+    }
+    if (signal?.aborted) return aborted()
+    if (!exists()) return finish(null, 'target_gone')
+    signal?.addEventListener('abort', aborted, { once: true })
+    bot.on('entityGone', gone); bot.on('playerCollect', collected); bot.on('goal_reached', reached); bot.on('goal_updated', changed); bot.on('path_update', pathUpdate)
+    const started = performance.now()
+    timer = setInterval(() => {
+      if (signal?.aborted) return aborted()
+      if (!exists()) return finish(null, 'target_gone')
+      const now = performance.now()
+      if (bot.entity.position.distanceTo(position) >= 0.35) { position = bot.entity.position.clone(); lastMove = now }
+      if (now - started >= timeoutMs) finish(new Error('Pickup navigation exceeded its local time budget'))
+      else if (now - lastMove >= stallMs) finish(new Error('Pickup navigation made no movement progress'))
+    }, pollMs)
+    try { ownsGoal = true; bot.pathfinder.setGoal(goal) } catch (error) { finish(error) }
+  })
+}
