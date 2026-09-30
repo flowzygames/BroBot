@@ -1,5 +1,6 @@
 import pathfinderPackage from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
+import { planReturnablePath, pursueDroppedItem } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
 const AIR = new Set(['air', 'cave_air', 'void_air'])
@@ -159,24 +160,39 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     return p
   }
 
-  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false } = {}) {
+  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false } = {}) {
     checked(ctx)
     assert(target.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start')
     if (requireLoaded) loaded(target)
     configureMovement()
-    const goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
+    let goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
+    if (returnable) goal = await returnableGoal(ctx, goal)
     await step(ctx, () => bot.pathfinder.goto(goal))
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
-  async function approachBlock (ctx, p) {
+  async function returnableGoal (ctx, goal) {
+    checked(ctx)
+    configureMovement()
+    const used = ctx.planningUsed ?? 0
+    assert(used < 7000, 'Collection return-path planning budget exhausted')
+    const start = performance.now()
+    try {
+      const home = ctx.origin.floored()
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalBlock(home.x, home.y, home.z), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), yieldControl: () => pause(ctx, 0) })
+      checked(ctx)
+      return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
+    } finally { ctx.planningUsed = used + performance.now() - start }
+  }
+
+  async function approachBlock (ctx, p, { returnable = false } = {}) {
     loaded(p)
     const visible = () => {
       const eye = bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0)
       if (bot.world?.raycast) return visibleBlockFace(bot.world, eye, p, 4.5)
       return eye.distanceTo(p.offset(0.5, 0.5, 0.5)) <= 4.5 && (!bot.canSeeBlock || bot.canSeeBlock(loaded(p)))
     }
-    if (!visible()) await navigate(ctx, p, 3, { lookAt: true })
+    if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable })
     assert(visible(), 'Target block remains out of reach or behind an obstruction')
   }
 
@@ -237,12 +253,26 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       // Drops from upper logs/ores are often still falling. Walking to their
       // airborne Y creates an impossible path; project onto loaded ground.
       const dropPosition = target.position.floored()
-      let destination = dropPosition
-      for (let down = 0; down <= 8; down++) {
-        const p = dropPosition.offset(0, -down, 0)
-        if (isAir(bot.blockAt(p)) && isAir(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destination = p; break }
+      const destinations = []
+      for (const [x, z] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        for (let down = 0; down <= 8; down++) {
+          const p = dropPosition.offset(x, -down, z)
+          if (isAir(bot.blockAt(p)) && isAir(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
+        }
       }
-      try { await navigate(ctx, destination, 0); await pause(ctx, 350) } catch (error) { checked(ctx); failures.push({ id: target.id, error: error.message }); await pause(ctx, 150) }
+      destinations.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position))
+      try {
+        assert(destinations.length, 'No validated standing space near dropped item')
+        let goal, lastError
+        for (const p of destinations.slice(0, 3)) {
+          try { goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z)); break } catch (error) { checked(ctx); lastError = error }
+        }
+        if (!goal) throw lastError ?? new Error('No returnable route to dropped item')
+        checked(ctx)
+        await pursueDroppedItem(bot, goal, target, { signal: ctx.signal })
+        checked(ctx)
+        await pause(ctx, 200)
+      } catch (error) { checked(ctx); failures.push({ id: target.id, error: error.message }); await pause(ctx, 150) }
     }
     return { inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: failures }
   }
@@ -289,7 +319,7 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       const p = choices[0]
       skipped.add(p.toString())
       try {
-        await approachBlock(ctx, p)
+        await approachBlock(ctx, p, { returnable: true })
         const block = loaded(p)
         if (block.name !== name) continue
         await harvestBlock(ctx, p)

@@ -26,6 +26,12 @@ function fakeBot () {
   bot.blockAt = p => blocks.get(p.floored().toString()) ?? { name: 'air', type: registry.blocksByName.air.id, position: p.floored(), boundingBox: 'empty', stateId: 0 }
   bot.canSeeBlock = () => true
   bot.pathfinder = { setMovements: () => {}, setGoal: () => {}, goto: async goal => { bot.entity.position = new Vec3(goal.x + 0.5, goal.y ?? 64, goal.z + 0.5) }, bestHarvestTool: () => null }
+  bot.pathfinder.goal = null
+  bot.pathfinder.setGoal = goal => {
+    bot.pathfinder.goal = goal; bot.emit('goal_updated', goal)
+    if (goal) Promise.resolve(bot.pathfinder.goto(goal)).then(() => { if (bot.pathfinder.goal === goal) bot.emit('goal_reached', goal) }, () => bot.emit('path_update', { status: 'noPath' }))
+  }
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) { yield { result: { status: 'success', path: [{ x: goal.x, y: goal.y ?? start.y, z: goal.z }] } } }
   bot.findBlock = ({ matching }) => [...blocks.values()].find(b => typeof matching === 'function' ? matching(b) : Array.isArray(matching) ? matching.includes(b.type) : b.type === matching) ?? null
   bot.findBlocks = options => [...blocks.values()].filter(b => Array.isArray(options.matching) ? options.matching.includes(b.type) : b.type === options.matching)
     .filter(b => typeof options.useExtraInfo !== 'function' || options.useExtraInfo(b))
@@ -247,7 +253,12 @@ test('collection filters enclosed stone before the 128-candidate cap', async () 
   assert.equal(unfiltered.length, 128)
   assert.equal(unfiltered.some(p => p.equals(exposed)), false)
   const approached = []
-  bot.pathfinder.goto = async goal => { approached.push(goal.target); bot.entity.position = goal.target.offset(-1, 0, 0) }
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+    if (goal.target) approached.push(goal.target)
+    const p = goal.target ? goal.target.offset(-1, 0, 0) : new Vec3(goal.x, goal.y, goal.z)
+    yield { result: { status: 'success', path: [p] } }
+  }
+  bot.pathfinder.goto = async goal => { bot.entity.position = new Vec3(goal.x + .5, goal.y, goal.z + .5) }
   bot.dig = async block => { assert.ok(block.position.equals(exposed)); bot.removeBlock(exposed); bot.addItem('cobblestone') }
   const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 })
   assert.equal(result.completed, true)
@@ -477,4 +488,31 @@ test('block-face navigation measures elevated supports from player eyes and reje
   assert.equal(observedEyes[0].y, 66.62)
   assert.equal(goal.isEnd(new Vec3(16, 59, -4)), false)
   assert.equal(visibleBlockFace({ raycast: () => ({ position: new Vec3(16, 66, -5) }) }, new Vec3(16.5, 66.62, -3.5), target, 4), false)
+})
+
+test('pickup refuses an item with no validated standing cell', async () => {
+  const bot = fakeBot()
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.5, 64.5, 0.5) }
+  bot.putBlock('stone', new Vec3(2, 63, 0))
+  bot.putBlock('oak_log', new Vec3(2, 65, 0))
+  let traveled = 0
+  bot.pathfinder.setGoal = goal => { if (goal) traveled++ }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.equal(traveled, 0)
+  assert.equal(result.remaining_drops.length, 1)
+  assert.ok(result.unreachable.every(f => /standing space/.test(f.error)))
+})
+
+test('pickup disappearance is not fabricated as inventory gain', async () => {
+  const bot = fakeBot()
+  bot.putBlock('stone', new Vec3(2, 63, 0))
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.5, 64.5, 0.5) }
+  bot.pathfinder.setGoal = goal => {
+    bot.pathfinder.goal = goal
+    if (goal) { const target = bot.entities[2]; delete bot.entities[2]; bot.emit('entityGone', target) }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.deepEqual(result.inventory_changes, {})
+  assert.deepEqual(result.remaining_drops, [])
+  assert.equal(bot.listenerCount('entityGone'), 0)
 })
