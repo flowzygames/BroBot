@@ -27,7 +27,9 @@ function fakeBot () {
   bot.canSeeBlock = () => true
   bot.pathfinder = { setMovements: () => {}, setGoal: () => {}, goto: async goal => { bot.entity.position = new Vec3(goal.x + 0.5, goal.y ?? 64, goal.z + 0.5) }, bestHarvestTool: () => null }
   bot.findBlock = ({ matching }) => [...blocks.values()].find(b => typeof matching === 'function' ? matching(b) : Array.isArray(matching) ? matching.includes(b.type) : b.type === matching) ?? null
-  bot.findBlocks = options => [...blocks.values()].filter(b => Array.isArray(options.matching) ? options.matching.includes(b.type) : b.type === options.matching).map(b => b.position)
+  bot.findBlocks = options => [...blocks.values()].filter(b => Array.isArray(options.matching) ? options.matching.includes(b.type) : b.type === options.matching)
+    .filter(b => typeof options.useExtraInfo !== 'function' || options.useExtraInfo(b))
+    .map(b => b.position).sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position)).slice(0, options.count ?? 1)
   bot.equip = async item => { bot.heldItem = item }
   bot.look = async () => {}
   bot.lookAt = async () => {}
@@ -231,6 +233,74 @@ test('mining distinguishes mined blocks from inventory collection', async () => 
   assert.equal(result.mined, 1)
   assert.equal(result.completed, false)
   assert.deepEqual(result.inventory_changes, {})
+})
+
+test('collection filters enclosed stone before the 128-candidate cap', async () => {
+  const bot = fakeBot()
+  for (let x = -4; x <= 4; x++) for (let y = 54; y <= 62; y++) for (let z = -4; z <= 4; z++) {
+    const shell = Math.abs(x) === 4 || Math.abs(z) === 4 || y === 54 || y === 62
+    bot.putBlock(shell ? 'dirt' : 'stone', new Vec3(x, y, z))
+  }
+  const exposed = new Vec3(12, 64, 0)
+  bot.putBlock('stone', exposed)
+  const unfiltered = bot.findBlocks({ matching: registry.blocksByName.stone.id, count: 128 })
+  assert.equal(unfiltered.length, 128)
+  assert.equal(unfiltered.some(p => p.equals(exposed)), false)
+  const approached = []
+  bot.pathfinder.goto = async goal => { approached.push(goal.target); bot.entity.position = goal.target.offset(-1, 0, 0) }
+  bot.dig = async block => { assert.ok(block.position.equals(exposed)); bot.removeBlock(exposed); bot.addItem('cobblestone') }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 })
+  assert.equal(result.completed, true)
+  assert.equal(result.inventory_changes.cobblestone, 1)
+  assert.equal(result.search_limited, false)
+  assert.deepEqual(approached, [exposed])
+})
+
+test('collection rejects enclosed or unloaded faces without attempting a path', async () => {
+  const bot = fakeBot()
+  const p = new Vec3(2, 64, 0)
+  bot.putBlock('stone', p)
+  bot.blockAt = position => position.equals(p) ? { name: 'stone', position: p } : null
+  let moved = false
+  bot.pathfinder.goto = async () => { moved = true }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 8 }), /no exposed loaded candidates/)
+  assert.equal(moved, false)
+})
+
+test('collection bounds matching-block inspection and reports an incomplete search', async () => {
+  const bot = fakeBot()
+  let inspected = 0
+  bot.findBlocks = options => {
+    while (true) { inspected++; options.useExtraInfo({ position: new Vec3(1000, 64, 0) }) }
+  }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 8 }), error => {
+    assert.match(error.message, /bounded search exhausted/)
+    assert.equal(error.result.search_limited, true)
+    return true
+  })
+  assert.ok(inspected <= 65537)
+})
+
+test('collection keeps exposed candidates found before its scan budget is exhausted', async () => {
+  const bot = fakeBot()
+  const p = new Vec3(2, 64, 0)
+  const block = bot.putBlock('stone', p)
+  bot.findBlocks = options => {
+    options.useExtraInfo(block)
+    while (true) options.useExtraInfo({ position: new Vec3(1000, 64, 0) })
+  }
+  bot.dig = async () => { bot.removeBlock(p); bot.addItem('cobblestone') }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 8 })
+  assert.equal(result.completed, true)
+  assert.equal(result.inventory_changes.cobblestone, 1)
+  assert.equal(result.search_limited, true)
+})
+
+test('collection propagates cancellation during candidate scanning', async () => {
+  const bot = fakeBot()
+  const controller = new AbortController()
+  bot.findBlocks = options => { controller.abort(); options.useExtraInfo({ position: new Vec3(2, 64, 0) }) }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 8 }, controller.signal), { name: 'AbortError' })
 })
 
 test('mining prefers harvest eligibility over an unsuitable faster golden tool', async () => {
