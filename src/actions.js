@@ -257,9 +257,34 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     const skipped = new Set()
     const failures = []
     let mined = 0
+    let searchLimited = false
     while (mined < count) {
       checked(ctx)
-      const choices = bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 128 }).filter(p => !skipped.has(p.toString()) && p.distanceTo(ctx.origin) <= 128).sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position))
+      // Filter before findBlocks applies its count cap. Dense buried stone must
+      // not hide a farther exposed face or consume the pathfinding failure budget.
+      // Mineflayer applies useExtraInfo to real positioned blocks (not palettes).
+      // Time/count budgets are checked on matching blocks, not a hard timeout
+      // for findBlocks itself; its fixed radius also bounds nonmatching scans.
+      const candidates = []
+      const searchOrigin = bot.entity.position.floored()
+      const searchLimit = Symbol('collection search limit')
+      const deadline = performance.now() + 500
+      let inspected = 0
+      try {
+        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 128, useExtraInfo: block => {
+          checked(ctx)
+          if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
+          const p = block.position
+          if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || skipped.has(p.toString())) return false
+          if (!DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d))))) return false
+          candidates.push(p)
+          return true
+        } })
+      } catch (error) {
+        if (error !== searchLimit) throw error
+        searchLimited = true
+      }
+      const choices = candidates.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position)).slice(0, 128)
       if (!choices.length) break
       const p = choices[0]
       skipped.add(p.toString())
@@ -279,8 +304,8 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     }
     let pickup = { remaining_drops: [], unreachable: [] }
     if (mined) { await pause(ctx, 300); pickup = await pickupInternal(ctx, 12) }
-    const result = { completed: mined === count && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures }
-    if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? 'no reachable loaded blocks found'}`), { result })
+    const result = { completed: mined === count && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited }
+    if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
   }
 
