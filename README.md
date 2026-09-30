@@ -97,6 +97,8 @@ The action set includes navigation, following, exploration, observed gathering, 
 
 Progression tools can construct and light an obsidian portal, wait for a real portal transition, observe eye-of-ender throws and triangulate bearings, fill a correctly oriented End portal, shoot a bow, and attempt bounded dragon combat. They report missing materials, obstructions, failed paths, and unconfirmed outcomes. Fortress exploration, stronghold excavation, crystal cages, and a reliable full-game strategy still need substantial live-world validation.
 
+The planner pauses repeated no-progress failures, including unsuccessful results that do not throw errors. Partial mining or building can still count as progress. Simple whole-goal inventory, dimension, and dragon-death requests have runtime completion checks; `finish_goal` completion claims for other wording and compound goals produce an explicitly **unverified** report. See [completion verification](docs/ARCHITECTURE.md#completion-verification) for supported forms and limitations. Ordinary conversation remains available.
+
 Default API limits persist across restarts: 30 requests, 120,000 input tokens, and 30,000 output tokens. The agent reserves a conservative allowance before each request, so it may stop before those reported totals are fully consumed. The dashboard shows usage and an explicit reset button. Resetting allows more paid requests; these are token/request limits, not a dollar guarantee.
 
 ## Files and troubleshooting

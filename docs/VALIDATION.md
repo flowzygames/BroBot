@@ -59,6 +59,14 @@ The user confirmed **Add Server is available while signed out** in their Minecra
 
 These tests exposed and helped repair inventory synchronization, elevated-block visibility, item-transfer timing, and portal-entry pathing defects. They exercise prepared, loaded terrain; they do not certify unrestricted autonomous survival.
 
+## Planner safeguard regression record (2026-09-30)
+
+`npm run check` passes syntax checks and **83 tests** after adding planner safeguards (the original 58 plus 25 regressions). The new tests use mocked Responses output and runtime observations; they do not establish live model behavior.
+
+Coverage includes returned partial/blocked outcomes and action-specific pickup/combat/eye-bearing result contracts, canonical argument order, cross-argument no-progress limits, mixed thrown/returned failures, positive partial progress and recovery, observation/chat non-progress, rejected and retried premature completion, fresh inventory verification and stack totals, text-only bypass rejection, ordinary conversation, compound/unsupported goal reports, actual destination dimensions, and current-goal dragon-death evidence. The original `completed: false, mined: 1` example is deliberately treated as partial mining progress; zero-progress partial results and blocked results are bounded independently. Mined blocks alone still cannot certify inventory acquisition.
+
+No gameplay action implementations were changed for these safeguards. They do not provide an arbitrary natural-language goal verifier, a full autonomous survival strategy, or new proof of live model access. The earlier real-server validation record remains separate from these planner tests.
+
 ## Explicitly unverified
 
 - A real OpenAI API request or model access for the user's account: no API key was available during validation. Planner behavior was tested with mocked Responses results.
