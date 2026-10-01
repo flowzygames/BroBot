@@ -1025,7 +1025,7 @@
     "publishedCommit": "8b47cddf527efe02f2e19cae566155b348f8ae38",
     "testedApplicationCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
     "records": "https://github.com/flowzygames/BroBot/tree/feat/starter-recovery-and-readme/benchmarks/results/pickup-preflight-2026-10-01",
-    "note": "All ten current worlds are known development cases. A separate twenty-world first-pass evaluation is in progress and is not part of this completed comparison."
+    "note": "The ten original, additional and wider worlds are known development cases. A separate twenty-world first-pass evaluation on this same build completed 8/20 (40%); all 20 records and 12 failures are retained in firstPassWorlds. Stable 1.0 remains unverified."
   },
   "additionalWorlds": {
     "schemaVersion": 1,
