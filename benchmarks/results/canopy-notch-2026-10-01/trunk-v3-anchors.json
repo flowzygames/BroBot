@@ -1,0 +1,381 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:42:10.863Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 19,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Dig one adjacent lower leaf without removing occupied support",
+      "passed": true,
+      "elapsedMs": 655,
+      "detail": {
+        "completed": true,
+        "mined": 1,
+        "block": "spruce_leaves",
+        "position": {
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        "inventory_changes": {},
+        "remaining_drops": [],
+        "pickup_failures": []
+      }
+    },
+    {
+      "name": "Verify real lower landing and return route",
+      "passed": true,
+      "elapsedMs": 2,
+      "detail": {
+        "endpoint": {
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Settle on lower landing",
+      "passed": true,
+      "elapsedMs": 710,
+      "detail": [
+        226.43573314134537,
+        84,
+        -32.65415032799951
+      ]
+    },
+    {
+      "name": "Enter trunk at Y84",
+      "passed": true,
+      "elapsedMs": 3866,
+      "detail": {
+        "digs": [
+          {
+            "completed": true,
+            "mined": 1,
+            "block": "spruce_log",
+            "position": {
+              "x": 227,
+              "y": 84,
+              "z": -33
+            },
+            "inventory_changes": {
+              "spruce_log": 1
+            },
+            "remaining_drops": [],
+            "pickup_failures": []
+          }
+        ],
+        "anchors": [
+          {
+            "leaves": [
+              [
+                224,
+                84,
+                -32
+              ],
+              [
+                225,
+                84,
+                -32
+              ],
+              [
+                226,
+                84,
+                -32
+              ],
+              [
+                227,
+                84,
+                -32
+              ],
+              [
+                228,
+                84,
+                -32
+              ]
+            ],
+            "anchor": [
+              228,
+              84,
+              -33
+            ],
+            "distance": 5
+          }
+        ],
+        "proof": {
+          "endpoint": {
+            "x": 227,
+            "y": 84,
+            "z": -33
+          },
+          "forwardNodes": 1,
+          "reverseNodes": 1
+        },
+        "position": [
+          227.30839610332004,
+          84,
+          -32.530086918170504
+        ]
+      }
+    },
+    {
+      "name": "Enter lower trunk at Y83",
+      "passed": true,
+      "elapsedMs": 7575,
+      "detail": {
+        "digs": [
+          {
+            "completed": true,
+            "mined": 1,
+            "block": "spruce_log",
+            "position": {
+              "x": 228,
+              "y": 84,
+              "z": -33
+            },
+            "inventory_changes": {
+              "spruce_log": 1
+            },
+            "remaining_drops": [],
+            "pickup_failures": []
+          },
+          {
+            "completed": true,
+            "mined": 1,
+            "block": "spruce_log",
+            "position": {
+              "x": 228,
+              "y": 83,
+              "z": -33
+            },
+            "inventory_changes": {
+              "spruce_log": 1
+            },
+            "remaining_drops": [],
+            "pickup_failures": []
+          }
+        ],
+        "anchors": [
+          {
+            "leaves": [
+              [
+                224,
+                84,
+                -32
+              ],
+              [
+                225,
+                84,
+                -32
+              ],
+              [
+                226,
+                84,
+                -32
+              ],
+              [
+                227,
+                84,
+                -32
+              ],
+              [
+                227,
+                83,
+                -32
+              ]
+            ],
+            "anchor": [
+              227,
+              83,
+              -33
+            ],
+            "distance": 5
+          },
+          {
+            "leaves": [
+              [
+                224,
+                84,
+                -32
+              ],
+              [
+                225,
+                84,
+                -32
+              ],
+              [
+                226,
+                84,
+                -32
+              ],
+              [
+                227,
+                84,
+                -32
+              ],
+              [
+                227,
+                83,
+                -32
+              ]
+            ],
+            "anchor": [
+              227,
+              83,
+              -33
+            ],
+            "distance": 5
+          }
+        ],
+        "proof": {
+          "endpoint": {
+            "x": 228,
+            "y": 83,
+            "z": -33
+          },
+          "forwardNodes": 0,
+          "reverseNodes": 0
+        },
+        "position": [
+          228.58146327138775,
+          83,
+          -32.50307666620036
+        ]
+      }
+    },
+    {
+      "name": "Return home alive",
+      "passed": true,
+      "elapsedMs": 1351,
+      "detail": {
+        "position": [
+          224.603781715732,
+          85,
+          -31.48950650191035
+        ],
+        "health": 20,
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "spruce_log",
+            "count": 6
+          },
+          {
+            "name": "stick",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "Retained home support under normal random ticks",
+      "passed": true,
+      "elapsedMs": 10351,
+      "detail": {
+        "before": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              225,
+              84,
+              -32
+            ],
+            [
+              226,
+              84,
+              -32
+            ],
+            [
+              227,
+              84,
+              -32
+            ],
+            [
+              227,
+              83,
+              -32
+            ]
+          ],
+          "anchor": [
+            227,
+            83,
+            -33
+          ],
+          "distance": 5
+        },
+        "after": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              225,
+              84,
+              -32
+            ],
+            [
+              226,
+              84,
+              -32
+            ],
+            [
+              227,
+              84,
+              -32
+            ],
+            [
+              227,
+              83,
+              -32
+            ]
+          ],
+          "anchor": [
+            227,
+            83,
+            -33
+          ],
+          "distance": 5
+        },
+        "position": [
+          224.603781715732,
+          85,
+          -31.48950650191035
+        ],
+        "health": 20,
+        "observationSeconds": 10
+      }
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-01T19:42:46.936Z"
+}

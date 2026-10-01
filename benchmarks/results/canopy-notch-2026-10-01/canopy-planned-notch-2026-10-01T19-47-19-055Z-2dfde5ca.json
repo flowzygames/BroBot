@@ -1,0 +1,30 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:47:19.055Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 20,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Select a notch from live observations",
+      "passed": false,
+      "error": "No certified observed notch"
+    }
+  ],
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: No certified observed notch\n    at file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:49:409\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async phase (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:34:71)\n    at async file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:49:13",
+  "finished": "2026-10-01T19:47:32.662Z"
+}

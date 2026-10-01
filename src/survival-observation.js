@@ -1,4 +1,5 @@
 import { visibleBlockFace } from './actions.js';
+import { isFluidBearingBlock } from './navigation-guards.js';
 const AIR = new Set(['air', 'cave_air', 'void_air']);
 const CLEARABLE = new Set(['stone', 'dirt', 'grass_block', 'andesite', 'diorite', 'granite', 'tuff', 'deepslate']);
 const clearable = name => CLEARABLE.has(name) || /_leaves$/.test(name ?? '');
@@ -34,6 +35,29 @@ export function findPickupClearance(bot, ids = []) {
     if (overlaps && p.y < position.y && p.y + 1 >= position.y - 0.1) continue;
     if (!visibleBlockFace(bot.world, eye, p, 4.2)) continue;
     return { x: p.x, y: p.y, z: p.z, expected_block: head.name };
+  }
+  return null;
+}
+
+// A lower trunk ray may pass through a gap while another observed trunk ray
+// hits the leaf wall that is actually blocking approach. Keep the existing
+// bounded log sample, try several rays, and leave excavation to normal dig_at.
+export function findTreeFoliage(bot, logs = []) {
+  if (!Array.isArray(logs) || !bot.world?.raycast || !bot.entity?.position || !bot.blockAt) return null;
+  const position = bot.entity.position, eye = position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
+  const candidates = logs.slice(0, 16).filter(block => block?.position && /_log$/.test(block.name ?? '')).sort((a, b) => a.position.distanceTo(position) - b.position.distanceTo(position));
+  for (const tree of candidates) {
+    const delta = tree.position.offset(0.5, 0.5, 0.5).minus(eye), distance = delta.norm();
+    if (!Number.isFinite(distance) || distance <= 0) continue;
+    const hit = bot.world.raycast(eye, delta.scaled(1 / distance), Math.min(4.2, distance));
+    const leaf = hit?.position ? bot.blockAt(hit.position) : null;
+    if (!leaf?.position || !/_leaves$/.test(leaf.name ?? '') || leaf.isWaterlogged || leaf.diggable === false || leaf.position.y < Math.ceil(position.y - 0.001)) continue;
+    const neighbors = [[1,0,0],[-1,0,0],[0,0,1],[0,0,-1],[0,1,0],[0,-1,0]].map(([x,y,z]) => bot.blockAt(leaf.position.offset(x,y,z)));
+    if (neighbors.some(block => !block || isFluidBearingBlock(block))) continue;
+    if (/^(sand|red_sand|gravel|anvil|chipped_anvil|damaged_anvil|pointed_dripstone)$|_concrete_powder$/.test(neighbors[4].name)) continue;
+    if (!visibleBlockFace(bot.world, eye, leaf.position, 4.2)) continue;
+    const p = leaf.position;
+    return { x: p.x, y: p.y, z: p.z, expected_block: leaf.name };
   }
   return null;
 }

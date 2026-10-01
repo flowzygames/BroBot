@@ -884,3 +884,17 @@ test('harvesting rejects water-bearing plants and bubble columns beside a target
   await assert.rejects(createActions(bot).execute('dig_at',{x:p.x,y:p.y,z:p.z,expected_block:'oak_log'}),/adjacent liquid/,name);assert.equal(dug,false,name);
  }
 });
+
+test('experimental descent refuses low health before touching terrain', async () => {
+  const bot = fakeBot(); bot.health = 8;
+  let digs = 0; bot.dig = async () => { digs++ };
+  await assert.rejects(createActions(bot).execute('descend_notch', {}), /health 12/);
+  assert.equal(digs, 0);
+});
+
+test('experimental descent refuses an ungrounded start without mining', async () => {
+  const bot = fakeBot(); bot.food = 20; bot.entity.onGround = false;
+  let digs = 0; bot.dig = async () => { digs++ };
+  await assert.rejects(createActions(bot).execute('descend_notch', {}), /No certified/);
+  assert.equal(digs, 0);
+});

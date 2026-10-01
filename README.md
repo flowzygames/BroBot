@@ -1,3 +1,5 @@
+> **Experimental canopy branch:** this branch adds a separately invoked `action descend_notch {}` and bounded tree-observation improvements. It passes 245 automated checks, 17 prepared live phases and 20 local controls. It has not established a new natural-world starter score. The website download and release information below still describe the published 219-check build. See [the experiment and its limits](docs/FOLIAGE_RECOVERY.md).
+
 # BroBot
 
 ### A Minecraft companion that turns commands into real actions

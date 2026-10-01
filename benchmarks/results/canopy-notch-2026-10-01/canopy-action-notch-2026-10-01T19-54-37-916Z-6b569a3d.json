@@ -1,0 +1,150 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:54:37.917Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 22,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Execute observed bounded descent action",
+      "passed": true,
+      "elapsedMs": 1095,
+      "detail": {
+        "completed": true,
+        "mined": 1,
+        "descended_blocks": 1,
+        "position": {
+          "x": 225.62,
+          "y": 84,
+          "z": -31.41
+        },
+        "return_home": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "experimental": true
+      }
+    },
+    {
+      "name": "Return home alive",
+      "passed": true,
+      "elapsedMs": 500,
+      "detail": {
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "spruce_log",
+            "count": 3
+          },
+          {
+            "name": "stick",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "Retained home support under normal random ticks",
+      "passed": true,
+      "elapsedMs": 10353,
+      "detail": {
+        "before": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "after": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "observationSeconds": 10
+      }
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-01T19:55:03.662Z"
+}
