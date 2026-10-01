@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "classification": "known-development",
+  "commit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "protocol": "trailhead-v1",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "passed": 1,
+  "scheduled": 1,
+  "completed": 1,
+  "complete": true,
+  "cases": [
+    {
+      "seed": "1542908414",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 242380,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    }
+  ],
+  "note": "Known development worlds; not evidence of broad or held-out reliability. Retain all individual run records and failed attempts."
+}

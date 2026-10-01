@@ -3,7 +3,7 @@ import { Vec3 } from 'vec3'
 import { configureCollisionMargin } from './collision-margin.js'
 import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
-import { planReturnablePath, pursueDroppedItem, walkToGoal } from './navigation-guards.js'
+import { planReturnablePath, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
 const AIR = new Set(['air', 'cave_air', 'void_air'])
@@ -167,7 +167,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
     // Starter gathering is a dry-land objective. The library otherwise allows
     // water as a costly walking destination, even for a returnable pickup route.
-    for (const name of ['water', 'flowing_water', 'bubble_column', 'kelp', 'kelp_plant', 'seagrass', 'tall_seagrass']) {
+    for (const name of WATER_BEARING_BLOCK_NAMES) {
       const id = bot.registry?.blocksByName?.[name]?.id
       if (id != null) {
         if (movementBoundary()) movements.blocksToAvoid.add(id)
@@ -295,7 +295,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const dropPosition = target.position.floored()
       const destinations = []
       configureMovement()
-      const passable = b => b && (isAir(b) || /^(short_grass|tall_grass|fern|large_fern|leaf_litter)$/.test(b.name)) && b.boundingBox === 'empty' && !movements.blocksToAvoid.has(b.type) && !movements.liquids.has(b.type)
+      const passable = b => b && (isAir(b) || /^(short_grass|tall_grass|fern|large_fern|leaf_litter)$/.test(b.name) || (b.name === 'snow' && b.shapes?.length === 0)) && b.boundingBox === 'empty' && !movements.blocksToAvoid.has(b.type) && !movements.liquids.has(b.type)
       for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
         for (let down = -1; down <= 8; down++) {
           const p = dropPosition.offset(x, -down, z)
@@ -422,7 +422,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     assert(!block.isWaterlogged, 'Mining would release water from a waterlogged block')
     assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
     const neighbors = DIRECTIONS.filter(d => d.y >= 0).map(d => bot.blockAt(p.plus(d)))
-    assert(neighbors.every(b => b && !['water', 'lava'].includes(b.name)), 'Mining would expose adjacent liquid or an unloaded block')
+    assert(neighbors.every(b => b && !isFluidBearingBlock(b)), 'Mining would expose adjacent liquid or an unloaded block')
     const above = loaded(p.offset(0, 1, 0))
     assert(!/^(sand|red_sand|gravel|anvil|chipped_anvil|damaged_anvil|pointed_dripstone)$|_concrete_powder$/.test(above.name), `Mining would release overhead falling block ${above.name}`)
     let tool = bot.pathfinder?.bestHarvestTool(block)

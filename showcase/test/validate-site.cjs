@@ -35,11 +35,12 @@ const replay = JSON.parse(fs.readFileSync(path.join(root, 'run-telemetry.json'),
 const scorecard = JSON.parse(fs.readFileSync(path.join(root, 'brobench-current.json'), 'utf8'));
 assert.equal(replay.sourceCommit, release.testedApplicationCommit);
 assert.equal(scorecard.commits.candidate, release.testedApplicationCommit);
-for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','widerKnownWorlds'],['fresh','firstPassWorlds']]) {
+for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','widerKnownWorlds'],['fresh','firstPassWorlds'],['paired','pairedKnownWorlds']]) {
   const g = checkpoint.groups[group];
   assert.equal(g.cases.length, g.scheduled);
   assert.equal(g.cases.filter(r=>r.passed).length,g.passed);
-  assert.deepEqual({passed:g.passed,scheduled:g.scheduled},release[key]);
+  assert.equal(g.passed,release[key].passed);assert.equal(g.scheduled,release[key].scheduled);
+  assert.equal(g.sourceCommit||checkpoint.sourceCommit,release[key].sourceCommit||release.testedApplicationCommit);
 }
 const zip = fs.readFileSync(path.join(root, 'brobot-dev.zip'));
 assert.equal(zip.length, release.bytes);

@@ -8,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. In a preselected twenty-world first-pass evaluation, the latest measured build completed 8/20 (40%). It also completed three original known worlds, two of three additional known worlds and two of four wider known worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest measured build completed 10/20 (50%) on the same twenty worlds where the earlier build completed 8/20 (40%). These are now known development cases, with every failed run retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
@@ -164,7 +164,19 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ## Measured, not guessed
 
-### Latest recovery checkpoint · October 1, 2026
+### Transit recovery checkpoint · October 1, 2026
+
+- **219 automated checks**, **17/17 prepared live phases**, **11/11 prepared skill cases** and **20/20 local controls** pass on clean app `682bf46`
+- All three original known worlds completed the full starter objective, in 159.168s, 94.701s and 91.327s
+- A previously failing world completed a targeted replay in 242.380s, using the new bounded transit-obstruction recovery
+- A separately prepared live diagnostic recovered ten pre-existing cobblestone after clearing one safe dirt obstruction, then returned with them alive; this is not a fresh-world score
+- **10/20 wider known worlds completed**, compared with the previous first-pass result of 8/20; all eight previous successes completed again and two prior failures now completed
+
+[Current records and exact tested-file manifest](benchmarks/results/transit-2026-10-01/) · [How safe transit clearance works](docs/PICKUP_TRANSIT.md)
+
+The hosted development download includes this measured transit-recovery checkpoint. Individual runs can vary with mob/item timing, and these worlds informed development. Stable 1.0, rendered Windows/Mac client gameplay and paid-planner behavior remain unverified.
+
+### Earlier measured recovery checkpoint
 
 - **208 automated checks pass**, plus source syntax checks
 - **17/17 real-server regression phases pass**, including three repetitions of a previously troublesome grass-corner route
@@ -173,7 +185,7 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 - **2/3 additional development worlds** completed it: 86.129s and 99.866s. The canopy case reached the 300-second limit
 - Windows/Ubuntu Node 22/24 checks run on [PR 7](https://github.com/flowzygames/BroBot/pull/7). Actual rendered Windows/Mac gameplay and live paid-planner behavior remain unverified here
 
-**2/4 wider known worlds** completed the objective. These are reruns of the earlier first-pass sample; the treeless and mangrove cases still failed. A separate preselected twenty-world first-pass evaluation is in progress, with no result claimed yet.
+**2/4 wider known worlds** completed the objective. These are reruns of the earlier first-pass sample; the treeless and mangrove cases still failed. The separate preselected twenty-world first-pass evaluation completed **8/20 (40%)**, with every failure retained. [All twenty records and the selection plan](benchmarks/results/wide-first-pass-2026-10-01/).
 
 The tested app snapshot is `1e7ab1f`. All ten are known development cases, not a general reliability percentage. The earlier 526 source failed world 42; that result remains visible alongside this later complete rerun. Every scheduled result, including all failures, is [published with its conditions](benchmarks/results/pickup-preflight-2026-10-01/). The original frozen comparison below remains unchanged.
 

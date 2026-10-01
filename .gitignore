@@ -3,7 +3,7 @@ node_modules
 .env.*
 !.env.example
 .brobot/
-.server/
+.server
 *.log
 .DS_Store
 coverage/

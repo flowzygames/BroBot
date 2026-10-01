@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-transit-682",
+  "commit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T10:48:24.803Z",
+  "finished": "2026-10-01T10:52:56.409Z",
+  "status": "failed",
+  "passed": false,
+  "elapsedMs": 241678,
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "seed": "386690312",
+  "recordKind": "Summary with initial/final evidence. Full original result retained; duplicate runtime history and trace omitted.",
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -111.5,
+      "y": 66,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -140.5,
+      "y": 66,
+      "z": -28.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "acacia_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ]
+  },
+  "job": {
+    "status": "blocked",
+    "home": {
+      "position": {
+        "x": -111.5,
+        "y": 66,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 33,
+    "scouts": 8,
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "evidence": null
+  },
+  "fullRecordSha256": "35b08b035ab6fded8de2037cef85e65fdeb5a93254f88f770d528d445b0da36d"
+}
