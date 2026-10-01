@@ -134,3 +134,35 @@ are retained in `benchmarks/results/canopy-notch-2026-10-01/paired-summary-245.j
 The public download and published 219-check / 10-of-20 score remain unchanged.
 Next diagnostic work should isolate pickup and return-path planning behavior
 without weakening support/return-route guards or increasing benchmark budgets.
+
+## New standing cell pickup diagnosis
+
+A terminal-world reconstruction of seed 454806089 reproduces a separate
+clearance gap. At the logged late pickup position, the only existing standing
+endpoint is the bot's origin. It is already reachable, so the old transit probe
+has no sealed endpoint to repair and returns no suggestion. Direct headroom
+above the tracked drops is occluded. Increasing the probe's node cap alone does
+not change that result.
+
+A visible stone at (-23, 61, 6) can instead create a new standing cell at
+(-23, 60, 6), near a tracked item. Independent installed A* verifies both walking
+directions after that one virtual removal. This reconstruction combines the
+terminal world with rounded logged actor/drop positions and reconstructed dry
+movement settings. It does not establish that the patch would have prevented
+the historical timeout.
+
+The new experimental branch also considers that narrow case. A tracked item
+qualifies only when its full bounded proximity neighborhood is known and has
+no existing dry supported standing cell close enough, including manufactured
+solid support. One eligible visible removal must create dry feet/head space
+without removing the destination floor. Existing candidate selection for sealed
+endpoints is retained. All routes share the unchanged 80 ms / 512-node budget,
+128-node per-search limit, and twelve-candidate/target bounds. Ordinary digging
+and actual pickup still revalidate execution and inventory.
+
+The new nine regressions bring the automated check count to 254. A targeted
+natural-world run of seed 454806089 on application a3e2242 passed in 107.416
+seconds, with verified pickup gains, stone pickaxe, furnace and a living return
+to the start. Its complete result is retained separately as targeted-pocket-254.json.
+This single targeted pass does not replace the retained 8/20 experiment or the
+released 10/20 score. A new complete same-20 regression is in progress.
