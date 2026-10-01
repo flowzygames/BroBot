@@ -199,7 +199,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
-  async function returnableGoal (ctx, goal) {
+  async function returnableGoal (ctx, goal, fixedEndpoint = null) {
     checked(ctx)
     configureMovement()
     const used = ctx.planningUsed ?? 0
@@ -210,7 +210,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // Requiring the floored center as a reverse endpoint invents an impossible
       // standing cell. Verify a real walking route back within one block instead.
       const home = ctx.origin.floored()
-      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), yieldControl: () => pause(ctx, 0) })
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), fixedEndpoint, yieldControl: () => pause(ctx, 0) })
       checked(ctx)
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
     } catch (error) {
@@ -310,7 +310,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         // Give each drop one destination attempt before retrying a blocked
         // neighbor. One unreachable item must not monopolize the shared budget.
         const p = destinations[(attempts.get(target.id) - 1) % Math.min(3, destinations.length)]
-        const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z))
+        const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p)
         checked(ctx)
         await pursueDroppedItem(bot, goal, target, { signal: ctx.signal })
         checked(ctx)

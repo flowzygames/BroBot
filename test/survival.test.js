@@ -371,3 +371,42 @@ test('starter distinguishes a nearby obstructed table from a visible usable tabl
     runtime.bot.world.raycast=()=>({position});assert.equal((await runtime.survival.observe()).tableInReach,true);
   } finally {await runtime.close();await rm(dir,{recursive:true,force:true});}
 });
+
+test('capitalized owner pronouns resolve locally without changing literal player names', () => {
+ assert.deepEqual(parseCommand('Follow Me','Player'),{kind:'follow',player:'Player'});
+ assert.deepEqual(parseCommand('Come Here','Player'),{kind:'come',player:'Player'});
+ assert.deepEqual(parseCommand('follow MixedCaseName','Player'),{kind:'follow',player:'MixedCaseName'});
+});
+
+test('same-session resume recovers scoped drops after an inter-step pause and keeps its reason', async () => {
+ const f=fixture({intervalMs:30});let harvested=false;
+ f.job.observe=async()=>harvested?{}:{wood:'oak'};
+ f.job.execute=async(name,args)=>{
+  f.calls.push({name,args});
+  if(name==='collect'&&!harvested){harvested=true;setImmediate(()=>f.job.stop('User stop'));return{mined:3,remaining_drops:[{id:42}]};}
+  if(name==='pickup'){setImmediate(()=>f.job.stop('Recovery checked'));return{remaining_drops:[]};}
+  return{};
+ };
+ f.job.start();await f.job.promise;
+ assert.equal(f.job.state().status,'paused');assert.equal(f.job.state().reason,'User stop');assert.deepEqual(f.job.state().recoverDropIds,[42]);
+ f.calls.length=0;f.job.start({resume:true});await f.job.promise;
+ assert.equal(f.calls[0].name,'pickup');assert.deepEqual(f.calls[0].args.entity_ids,[42]);assert.equal(f.job.state().reason,'Recovery checked');
+});
+
+test('resume discards entity IDs after a new play session or process restoration', async () => {
+ let session=1;const f=fixture({intervalMs:30,session:()=>session});
+ f.job.execute=async()=>{setImmediate(()=>f.job.stop('Pause'));return{remaining_drops:[{id:42}]};};
+ f.job.start();await f.job.promise;assert.deepEqual(f.job.state().recoverDropIds,[42]);
+ session++;f.calls.length=0;
+ f.job.execute=async(name,args)=>{f.calls.push({name,args});setImmediate(()=>f.job.stop('Checked'));return{};};
+ f.job.start({resume:true});await f.job.promise;assert.notEqual(f.calls[0].name,'pickup');assert.deepEqual(f.job.state().recoverDropIds,[]);
+ f.data.survivalJob.recoverDropIds=[42];
+ const restored=new SurvivalJob({memory:f.memory,snapshot:()=>structuredClone(f.state),observe:async()=>({wood:'oak'}),execute:f.job.execute,stopActions:()=>{},context:'test',session:()=>session,intervalMs:30});
+ f.calls.length=0;restored.execute=async(name,args)=>{f.calls.push({name,args});setImmediate(()=>restored.stop('Checked'));return{};};
+ restored.start({resume:true});await restored.promise;assert.notEqual(f.calls[0].name,'pickup');assert.deepEqual(restored.state().recoverDropIds,[]);
+});
+
+test('low air during the inter-step sleep keeps the above-water safety instruction', async () => {
+ const f=fixture({intervalMs:30});f.job.execute=async()=>{setImmediate(()=>{f.state.oxygen=8;f.job.checkAir();});return{};};
+ f.job.start();await f.job.promise;assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/Bring BroBot above water/);
+});

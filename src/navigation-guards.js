@@ -4,7 +4,7 @@ const abortError = () => Object.assign(new Error('Action cancelled'), { name: 'A
 
 // Use the public path generator rather than mutating the pathfinder's active goal.
 // A timeout is unknown, never evidence that a route is safe.
-export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
+export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, fixedEndpoint = null, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
   if (typeof bot.pathfinder.getPathFromTo !== 'function') throw new Error('Return-path planning is unavailable; refusing collection travel')
   const deadline = performance.now() + planningBudget
   const check = () => { if (signal?.aborted) throw abortError(); if (performance.now() >= deadline) throw new Error('Return-path planning budget exhausted') }
@@ -25,11 +25,22 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
     if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
     return result
   }
+  // Pickup already validates an exact standing cell. A sealed drop pocket can
+  // exhaust a huge forward search even though its reverse component is tiny.
+  // Reject that pocket first; both directions still share the same deadline.
+  let fixed = null, reverse = null
+  if (fixedEndpoint !== null) {
+    if (!['x', 'y', 'z'].every(k => Number.isInteger(fixedEndpoint[k])) || typeof goal.isEnd !== 'function') throw new Error('Fixed endpoint must be an exact standing-cell goal')
+    fixed = new Vec3(fixedEndpoint.x, fixedEndpoint.y, fixedEndpoint.z)
+    if (!goal.isEnd(fixed)) throw new Error('Fixed endpoint does not satisfy the walking goal')
+    reverse = await plan(fixed, origin)
+  }
   const forward = await plan(bot.entity.position.clone(), goal)
   const last = forward.path.at(-1)
   const endpoint = last ? new Vec3(last.x, last.y, last.z) : bot.entity.position.floored()
   // Origin goal is supplied by the caller so the helper does not depend on an internal goal class.
-  const reverse = await plan(endpoint, origin)
+  if (fixed && !endpoint.equals(fixed)) throw new Error('Forward route ended at a different fixed endpoint')
+  if (!reverse) reverse = await plan(endpoint, origin)
   return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
 }
 

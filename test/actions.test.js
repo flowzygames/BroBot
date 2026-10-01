@@ -748,8 +748,9 @@ test('pickup gives a farther item a turn before retrying the closest blocked ite
   bot.entities[10] = { id: 10, name: 'item', position: new Vec3(2.5, 64, .5) }
   bot.entities[11] = { id: 11, name: 'item', position: new Vec3(5.5, 64, .5) }
   bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
-    planned.push(goal.x)
-    yield { result: { status: goal.x === 2 ? 'noPath' : 'success', path: [{ x: goal.x, y: goal.y, z: goal.z }] } }
+    const reverse = goal.x === 0
+    if (reverse) planned.push(start.x)
+    yield { result: { status: (reverse ? start.x : goal.x) === 2 ? 'noPath' : 'success', path: [{ x: goal.x, y: goal.y, z: goal.z }] } }
   }
   bot.pathfinder.goto = async goal => {
     bot.entity.position = new Vec3(goal.x + .5, goal.y, goal.z + .5)
@@ -769,7 +770,7 @@ test('pickup stops on cumulative planning exhaustion after fairly rotating targe
   bot.entities[10] = { id: 10, name: 'item', position: new Vec3(2.5, 64, .5) }
   bot.entities[11] = { id: 11, name: 'item', position: new Vec3(5.5, 64, .5) }
   bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
-    planned.push([goal.x, goal.z]); now += 1601
+    planned.push([start.x, start.z]); now += 1601
     yield { result: { status: 'partial', path: [] } }
   }
   const result = await createActions(bot).execute('pickup', { radius: 8 })
