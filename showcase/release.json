@@ -1,0 +1,39 @@
+{
+  "channel": "development",
+  "sourceCommit": "b3ace08d9f1aae419eddd3e2df250304698a0e7e",
+  "sourceTree": "012afbbca8ea99ade63207fd0bf38842ce212071",
+  "packagedCommit": "97bcec44ede368e69dc5a2e0b9046b7dbd7adbe7",
+  "testedApplicationCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "sha256": "17e01bbbb3d280c7df77fca9a56fd5a1c618c9fc055b6dd29f102c537767fd14",
+  "bytes": 401855,
+  "automatedChecks": 219,
+  "liveRegressionPhases": 17,
+  "originalDevelopmentWorlds": {
+    "passed": 3,
+    "scheduled": 3,
+    "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775"
+  },
+  "additionalDevelopmentWorlds": {
+    "passed": 2,
+    "scheduled": 3,
+    "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
+  },
+  "multiWorldEvaluation": "Prior first-pass build completed 8/20; current build completed 10/20 on the same now-known seeds. Every outcome is retained; no broad reliability or stable 1.0 claim.",
+  "readyForStable1_0": false,
+  "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest.",
+  "widerKnownWorlds": {
+    "passed": 2,
+    "scheduled": 4,
+    "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
+  },
+  "firstPassWorlds": {
+    "passed": 8,
+    "scheduled": 20,
+    "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
+  },
+  "pairedKnownWorlds": {
+    "passed": 10,
+    "scheduled": 20,
+    "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775"
+  }
+}

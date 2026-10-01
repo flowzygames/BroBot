@@ -1,0 +1,1322 @@
+{
+  "name": "BroBench overnight recovery checkpoint",
+  "date": "2026-10-01 UTC",
+  "protocol": "Same fixed development cases; original starter versus measured pickup-recovery build",
+  "commits": {
+    "baseline": "5164554fdaf25d9139ace4becc9aa803861333f7",
+    "candidate": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
+  },
+  "metrics": {
+    "MineLine": {
+      "baseline": {
+        "score": 100.0,
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          {
+            "group": "MineLine",
+            "id": "timber",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "completed": true,
+              "requested": 4,
+              "mined": 4,
+              "inventory_changes": {
+                "oak_log": 4
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "oak_log",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 16603
+          },
+          {
+            "group": "MineLine",
+            "id": "stone",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "result": {
+              "completed": true,
+              "requested": 4,
+              "mined": 4,
+              "inventory_changes": {
+                "cobblestone": 4
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 4
+              },
+              {
+                "name": "cobblestone",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 9046
+          },
+          {
+            "group": "MineLine",
+            "id": "iron",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "result": {
+              "completed": true,
+              "requested": 3,
+              "mined": 3,
+              "inventory_changes": {
+                "raw_iron": 3
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 3
+              },
+              {
+                "name": "raw_iron",
+                "count": 3,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 17398
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          {
+            "group": "MineLine",
+            "id": "timber",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "completed": true,
+              "requested": 4,
+              "mined": 4,
+              "inventory_changes": {
+                "oak_log": 4
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false,
+              "planning_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "oak_log",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 16600
+          },
+          {
+            "group": "MineLine",
+            "id": "stone",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "result": {
+              "completed": true,
+              "requested": 4,
+              "mined": 4,
+              "inventory_changes": {
+                "cobblestone": 4
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false,
+              "planning_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 4
+              },
+              {
+                "name": "cobblestone",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 9049
+          },
+          {
+            "group": "MineLine",
+            "id": "iron",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "result": {
+              "completed": true,
+              "requested": 3,
+              "mined": 3,
+              "inventory_changes": {
+                "raw_iron": 3
+              },
+              "remaining_drops": [],
+              "pickup_failures": [],
+              "failures": [],
+              "search_limited": false,
+              "planning_limited": false
+            },
+            "finalInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 3
+              },
+              {
+                "name": "raw_iron",
+                "count": 3,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 17349
+          }
+        ]
+      }
+    },
+    "Workbench": {
+      "baseline": {
+        "score": 100.0,
+        "passed": 6,
+        "total": 6,
+        "cases": [
+          {
+            "group": "Workbench",
+            "id": "planks",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_log",
+                "count": 2,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "oak_planks",
+              "requested": 8,
+              "crafted": 8,
+              "inventory_count": 8,
+              "recipe_batches": 2
+            },
+            "finalInventory": [
+              {
+                "name": "oak_planks",
+                "count": 8,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 1750
+          },
+          {
+            "group": "Workbench",
+            "id": "handles",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "stick",
+              "requested": 8,
+              "crafted": 8,
+              "inventory_count": 8,
+              "recipe_batches": 2
+            },
+            "finalInventory": [
+              {
+                "name": "stick",
+                "count": 8,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 2357
+          },
+          {
+            "group": "Workbench",
+            "id": "table",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "crafting_table",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 1944
+          },
+          {
+            "group": "Workbench",
+            "id": "wood-pick",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 3,
+                "durability_used": null
+              },
+              {
+                "name": "stick",
+                "count": 2,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "wooden_pickaxe",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "elapsedMs": 3076
+          },
+          {
+            "group": "Workbench",
+            "id": "stone-pick",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "cobblestone",
+                "count": 3,
+                "durability_used": null
+              },
+              {
+                "name": "stick",
+                "count": 2,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "stone_pickaxe",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "elapsedMs": 2753
+          },
+          {
+            "group": "Workbench",
+            "id": "furnace",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "cobblestone",
+                "count": 8,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "furnace",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "furnace",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 3810
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 6,
+        "total": 6,
+        "cases": [
+          {
+            "group": "Workbench",
+            "id": "planks",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_log",
+                "count": 2,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "oak_planks",
+              "requested": 8,
+              "crafted": 8,
+              "inventory_count": 8,
+              "recipe_batches": 2
+            },
+            "finalInventory": [
+              {
+                "name": "oak_planks",
+                "count": 8,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 1754
+          },
+          {
+            "group": "Workbench",
+            "id": "handles",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "stick",
+              "requested": 8,
+              "crafted": 8,
+              "inventory_count": 8,
+              "recipe_batches": 2
+            },
+            "finalInventory": [
+              {
+                "name": "stick",
+                "count": 8,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 2365
+          },
+          {
+            "group": "Workbench",
+            "id": "table",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 4,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "crafting_table",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 1953
+          },
+          {
+            "group": "Workbench",
+            "id": "wood-pick",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "oak_planks",
+                "count": 3,
+                "durability_used": null
+              },
+              {
+                "name": "stick",
+                "count": 2,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "wooden_pickaxe",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "wooden_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "elapsedMs": 3166
+          },
+          {
+            "group": "Workbench",
+            "id": "stone-pick",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "cobblestone",
+                "count": 3,
+                "durability_used": null
+              },
+              {
+                "name": "stick",
+                "count": 2,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "stone_pickaxe",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "stone_pickaxe",
+                "count": 1,
+                "durability_used": 0
+              }
+            ],
+            "elapsedMs": 2933
+          },
+          {
+            "group": "Workbench",
+            "id": "furnace",
+            "passed": true,
+            "initialInventory": [
+              {
+                "name": "cobblestone",
+                "count": 8,
+                "durability_used": null
+              },
+              {
+                "name": "crafting_table",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "result": {
+              "item": "furnace",
+              "requested": 1,
+              "crafted": 1,
+              "inventory_count": 1,
+              "recipe_batches": 1
+            },
+            "finalInventory": [
+              {
+                "name": "furnace",
+                "count": 1,
+                "durability_used": null
+              }
+            ],
+            "elapsedMs": 3980
+          }
+        ]
+      }
+    },
+    "Pathfinder": {
+      "baseline": {
+        "score": 100.0,
+        "passed": 2,
+        "total": 2,
+        "cases": [
+          {
+            "group": "Pathfinder",
+            "id": "wall-detour",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "arrived": true,
+              "position": {
+                "x": 8.31,
+                "y": 65,
+                "z": 4.5
+              },
+              "target": {
+                "x": 8,
+                "y": 65,
+                "z": 4
+              },
+              "radius": 0
+            },
+            "finalInventory": [],
+            "elapsedMs": 2402
+          },
+          {
+            "group": "Pathfinder",
+            "id": "climb-and-return",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "arrived": true,
+              "position": {
+                "x": 0.5,
+                "y": 65,
+                "z": 0.53
+              },
+              "target": {
+                "x": 0,
+                "y": 65,
+                "z": 0
+              },
+              "radius": 0
+            },
+            "finalInventory": [],
+            "elapsedMs": 3712
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 2,
+        "total": 2,
+        "cases": [
+          {
+            "group": "Pathfinder",
+            "id": "wall-detour",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "arrived": true,
+              "position": {
+                "x": 8.31,
+                "y": 65,
+                "z": 4.5
+              },
+              "target": {
+                "x": 8,
+                "y": 65,
+                "z": 4
+              },
+              "radius": 0
+            },
+            "finalInventory": [],
+            "elapsedMs": 2406
+          },
+          {
+            "group": "Pathfinder",
+            "id": "climb-and-return",
+            "passed": true,
+            "initialInventory": [],
+            "result": {
+              "arrived": true,
+              "position": {
+                "x": 0.5,
+                "y": 65,
+                "z": 0.53
+              },
+              "target": {
+                "x": 0,
+                "y": 65,
+                "z": 0
+              },
+              "radius": 0
+            },
+            "finalInventory": [],
+            "elapsedMs": 3716
+          }
+        ]
+      }
+    },
+    "CommandSense": {
+      "baseline": {
+        "score": 100.0,
+        "passed": 14,
+        "total": 14,
+        "cases": [
+          {
+            "group": "CommandSense",
+            "id": "stop",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "pause",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "!bro follow me",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "come here",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goto 1 64 -2",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goto camp",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "remember camp",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "home",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "inventory",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "status",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "action collect {\"block\":\"stone\",\"count\":3}",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goal Gather wood",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "survive starter",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "survive resume",
+            "passed": true
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 14,
+        "total": 14,
+        "cases": [
+          {
+            "group": "CommandSense",
+            "id": "stop",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "pause",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "!bro follow me",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "come here",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goto 1 64 -2",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goto camp",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "remember camp",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "home",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "inventory",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "status",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "action collect {\"block\":\"stone\",\"count\":3}",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "goal Gather wood",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "survive starter",
+            "passed": true
+          },
+          {
+            "group": "CommandSense",
+            "id": "survive resume",
+            "passed": true
+          }
+        ]
+      }
+    },
+    "SafetyLatch": {
+      "baseline": {
+        "score": 100.0,
+        "passed": 6,
+        "total": 6,
+        "cases": [
+          {
+            "group": "SafetyLatch",
+            "id": "only-owner-commands",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "invalid-action-json",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "stop-retains-lock",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "pre-cancelled-does-not-act",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "completion-needs-observed-items",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "api-failure-does-not-execute",
+            "passed": true
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 6,
+        "total": 6,
+        "cases": [
+          {
+            "group": "SafetyLatch",
+            "id": "only-owner-commands",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "invalid-action-json",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "stop-retains-lock",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "pre-cancelled-does-not-act",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "completion-needs-observed-items",
+            "passed": true
+          },
+          {
+            "group": "SafetyLatch",
+            "id": "api-failure-does-not-execute",
+            "passed": true
+          }
+        ]
+      }
+    },
+    "Trailhead": {
+      "baseline": {
+        "score": 0.0,
+        "passed": 0,
+        "total": 3,
+        "unsupported": 0,
+        "outcomes": [
+          {
+            "seed": "718224",
+            "status": "failed",
+            "elapsedMs": 121129,
+            "reason": "The starter job reached its 96-block travel boundary."
+          },
+          {
+            "seed": "42",
+            "status": "failed",
+            "elapsedMs": 245282,
+            "reason": "Low health: paused work to recover."
+          },
+          {
+            "seed": "20260930",
+            "status": "failed",
+            "elapsedMs": 87541,
+            "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+          }
+        ]
+      },
+      "candidate": {
+        "score": 100.0,
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          {
+            "seed": "718224",
+            "status": "passed",
+            "passed": true,
+            "elapsedMs": 100478,
+            "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+          },
+          {
+            "seed": "42",
+            "status": "passed",
+            "passed": true,
+            "elapsedMs": 158151,
+            "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+          },
+          {
+            "seed": "20260930",
+            "status": "passed",
+            "passed": true,
+            "elapsedMs": 76891,
+            "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+          }
+        ]
+      }
+    },
+    "GoalSense-LLM": {
+      "baseline": {
+        "score": null,
+        "note": "No API key / paid-model run"
+      },
+      "candidate": {
+        "score": null,
+        "passed": null,
+        "total": null,
+        "reason": "No live paid-model evaluation"
+      }
+    }
+  },
+  "source": {
+    "publishedCommit": "8b47cddf527efe02f2e19cae566155b348f8ae38",
+    "testedApplicationCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+    "records": "https://github.com/flowzygames/BroBot/tree/feat/starter-recovery-and-readme/benchmarks/results/pickup-preflight-2026-10-01",
+    "note": "The ten original, additional and wider worlds are known development cases. A separate twenty-world first-pass evaluation on this same build completed 8/20 (40%); all 20 records and 12 failures are retained in firstPassWorlds. Stable 1.0 remains unverified."
+  },
+  "additionalWorlds": {
+    "schemaVersion": 1,
+    "benchmark": "Trailhead",
+    "classification": "development",
+    "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+    "protocol": "trailhead-v1",
+    "environment": {
+      "node": "v24.19.0",
+      "platform": "linux",
+      "minecraft": "1.21.8"
+    },
+    "conditions": {
+      "freshNaturalWorld": true,
+      "difficulty": "normal",
+      "mode": "survival",
+      "suppliedItems": false,
+      "preparedTerrain": false,
+      "consoleActions": [
+        "spawnRadius=0 before connection only"
+      ],
+      "spawnRadius": 0,
+      "paidModel": false,
+      "controller": "offline-observation-driven",
+      "timeBudgetSeconds": 300,
+      "startCommand": "survive starter"
+    },
+    "passed": 2,
+    "scheduled": 3,
+    "completed": 3,
+    "complete": true,
+    "cases": [
+      {
+        "seed": "314159",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 86129,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "271828",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 99866,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "8675309",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 300021,
+        "reason": "Starter job time budget reached."
+      }
+    ],
+    "note": "Known development worlds; not evidence of broad or held-out reliability. Retain all individual run records and failed attempts."
+  },
+  "widerWorlds": {
+    "schemaVersion": 1,
+    "benchmark": "Trailhead",
+    "classification": "development",
+    "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+    "protocol": "trailhead-v1",
+    "environment": {
+      "node": "v24.19.0",
+      "platform": "linux",
+      "minecraft": "1.21.8"
+    },
+    "conditions": {
+      "freshNaturalWorld": true,
+      "difficulty": "normal",
+      "mode": "survival",
+      "suppliedItems": false,
+      "preparedTerrain": false,
+      "consoleActions": [
+        "spawnRadius=0 before connection only"
+      ],
+      "spawnRadius": 0,
+      "paidModel": false,
+      "controller": "offline-observation-driven",
+      "timeBudgetSeconds": 300,
+      "startCommand": "survive starter"
+    },
+    "passed": 2,
+    "scheduled": 4,
+    "completed": 4,
+    "complete": true,
+    "cases": [
+      {
+        "seed": "256004205",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 93812,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "345250156",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 67300,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      {
+        "seed": "387394791",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 99725,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "904314939",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 193955,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      }
+    ],
+    "note": "Known development worlds; not evidence of broad or held-out reliability. Retain all individual run records and failed attempts."
+  },
+  "firstPassWorlds": {
+    "schemaVersion": 1,
+    "benchmark": "Trailhead",
+    "classification": "first-pass",
+    "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+    "protocol": "trailhead-v1",
+    "environment": {
+      "node": "v24.19.0",
+      "platform": "linux",
+      "minecraft": "1.21.8"
+    },
+    "conditions": {
+      "freshNaturalWorld": true,
+      "difficulty": "normal",
+      "mode": "survival",
+      "suppliedItems": false,
+      "preparedTerrain": false,
+      "consoleActions": [
+        "spawnRadius=0 before connection only"
+      ],
+      "spawnRadius": 0,
+      "paidModel": false,
+      "controller": "offline-observation-driven",
+      "timeBudgetSeconds": 300,
+      "startCommand": "survive starter"
+    },
+    "passed": 8,
+    "scheduled": 20,
+    "completed": 20,
+    "complete": true,
+    "cases": [
+      {
+        "seed": "454806089",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 54615,
+        "reason": "A hostile mob is too close for unarmored starter gathering."
+      },
+      {
+        "seed": "1542908414",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 300005,
+        "reason": "Starter job time budget reached."
+      },
+      {
+        "seed": "761598570",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 77559,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1587439118",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 111019,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "924242050",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 69349,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      {
+        "seed": "113919219",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 81358,
+        "reason": "No bounded exploration target remains inside the job area."
+      },
+      {
+        "seed": "474859294",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 66607,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1576696577",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 76876,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1382194916",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 268456,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "386690312",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 240929,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      {
+        "seed": "1744809425",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 300004,
+        "reason": "Starter job time budget reached."
+      },
+      {
+        "seed": "61544722",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 39682,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      {
+        "seed": "1041160109",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 52441,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      {
+        "seed": "1888406977",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 94592,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1547703085",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 50049,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      {
+        "seed": "1146093953",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 121782,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1014875191",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 182430,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      {
+        "seed": "355620996",
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 230148,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      {
+        "seed": "1276821265",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 300021,
+        "reason": "Starter job time budget reached."
+      },
+      {
+        "seed": "1244186709",
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 67099,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      }
+    ],
+    "note": "Twenty preselected fresh worlds, one run each on frozen source. All failures and unsuitable spawns retained. This measures bounded starter coverage, not general intelligence or stable-release readiness. Later development may inspect these worlds, making future reruns known cases.",
+    "selection": "Python Random seeded with the first8 SHA256 bytes of 'BroBot Trailhead Wide 2026-10-01', sampled before inspecting any of these worlds; excludes ten already known worlds."
+  }
+}

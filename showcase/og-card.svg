@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#f6f7ef"/>
+<circle cx="940" cy="350" r="280" fill="#e5ebd6"/>
+<g font-family="DejaVu Sans, sans-serif" fill="#142c22">
+<rect x="60" y="48" width="39" height="29" rx="7" transform="rotate(-6 80 64)" fill="#142c22"/>
+<rect x="70" y="58" width="5" height="10" rx="2" fill="#d1f268"/><rect x="84" y="58" width="5" height="10" rx="2" fill="#d1f268"/>
+<text x="112" y="76" font-size="34" font-weight="bold" letter-spacing="-2">brobot.</text>
+<text x="60" y="208" font-size="73" font-weight="bold" letter-spacing="-4">A little help.</text>
+<text x="60" y="294" font-size="73" font-weight="bold" letter-spacing="-4">A bigger</text>
+<text x="60" y="380" font-size="73" font-weight="bold" letter-spacing="-4" fill="#7a9552">adventure.</text>
+<text x="64" y="442" font-size="21" fill="#627065">Your local Minecraft companion.</text>
+<text x="64" y="563" font-size="13" letter-spacing="3" fill="#627065">GATHER. CRAFT. EXPLORE. TOGETHER.</text>
+</g>
+<ellipse cx="932" cy="505" rx="172" ry="28" fill="#cad7ae"/>
+<g stroke-linejoin="round">
+<path d="M760 442 L939 346 L1106 438 L928 535Z" fill="#a5ba74"/>
+<path d="M760 442 L928 535 L928 569 L760 479Z" fill="#927b53"/>
+<path d="M928 535 L1106 438 L1106 474 L928 569Z" fill="#aa9568"/>
+<path d="M860 347 L935 307 L1006 347 L932 389Z" fill="#536d42"/>
+<path d="M860 347 L932 389 L932 468 L860 428Z" fill="#243e2c"/>
+<path d="M932 389 L1006 347 L1006 424 L932 468Z" fill="#3d5836"/>
+<path d="M839 235 L935 184 L1029 237 L932 291Z" fill="#e0f0a2"/>
+<path d="M839 235 L932 291 L932 382 L839 329Z" fill="#b6d56f"/>
+<path d="M932 291 L1029 237 L1029 327 L932 382Z" fill="#8fab55"/>
+<path d="M864 272 L878 280 L878 300 L864 292Z" fill="#243e2c"/>
+<path d="M904 294 L918 302 L918 322 L904 314Z" fill="#243e2c"/>
+<path d="M881 324 L902 335" stroke="#243e2c" stroke-width="5" fill="none"/>
+<path d="M932 184 L932 161" stroke="#536d42" stroke-width="7"/><circle cx="932" cy="153" r="10" fill="#f2a16c"/>
+<path d="M842 365 L812 350 L812 411 L842 428Z" fill="#b6d56f"/>
+<path d="M1018 356 L1044 341 L1044 402 L1018 417Z" fill="#8fab55"/>
+</g>
+<text x="979" y="596" font-family="DejaVu Sans,sans-serif" font-size="10" fill="#627065" letter-spacing="1">ILLUSTRATION</text>
+</svg>

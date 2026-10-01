@@ -1,0 +1,516 @@
+{
+  "title": "A measured starter run",
+  "seed": "718224",
+  "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "minecraft": "1.21.8",
+  "durationSeconds": 94.701,
+  "sampleIntervalSeconds": 5,
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "home": {
+    "x": 0.5,
+    "y": 68,
+    "z": 0.5
+  },
+  "samplingNote": "Initial frame is the verified pre-command snapshot; later frames use recorded times and the final frame verifies completion.",
+  "samples": [
+    {
+      "seconds": 0,
+      "position": {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "starting",
+      "inventory": []
+    },
+    {
+      "seconds": 5.0,
+      "position": {
+        "x": -16.2,
+        "y": 71,
+        "z": 12.2
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": []
+    },
+    {
+      "seconds": 9.999,
+      "position": {
+        "x": -30.5,
+        "y": 72,
+        "z": 20.54
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": []
+    },
+    {
+      "seconds": 15.0,
+      "position": {
+        "x": -31.55,
+        "y": 72,
+        "z": 22.9
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_log",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "seconds": 19.999,
+      "position": {
+        "x": -31.5,
+        "y": 72,
+        "z": 23.74
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_log",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "seconds": 24.999,
+      "position": {
+        "x": -31.5,
+        "y": 72,
+        "z": 24.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "observing",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 4
+        },
+        {
+          "name": "oak_log",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "seconds": 30.0,
+      "position": {
+        "x": -31.5,
+        "y": 72,
+        "z": 24.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 6
+        },
+        {
+          "name": "stick",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "seconds": 35.0,
+      "position": {
+        "x": -24.37,
+        "y": 76,
+        "z": 32.43
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "seconds": 40.0,
+      "position": {
+        "x": -4.64,
+        "y": 79,
+        "z": 38.49
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "seconds": 44.999,
+      "position": {
+        "x": -7.5,
+        "y": 74,
+        "z": 32.37
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "seconds": 50.0,
+      "position": {
+        "x": -6.58,
+        "y": 74,
+        "z": 33.02
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "seconds": 55.0,
+      "position": {
+        "x": -5.82,
+        "y": 74,
+        "z": 33.7
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "seconds": 59.999,
+      "position": {
+        "x": -5.3,
+        "y": 74,
+        "z": 34.7
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "seconds": 64.999,
+      "position": {
+        "x": -3.8,
+        "y": 74,
+        "z": 35.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "seconds": 70.0,
+      "position": {
+        "x": -2.49,
+        "y": 78.02,
+        "z": 39.16
+      },
+      "health": 20,
+      "food": 20,
+      "action": "go_to",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "seconds": 74.999,
+      "position": {
+        "x": -17.37,
+        "y": 76,
+        "z": 36.18
+      },
+      "health": 20,
+      "food": 20,
+      "action": "go_to",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "seconds": 80.0,
+      "position": {
+        "x": -30.54,
+        "y": 72,
+        "z": 24.69
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "stick",
+          "count": 2
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 11
+        }
+      ]
+    },
+    {
+      "seconds": 84.999,
+      "position": {
+        "x": -30.54,
+        "y": 72,
+        "z": 24.69
+      },
+      "health": 20,
+      "food": 20,
+      "action": "observing",
+      "inventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "furnace",
+          "count": 1
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "seconds": 90.0,
+      "position": {
+        "x": -18.41,
+        "y": 71,
+        "z": 12.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "go_to",
+      "inventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "furnace",
+          "count": 1
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "seconds": 94.701,
+      "position": {
+        "x": 0.68,
+        "y": 68.23,
+        "z": 0.32
+      },
+      "health": 20,
+      "food": 20,
+      "action": "complete",
+      "inventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1
+        },
+        {
+          "name": "oak_planks",
+          "count": 3
+        },
+        {
+          "name": "furnace",
+          "count": 1
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}
