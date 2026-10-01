@@ -136,7 +136,7 @@ export class SurvivalJob {
       if (recovery) {
         // Fresh inventory may already satisfy the next prerequisite. Do not
         // chase leftover drops instead of crafting or taking a finished kit home.
-        if (decision.name === 'collect' || decision.scout) decision = recovery;
+        if (recovery.name !== 'pickup' || decision.name === 'collect' || decision.scout) decision = recovery;
         recovery = null;
       }
       if (decision.name === 'pickup' && observation.pickupClearance && (this.job.clearanceDigs ?? 0) < 8) {

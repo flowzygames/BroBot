@@ -1,3 +1,40 @@
+# Latest workstation and recovery checkpoint — October 1, 2026
+
+Tested app `6e63360210f525baa3d53af6a8cfffa2b63015df`: **198 automated checks**, **17/17 prepared live regression phases**, **11/11 prepared skill cases**, and **20/20 local controls**. Source stayed frozen and clean throughout this suite. Documentation and evidence are packaged afterward with a matching tested-file manifest.
+
+Workstation selection now prefers a visible table over a closer obstructed one and places a carried table locally when the nearby table is blocked. Repeated crafting failures now execute bounded scouting instead of spinning through the work limit.
+
+| Cohort / world | Complete starter and return | Elapsed |
+|---|---:|---:|
+| 718224 | Pass | 99.653s |
+| 42 | Pass | 150.625s |
+| 20260930 | Pass | 91.643s |
+| **Original development worlds** | **3/3** | |
+| 314159 | Pass | 95.489s |
+| 271828 | Pass | 108.002s |
+| 8675309 | Fail | 300.005s |
+| **Additional development worlds** | **2/3** | |
+| 256004205 | Pass | 78.019s |
+| 345250156 | Fail | 67.619s |
+| 387394791 | Pass | 124.452s |
+| 904314939 | Fail | 116.963s |
+| **New first-pass worlds** | **2/4** | |
+
+All ten cases used the same clean app, Linux/Node 24.19.0, Minecraft 1.21.8, normal survival, empty inventory and a 300-second limit. No materials or terrain were supplied. Every scheduled case remains in its denominator; no best retry was selected.
+
+The original and additional cohorts are known development worlds. Four new seeds were randomly selected before their worlds were inspected and tested once on this frozen build; [the selection record](results/workstations-2026-10-01/first-pass-selection.json) is included. Their **2/4** result is a small first-pass check, not general reliability proof. Once used for diagnosis, these are also known development cases for subsequent work.
+
+### What still stops it
+- **8675309:** Canopy run reached the 300-second limit; no completion claimed.
+- **345250156:** No supported logs were found before the eight-scout limit. A separate saved-terrain diagnostic found no logs inside the loaded 90-block job area; extending retries would not create trees.
+- **904314939:** The bot made a wooden pickaxe but could not reach stone through its dry, returnable walking policy. Saved-terrain analysis found a 108-cell canopy component at Y81–90, with the observed stone targets at Y67 or lower and no reachable harvesting endpoint. Home was reachable. This static diagnosis does not prove how terrain editing would behave live.
+
+[Per-world evidence, cohort reports and the tested-file manifest](results/workstations-2026-10-01/) retain pass/fail conditions and source identity. Summary records omit duplicate traces; full local harness records remain retained. Prepared fixtures supply resources and do not prove autonomous acquisition. Live API planning and Windows/macOS rendered-client gameplay remain unverified. This is a development preview, not stable 1.0.
+
+---
+
+## Previous complete checkpoint (preserved)
+
 # Latest measured recovery checkpoint — October 1, 2026
 
 The application snapshot `c1e01963a8eea0b6446c47a1f4dd6302a91986f8` passed 194 automated checks, all 17 prepared live regression phases, all 11 prepared skill cases and all 20 local control/grammar cases. The published documentation/evidence commit may differ; application code is unchanged from this tested snapshot.

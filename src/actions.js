@@ -95,7 +95,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   const owned = name => { const item = items().find(i => i.name === name); assert(item, `No ${name} in inventory`); return item }
   const dimension = () => bot.game?.dimension ?? bot.entity?.dimension ?? 'unknown'
   const loaded = p => { const b = bot.blockAt(p); assert(b, `Chunk not loaded at ${JSON.stringify(plainPos(p))}`); return b }
-  const nearby = (name, radius = 32) => {
+  const nearby = (name, radius = 32, accept = () => true) => {
     const id = bot.registry?.blocksByName?.[name]?.id
     if (id == null) return null
     const origin = bot.entity.position
@@ -110,11 +110,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         const d = p.distanceTo(origin)
         if (d > radius || d >= distance) continue
         const block = bot.blockAt(p)
-        if (block?.type === id) { closest = block; distance = d }
+        if (block?.type === id && accept(block)) { closest = block; distance = d }
       }
       return closest
     }
-    const positions = bot.findBlocks({ matching: id, maxDistance: Math.ceil(radius * Math.sqrt(3) + 24), count: 256 }).filter(p => p.distanceTo(origin) <= radius).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
+    const positions = bot.findBlocks({ matching: id, maxDistance: Math.ceil(radius * Math.sqrt(3) + 24), count: 256 }).filter(p => p.distanceTo(origin) <= radius && accept(bot.blockAt(p))).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
     return positions.length ? bot.blockAt(positions[0]) : null
   }
   const checked = ctx => { if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
@@ -219,13 +219,16 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     } finally { ctx.planningUsed = used + performance.now() - start }
   }
 
+  function visibleHere (block) {
+    if (!block?.position) return false
+    const eye = bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0)
+    if (bot.world?.raycast) return visibleBlockFace(bot.world, eye, block.position, 4.5)
+    return eye.distanceTo(block.position.offset(0.5, 0.5, 0.5)) <= 4.5 && (!bot.canSeeBlock || bot.canSeeBlock(block))
+  }
+
   async function approachBlock (ctx, p, { returnable = false } = {}) {
     loaded(p)
-    const visible = () => {
-      const eye = bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0)
-      if (bot.world?.raycast) return visibleBlockFace(bot.world, eye, p, 4.5)
-      return eye.distanceTo(p.offset(0.5, 0.5, 0.5)) <= 4.5 && (!bot.canSeeBlock || bot.canSeeBlock(loaded(p)))
-    }
+    const visible = () => visibleHere(loaded(p))
     if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable })
     assert(visible(), 'Target block remains out of reach or behind an obstruction')
   }
@@ -493,7 +496,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   async function workstation (ctx, name) {
     // Reuse a workstation already in reach. If carrying one, place it locally
     // rather than crossing difficult terrain to a distant duplicate.
-    let block = nearby(name, 4) ?? (itemCount(name) ? null : nearby(name, 24))
+    let block = nearby(name, 4, visibleHere) ?? (itemCount(name) ? null : nearby(name, 24))
     if (block) { await approachBlock(ctx, block.position); return loaded(block.position) }
     owned(name)
     const feet = bot.entity.position.floored()
@@ -515,7 +518,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     assert(definition, `Unknown item ${name}`)
     const wanted = numeric(args.count, undefined, 1, 256, true)
     const before = itemCount(name)
-    let table = nearby('crafting_table', 4)
+    let table = nearby('crafting_table', 4, visibleHere)
     let produced = 0
     let batches = 0
     while (produced < wanted) {

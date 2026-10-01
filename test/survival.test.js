@@ -348,3 +348,26 @@ test('another entity air update cannot pause the starter or mask its own low air
   bot.entity.metadata[1]=60;bot.oxygenLevel=20;f.job.checkAir();await f.job.promise;
   assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/Air is low/);
 });
+
+test('repeated blocked crafting executes its scouting recovery instead of spinning to the step cap', async () => {
+  const f=fixture();let scouted=false,craftFailures=0;
+  f.job.execute=async(name,args,signal)=>{
+    if(name==='craft'&&args.item==='wooden_pickaxe'&&!scouted){craftFailures++;throw Error('Target block remains out of reach or behind an obstruction');}
+    if(name==='explore')scouted=true;
+    return f.execute(name,args,signal);
+  };
+  f.job.start();await f.job.promise;
+  assert.equal(scouted,true);assert.equal(craftFailures,2);assert.equal(f.job.state().status,'complete');
+  assert.equal(f.calls.filter(call=>call.name==='explore').length,1);
+});
+
+test('starter distinguishes a nearby obstructed table from a visible usable table', async () => {
+  const {Runtime}=await import('../src/runtime.js');const {loadConfig}=await import('../src/config.js');const {Vec3}=await import('vec3');const {mkdtemp,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');
+  const dir=await mkdtemp(join(tmpdir(),'brobot-table-visibility-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));const position=new Vec3(2,64,0);
+  runtime.execute=async()=>({position:{x:.5,y:64,z:.5},nearby_blocks:[]});
+  runtime.bot={registry:{blocksArray:[{id:2,name:'crafting_table'}]},entity:{position:new Vec3(.5,64,.5)},findBlocks:({matching})=>matching.includes(2)?[position]:[],blockAt:p=>({name:'crafting_table',position:p}),world:{raycast:()=>({position:new Vec3(1,64,0)})},quit:()=>{}};
+  try {
+    const blocked=await runtime.survival.observe();assert.equal(blocked.tableInReach,false);assert.equal(blocked.tables.length,1);
+    runtime.bot.world.raycast=()=>({position});assert.equal((await runtime.survival.observe()).tableInReach,true);
+  } finally {await runtime.close();await rm(dir,{recursive:true,force:true});}
+});
