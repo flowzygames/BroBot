@@ -30,3 +30,5 @@ for(let i=0;i<5;i++){const a=t*.3+i*1.9;const x=r.width*.5+Math.sin(a)*r.width*.
 function frame(now){draw((now-start)/1000);raf=paused?0:requestAnimationFrame(frame)}new ResizeObserver(()=>draw(paused?0:(performance.now()-start)/1000)).observe(canvas);draw(0);if(!paused)raf=requestAnimationFrame(frame);document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0}else if(!paused&&!raf)raf=requestAnimationFrame(frame)});
 
 }
+
+const downloadButton=document.querySelector('#downloadBroBot');if(downloadButton)downloadButton.addEventListener('click',()=>{const thanks=document.querySelector('#downloadThanks');thanks.hidden=false;thanks.focus({preventScroll:true});thanks.scrollIntoView({behavior:reduced?'instant':'smooth',block:'center'});});
