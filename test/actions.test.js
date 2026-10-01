@@ -687,3 +687,18 @@ test('targeted clearing refuses a block that no longer matches the observed type
   await assert.rejects(createActions(bot).execute('dig_at', { x: 2, y: 64, z: 0, expected_block: 'stone' }), /changed/);
   assert.equal(mined, false);
 });
+
+test('return anchor permits a neighboring supported cell but never a two-block shortcut', async () => {
+ const bot = fakeBot(); let plans = 0;
+ bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+   plans++;
+   if(plans === 2) {
+     assert.equal(goal.isEnd({x:0,y:64,z:1}),true);
+     assert.equal(goal.isEnd({x:0,y:64,z:2}),false);
+     assert.equal(goal.isEnd({x:0,y:62,z:0}),false);
+     yield {result:{status:'success',path:[{x:0,y:64,z:1}]}};
+   } else yield {result:{status:'success',path:[{x:0,y:64,z:-4}]}};
+ };
+ const result = await createActions(bot).execute('explore',{direction:'north',distance:4,returnable:true});
+ assert.equal(result.explored,true); assert.equal(plans,2);
+});

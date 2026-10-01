@@ -1,0 +1,16 @@
+{
+  "channel": "development",
+  "sourceCommit": "f68166b82a6b3d26323428ee3cacfb47f51c56cf",
+  "sourceTree": "1afd9502a3997dbfafb52389f3d04e54ce52ae1f",
+  "packagedCommit": "d3e5aa82da735939d9d0afb6d6c81e2eda86eee2",
+  "sha256": "ae2d5334938ff8e6c67eee5ed0044cae633bf03363cc8972ac946672a2f41cc5",
+  "bytes": 206450,
+  "automatedChecks": 161,
+  "liveRegressionPhases": 16,
+  "latestDevelopmentStarter": {
+    "seed": "20260930",
+    "milliseconds": 86728
+  },
+  "multiWorldEvaluation": "in progress",
+  "readyForStable1_0": false
+}

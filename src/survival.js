@@ -48,7 +48,9 @@ export function nextStarterStep(state, job, observation = {}) {
     return ensurePlanks(3) ?? action('craft', { item: 'wooden_pickaxe', count: 1 }, 'Craft the first mining tool.');
   }
   if (!has('stone_pickaxe') && (items.stick ?? 0) < 2) return ensurePlanks(2) ?? action('craft', { item: 'stick', count: 4 }, 'Prepare stone-pickaxe handles.');
-  const requiredStone = has('stone_pickaxe') ? 8 : 3;
+  // If the table is elsewhere, gather the full kit before making a return trip.
+  // Upgrade immediately when a usable table is already nearby.
+  const requiredStone = has('stone_pickaxe') ? 8 : table ? 3 : 11;
   if ((items.cobblestone ?? 0) < requiredStone) {
     const needed = requiredStone - (items.cobblestone ?? 0);
     return action('collect', { block: 'stone', count: Math.min(needed, 4), radius: 32 }, 'Collect a bounded batch of stone and verify its drops.');
@@ -91,6 +93,7 @@ export class SurvivalJob {
   async loop(signal) {
     const deadline = Date.now() + this.maxDurationMs;
     const failures = new Map();
+    const firstStep = this.job.steps;
     let recovery = null;
     const excludeFailures = (decision, result) => {
       if (decision.name !== 'collect' || !result?.failures) return;
@@ -101,7 +104,7 @@ export class SurvivalJob {
       this.job.excluded[decision.args.block] = [...unique.values()].slice(-128);
     };
     const remember = entry => { this.job.history.push({ at: new Date().toISOString(), ...entry }); this.job.history = this.job.history.slice(-32); this.save(); };
-    while (this.job.steps < this.maxSteps) {
+    while (this.job.steps - firstStep < this.maxSteps) {
       signal.throwIfAborted();
       if (Date.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
       const before = this.snapshot();

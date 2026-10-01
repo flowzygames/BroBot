@@ -71,3 +71,17 @@ test('abort releases listeners and goal; replacement goals are never cleared', a
   const p2 = pursueDroppedItem(b, goal, b.entities[2]); const replacement = { x: 8 }; b.pathfinder.setGoal(replacement)
   await assert.rejects(p2, /replaced/); assert.equal(b.pathfinder.goal, replacement); clean(b)
 })
+
+test('walking timeout releases its movement and event listeners', async () => {
+ const { walkToGoal }=await import('../src/navigation-guards.js');const b=bot();
+ await assert.rejects(walkToGoal(b,goal,{stallMs:10,pollMs:2,timeoutMs:100}),/no movement progress/);clean(b);assert.equal(b.pathfinder.goal,null);assert.equal(b.clears,1);
+});
+test('walking arrival is verified and never clears a replacement goal',async()=>{
+ const { walkToGoal }=await import('../src/navigation-guards.js');const b=bot();let arrived=false;const g={isEnd:()=>arrived};
+ const p=walkToGoal(b,g);b.emit('goal_reached',g);arrived=true;b.emit('goal_reached',g);assert.deepEqual(await p,{arrived:true});clean(b);
+ const other={x:8};const q=walkToGoal(b,goal);b.pathfinder.setGoal(other);await assert.rejects(q,/replaced/);assert.equal(b.pathfinder.goal,other);clean(b);
+});
+test('walking abort and no-path stop promptly without claiming arrival',async()=>{
+ const { walkToGoal }=await import('../src/navigation-guards.js');
+ for(const kind of ['abort','path']){const b=bot(),c=new AbortController();const p=walkToGoal(b,goal,{signal:c.signal});if(kind==='abort')c.abort();else b.emit('path_update',{status:'noPath'});await assert.rejects(p,kind==='abort'?/cancelled/:/noPath/);clean(b);assert.equal(b.pathfinder.goal,null);}
+});

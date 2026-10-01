@@ -195,7 +195,7 @@ test('completion on the final allowed action is verified rather than lost to the
 });
 
 test('starter returns to a known table instead of requiring redundant wood', () => {
-  const state = { connected: true, health: 20, food: 20, dimension: 'overworld', position: { x: 20, y: 64, z: 0 }, inventory: [{ name: 'wooden_pickaxe', count: 1 }, { name: 'stick', count: 2 }, { name: 'cobblestone', count: 3 }, { name: 'birch_planks', count: 3 }] };
+  const state = { connected: true, health: 20, food: 20, dimension: 'overworld', position: { x: 20, y: 64, z: 0 }, inventory: [{ name: 'wooden_pickaxe', count: 1 }, { name: 'stick', count: 2 }, { name: 'cobblestone', count: 11 }, { name: 'birch_planks', count: 3 }] };
   const table = { x: 0, y: 64, z: 2 };
   const job = { home: { position: { x: 0, y: 64, z: 0 }, dimension: 'overworld' }, tables: [table] };
   const step = nextStarterStep(state, job, { wood: 'birch', tableInReach: false });
@@ -215,4 +215,37 @@ test('drop recovery can clear a verified head block and then resume pickup', asy
   };
   f.job.start(); await f.job.promise;
   assert.equal(cleared, true); assert.equal(f.job.state().status, 'complete'); assert.equal(f.job.state().clearanceDigs, 1);
+});
+
+test('explicit resume grants a new bounded step budget while preserving total progress', async () => {
+  const f = fixture({ maxSteps: 1 });
+  f.job.start(); await f.job.promise;
+  assert.equal(f.job.state().status, 'blocked');
+  assert.equal(f.job.state().steps, 1);
+  for (let attempt = 0; attempt < 30 && f.job.state().status !== 'complete'; attempt++) {
+    const previous = f.job.state().steps;
+    f.job.start({ resume: true }); await f.job.promise;
+    assert.ok(f.job.state().steps <= previous + 1);
+  }
+  assert.equal(f.job.state().status, 'complete');
+  assert.ok(f.job.state().steps > 1);
+  assert.equal(f.counts().stone_pickaxe, 1);
+  assert.equal(f.counts().furnace, 1);
+});
+
+test('starter gathers the kit stone before returning to a distant crafting table', () => {
+ const state={connected:true,health:20,food:20,dimension:'overworld',position:{x:8,y:64,z:0},inventory:[{name:'wooden_pickaxe',count:1},{name:'stick',count:2},{name:'cobblestone',count:3}]};
+ const job={home:{position:{x:0,y:64,z:0},dimension:'overworld'},tables:[{x:0,y:64,z:0}]};
+ const away=nextStarterStep(state,job,{tableInReach:false});assert.equal(away.name,'collect');assert.equal(away.args.count,4);
+ const near=nextStarterStep(state,job,{tableInReach:true});assert.equal(near.name,'craft');assert.equal(near.args.item,'stone_pickaxe');
+ state.inventory.find(i=>i.name==='cobblestone').count=11;
+ assert.equal(nextStarterStep(state,job,{tableInReach:false}).waypointKind,'table');
+});
+
+test('starter observes its crafting table even when generic inspection is full of ore', async () => {
+ const { Runtime }=await import('../src/runtime.js');const { loadConfig }=await import('../src/config.js');const {Vec3}=await import('vec3');const{mkdtemp,rm}=await import('node:fs/promises');const{tmpdir}=await import('node:os');const{join}=await import('node:path');
+ const dir=await mkdtemp(join(tmpdir(),'brobot-table-observe-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));
+ runtime.execute=async()=>({position:{x:0.5,y:64,z:0.5},nearby_blocks:Array.from({length:64},()=>({name:'iron_ore',position:{x:0,y:60,z:0}}))});
+ runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'crafting_table'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({matching})=>matching[0]===2?[new Vec3(2,64,0)]:[],blockAt:p=>({name:'crafting_table',position:p}),quit:()=>{}};
+ try{const observation=await runtime.survival.observe();assert.equal(observation.tableInReach,true);assert.equal(observation.tables.length,1);assert.equal(observation.tables[0].x,2);}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
 });

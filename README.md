@@ -29,6 +29,20 @@ Other implemented tools cover eating, sleeping, item transfer, block interaction
 
 **You need:** Node.js **22.9+**, a licensed Minecraft client, and the repository downloaded to your computer. Setup downloads Java 21 if a compatible installation is missing. Initial downloads require internet access.
 
+### Download and launch
+
+Unzip the [development download](https://brobot-showcase.vercel.app/download), then:
+
+- **Windows:** double-click `Start-BroBot.cmd`
+- **macOS / Linux:** open a terminal in the extracted folder and run `sh start-brobot.sh`
+
+Install Node.js 22.9+ first. The launcher installs the locked dependencies,
+opens setup if needed, and starts the local world. It asks you to review the
+Minecraft EULA rather than accepting it silently. Keep the terminal open while
+playing; Ctrl+C saves and closes the world.
+
+### Prefer Git?
+
 ```sh
 git clone https://github.com/flowzygames/BroBot.git
 cd BroBot
@@ -40,7 +54,7 @@ npm run play
 
 This README describes the development branch `feat/starter-recovery-and-readme`. Until its draft pull request is merged, a default-branch checkout may not contain these features.
 
-1. Enter your exact player name during setup. Leave the API key blank to start with direct controls.
+1. Enter your exact player name during setup. Leave the API key blank to use direct controls and the offline starter.
 2. Review and accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula) when the launcher asks.
 3. Open the dashboard at **http://127.0.0.1:3000**.
 4. Join the local world and set the owner name to the connected player name shown in the dashboard.
@@ -66,6 +80,20 @@ remember home
 home
 stop
 ```
+
+A small set of ordinary phrases also works **offline**, without an API key:
+
+```text
+collect 4 oak logs
+mine two iron ore
+craft a furnace
+make me a stone pickaxe
+```
+
+These are exact supported command patterns, not general language understanding.
+Use a specific wood species and a count from 1 to 64. BroBot still checks tools,
+materials and reachable terrain. Compound requests and explicit `goal`/`ask`
+commands use the optional paid planner.
 
 For the experimental offline starter:
 
@@ -136,15 +164,16 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ## Measured, not guessed
 
-### Current recovery checkpoint
+### Recovery checkpoints
 
-- **141 automated tests pass**, plus source syntax checks
-- **16 real-server regression scenarios pass** on Linux, including mining, crafting, movement, cancellation and supplied-material portal fixtures
-- **One complete starter development run passed in 215.975 seconds** on seed `20260930`: empty inventory → stone pickaxe and furnace → alive at the start
-- The earlier published PR 4 code passed Windows/Ubuntu checks on Node 22/24; this branch's CI status must be checked separately
+- **160 automated tests pass**, plus source syntax checks
+- **16 real-server regression scenarios passed** on Linux before the final return-anchor refinement, including mining, crafting, movement, cancellation and supplied-material portal fixtures; the final rerun is pending
+- Development seed `718224` completed in **191.344 seconds** on the bounded-walk revision; seed `42` completed in **263.566 seconds** after the return-anchor refinement
+- The earlier recovery revision completed seed `20260930` in **215.975 seconds**. Each started empty and returned alive with a stone pickaxe and furnace
+- Check the latest [PR 7 CI results](https://github.com/flowzygames/BroBot/pull/7) for Windows/Ubuntu on Node 22/24
 - Actual rendered Windows Minecraft gameplay and live OpenAI planner behavior remain unverified here
 
-One successful development world is encouraging, not a broad reliability claim. The latest fixes have not received a new full three-seed comparison. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
+These successes come from different development revisions, not one new aggregate score. The latest fixes are undergoing a complete same-revision multi-world evaluation. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
 
 ### Frozen BroBench comparison
 

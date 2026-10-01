@@ -37,7 +37,8 @@ const result = {
   started: new Date().toISOString(), status: 'running', passed: false
 };
 const stream = createWriteStream(join(directory, 'server.log'));
-let output = '', exited = false, runtime;
+let output = '', exited = false, runtime, traceTimer;
+result.trace = [];
 const server = await spawnServer({ directory, java: java.path, pipe: true });
 server.once('close', () => { exited = true; });
 server.once('error', error => { output += error.message; });
@@ -58,6 +59,20 @@ try {
   await waitUntil(() => runtime.connection === 'connected', 60000, 'Bot connection');
   await runtime.bot.waitForChunksToLoad(); await sleep(1000);
   result.initial = runtime.snapshot();
+  // Read-only diagnostic samples. No movement, inventory or world edits.
+  const sample = () => {
+    if (!runtime?.bot?.entity?.position) return;
+    const state = runtime.snapshot(), feet = runtime.bot.entity.position.floored();
+    const nearby = [];
+    for (let x=-1;x<=1;x++) for(let z=-1;z<=1;z++) for(let y=-1;y<=2;y++) {
+      const p=feet.offset(x,y,z), b=runtime.bot.blockAt(p);
+      if(b && !['air','cave_air','void_air'].includes(b.name)) nearby.push({name:b.name,x:p.x,y:p.y,z:p.z});
+    }
+    result.trace.push({at:new Date().toISOString(),position:state.position,health:state.health,food:state.food,action:state.action?.name,inventory:state.inventory,nearby});
+    if(result.trace.length>200)result.trace.shift();
+  };
+  sample(); traceTimer=setInterval(sample,5000);
+
   if (result.initial.inventory.length || runtime.bot.game.gameMode !== 'survival') throw new Error('Benchmark requires empty survival inventory.');
   if (!runtime.survival) {
     result.status = 'unsupported'; result.reason = 'This version does not implement the offline starter command.'; result.elapsedMs = 0; result.final = runtime.snapshot();
@@ -73,6 +88,7 @@ try {
   }
 } catch (error) { result.status = 'error'; result.error = error.message; }
 finally {
+  clearInterval(traceTimer);
   if (runtime) await runtime.close();
   await stopServer(server, 45000); stream.end();
   result.finished = new Date().toISOString();

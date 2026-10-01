@@ -18,10 +18,23 @@ function draw(state) {
   $('position').textContent = state.position ? ['x', 'y', 'z'].map(k => Math.floor(state.position[k])).join(' / ') : 'Waiting for world';
   $('dimension').textContent = state.dimension || '—';
   $('action').textContent = state.action ? `${state.action.stopping ? 'Stopping ' : ''}${pretty(state.action.name)}` : 'Idle';
-  $('goalstep').textContent = state.ai.goal ? `Decision ${state.ai.goal.step}` : 'Ready when you are';
-  $('aimode').textContent = state.ai.configured ? state.ai.model : 'AI key needed';
-  $('welcome').textContent = state.ai.configured ? 'Build a home. Explore a little. Take on the dragon.' : 'Direct controls are ready. Run npm run setup to connect OpenAI.';
+  $('goalstep').textContent = state.survival?.status === 'running' ? `Starter step ${state.survival.steps}` : state.ai.goal ? `Decision ${state.ai.goal.step}` : 'Ready when you are';
+  $('aimode').textContent = state.ai.configured ? state.ai.model : 'Offline controls';
+  $('welcome').textContent = state.ai.configured ? 'Build a home. Explore a little. Take on the dragon.' : 'Follow, gather and craft with direct commands, or try the offline starter kit.';
   $('currentgoal').textContent = state.ai.goal?.text || (state.ai.lastGoal ? `${state.ai.lastGoal.status}: ${state.ai.lastGoal.reason || state.ai.lastGoal.text}` : 'No active goal.');
+  const starter = state.survival;
+  const busy = Boolean(state.action || state.ai.goal || starter?.status === 'running' || starter?.stopping);
+  $('starterstatus').textContent = starter?.stopping ? 'Stopping' : pretty(starter?.status || 'Ready');
+  $('starterreason').textContent = starter?.reason || (starter?.status === 'running' ? 'Working from observed world and inventory state. Watch the activity log below.' : 'Start in a safe area with trees and stone nearby.');
+  $('starterprogress').textContent = starter ? `${starter.steps} actions · ${starter.scouts} scouting attempts` : '';
+  $('startstarter').disabled = !state.connected || busy;
+  $('resumestarter').disabled = !state.connected || busy || !['paused', 'blocked'].includes(starter?.status);
+  $('starterchecklist').replaceChildren();
+  for (const [name, label] of [['stone_pickaxe', 'Stone pickaxe'], ['furnace', 'Furnace']]) {
+    const owned = (Array.isArray(state.inventory) ? state.inventory : []).some(item => item.name === name && item.count > 0);
+    const row = document.createElement('p'); row.textContent = `${owned ? '✓' : '○'} ${label}`; $('starterchecklist').append(row);
+  }
+  const home = document.createElement('p'); home.textContent = `${starter?.status === 'complete' ? '✓' : '○'} Verified return home`; $('starterchecklist').append(home);
   if (!ownerEdited) $('owner').value = state.owner || '';
   const players = (state.players || []).map(p => typeof p === 'string' ? p : p.name || p.username).filter(Boolean);
   $('players').textContent = players.length ? `Nearby players: ${players.join(', ')}` : '';
@@ -46,12 +59,13 @@ function draw(state) {
   }
   if (!toolsShown && state.tools.length > 4) {toolsShown=true;for (const tool of state.tools){const el=document.createElement('div');el.className='tool';const name=document.createElement('strong');name.textContent=tool.name;const desc=document.createElement('p');desc.textContent=tool.description;const args=document.createElement('code');args.textContent=Object.entries(tool.parameters.properties).map(([k,v])=>`${k}: ${v.enum?.join(' | ')||v.type}`).join('\n')||'No arguments';el.append(name,desc,args);$('tools').append(el);}}
 }
-async function submit(text) { try {await post('/api/command',{text});notify('Sent. Watch the activity log for progress.');} catch(e){notify(e.message);} }
-$('commandform').onsubmit = async e => {e.preventDefault();const text=$('command').value.trim();if(!text)return;await submit(text);$('command').value='';};
+async function submit(text) { try {await post('/api/command',{text});notify('Sent. Watch the activity log for progress.');return true;} catch(e){notify(e.message);return false;} }
+let submitting = false;
+$('commandform').onsubmit = async e => {e.preventDefault();const text=$('command').value.trim();if(!text||submitting)return;submitting=true;try{const accepted=await submit(text);if(accepted&&$('command').value.trim()===text)$('command').value='';}finally{submitting=false;}};
 $('command').onkeydown = e => {if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('commandform').requestSubmit();}};
-$('stop').onclick = async () => {try{await post('/api/stop');notify('Stopped.');}catch(e){notify(e.message);}};
+$('stop').onclick = async () => {try{await post('/api/stop');notify('Stop requested. Watch the current action while it finishes stopping.');}catch(e){notify(e.message);}};
 $('shutdown').onclick = async () => {try{await post('/api/shutdown');notify('Closing BroBot. The launcher will save your world.');}catch(e){notify(e.message);}};
-document.querySelectorAll('[data-command]').forEach(el=>el.onclick=()=>submit(el.dataset.command));
+document.querySelectorAll('[data-command]').forEach(el=>el.onclick=async()=>{if(el.disabled)return;el.disabled=true;try{await submit(el.dataset.command);}finally{if(!['startstarter','resumestarter'].includes(el.id))el.disabled=false;}});
 $('owner').oninput=()=>{ownerEdited=true;};
 $('ownerform').onsubmit=async e=>{e.preventDefault();try{await post('/api/owner',{name:$('owner').value});ownerEdited=false;notify('Player name saved.');}catch(e){notify(e.message);}};
 $('resetbudget').onclick=async()=>{if(!confirm('Reset the counters and allow more paid OpenAI API calls?'))return;try{await post('/api/budget/reset');notify('AI budget reset.');}catch(e){notify(e.message);}};
