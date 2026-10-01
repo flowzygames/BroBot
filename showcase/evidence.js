@@ -1,6 +1,7 @@
 const panel = document.querySelector('#worldEvidence');
 if (panel) {
   const list = panel.querySelector('#worldCases'), status = panel.querySelector('#worldStatus');
+  const filter = panel.querySelector('#worldFilter'), query = panel.querySelector('#worldSearch'), shown = panel.querySelector('#worldShown');
   let data, selected = 'fresh';
   const render = () => {
     if (!data) return;
@@ -9,7 +10,11 @@ if (panel) {
     list.replaceChildren();
     status.textContent = `${group.passed}/${group.scheduled} completed the full starter objective · ${group.label}${group.note ? ' · ' + group.note : ''}`;
     panel.querySelectorAll('[data-cohort]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cohort === selected)));
-    for (const run of group.cases) {
+    const needle = query.value.trim();
+    const visible = group.cases.filter(run => (!needle || run.seed.includes(needle)) && (filter.value === 'all' || (filter.value === 'passed' ? run.passed : !run.passed)));
+    shown.textContent = `Showing ${visible.length} of ${group.scheduled} recorded runs. Filters do not change the score above.`;
+    if (!visible.length) { const empty = document.createElement('p'); empty.textContent = 'No runs match these filters. Clear them to see every result.'; list.append(empty); }
+    for (const run of visible) {
       const card = document.createElement('article'); card.className = 'world-case';
       const heading = document.createElement('div'); heading.className = 'world-case-head';
       const seed = document.createElement('h3'); seed.textContent = `World ${run.seed}`;
@@ -23,6 +28,9 @@ if (panel) {
     }
     panel.querySelector('#worldSource').textContent = `Tested app snapshot ${(group.sourceCommit || data.sourceCommit).slice(0, 7)} · Minecraft ${data.minecraft} · Linux · no paid model calls`;
   };
+  query.addEventListener('input', render);
+  filter.addEventListener('change', render);
+  panel.querySelector('#worldReset').addEventListener('click', () => { query.value = ''; filter.value = 'all'; render(); });
   panel.querySelectorAll('[data-cohort]').forEach(button => button.addEventListener('click', () => { selected = button.dataset.cohort; render(); }));
   fetch('/checkpoint.json').then(response => { if (!response.ok) throw Error('unavailable'); return response.json(); }).then(value => {
     if (!/^[a-f0-9]{40}$/.test(value.sourceCommit ?? '') || typeof value.minecraft !== 'string') throw Error('invalid');

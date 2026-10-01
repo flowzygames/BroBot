@@ -45,6 +45,11 @@ const zip = fs.readFileSync(path.join(root, 'brobot-dev.zip'));
 assert.equal(zip.length, release.bytes);
 assert.equal(crypto.createHash('sha256').update(zip).digest('hex'),release.sha256);
 assert.equal(release.readyForStable1_0,false,'Update release gates deliberately before claiming stable');
+const downloadHtml=fs.readFileSync(path.join(root,'download.html'),'utf8');
+assert.ok(downloadHtml.includes(`<code id="downloadChecksum">${release.sha256}</code>`),'Visible download checksum must match the actual ZIP');
+assert.ok(downloadHtml.includes(`<small id="downloadBuild">${release.bytes.toLocaleString('en-US')} bytes · Tested app ${release.testedApplicationCommit.slice(0,7)} · ${release.automatedChecks} checks</small>`),'Visible download size and tested build must match metadata');
+assert.ok(downloadHtml.includes(`Source snapshot ${release.sourceCommit}.`),'Visible source identity must match the package');
+
 function checkSyntax(directory) {
   for (const entry of fs.readdirSync(directory,{withFileTypes:true})) {
     const file=path.join(directory,entry.name);
