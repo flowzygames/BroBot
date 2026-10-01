@@ -1,4 +1,4 @@
-> **Experimental canopy branch:** this branch adds a separately invoked `action descend_notch {}` and bounded tree-observation improvements. It passes 245 automated checks, 17 prepared live phases and 20 local controls. It has not established a new natural-world starter score. The website download and release information below still describe the published 219-check build. See [the experiment and its limits](docs/FOLIAGE_RECOVERY.md).
+> **Experimental canopy branch:** this branch adds a separately invoked `action descend_notch {}` and bounded tree-observation improvements. It passes 245 automated checks, 17 prepared live phases and 20 local controls. The complete same-20 known-world regression scored 8/20 versus the released build's 10/20; two prior successes were lost and no failures became successes. It remains unreleased. The website download and release information below still describe the published 219-check build. See [the experiment and its limits](docs/FOLIAGE_RECOVERY.md).
 
 # BroBot
 

@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "classification": "known-world-paired-rerun",
+  "commit": "6b26ad5f8f28e8eae6e3464d52ea687662aca96b",
+  "dirty": false,
+  "protocol": "trailhead-v1",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "baselineCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "baselineEvidence": "benchmarks/results/transit-2026-10-01/paired-summary.json",
+  "scheduled": 20,
+  "completed": 20,
+  "complete": true,
+  "passed": 8,
+  "baselinePassed": 10,
+  "losses": [
+    "454806089",
+    "1382194916"
+  ],
+  "gains": [],
+  "cases": [
+    {
+      "seed": "454806089",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 300005,
+      "reason": "Starter job time budget reached.",
+      "resultDirectory": "2026-10-01T20-43-01-957Z-e1ccbedc",
+      "resultSha256": "ada7c7e1bd897042ae9e522115fa1c2c2c0c7b02a5a37ca53240bc1b4247c6e9",
+      "logSha256": "4a953785a307af6ff47112993889a615473cbfe2ea1d9dc8f766d4bf952e733e",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 109120,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-454806089.json"
+    },
+    {
+      "seed": "1542908414",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 225123,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T20-48-51-758Z-4b5041fb",
+      "resultSha256": "21052fe306ec5dcdfc49e385fd2f271661b09626051ec808def802fda59507e9",
+      "logSha256": "1a0e6c88154ad13580ae86a3f029aaf004ef0cd7098f5cc0014781d1d9da08ca",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 201791,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1542908414.json"
+    },
+    {
+      "seed": "761598570",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 90668,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T20-53-16-938Z-a9c900e3",
+      "resultSha256": "72da5fe6b688258a24228bcfeaa8211efd36d5c0dd94809700294463af6c2712",
+      "logSha256": "46ee95ae86570338e699761cd58ae584c6f4b234d4412640acd56e54bd6879eb",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 78271,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-761598570.json"
+    },
+    {
+      "seed": "1587439118",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 89275,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T20-55-34-921Z-c4b00547",
+      "resultSha256": "3538cd1a85e67e1523a2a51d6bc9f5793cf3809757827a29d06131d1f43b58e8",
+      "logSha256": "f6358d9af429de077ce20d655e9139da92d021d9c2a000f488fefc7ab3155f91",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 109876,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1587439118.json"
+    },
+    {
+      "seed": "924242050",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 76304,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "resultDirectory": "2026-10-01T20-57-50-054Z-61c5fc30",
+      "resultSha256": "63bb3ee6bb9e4e32564a9001964fb3e8428cd7c0614b4c0e901e641b23c8144d",
+      "logSha256": "32b8cd3fe903b71d992c0a2ed71cc79075e3c7d80b5e33329458175ba306e200",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 68173,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      "evidence": "paired-924242050.json"
+    },
+    {
+      "seed": "113919219",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 233516,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "resultDirectory": "2026-10-01T20-59-36-397Z-9469e23c",
+      "resultSha256": "f1ef1d2d4e8cf199d672da9c2b60286ebeab1be601b3680fe8649933c9274fa7",
+      "logSha256": "1743eaa4ca89eaea0a7d295038d9c22b7988634d049398b5b9e73510d083fecf",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 220242,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      "evidence": "paired-113919219.json"
+    },
+    {
+      "seed": "474859294",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 66888,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T21-04-00-550Z-9dbcd56d",
+      "resultSha256": "34fd917a1a0158d382c070c7b6c2f88ef60a1aef8d3be14b0e8a5055565bcd39",
+      "logSha256": "07a010129f78d0dee37ef53a232614f70afa0485cf1f9f5ffaf3f2f395218b4e",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 63583,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-474859294.json"
+    },
+    {
+      "seed": "1576696577",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 84289,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T21-05-57-254Z-3e56bcdc",
+      "resultSha256": "11b5d0ba332f1687d15e54f83c5c6909b3caac0667daed4030daba567a69dfaa",
+      "logSha256": "0297178a400bf05013bbb660ce9b4b2019f97420a87acc6820a9c81d4ab70ec1",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 68852,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1576696577.json"
+    },
+    {
+      "seed": "1382194916",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 208339,
+      "reason": "Low health: paused work to recover.",
+      "resultDirectory": "2026-10-01T21-08-05-333Z-fb38d4be",
+      "resultSha256": "bb84dd6f34a2c5c7177a86cc25d0952a7653259df13b323456885dac0e9bbe9a",
+      "logSha256": "7c39f8a6ff04f5abf6a4ca9e7ea6e53c1f72e909117af1f504ff17feab0b2569",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 276045,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1382194916.json"
+    },
+    {
+      "seed": "386690312",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 248643,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "resultDirectory": "2026-10-01T21-12-05-819Z-fceb276b",
+      "resultSha256": "9354d05783619369421966eb5313c2aa97412f5bf890b79693dc67e8a6255230",
+      "logSha256": "225eca3b7ab93322ebbc652bff4856a7f87197f4a589063dd03c64c28a64b2dc",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 241678,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      "evidence": "paired-386690312.json"
+    },
+    {
+      "seed": "1744809425",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 300030,
+      "reason": "Starter job time budget reached.",
+      "resultDirectory": "2026-10-01T21-16-44-880Z-8429c58b",
+      "resultSha256": "d8c24bc57565bc28a478f7ed8ab4d7e11eaaa74469514b9871df5c3ec17ed383",
+      "logSha256": "7206c383b1541291df561a085e739e1c70dce180e9c112b37ee90a906f863180",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 300035,
+        "reason": "Starter job time budget reached."
+      },
+      "evidence": "paired-1744809425.json"
+    },
+    {
+      "seed": "61544722",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 39784,
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "resultDirectory": "2026-10-01T21-22-14-337Z-890011d9",
+      "resultSha256": "edbe29b452cbdf9cabba71af289713ca60ebdbb6d6ce90ff569332516dae0ee0",
+      "logSha256": "8f875414a18ee791886191374252773bc4093be411ae5b7727e6e5959e5e4994",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 40147,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      "evidence": "paired-61544722.json"
+    },
+    {
+      "seed": "1041160109",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 52050,
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "resultDirectory": "2026-10-01T21-23-24-706Z-3473559d",
+      "resultSha256": "92ecc83c210603d775beff401d08606ec2f70cb037e2a30c73ba7647afb67a7b",
+      "logSha256": "3bb03f01a0de2b979f6ade3944a8be87ba4380692878dee3f8db2e6f1b915108",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 52060,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      "evidence": "paired-1041160109.json"
+    },
+    {
+      "seed": "1888406977",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 101157,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T21-24-46-648Z-e6f8ce18",
+      "resultSha256": "c3a7334cc81a70fe21ec02c0c254a378d568a4ed229b2573aa8dc96e04390078",
+      "logSha256": "625271a1fd92d58367bb87cf68f90d010c360e1af5ebf76aae9a576067635bca",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 98303,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1888406977.json"
+    },
+    {
+      "seed": "1547703085",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 49515,
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "resultDirectory": "2026-10-01T21-27-17-067Z-4f2c27ab",
+      "resultSha256": "94107c10a4a5b37ee7ae433c7db2e7d4eecb620026b7b03ce709799897e160df",
+      "logSha256": "e325cb88fa9c2b4ce55b05a370abce69fa1730991673c390f7ba4cb7daaf0303",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 49170,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      "evidence": "paired-1547703085.json"
+    },
+    {
+      "seed": "1146093953",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 172052,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T21-28-35-679Z-6eb447fd",
+      "resultSha256": "3db51f4062099cc59015e130edb3f344976ee756378b9e156249979b35cae08a",
+      "logSha256": "c0156311df966983192461050cdfbf6554404e7d8d6a8f586d647a9af5e64dea",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 144667,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-1146093953.json"
+    },
+    {
+      "seed": "1014875191",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 184199,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "resultDirectory": "2026-10-01T21-32-14-581Z-d0465c75",
+      "resultSha256": "a0757dd908ceb879f447b87a4048effce2b295071ab90e11d8f9ecb7fd49b1ce",
+      "logSha256": "8daa234de467ba0f51860d945af5cae438b36126e6450ac55134fe43d934d33b",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 182467,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      "evidence": "paired-1014875191.json"
+    },
+    {
+      "seed": "355620996",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 184136,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "resultDirectory": "2026-10-01T21-35-48-642Z-27cf2479",
+      "resultSha256": "c9552a132ca59a18fd2a4c7356987e887d32c6b3256caaa3f3ea4034d411f32d",
+      "logSha256": "985c0d37f5e1e8ad64f7becb387223f828e6f3d55b0b8818216b692b073ee3e9",
+      "baseline": {
+        "status": "passed",
+        "passed": true,
+        "elapsedMs": 88222,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+      },
+      "evidence": "paired-355620996.json"
+    },
+    {
+      "seed": "1276821265",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 104917,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "resultDirectory": "2026-10-01T21-39-36-166Z-68fe1ca9",
+      "resultSha256": "1dfd04ec30befede1aa58f0d557b5adc0bad4e7ed68ebd8e543605817917d496",
+      "logSha256": "918153d3764e22d1067addc019035624fba3813c8f6643ce189bc92a1031f0d2",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 96515,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+      },
+      "evidence": "paired-1276821265.json"
+    },
+    {
+      "seed": "1244186709",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 66804,
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "resultDirectory": "2026-10-01T21-41-50-901Z-c87edbbe",
+      "resultSha256": "188dbdf25d2012e6cccd299d05ce60c3d5a5df3c765963f27fa78490a46aab4f",
+      "logSha256": "db301a566af48cd982c0c0e0600717ca25481c98043c5df1c1b97faf97141b60",
+      "baseline": {
+        "status": "failed",
+        "passed": false,
+        "elapsedMs": 66696,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+      },
+      "evidence": "paired-1244186709.json"
+    }
+  ],
+  "limitations": [
+    "Single runs on the same twenty known seeds, not held-out reliability.",
+    "Mob and item timing varies; paired losses do not isolate a causal code change.",
+    "The explicit descend_notch action is not automatically used by survive starter; these runs do not evaluate automatic notch recovery.",
+    "All scheduled outcomes retained; no retries substituted.",
+    "The experimental branch remains unreleased; the published 219-check download and 10/20 evidence remain unchanged."
+  ]
+}

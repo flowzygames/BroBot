@@ -106,3 +106,31 @@ this does not change the published 219-check build or its 10-of-20 score.
 The same experimental application also passed all 17 prepared live regression
 phases and all 20 local command/control cases. These are regression checks,
 not a new natural-world starter score.
+
+## Completed same-20 regression, October 1, 2026
+
+Frozen application commit `6b26ad5f8f28e8eae6e3464d52ea687662aca96b` completed
+all twenty preselected Trailhead worlds without substituting retries: **8/20**.
+The published `682bf46b` application completed **10/20** on those same seeds.
+Eight successes and ten failures were retained, two successes were lost, and no
+failed world became a success. The experiment remains unreleased.
+
+- Seed 454806089: 109.120-second baseline success became a 300.005-second
+  timeout. Repeated pickup/clearance failures consumed the budget; the stone
+  pickaxe was present but furnace completion was not observed.
+- Seed 1382194916: 276.045-second baseline success became a 208.339-second
+  low-health pause. Twelve stone-collection errors cited return-path planning
+  exhaustion; final health was about four with a spider 1.7 blocks away.
+  Exact damage causation is not established.
+
+These are single runs of known cases, with variable mob and item timing. They
+do not isolate a causal code regression or establish held-out reliability.
+`descend_notch` was not used automatically, so this cohort does not measure an
+autonomous canopy-descent feature. The 245 checks, prepared fixtures, and
+natural-world score describe different kinds of evidence.
+
+All twenty per-seed records, the selection plan, hashes and paired comparison
+are retained in `benchmarks/results/canopy-notch-2026-10-01/paired-summary-245.json`.
+The public download and published 219-check / 10-of-20 score remain unchanged.
+Next diagnostic work should isolate pickup and return-path planning behavior
+without weakening support/return-route guards or increasing benchmark budgets.

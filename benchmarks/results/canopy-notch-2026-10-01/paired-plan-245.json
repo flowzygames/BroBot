@@ -1,0 +1,30 @@
+{
+  "created": "2026-10-01T20:43:01.473669+00:00",
+  "commit": "6b26ad5f8f28e8eae6e3464d52ea687662aca96b",
+  "label": "paired-canopy-245",
+  "seeds": [
+    454806089,
+    1542908414,
+    761598570,
+    1587439118,
+    924242050,
+    113919219,
+    474859294,
+    1576696577,
+    1382194916,
+    386690312,
+    1744809425,
+    61544722,
+    1041160109,
+    1888406977,
+    1547703085,
+    1146093953,
+    1014875191,
+    355620996,
+    1276821265,
+    1244186709
+  ],
+  "seconds": 300,
+  "kind": "same twenty known-case regression; no retries substituted",
+  "note": "descend_notch is separately invoked and not used automatically by starter; earlier four-case run retained separately"
+}
