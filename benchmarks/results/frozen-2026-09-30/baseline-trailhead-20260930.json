@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "baseline",
+  "commit": "659ffce1da4d8203c6d448a221d5f4c0ff71bb5f",
+  "dirty": true,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "20260930",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T01:35:16.341Z",
+  "status": "unsupported",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 66,
+      "z": 16.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 68,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -7.34,
+          "y": 63,
+          "z": 27.65
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 5,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -8,
+          "y": 63,
+          "z": 40
+        },
+        "distance": 24.8
+      },
+      {
+        "id": 6,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -5.06,
+          "y": 63,
+          "z": 39.08
+        },
+        "distance": 25.1
+      },
+      {
+        "id": 124,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 1.5,
+          "y": 40,
+          "z": -4.5
+        },
+        "distance": 37.5
+      },
+      {
+        "id": 133,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 9.5,
+          "y": 37,
+          "z": 17.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 71,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 13.5,
+          "y": 36,
+          "z": 8.5
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 111,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 11.5,
+          "y": 34,
+          "z": 5.5
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 72,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 14.69,
+          "y": 35,
+          "z": 10.5
+        },
+        "distance": 43.7
+      },
+      {
+        "id": 129,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 9.5,
+          "y": 28,
+          "z": 30.5
+        },
+        "distance": 47.6
+      },
+      {
+        "id": 99,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 2.5,
+          "y": 26,
+          "z": 35.5
+        },
+        "distance": 47.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "This version does not implement the offline starter command.",
+  "elapsedMs": 0,
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 66,
+      "z": 16.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 68,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -7.34,
+          "y": 63,
+          "z": 27.65
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 5,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -8,
+          "y": 63,
+          "z": 40
+        },
+        "distance": 24.8
+      },
+      {
+        "id": 6,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -5.06,
+          "y": 63,
+          "z": 39.08
+        },
+        "distance": 25.1
+      },
+      {
+        "id": 124,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 1.5,
+          "y": 40,
+          "z": -4.5
+        },
+        "distance": 37.5
+      },
+      {
+        "id": 133,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 9.5,
+          "y": 37,
+          "z": 17.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 71,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 13.5,
+          "y": 36,
+          "z": 8.5
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 111,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 11.5,
+          "y": 34,
+          "z": 5.5
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 72,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 14.69,
+          "y": 35,
+          "z": 10.5
+        },
+        "distance": 43.7
+      },
+      {
+        "id": 129,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 9.5,
+          "y": 28,
+          "z": 30.5
+        },
+        "distance": 47.6
+      },
+      {
+        "id": 99,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 2.5,
+          "y": 26,
+          "z": 35.5
+        },
+        "distance": 47.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "finished": "2026-10-01T01:35:46.694Z"
+}

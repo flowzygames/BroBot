@@ -1,5 +1,6 @@
 import pathfinderPackage from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
+import { configureCollisionMargin } from './collision-margin.js'
 import { planReturnablePath, pursueDroppedItem } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
@@ -45,8 +46,8 @@ export const definitions = [
   def('inspect', 'Read real position, health, inventory, visible entities, nearby useful blocks, and immediately craftable recipe hints. This does not reveal unloaded terrain.', { radius: optional(number('Block search radius; default 16', 1, 32, true)) }),
   def('go_to', 'Walk to a loaded location within 128 blocks. Never digs or places blocks while navigating. Radius 0 requires standing at the exact block.', { ...posSchema, radius: optional(number('Acceptable distance; default 1', 0, 8)) }),
   def('follow', 'Follow a visible player for a bounded number of seconds; repeat if necessary. Never changes terrain.', { player: str('Exact visible player username'), duration: optional(number('Seconds; default 15', 1, 60)), distance: optional(number('Following distance; default 3', 1, 8)) }),
-  def('collect', 'Mine up to the requested number of named blocks using a suitable owned tool, then pick up nearby drops. Reports blocks mined and actual inventory gains separately. Requires visible reachable blocks.', { block: str('Exact registry block name, for example oak_log or iron_ore'), count: number('Number of blocks to mine', 1, 64, true), radius: optional(number('Search radius; default 24', 1, 64, true)) }),
-  def('dig_at', 'Mine one exact loaded block and collect drops using an appropriate owned tool. Useful for planned stairs, tunnels, or clearing a specific obstruction. Refuses to mine under the bot, expose adjacent water/lava, or release an overhead falling block.', { ...posSchema }),
+  def('collect', 'Mine up to the requested number of named blocks using a suitable owned tool, then pick up nearby drops. Reports blocks mined and actual inventory gains separately. Requires visible reachable blocks.', { block: str('Exact registry block name, for example oak_log or iron_ore'), count: number('Number of blocks to mine', 1, 64, true), radius: optional(number('Search radius; default 24', 1, 64, true)), skip_positions: optional({ type: 'array', maxItems: 128, items: { type: 'object', properties: { x: number('X', -29999984, 29999984, true), y: number('Y', -2048, 2048, true), z: number('Z', -29999984, 29999984, true) }, required: ['x', 'y', 'z'], additionalProperties: false }, description: 'Previously unreachable positions to skip for this request; default none' }) }),
+  def('dig_at', 'Mine one exact loaded block and collect drops using an appropriate owned tool. Useful for planned stairs, tunnels, or clearing a specific obstruction. Refuses to mine under the bot, expose adjacent water/lava, or release an overhead falling block.', { ...posSchema, expected_block: optional(str('Refuse if the target no longer has this block name; default no precondition')) }),
   def('craft', 'Craft a requested number of output items from existing ingredients. May place an owned crafting table nearby. Does not gather ingredients. Recipe batch output can exceed count.', { item: str('Exact output item name'), count: number('Number of output items wanted, not recipe repetitions', 1, 256, true) }),
   def('smelt', 'Smelt owned items in a nearby empty furnace; may place an owned furnace. Supplies fuel and waits for verified inventory output. Up to 8 items per call.', { item: str('Input item name'), count: number('Number of input items', 1, 8, true), fuel: optional(str('Owned fuel item name; null chooses coal, charcoal, planks, or logs')) }),
   def('place', 'Place one owned block at an exact air location adjacent to a solid support. Never replaces existing blocks. Walks into reach and verifies the server block.', { block: str('Inventory block item name'), ...posSchema }),
@@ -59,7 +60,7 @@ export const definitions = [
   def('activate', 'Right-click a loaded reachable block, such as a door, button, lever, or workstation. Reports observed block/window change, not unverified mechanism results.', { ...posSchema }),
   def('use_item', 'Use an owned/current held item in a chosen direction for a bounded time, then release it. Yaw/pitch are radians. Useful for bow, shield, fishing, eyes of ender, or other right-click items. Reports actual item use and inventory changes, not guessed hits.', { item: optional(str('Item to equip, or null for current held item')), yaw: optional(number('Yaw radians; null keeps current direction', -Math.PI, Math.PI)), pitch: optional(number('Pitch radians; positive looks up', -Math.PI / 2, Math.PI / 2)), duration: optional(number('Hold seconds before release; default 1', 0, 10)) }),
   def('pickup', 'Walk over nearby dropped item entities and report verified inventory gains.', { radius: optional(number('Maximum radius; default 12', 1, 32, true)) }),
-  def('explore', 'Walk a bounded distance in a compass direction while loading new terrain, without digging or placing.', { direction: optional({ type: 'string', enum: ['north', 'south', 'east', 'west', null], description: 'Compass direction; null uses current facing' }), distance: optional(number('Distance; default 24', 4, 96, true)) })
+  def('explore', 'Walk a bounded distance in a compass direction while loading new terrain, without digging or placing.', { direction: optional({ type: 'string', enum: ['north', 'south', 'east', 'west', null], description: 'Compass direction; null uses current facing' }), distance: optional(number('Distance; default 24', 4, 96, true)), returnable: optional({ type: 'boolean', description: 'Require a verified walking return path before exploration; default false' }) })
 ]
 
 function abortError () { const error = new Error('Action cancelled'); error.name = 'AbortError'; return error }
@@ -80,7 +81,8 @@ function matchesPlacedBlock (actual, item) {
 }
 
 /** One serialized physical action at a time. In-flight inventory operations drain before reuse. */
-export function createActions (bot, { memory, log = () => {} } = {}) {
+export function createActions (bot, { memory, log = () => {}, movementBoundary = () => null } = {}) {
+  configureCollisionMargin(bot)
   let active = null
   let movements = null
   const items = () => bot.inventory?.items() ?? []
@@ -138,6 +140,13 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     checked(ctx)
   }
 
+  const insideBoundary = p => {
+    const bound = movementBoundary()
+    if (!bound) return true
+    assert(bound.center && ['x', 'y', 'z'].every(k => Number.isFinite(bound.center[k])) && Number.isFinite(bound.radius) && bound.radius > 0, 'Invalid movement boundary')
+    return p && Math.hypot(p.x - bound.center.x, p.y - bound.center.y, p.z - bound.center.z) <= bound.radius
+  }
+
   function configureMovement () {
     assert(bot.pathfinder, 'Mineflayer pathfinder plugin is required')
     if (!movements) {
@@ -147,6 +156,10 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       movements.allowParkour = false
       movements.scafoldingBlocks = []
       movements.maxDropDown = 3
+      // Enforce job bounds while planning every path, not only after an action
+      // has already wandered outside the area. Ordinary direct actions have no
+      // job boundary. Keep the margin inside the controller's hard stop radius.
+      movements.exclusionAreasStep.push(block => insideBoundary(block.position) ? 0 : 1000)
     }
     bot.pathfinder.setMovements(movements)
   }
@@ -157,12 +170,14 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     const maxY = minY + (bot.game?.height ?? 384)
     assert(p.y >= minY && p.y < maxY, `Y must be within this world's build range ${minY}..${maxY - 1}`)
     assert(p.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start; use bounded waypoints')
+    assert(insideBoundary(p), 'Target is outside the current job movement boundary')
     return p
   }
 
   async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false } = {}) {
     checked(ctx)
     assert(target.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start')
+    assert(insideBoundary(target), 'Target is outside the current job movement boundary')
     if (requireLoaded) loaded(target)
     configureMovement()
     let goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
@@ -242,7 +257,7 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
 
   async function pickupInternal (ctx, radius = 12) {
     const before = inventoryMap()
-    const drops = () => Object.values(bot.entities ?? {}).filter(e => e.name === 'item' && e.position && e.position.distanceTo(bot.entity.position) <= radius && e.position.distanceTo(ctx.origin) <= 128)
+    const drops = () => Object.values(bot.entities ?? {}).filter(e => e.name === 'item' && e.position && insideBoundary(e.position) && e.position.distanceTo(bot.entity.position) <= radius && e.position.distanceTo(ctx.origin) <= 128)
     const attempts = new Map()
     const failures = []
     for (let n = 0; n < 24; n++) {
@@ -254,13 +269,17 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       // airborne Y creates an impossible path; project onto loaded ground.
       const dropPosition = target.position.floored()
       const destinations = []
-      for (const [x, z] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) {
-        for (let down = 0; down <= 8; down++) {
+      configureMovement()
+      const passable = b => b && (isAir(b) || /^(short_grass|tall_grass|fern|large_fern|leaf_litter)$/.test(b.name)) && b.boundingBox === 'empty' && !movements.blocksToAvoid.has(b.type) && !movements.liquids.has(b.type)
+      for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
+        for (let down = -1; down <= 8; down++) {
           const p = dropPosition.offset(x, -down, z)
-          if (isAir(bot.blockAt(p)) && isAir(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
+          if (passable(bot.blockAt(p)) && passable(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
         }
       }
-      destinations.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position))
+      // A cell close to the bot can still be outside item-pickup reach,
+      // especially diagonally. Aim at the drop rather than the nearest cell.
+      destinations.sort((a, b) => a.offset(0.5, 0, 0.5).distanceTo(target.position) - b.offset(0.5, 0, 0.5).distanceTo(target.position))
       try {
         assert(destinations.length, 'No validated standing space near dropped item')
         let goal, lastError
@@ -284,10 +303,15 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     const count = numeric(args.count, undefined, 1, 64, true)
     const radius = numeric(args.radius, 24, 1, 64, true)
     const before = inventoryMap()
-    const skipped = new Set()
+    assert(args.skip_positions == null || (Array.isArray(args.skip_positions) && args.skip_positions.length <= 128), 'skip_positions must be an array of at most 128 coordinates')
+    const skipped = new Set((args.skip_positions ?? []).map(p => {
+      assert(p && ['x', 'y', 'z'].every(k => Number.isSafeInteger(p[k]) && Math.abs(p[k]) <= (k === 'y' ? 2048 : 29999984)), 'Invalid skipped block coordinate')
+      return new Vec3(p.x, p.y, p.z).toString()
+    }))
     const failures = []
     let mined = 0
     let searchLimited = false
+    let consecutiveFailures = 0
     while (mined < count) {
       checked(ctx)
       // Filter before findBlocks applies its count cap. Dense buried stone must
@@ -301,11 +325,11 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       const deadline = performance.now() + 500
       let inspected = 0
       try {
-        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 128, useExtraInfo: block => {
+        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 512, useExtraInfo: block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
           const p = block.position
-          if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || skipped.has(p.toString())) return false
+          if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || !insideBoundary(p) || skipped.has(p.toString())) return false
           if (!DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d))))) return false
           candidates.push(p)
           return true
@@ -314,7 +338,15 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
         if (error !== searchLimit) throw error
         searchLimited = true
       }
-      const choices = candidates.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position)).slice(0, 128)
+      // Nearby depth can be a misleading shortcut: prefer surface-height resources
+      // before trying a dense cave face. Returnability is still verified separately.
+      const effort = p => {
+        // Drops scatter off ledges. Prefer a supported landing area to a cliff
+        // edge, without excluding trees or resources that lack a full platform.
+        const stableLanding = [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]].every(([x, z]) => isSolid(bot.blockAt(p.offset(x, -1, z))))
+        return p.distanceTo(bot.entity.position) + 3 * Math.abs(p.y - bot.entity.position.y) + (stableLanding ? 0 : 32)
+      }
+      const choices = candidates.sort((a, b) => effort(a) - effort(b)).slice(0, 128)
       if (!choices.length) break
       const p = choices[0]
       skipped.add(p.toString())
@@ -324,12 +356,13 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
         if (block.name !== name) continue
         await harvestBlock(ctx, p)
         mined++
+        consecutiveFailures = 0
         await pause(ctx, 300)
         await pickupInternal(ctx, 6)
       } catch (error) {
         checked(ctx)
         failures.push({ position: plainPos(p), error: error.message })
-        if (failures.length >= 8) break
+        if (++consecutiveFailures >= 8) break
       }
     }
     let pickup = { remaining_drops: [], unreachable: [] }
@@ -339,12 +372,16 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     return result
   }
 
-  async function harvestBlock (ctx, p) {
+  async function harvestBlock (ctx, p, { expectedBlock = null } = {}) {
     await approachBlock(ctx, p)
     const block = loaded(p)
     assert(!isAir(block), 'Requested block is already air')
+    assert(expectedBlock == null || block.name === expectedBlock, 'Target block changed before mining')
     const feet = bot.entity.position.floored()
-    assert(!(p.x === feet.x && p.z === feet.z && p.y < feet.y), 'Will not dig the block supporting the bot')
+    const position = bot.entity.position
+    const touchesFootprint = position.x + 0.31 > p.x && position.x - 0.31 < p.x + 1 && position.z + 0.31 > p.z && position.z - 0.31 < p.z + 1
+    const supportsFootprint = touchesFootprint && p.y < position.y && p.y + 1 >= position.y - 0.1
+    assert(!(p.x === feet.x && p.z === feet.z && p.y < feet.y) && !supportsFootprint, 'Will not dig the block supporting the bot')
     assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
     const neighbors = DIRECTIONS.filter(d => d.y >= 0).map(d => bot.blockAt(p.plus(d)))
     assert(neighbors.every(b => b && !['water', 'lava'].includes(b.name)), 'Mining would expose adjacent liquid or an unloaded block')
@@ -356,6 +393,7 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     }
     if (tool) await step(ctx, () => bot.equip(tool, 'hand'))
     assert(!block.canHarvest || block.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${block.name}; refusing to destroy it without drops`)
+    assert(expectedBlock == null || loaded(p).name === expectedBlock, 'Target block changed before mining')
     await step(ctx, () => bot.dig(block, true))
     assert(loaded(p).name !== block.name, `Server did not confirm mining ${block.name}`)
     return block.name
@@ -366,7 +404,9 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     const block = loaded(p)
     if (isAir(block)) return { completed: true, mined: 0, already_air: true, position: plainPos(p), inventory_changes: {} }
     const before = inventoryMap()
-    const name = await harvestBlock(ctx, p)
+    const expectedBlock = args.expected_block == null ? null : cleanName(args.expected_block, 'block')
+    assert(expectedBlock == null || block.name === expectedBlock, 'Target block changed before mining')
+    const name = await harvestBlock(ctx, p, { expectedBlock })
     await pause(ctx, 350)
     const pickup = await pickupInternal(ctx, 8)
     return { completed: pickup.remaining_drops.length === 0, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
@@ -416,7 +456,9 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
   }
 
   async function workstation (ctx, name) {
-    let block = nearby(name, 24)
+    // Reuse a workstation already in reach. If carrying one, place it locally
+    // rather than crossing difficult terrain to a distant duplicate.
+    let block = nearby(name, 4) ?? (itemCount(name) ? null : nearby(name, 24))
     if (block) { await approachBlock(ctx, block.position); return loaded(block.position) }
     owned(name)
     const feet = bot.entity.position.floored()
@@ -444,7 +486,14 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     while (produced < wanted) {
       checked(ctx)
       let recipes = bot.recipesFor(definition.id, null, 1, table)
-      if (!recipes.length && !table && (nearby('crafting_table', 24) || itemCount('crafting_table'))) { table = await workstation(ctx, 'crafting_table'); recipes = bot.recipesFor(definition.id, null, 1, table) }
+      if (!recipes.length && !table && (nearby('crafting_table', 24) || itemCount('crafting_table'))) {
+        // Mineflayer uses table presence as a recipe filter, not its distance.
+        // Check ingredients first so a missing cobblestone does not trigger a
+        // long journey to a table that cannot help with the requested craft.
+        assert(bot.recipesFor(definition.id, null, 1, true).length, `Cannot craft ${name}: missing ingredients; produced ${produced}/${wanted}`)
+        table = await workstation(ctx, 'crafting_table')
+        recipes = bot.recipesFor(definition.id, null, 1, table)
+      }
       assert(recipes.length, `Cannot craft ${name}: missing ingredients or crafting table; produced ${produced}/${wanted}`)
       const recipe = recipes[0]
       if (recipe.requiresTable) { assert(table, 'Recipe requires a crafting table'); await approachBlock(ctx, table.position) }
@@ -823,7 +872,9 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       const target = start.offset(dx * distance, 0, dz * distance).floored()
       assert(Math.abs(target.x) < 29999984 && Math.abs(target.z) < 29999984, 'Exploration exceeds world bounds')
       configureMovement()
-      await step(ctx, () => bot.pathfinder.goto(new goals.GoalXZ(target.x, target.z)))
+      let goal = new goals.GoalXZ(target.x, target.z)
+      if (args.returnable === true) goal = await returnableGoal(ctx, goal)
+      await step(ctx, () => bot.pathfinder.goto(goal))
       const actual = Math.hypot(bot.entity.position.x - start.x, bot.entity.position.z - start.z)
       assert(actual >= distance - 2, 'Exploration ended before requested distance')
       return { explored: true, distance: Math.round(actual * 10) / 10, position: plainPos(bot.entity.position) }

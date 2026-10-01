@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "BroBench",
+  "version": "1.0-development",
+  "serverVersion": "1.21.8",
+  "baseline": "659ffce1da4d8203c6d448a221d5f4c0ff71bb5f",
+  "groups": {
+    "MineLine": {
+      "layer": "real-server prepared fixture",
+      "cases": 3,
+      "goal": "Gather actual drops from four logs, four stone and three iron ore, with specified tools"
+    },
+    "Workbench": {
+      "layer": "real-server prepared fixture",
+      "cases": 6,
+      "goal": "Craft verified outputs from provided ingredients: planks, sticks, table, wooden pickaxe, stone pickaxe and furnace"
+    },
+    "Pathfinder": {
+      "layer": "real-server prepared fixture",
+      "cases": 2,
+      "goal": "Navigate around a wall and climb/return over a ledge without digging"
+    },
+    "CommandSense": {
+      "layer": "offline command grammar",
+      "cases": 14,
+      "goal": "Map fixed supported command forms to exact actions; this is not LLM language understanding"
+    },
+    "SafetyLatch": {
+      "layer": "simulated control failures",
+      "cases": 6,
+      "goal": "Enforce owner gating, reject malformed input, honor stop/locks/cancellation, reject unsupported completion, pause API failure"
+    },
+    "Trailhead": {
+      "layer": "fresh natural survival world",
+      "seeds": [
+        718224,
+        42,
+        20260930
+      ],
+      "timeBudgetSeconds": 300,
+      "goal": "One offline starter command, empty inventory, stone pickaxe and furnace carried back to the original position while alive",
+      "spawnRadius": 0,
+      "setup": "Set spawnRadius to zero before connection; no terrain, items, time or agent actions are changed."
+    },
+    "GoalSense-LLM": {
+      "layer": "live model language and planning",
+      "status": "not_run",
+      "reason": "No API key or approved paid-model test budget; never substitute command-parser scores"
+    }
+  },
+  "scoring": "100 * observed successes / scheduled cases. Retain failed and unsupported cases. Infrastructure errors and unrun cases are disclosed separately. No made-up overall score.",
+  "fairness": "Use the same harness, server version, conditions, fixed cases and seeds for both versions. Final live runs execute sequentially. Record source commit and dirty flag. Blue highlights identify best measured scores, including ties; unrun entries never receive a score.",
+  "qualification": "This is a small development comparison, not proof of general Minecraft reliability. The listed seeds were also used during development and are not a held-out test set. Results are not official model benchmarks. Prepared skill fixtures grant ingredients and reset terrain; Trailhead does neither. No model calls are made by the offline suite."
+}

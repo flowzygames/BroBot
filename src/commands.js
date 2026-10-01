@@ -23,6 +23,10 @@ export function parseCommand(input, owner = '') {
       if (!args || typeof args !== 'object' || Array.isArray(args)) throw new Error('Action arguments must be an object.');
       return { kind: 'action', name: match[1], args };
     }
+    case 'survive': {
+      if (!['starter', 'resume'].includes(rest.toLowerCase())) throw new Error('Use survive starter, or survive resume.');
+      return { kind: 'survival', resume: rest.toLowerCase() === 'resume' };
+    }
     case 'goal': return { kind: 'goal', text: rest, persistent: true };
     case 'ask': return { kind: 'goal', text: rest, persistent: false };
     default: return { kind: 'goal', text };
@@ -33,4 +37,4 @@ export function authorizedChat(username, message, owner, botName) {
   return Boolean(owner && username.toLowerCase() === owner.toLowerCase() && username.toLowerCase() !== botName.toLowerCase() && /^(?:!bro\b|@?brobot\b)/i.test(message));
 }
 
-export const HELP = 'Chat naturally with AI, or use stop, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';
+export const HELP = 'Chat naturally with AI, or use stop, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, survive starter, survive resume, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';

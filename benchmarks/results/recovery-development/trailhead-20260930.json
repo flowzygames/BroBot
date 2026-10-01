@@ -1,0 +1,1446 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "clearance-development",
+  "commit": "5164554fdaf25d9139ace4becc9aa803861333f7",
+  "dirty": true,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "20260930",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T02:19:22.863Z",
+  "status": "passed",
+  "passed": true,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 66,
+      "z": 16.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 88,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 141,
+        "name": "bee",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 69.2,
+          "z": 5.4
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 2,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -6,
+          "y": 63,
+          "z": 29
+        },
+        "distance": 16
+      },
+      {
+        "id": 5,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -8,
+          "y": 63,
+          "z": 40
+        },
+        "distance": 24.8
+      },
+      {
+        "id": 6,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -5,
+          "y": 63,
+          "z": 39
+        },
+        "distance": 25
+      },
+      {
+        "id": 55,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -28.79,
+          "y": 38.29,
+          "z": 5.75
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 81,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -7.5,
+          "y": 35,
+          "z": -4.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 80,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -4.5,
+          "y": 35,
+          "z": -4.5
+        },
+        "distance": 39
+      },
+      {
+        "id": 120,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -27.5,
+          "y": 26,
+          "z": 20.5
+        },
+        "distance": 42
+      },
+      {
+        "id": 137,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -11.5,
+          "y": 26,
+          "z": 30.5
+        },
+        "distance": 42.6
+      },
+      {
+        "id": 64,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 7.5,
+          "y": 30,
+          "z": 20.5
+        },
+        "distance": 42.9
+      },
+      {
+        "id": 57,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 13.5,
+          "y": 30,
+          "z": 22.5
+        },
+        "distance": 46.6
+      },
+      {
+        "id": 123,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 20.5,
+          "y": 35,
+          "z": 16.5
+        },
+        "distance": 47.5
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "25947758-4920-4c65-a8c1-cb2484c6914a"
+  },
+  "elapsedMs": 215975,
+  "job": {
+    "version": 1,
+    "id": "25947758-4920-4c65-a8c1-cb2484c6914a",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 66,
+        "z": 16.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 29,
+    "scouts": 1,
+    "clearings": 0,
+    "excluded": {
+      "birch_log": [],
+      "stone": [
+        {
+          "x": -33,
+          "y": 64,
+          "z": -25
+        },
+        {
+          "x": -34,
+          "y": 64,
+          "z": -24
+        },
+        {
+          "x": -36,
+          "y": 64,
+          "z": -24
+        }
+      ]
+    },
+    "history": [
+      {
+        "at": "2026-10-01T02:22:37.529Z",
+        "action": "pickup",
+        "args": {
+          "radius": 16
+        },
+        "reason": "Recover observed dropped materials before mining more.",
+        "result": {
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 302,
+              "position": {
+                "x": -33.38,
+                "y": 64,
+                "z": -24.12
+              }
+            },
+            {
+              "id": 489,
+              "position": {
+                "x": -36.12,
+                "y": 64,
+                "z": -23.28
+              }
+            }
+          ],
+          "unreachable": [
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            }
+          ]
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T02:22:49.127Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -33,
+              "y": 64,
+              "z": -25
+            },
+            {
+              "x": -34,
+              "y": 64,
+              "z": -24
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -24
+            }
+          ]
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 1,
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 302,
+              "position": {
+                "x": -33.38,
+                "y": 64,
+                "z": -24.12
+              }
+            },
+            {
+              "id": 489,
+              "position": {
+                "x": -36.12,
+                "y": 64,
+                "z": -23.28
+              }
+            },
+            {
+              "id": 517,
+              "position": {
+                "x": -37.87,
+                "y": 64,
+                "z": -25.12
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            }
+          ],
+          "failures": [],
+          "search_limited": false
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T02:22:52.365Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 12,
+          "returnable": true
+        },
+        "reason": "Repeated pickup failure. Look for a different approach.",
+        "result": {
+          "explored": true,
+          "distance": 12.2,
+          "position": {
+            "x": -34.5,
+            "y": 62.53,
+            "z": -38.69
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T02:23:02.952Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -33,
+              "y": 64,
+              "z": -25
+            },
+            {
+              "x": -34,
+              "y": 64,
+              "z": -24
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -24
+            }
+          ]
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 1,
+          "inventory_changes": {
+            "cobblestone": 1
+          },
+          "remaining_drops": [
+            {
+              "id": 302,
+              "position": {
+                "x": -33.38,
+                "y": 64,
+                "z": -24.12
+              }
+            },
+            {
+              "id": 489,
+              "position": {
+                "x": -36.12,
+                "y": 64,
+                "z": -23.28
+              }
+            },
+            {
+              "id": 517,
+              "position": {
+                "x": -37.87,
+                "y": 64,
+                "z": -25.12
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            }
+          ],
+          "failures": [],
+          "search_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T02:23:09.314Z",
+        "action": "pickup",
+        "args": {
+          "radius": 16
+        },
+        "reason": "Recover observed dropped materials before mining more.",
+        "result": {
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 302,
+              "position": {
+                "x": -33.38,
+                "y": 64,
+                "z": -24.12
+              }
+            },
+            {
+              "id": 489,
+              "position": {
+                "x": -36.12,
+                "y": 64,
+                "z": -23.28
+              }
+            },
+            {
+              "id": 517,
+              "position": {
+                "x": -37.87,
+                "y": 64,
+                "z": -25.12
+              }
+            }
+          ],
+          "unreachable": [
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 517,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 302,
+              "error": "Return-path planning budget exhausted"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            },
+            {
+              "id": 489,
+              "error": "No validated standing space near dropped item"
+            }
+          ]
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T02:23:16.498Z",
+        "action": "go_to",
+        "args": {
+          "x": -5,
+          "y": 64,
+          "z": -20,
+          "radius": 2
+        },
+        "reason": "Return to an observed crafting table instead of searching for more wood.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": -6.5,
+            "y": 64,
+            "z": -19.48
+          },
+          "target": {
+            "x": -5,
+            "y": 64,
+            "z": -20
+          },
+          "radius": 2
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T02:23:19.455Z",
+        "action": "craft",
+        "args": {
+          "item": "furnace",
+          "count": 1
+        },
+        "reason": "Craft a furnace from eight verified cobblestone.",
+        "result": {
+          "item": "furnace",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T02:23:27.471Z",
+        "action": "go_to",
+        "args": {
+          "x": -16,
+          "y": 66,
+          "z": 16,
+          "radius": 1
+        },
+        "reason": "Return to the job starting point with the starter kit.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": -15.48,
+            "y": 66,
+            "z": 15.36
+          },
+          "target": {
+            "x": -16,
+            "y": 66,
+            "z": 16
+          },
+          "radius": 1
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-01T02:19:51.686Z",
+    "status": "complete",
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "tables": [
+      {
+        "x": -5,
+        "y": 64,
+        "z": -20
+      }
+    ],
+    "recoverDropIds": [
+      302,
+      489,
+      517
+    ],
+    "clearanceDigs": 3,
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 1.1401754250991387
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -15.48,
+      "y": 66,
+      "z": 15.36
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": 20,
+    "time": 4408,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 7
+      },
+      {
+        "name": "birch_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 7
+      },
+      {
+        "name": "dirt",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "stone_pickaxe",
+    "entities": [
+      {
+        "id": 5,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -20.16,
+          "y": 66,
+          "z": 36.47
+        },
+        "distance": 21.6
+      },
+      {
+        "id": 6,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -9.16,
+          "y": 63,
+          "z": 35.83
+        },
+        "distance": 21.6
+      },
+      {
+        "id": 2,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30.29,
+          "y": 70,
+          "z": 34.34
+        },
+        "distance": 24.4
+      },
+      {
+        "id": 378,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -1.75,
+          "y": 46.1,
+          "z": 26.46
+        },
+        "distance": 26.6
+      },
+      {
+        "id": 595,
+        "name": "bee",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30.98,
+          "y": 71.81,
+          "z": -6.4
+        },
+        "distance": 27.3
+      },
+      {
+        "id": 356,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -26.5,
+          "y": 35,
+          "z": -1.97
+        },
+        "distance": 37.2
+      },
+      {
+        "id": 102,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -6.82,
+          "y": 63,
+          "z": -23.57
+        },
+        "distance": 40
+      },
+      {
+        "id": 302,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -33.38,
+          "y": 64,
+          "z": -24.12
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 489,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -36.12,
+          "y": 64,
+          "z": -23.28
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 635,
+        "name": "enderman",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 16.5,
+          "y": 36,
+          "z": 19.5
+        },
+        "distance": 44
+      },
+      {
+        "id": 478,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -18.39,
+          "y": 21.67,
+          "z": 16.34
+        },
+        "distance": 44.4
+      },
+      {
+        "id": 526,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -49.43,
+          "y": 71.71,
+          "z": -14.66
+        },
+        "distance": 45.7
+      },
+      {
+        "id": 517,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -37.87,
+          "y": 64,
+          "z": -25.12
+        },
+        "distance": 46.3
+      },
+      {
+        "id": 612,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -10.5,
+          "y": 19,
+          "z": 16.94
+        },
+        "distance": 47.3
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "25947758-4920-4c65-a8c1-cb2484c6914a",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -15.5,
+          "y": 66,
+          "z": 16.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 29,
+      "scouts": 1,
+      "clearings": 0,
+      "excluded": {
+        "birch_log": [],
+        "stone": [
+          {
+            "x": -33,
+            "y": 64,
+            "z": -25
+          },
+          {
+            "x": -34,
+            "y": 64,
+            "z": -24
+          },
+          {
+            "x": -36,
+            "y": 64,
+            "z": -24
+          }
+        ]
+      },
+      "history": [
+        {
+          "at": "2026-10-01T02:22:37.529Z",
+          "action": "pickup",
+          "args": {
+            "radius": 16
+          },
+          "reason": "Recover observed dropped materials before mining more.",
+          "result": {
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 302,
+                "position": {
+                  "x": -33.38,
+                  "y": 64,
+                  "z": -24.12
+                }
+              },
+              {
+                "id": 489,
+                "position": {
+                  "x": -36.12,
+                  "y": 64,
+                  "z": -23.28
+                }
+              }
+            ],
+            "unreachable": [
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              }
+            ]
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T02:22:49.127Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -33,
+                "y": 64,
+                "z": -25
+              },
+              {
+                "x": -34,
+                "y": 64,
+                "z": -24
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -24
+              }
+            ]
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 1,
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 302,
+                "position": {
+                  "x": -33.38,
+                  "y": 64,
+                  "z": -24.12
+                }
+              },
+              {
+                "id": 489,
+                "position": {
+                  "x": -36.12,
+                  "y": 64,
+                  "z": -23.28
+                }
+              },
+              {
+                "id": 517,
+                "position": {
+                  "x": -37.87,
+                  "y": 64,
+                  "z": -25.12
+                }
+              }
+            ],
+            "pickup_failures": [
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              }
+            ],
+            "failures": [],
+            "search_limited": false
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T02:22:52.365Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 12,
+            "returnable": true
+          },
+          "reason": "Repeated pickup failure. Look for a different approach.",
+          "result": {
+            "explored": true,
+            "distance": 12.2,
+            "position": {
+              "x": -34.5,
+              "y": 62.53,
+              "z": -38.69
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T02:23:02.952Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -33,
+                "y": 64,
+                "z": -25
+              },
+              {
+                "x": -34,
+                "y": 64,
+                "z": -24
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -24
+              }
+            ]
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 1,
+            "inventory_changes": {
+              "cobblestone": 1
+            },
+            "remaining_drops": [
+              {
+                "id": 302,
+                "position": {
+                  "x": -33.38,
+                  "y": 64,
+                  "z": -24.12
+                }
+              },
+              {
+                "id": 489,
+                "position": {
+                  "x": -36.12,
+                  "y": 64,
+                  "z": -23.28
+                }
+              },
+              {
+                "id": 517,
+                "position": {
+                  "x": -37.87,
+                  "y": 64,
+                  "z": -25.12
+                }
+              }
+            ],
+            "pickup_failures": [
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              }
+            ],
+            "failures": [],
+            "search_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T02:23:09.314Z",
+          "action": "pickup",
+          "args": {
+            "radius": 16
+          },
+          "reason": "Recover observed dropped materials before mining more.",
+          "result": {
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 302,
+                "position": {
+                  "x": -33.38,
+                  "y": 64,
+                  "z": -24.12
+                }
+              },
+              {
+                "id": 489,
+                "position": {
+                  "x": -36.12,
+                  "y": 64,
+                  "z": -23.28
+                }
+              },
+              {
+                "id": 517,
+                "position": {
+                  "x": -37.87,
+                  "y": 64,
+                  "z": -25.12
+                }
+              }
+            ],
+            "unreachable": [
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 517,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 302,
+                "error": "Return-path planning budget exhausted"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              },
+              {
+                "id": 489,
+                "error": "No validated standing space near dropped item"
+              }
+            ]
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T02:23:16.498Z",
+          "action": "go_to",
+          "args": {
+            "x": -5,
+            "y": 64,
+            "z": -20,
+            "radius": 2
+          },
+          "reason": "Return to an observed crafting table instead of searching for more wood.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": -6.5,
+              "y": 64,
+              "z": -19.48
+            },
+            "target": {
+              "x": -5,
+              "y": 64,
+              "z": -20
+            },
+            "radius": 2
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T02:23:19.455Z",
+          "action": "craft",
+          "args": {
+            "item": "furnace",
+            "count": 1
+          },
+          "reason": "Craft a furnace from eight verified cobblestone.",
+          "result": {
+            "item": "furnace",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T02:23:27.471Z",
+          "action": "go_to",
+          "args": {
+            "x": -16,
+            "y": 66,
+            "z": 16,
+            "radius": 1
+          },
+          "reason": "Return to the job starting point with the starter kit.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": -15.48,
+              "y": 66,
+              "z": 15.36
+            },
+            "target": {
+              "x": -16,
+              "y": 66,
+              "z": 16
+            },
+            "radius": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-01T02:19:51.686Z",
+      "status": "complete",
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "tables": [
+        {
+          "x": -5,
+          "y": 64,
+          "z": -20
+        }
+      ],
+      "recoverDropIds": [
+        302,
+        489,
+        517
+      ],
+      "clearanceDigs": 3,
+      "evidence": {
+        "stone_pickaxe": 1,
+        "furnace": 1,
+        "homeDistance": 1.1401754250991387
+      },
+      "stopping": false
+    }
+  },
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "finished": "2026-10-01T02:23:29.403Z"
+}
