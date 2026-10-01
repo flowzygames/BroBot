@@ -1,0 +1,32 @@
+{
+  "createdUtc": "2026-10-01T09:02:31.474248+00:00",
+  "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "protocol": "trailhead-v1",
+  "label": "wide-first-pass-1e7",
+  "seeds": [
+    454806089,
+    1542908414,
+    761598570,
+    1587439118,
+    924242050,
+    113919219,
+    474859294,
+    1576696577,
+    1382194916,
+    386690312,
+    1744809425,
+    61544722,
+    1041160109,
+    1888406977,
+    1547703085,
+    1146093953,
+    1014875191,
+    355620996,
+    1276821265,
+    1244186709
+  ],
+  "selection": "Python Random seeded with the first8 SHA256 bytes of 'BroBot Trailhead Wide 2026-10-01', sampled before inspecting any of these worlds; excludes ten already known worlds.",
+  "conditions": "Same300-second normal-survival empty-inventory protocol, no supplied items, no prepared terrain, no paid model. Source frozen for all20.",
+  "interpretation": "First-pass coverage of this bounded starter, including unsuitable resource/terrain spawns; no general intelligence or stable-release claim.",
+  "stoppingRule": "Finish every scheduled case unless the700MB disk reserve or an execution blocker prevents it; retain failures and mark any unrun cases explicitly."
+}
