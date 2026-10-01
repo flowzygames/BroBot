@@ -8,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. One recent fresh-world recovery run completed successfully; reliable survival across worlds and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest build completed three original worlds, two of three additional worlds and two of four new first-pass worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
@@ -166,14 +166,16 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ### Latest recovery checkpoint · October 1, 2026
 
-- **194 automated checks pass**, plus source syntax checks
+- **198 automated checks pass**, plus source syntax checks
 - **17/17 real-server regression phases pass**, including three repetitions of a previously troublesome grass-corner route
 - **11/11 prepared skill cases** and **20/20 local grammar/control cases** pass
-- **3/3 original development worlds** completed the full starter objective on one clean app revision: 99.100s, 182.106s and 88.720s
-- **2/3 additional development worlds** completed it: 89.896s and 91.871s. The canopy case stopped at the work-step limit while trying to reach its crafting table
+- **3/3 original development worlds** completed the full starter objective on one clean app revision: 99.653s, 150.625s and 91.643s
+- **2/3 additional development worlds** completed it: 95.489s and 108.002s. The canopy case reached the 300-second limit
 - Windows/Ubuntu Node 22/24 checks run on [PR 7](https://github.com/flowzygames/BroBot/pull/7). Actual rendered Windows/Mac gameplay and live paid-planner behavior remain unverified here
 
-The tested app snapshot is `c1e0196`. These six worlds are known development cases, not held-out proof or a general reliability percentage. Every scheduled result, including the failed canopy case, is [published with its conditions](benchmarks/results/recovery-2026-10-01/). The original frozen comparison below remains unchanged.
+**2/4 new first-pass worlds** completed the objective. These seeds were selected before inspection and tested once on the frozen build; failures found a treeless area and an unreachable mangrove-canopy stone route.
+
+The tested app snapshot is `6e63360`. The original six worlds are known development cases; the four first-pass cases are a small additional check, not a general reliability percentage. Every scheduled result, including all failures, is [published with its conditions](benchmarks/results/workstations-2026-10-01/). The original frozen comparison below remains unchanged.
 
 #### What improved
 

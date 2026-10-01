@@ -38,7 +38,11 @@ if (telemetryRoot) {
   slider.addEventListener('input',()=>{pause();index=Number(slider.value);render();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   fetch('/run-telemetry.json').then(r=>{if(!r.ok)throw Error('unavailable');return r.json();}).then(data=>{
-    if(!Array.isArray(data.samples)||data.samples.length<2||!data.samples.every(s=>Number.isFinite(s.seconds)&&['x','y','z'].every(k=>Number.isFinite(s.position?.[k]))))throw Error('invalid');
+    const point = p => p && ['x','y','z'].every(k=>Number.isFinite(p[k]));
+    if(!/^[a-f0-9]{40}$/.test(data.sourceCommit ?? '') || typeof data.seed !== 'string' || !point(data.home) || !(data.durationSeconds>0) || !Number.isFinite(data.durationSeconds) || !Array.isArray(data.samples) || data.samples.length<2)throw Error('invalid');
+    if(!data.samples.every((s,i)=>Number.isFinite(s.seconds) && s.seconds>=0 && s.seconds<=data.durationSeconds && (!i || s.seconds>data.samples[i-1].seconds) && point(s.position) && Number.isFinite(s.health) && Number.isFinite(s.food) && typeof s.action==='string' && Array.isArray(s.inventory) && s.inventory.every(item=>typeof item.name==='string' && Number.isInteger(item.count) && item.count>0)))throw Error('invalid');
+    const end=data.samples.at(-1), owns=name=>end.inventory.some(item=>item.name===name&&item.count>0);
+    if(data.samples[0].seconds!==0 || end.seconds!==data.durationSeconds || end.action!=='complete' || end.health<=0 || !owns('stone_pickaxe') || !owns('furnace') || Math.hypot(...['x','y','z'].map(k=>end.position[k]-data.home[k]))>2.5)throw Error('unverified finish');
     record=data;slider.max=String(data.samples.length-1);slider.disabled=false;play.disabled=false;get('traceReset').disabled=false;
     get('traceSource').textContent=`World ${data.seed} · app ${data.sourceCommit.slice(0,7)} · ${data.samples.length} recorded snapshots including the verified finish`;
     render();

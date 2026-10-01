@@ -834,3 +834,24 @@ test('actual starter neighbor generation rejects water, aquatic plants and water
     assert.equal(forward(),true,`${name} retains the original direct-command movement policy`)
   }
 })
+
+test('craft chooses a visible nearby table instead of a closer obstructed one', async () => {
+  const bot=fakeBot(),hidden=new Vec3(1,64,0),visible=new Vec3(3,64,0)
+  bot.putBlock('crafting_table',hidden);bot.putBlock('crafting_table',visible)
+  bot.canSeeBlock=block=>!block.position.equals(hidden)
+  bot.recipesFor=(type,metadata,count,table)=>table?[{result:{count:1},requiresTable:true}]:[]
+  bot.craft=async(recipe,count,table)=>{assert.ok(table.position.equals(visible));bot.addItem('wooden_pickaxe')}
+  const result=await createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1})
+  assert.equal(result.crafted,1)
+})
+
+test('craft places a carried table locally when the nearby existing table is obstructed', async () => {
+  const bot=fakeBot(),hidden=new Vec3(2,64,0)
+  bot.putBlock('crafting_table',hidden);bot.addItem('crafting_table')
+  for(let x=-3;x<=3;x++)for(let z=-3;z<=3;z++)bot.putBlock('stone',new Vec3(x,63,z))
+  bot.canSeeBlock=block=>!block.position.equals(hidden)
+  bot.recipesFor=(type,metadata,count,table)=>table?[{result:{count:1},requiresTable:true}]:[]
+  bot.craft=async(recipe,count,table)=>{assert.ok(!table.position.equals(hidden));bot.addItem('wooden_pickaxe')}
+  const result=await createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1})
+  assert.equal(result.crafted,1)
+})

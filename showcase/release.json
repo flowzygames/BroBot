@@ -1,12 +1,12 @@
 {
   "channel": "development",
-  "sourceCommit": "10a075f4e8d97ac392c8a5e6c781db60d4e5485c",
-  "sourceTree": "c9d7cf1853954aea12f482b0026f100ca4d3d1fa",
-  "packagedCommit": "e0a5ca9d9ce5e9d8d1aeddc596b94f325bc23759",
-  "testedApplicationCommit": "c1e01963a8eea0b6446c47a1f4dd6302a91986f8",
-  "sha256": "2af960303c8c4ba467b5d20ed0e0d5295b5246b7ec5064dbca1932383ed833ae",
-  "bytes": 239763,
-  "automatedChecks": 194,
+  "sourceCommit": "8b3d9ae7c9026ad96dcba544c974882370085cfb",
+  "sourceTree": "53dade440abbc9b463d21bbbd2bc473e466ab67b",
+  "packagedCommit": "47dacf3f6f7d150158556862fe61ee05ff613dcd",
+  "testedApplicationCommit": "6e63360210f525baa3d53af6a8cfffa2b63015df",
+  "sha256": "0ed4d2839458d7a988cd3cf01ebbaa0e3f93684cc590f4979315e5adee62e699",
+  "bytes": 266042,
+  "automatedChecks": 198,
   "liveRegressionPhases": 17,
   "originalDevelopmentWorlds": {
     "passed": 3,
@@ -16,7 +16,11 @@
     "passed": 2,
     "scheduled": 3
   },
-  "multiWorldEvaluation": "complete known-development cohort; failed canopy case retained",
+  "multiWorldEvaluation": "all ten scheduled worlds retained: original3/3, additional2/3, new first-pass2/4",
   "readyForStable1_0": false,
-  "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest."
+  "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest.",
+  "firstPassWorlds": {
+    "passed": 2,
+    "scheduled": 4
+  }
 }

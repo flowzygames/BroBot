@@ -1,9 +1,9 @@
 {
   "title": "A measured starter run",
   "seed": "718224",
-  "sourceCommit": "c1e01963a8eea0b6446c47a1f4dd6302a91986f8",
+  "sourceCommit": "6e63360210f525baa3d53af6a8cfffa2b63015df",
   "minecraft": "1.21.8",
-  "durationSeconds": 99.1,
+  "durationSeconds": 99.653,
   "sampleIntervalSeconds": 5,
   "conditions": {
     "freshNaturalWorld": true,
@@ -27,7 +27,7 @@
   },
   "samples": [
     {
-      "seconds": 0,
+      "seconds": 0.0,
       "position": {
         "x": 0.5,
         "y": 68,
@@ -35,15 +35,15 @@
       },
       "health": 20,
       "food": 20,
-      "action": "snapshot",
+      "action": "observing",
       "inventory": []
     },
     {
-      "seconds": 5.0,
+      "seconds": 5.001,
       "position": {
-        "x": -15.39,
+        "x": -16.2,
         "y": 71,
-        "z": 11.42
+        "z": 12.2
       },
       "health": 20,
       "food": 20,
@@ -51,7 +51,7 @@
       "inventory": []
     },
     {
-      "seconds": 10.0,
+      "seconds": 10.001,
       "position": {
         "x": -30.5,
         "y": 72,
@@ -63,11 +63,11 @@
       "inventory": []
     },
     {
-      "seconds": 15.0,
+      "seconds": 15.002,
       "position": {
-        "x": -31.54,
+        "x": -31.31,
         "y": 72,
-        "z": 23.18
+        "z": 23.7
       },
       "health": 20,
       "food": 20,
@@ -80,11 +80,11 @@
       ]
     },
     {
-      "seconds": 20.0,
+      "seconds": 20.001,
       "position": {
-        "x": -31.53,
+        "x": -31.44,
         "y": 72,
-        "z": 24.02
+        "z": 24.5
       },
       "health": 20,
       "food": 20,
@@ -97,9 +97,9 @@
       ]
     },
     {
-      "seconds": 25.0,
+      "seconds": 25.002,
       "position": {
-        "x": -31.53,
+        "x": -31.44,
         "y": 72,
         "z": 24.5
       },
@@ -122,32 +122,36 @@
       ]
     },
     {
-      "seconds": 30.0,
+      "seconds": 30.003,
       "position": {
-        "x": -31.53,
+        "x": -31.44,
         "y": 72,
         "z": 24.5
       },
       "health": 20,
       "food": 20,
-      "action": "craft",
+      "action": "observing",
       "inventory": [
         {
+          "name": "wooden_pickaxe",
+          "count": 1
+        },
+        {
           "name": "oak_planks",
-          "count": 6
+          "count": 3
         },
         {
           "name": "stick",
-          "count": 4
+          "count": 2
         }
       ]
     },
     {
-      "seconds": 35.0,
+      "seconds": 35.002,
       "position": {
-        "x": -24.37,
+        "x": -22.95,
         "y": 76,
-        "z": 32.43
+        "z": 33.54
       },
       "health": 20,
       "food": 20,
@@ -168,7 +172,7 @@
       ]
     },
     {
-      "seconds": 40.0,
+      "seconds": 40.003,
       "position": {
         "x": -4.36,
         "y": 79,
@@ -193,7 +197,7 @@
       ]
     },
     {
-      "seconds": 45.0,
+      "seconds": 45.003,
       "position": {
         "x": -7.5,
         "y": 74,
@@ -222,7 +226,7 @@
       ]
     },
     {
-      "seconds": 50.0,
+      "seconds": 50.003,
       "position": {
         "x": -7.5,
         "y": 74,
@@ -251,11 +255,11 @@
       ]
     },
     {
-      "seconds": 55.0,
+      "seconds": 55.003,
       "position": {
-        "x": -6.54,
+        "x": -6.64,
         "y": 74,
-        "z": 33.3
+        "z": 32.7
       },
       "health": 20,
       "food": 20,
@@ -280,11 +284,11 @@
       ]
     },
     {
-      "seconds": 60.0,
+      "seconds": 60.004,
       "position": {
-        "x": -5.34,
-        "y": 74.42,
-        "z": 34.52
+        "x": -6.06,
+        "y": 74,
+        "z": 33.7
       },
       "health": 20,
       "food": 20,
@@ -309,11 +313,11 @@
       ]
     },
     {
-      "seconds": 65.0,
+      "seconds": 65.004,
       "position": {
-        "x": -3.66,
+        "x": -4.59,
         "y": 74,
-        "z": 34.48
+        "z": 34.77
       },
       "health": 20,
       "food": 20,
@@ -338,11 +342,11 @@
       ]
     },
     {
-      "seconds": 70.0,
+      "seconds": 70.09,
       "position": {
-        "x": -4.32,
+        "x": -4.41,
         "y": 74,
-        "z": 35.46
+        "z": 34.96
       },
       "health": 20,
       "food": 20,
@@ -367,11 +371,11 @@
       ]
     },
     {
-      "seconds": 75.0,
+      "seconds": 75.091,
       "position": {
-        "x": -2.49,
-        "y": 78.25,
-        "z": 38.93
+        "x": -2.48,
+        "y": 77.25,
+        "z": 37.93
       },
       "health": 20,
       "food": 20,
@@ -396,11 +400,11 @@
       ]
     },
     {
-      "seconds": 80.0,
+      "seconds": 80.091,
       "position": {
-        "x": -19.92,
+        "x": -18.34,
         "y": 76,
-        "z": 36.08
+        "z": 37.67
       },
       "health": 20,
       "food": 20,
@@ -425,7 +429,7 @@
       ]
     },
     {
-      "seconds": 85.0,
+      "seconds": 85.092,
       "position": {
         "x": -30.54,
         "y": 72,
@@ -454,15 +458,15 @@
       ]
     },
     {
-      "seconds": 90.0,
+      "seconds": 90.091,
       "position": {
-        "x": -30.3,
+        "x": -30.54,
         "y": 72,
-        "z": 22.96
+        "z": 24.69
       },
       "health": 20,
       "food": 20,
-      "action": "go_to",
+      "action": "observing",
       "inventory": [
         {
           "name": "stone_pickaxe",
@@ -483,11 +487,11 @@
       ]
     },
     {
-      "seconds": 95.0,
+      "seconds": 95.092,
       "position": {
-        "x": -15.48,
+        "x": -17.57,
         "y": 71,
-        "z": 11.5
+        "z": 12.5
       },
       "health": 20,
       "food": 20,
@@ -512,11 +516,11 @@
       ]
     },
     {
-      "seconds": 99.1,
+      "seconds": 99.653,
       "position": {
-        "x": 0.63,
+        "x": 0.68,
         "y": 68.23,
-        "z": 0.37
+        "z": 0.32
       },
       "health": 20,
       "food": 20,

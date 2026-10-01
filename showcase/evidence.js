@@ -5,8 +5,9 @@ if (panel) {
   const render = () => {
     if (!data) return;
     const group = data.groups[selected];
+    if (!group) return;
     list.replaceChildren();
-    status.textContent = `${group.passed}/${group.scheduled} completed the full starter objective · ${group.label}`;
+    status.textContent = `${group.passed}/${group.scheduled} completed the full starter objective · ${group.label}${group.note ? ' · ' + group.note : ''}`;
     panel.querySelectorAll('[data-cohort]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cohort === selected)));
     for (const run of group.cases) {
       const card = document.createElement('article'); card.className = 'world-case';
@@ -24,7 +25,12 @@ if (panel) {
   };
   panel.querySelectorAll('[data-cohort]').forEach(button => button.addEventListener('click', () => { selected = button.dataset.cohort; render(); }));
   fetch('/checkpoint.json').then(response => { if (!response.ok) throw Error('unavailable'); return response.json(); }).then(value => {
-    if (!value.sourceCommit || !value.groups?.core?.cases || !value.groups?.additional?.cases) throw Error('invalid');
+    if (!/^[a-f0-9]{40}$/.test(value.sourceCommit ?? '') || typeof value.minecraft !== 'string') throw Error('invalid');
+    for (const button of panel.querySelectorAll('[data-cohort]')) {
+      const group = value.groups?.[button.dataset.cohort];
+      if (!group || !Array.isArray(group.cases) || !Number.isInteger(group.scheduled) || group.scheduled < 1 || group.cases.length !== group.scheduled || group.passed !== group.cases.filter(run => run.passed === true).length || new Set(group.cases.map(run => run.seed)).size !== group.cases.length) throw Error('invalid');
+      if (group.cases.some(run => typeof run.seed !== 'string' || !['passed', 'failed', 'error', 'unsupported', 'not_run'].includes(run.status) || run.passed !== (run.status === 'passed') || (run.elapsedMs !== null && (!Number.isFinite(run.elapsedMs) || run.elapsedMs < 0)))) throw Error('invalid');
+    }
     data = value; render();
   }).catch(() => { status.textContent = 'The latest records could not load. The evidence link below still has the published results.'; });
 }

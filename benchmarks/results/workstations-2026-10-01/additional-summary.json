@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "classification": "development",
+  "commit": "6e63360210f525baa3d53af6a8cfffa2b63015df",
+  "protocol": "trailhead-v1",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "passed": 2,
+  "scheduled": 3,
+  "completed": 3,
+  "complete": true,
+  "cases": [
+    {
+      "seed": "314159",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 95489,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    },
+    {
+      "seed": "271828",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 108002,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    },
+    {
+      "seed": "8675309",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 300005,
+      "reason": "Starter job time budget reached."
+    }
+  ],
+  "note": "Known development worlds; not evidence of broad or held-out reliability. Retain all individual run records and failed attempts."
+}
