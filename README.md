@@ -8,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. In a preselected twenty-world first-pass evaluation, the earlier measured recovery build completed 8/20 (40%). It also completed three original known worlds, two of three additional known worlds and two of four wider known worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest measured build completed 10/20 (50%) on the same twenty worlds where the earlier build completed 8/20 (40%). These are now known development cases, with every failed run retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
@@ -170,11 +170,11 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 - All three original known worlds completed the full starter objective, in 159.168s, 94.701s and 91.327s
 - A previously failing world completed a targeted replay in 242.380s, using the new bounded transit-obstruction recovery
 - A separately prepared live diagnostic recovered ten pre-existing cobblestone after clearing one safe dirt obstruction, then returned with them alive; this is not a fresh-world score
-- The same twenty wider seeds are being rerun on frozen source. Those are now known cases; no completed paired score is claimed yet
+- **10/20 wider known worlds completed**, compared with the previous first-pass result of 8/20; all eight previous successes completed again and two prior failures now completed
 
 [Current records and exact tested-file manifest](benchmarks/results/transit-2026-10-01/) · [How safe transit clearance works](docs/PICKUP_TRANSIT.md)
 
-The downloadable ZIP is still the previous verified 208-check checkpoint while wider testing continues. The development branch includes the newer recovery code. Stable 1.0, rendered Windows/Mac client gameplay and paid-planner behavior remain unverified.
+The hosted development download includes this measured transit-recovery checkpoint. Individual runs can vary with mob/item timing, and these worlds informed development. Stable 1.0, rendered Windows/Mac client gameplay and paid-planner behavior remain unverified.
 
 ### Earlier measured recovery checkpoint
 

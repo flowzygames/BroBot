@@ -6,7 +6,9 @@ A bounded read-only terrain probe now checks whether removing one visible natura
 
 In a separately prepared saved-world diagnostic, ordinary pickup initially acquired nothing. Removing the verified dirt obstruction recovered ten existing cobblestone, and the bot returned with that inventory and no deaths or respawns. Two other unreachable stacks remained; this is mechanism evidence, not complete collection or fresh survival. The targeted natural replay also used the dirt-clearance recovery, then completed the starter kit and return. Its earlier path differed, so one pass does not isolate the cause or prove broad reliability.
 
-[Current source manifest and complete available records](results/transit-2026-10-01/) preserve those results. A same-protocol rerun of all twenty wider seeds is now in progress on frozen 682 source. Those worlds are now known cases. No completed paired score is claimed yet, and the prior **8/20 first-pass result below remains intact**. Stable 1.0 remains unverified.
+[Current source manifest and complete available records](results/transit-2026-10-01/) preserve those results. The same-protocol rerun of all twenty wider seeds completed **10/20 (50%)** on frozen 682 source, compared with the earlier **8/20 (40%)** first-pass result. All eight prior successes completed again; worlds 454806089 and 1542908414 also completed. The remaining ten failed. Every run stays in its denominator, and the earlier targeted 1542908414 replay is separate from the paired run rather than substituted for it.
+
+These are now known cases, and one run per build can vary with mob/item timing. The difference is observed coverage, not an isolated causal effect or a broad reliability guarantee. [The paired summary](results/transit-2026-10-01/paired-summary.json), individual records and original selection remain available. **Stable 1.0 is not verified.**
 
 ---
 
