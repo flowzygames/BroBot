@@ -241,3 +241,11 @@ test('starter gathers the kit stone before returning to a distant crafting table
  state.inventory.find(i=>i.name==='cobblestone').count=11;
  assert.equal(nextStarterStep(state,job,{tableInReach:false}).waypointKind,'table');
 });
+
+test('starter observes its crafting table even when generic inspection is full of ore', async () => {
+ const { Runtime }=await import('../src/runtime.js');const { loadConfig }=await import('../src/config.js');const {Vec3}=await import('vec3');const{mkdtemp,rm}=await import('node:fs/promises');const{tmpdir}=await import('node:os');const{join}=await import('node:path');
+ const dir=await mkdtemp(join(tmpdir(),'brobot-table-observe-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));
+ runtime.execute=async()=>({position:{x:0.5,y:64,z:0.5},nearby_blocks:Array.from({length:64},()=>({name:'iron_ore',position:{x:0,y:60,z:0}}))});
+ runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'crafting_table'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({matching})=>matching[0]===2?[new Vec3(2,64,0)]:[],blockAt:p=>({name:'crafting_table',position:p}),quit:()=>{}};
+ try{const observation=await runtime.survival.observe();assert.equal(observation.tableInReach,true);assert.equal(observation.tables.length,1);assert.equal(observation.tables[0].x,2);}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
+});

@@ -56,7 +56,11 @@ export class Runtime {
           const feet = this.bot.entity.position.floored();
           if (hit && /_leaves$/.test(hit.name) && !(hit.position.x === feet.x && hit.position.z === feet.z && hit.position.y < feet.y)) foliage = { x: hit.position.x, y: hit.position.y, z: hit.position.z, expected_block: hit.name };
         }
-        const tablePositions = [...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
+        // A dense ore field can also crowd our placed table out of inspect's
+        // generic result cap. Search this critical workstation independently.
+        const tableId = this.bot.registry.blocksArray.find(b => b.name === 'crafting_table')?.id;
+        const foundTables = tableId == null ? [] : this.bot.findBlocks({ matching: [tableId], maxDistance: 32, count: 16 });
+        const tablePositions = [...foundTables, ...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
         const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => this.bot.blockAt(new Vec3(p.x, p.y, p.z))?.name === 'crafting_table').slice(0, 8);
         return { wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds), tables, tableInReach: tables.some(t => p && Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) <= 4) };
       },

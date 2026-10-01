@@ -164,15 +164,16 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ## Measured, not guessed
 
-### Current recovery checkpoint
+### Recovery checkpoints
 
-- **141 automated tests pass**, plus source syntax checks
-- **16 real-server regression scenarios pass** on Linux, including mining, crafting, movement, cancellation and supplied-material portal fixtures
-- **One complete starter development run passed in 215.975 seconds** on seed `20260930`: empty inventory → stone pickaxe and furnace → alive at the start
-- The earlier published PR 4 code passed Windows/Ubuntu checks on Node 22/24; this branch's CI status must be checked separately
+- **160 automated tests pass**, plus source syntax checks
+- **16 real-server regression scenarios passed** on Linux before the final return-anchor refinement, including mining, crafting, movement, cancellation and supplied-material portal fixtures; the final rerun is pending
+- Development seed `718224` completed in **191.344 seconds** on the bounded-walk revision; seed `42` completed in **263.566 seconds** after the return-anchor refinement
+- The earlier recovery revision completed seed `20260930` in **215.975 seconds**. Each started empty and returned alive with a stone pickaxe and furnace
+- Check the latest [PR 7 CI results](https://github.com/flowzygames/BroBot/pull/7) for Windows/Ubuntu on Node 22/24
 - Actual rendered Windows Minecraft gameplay and live OpenAI planner behavior remain unverified here
 
-One successful development world is encouraging, not a broad reliability claim. The latest fixes have not received a new full three-seed comparison. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
+These successes come from different development revisions, not one new aggregate score. The latest fixes are undergoing a complete same-revision multi-world evaluation. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
 
 ### Frozen BroBench comparison
 
