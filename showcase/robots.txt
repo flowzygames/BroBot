@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://brobot-showcase.vercel.app/sitemap.xml
