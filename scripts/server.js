@@ -167,12 +167,18 @@ export async function setupServer({ acceptEula = false, interactive = false, upd
   log(`Ready: Java ${java.major}, Minecraft ${VERSION}, Java 127.0.0.1:${process.env.MC_PORT || 25565}, Bedrock 127.0.0.1:${process.env.BEDROCK_PORT || 19132}.`);
   return { manifest, java };
 }
+export function serverEnvironment(source = process.env) {
+  const env = { ...source };
+  delete env.OPENAI_API_KEY;
+  return env;
+}
+
 export async function spawnServer({ directory = SERVER_DIR, java, pipe = false } = {}) {
   await requireEula(directory);
   const executable = java || (await findJava()).path;
   const memory = process.env.MC_SERVER_MEMORY || '2G';
   if (!/^\d+[MG]$/i.test(memory)) throw new Error('MC_SERVER_MEMORY must look like 2G or 2048M.');
-  const child = spawn(executable, ['-Xms512M', `-Xmx${memory}`, '-Dterminal.jline=false', '-Dterminal.ansi=false', '-jar', join(SERVER_DIR, 'server.jar'), 'nogui'], { cwd: directory, windowsHide: true, stdio: ['pipe', pipe ? 'pipe' : 'inherit', pipe ? 'pipe' : 'inherit'] });
+  const child = spawn(executable, ['-Xms512M', `-Xmx${memory}`, '-Dterminal.jline=false', '-Dterminal.ansi=false', '-jar', join(SERVER_DIR, 'server.jar'), 'nogui'], { cwd: directory, env: serverEnvironment(), windowsHide: true, stdio: ['pipe', pipe ? 'pipe' : 'inherit', pipe ? 'pipe' : 'inherit'] });
   child.stdin.on('error', () => {});
   return child;
 }

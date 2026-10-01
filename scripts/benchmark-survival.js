@@ -30,7 +30,7 @@ const properties = join(directory, 'server.properties');
 await writeFile(properties, `${await readFile(properties, 'utf8')}\nlevel-seed=${seed}\n`);
 const git = args => { try { return execFileSync('git', args, { cwd: repo, encoding: 'utf8' }).trim(); } catch { return null; } };
 const result = {
-  schemaVersion: 1, benchmark: 'Trailhead', protocol: 'trailhead-v1', label,
+  schemaVersion: 1, benchmark: 'Trailhead', protocol: seconds === 300 ? 'trailhead-v1' : `trailhead-development-${seconds}s`, label,
   commit: git(['rev-parse', 'HEAD']), dirty: Boolean(git(['status', '--porcelain'])),
   environment: { node: process.version, platform: process.platform, minecraft: VERSION }, seed,
   conditions: { freshNaturalWorld: true, difficulty: 'normal', mode: 'survival', suppliedItems: false, preparedTerrain: false, consoleActions: ['spawnRadius=0 before connection only'], spawnRadius: 0, paidModel: false, controller: 'offline-observation-driven', timeBudgetSeconds: seconds, startCommand: 'survive starter' },

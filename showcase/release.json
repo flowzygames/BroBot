@@ -1,16 +1,22 @@
 {
   "channel": "development",
-  "sourceCommit": "f68166b82a6b3d26323428ee3cacfb47f51c56cf",
-  "sourceTree": "1afd9502a3997dbfafb52389f3d04e54ce52ae1f",
-  "packagedCommit": "d3e5aa82da735939d9d0afb6d6c81e2eda86eee2",
-  "sha256": "ae2d5334938ff8e6c67eee5ed0044cae633bf03363cc8972ac946672a2f41cc5",
-  "bytes": 206450,
-  "automatedChecks": 161,
-  "liveRegressionPhases": 16,
-  "latestDevelopmentStarter": {
-    "seed": "20260930",
-    "milliseconds": 86728
+  "sourceCommit": "10a075f4e8d97ac392c8a5e6c781db60d4e5485c",
+  "sourceTree": "c9d7cf1853954aea12f482b0026f100ca4d3d1fa",
+  "packagedCommit": "e0a5ca9d9ce5e9d8d1aeddc596b94f325bc23759",
+  "testedApplicationCommit": "c1e01963a8eea0b6446c47a1f4dd6302a91986f8",
+  "sha256": "2af960303c8c4ba467b5d20ed0e0d5295b5246b7ec5064dbca1932383ed833ae",
+  "bytes": 239763,
+  "automatedChecks": 194,
+  "liveRegressionPhases": 17,
+  "originalDevelopmentWorlds": {
+    "passed": 3,
+    "scheduled": 3
   },
-  "multiWorldEvaluation": "in progress",
-  "readyForStable1_0": false
+  "additionalDevelopmentWorlds": {
+    "passed": 2,
+    "scheduled": 3
+  },
+  "multiWorldEvaluation": "complete known-development cohort; failed canopy case retained",
+  "readyForStable1_0": false,
+  "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest."
 }

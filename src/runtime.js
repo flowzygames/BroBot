@@ -8,7 +8,7 @@ import { ActionRunner } from './runner.js';
 import { createActions } from './actions.js';
 import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
-import { SurvivalJob } from './survival.js';
+import { SurvivalJob, STARTER_LOG_RADIUS } from './survival.js';
 import { findPickupClearance } from './survival-observation.js';
 import { publicConfig } from './config.js';
 import { parseCommand, authorizedChat, HELP } from './commands.js';
@@ -45,7 +45,8 @@ export class Runtime {
         // generic resource cap before a nearby tree is considered.
         const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
         const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
-        const positions = this.bot.findBlocks({ matching: ids, maxDistance: 32, count: 16 });
+        const excludedLogs = this.survival.job?.excluded ?? {};
+        const positions = this.bot.findBlocks({ matching: ids, maxDistance: STARTER_LOG_RADIUS, count: 16, useExtraInfo: block => !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
         const wood = positions.map(p => this.bot.blockAt(p)).find(b => b && pattern.test(b.name));
         const p = seen.position;
         let foliage = null;
@@ -131,6 +132,7 @@ export class Runtime {
         if (result?.message) this.say(result.message);
       }).catch(error => this.say(error.message));
     });
+    bot.on('breath', () => { if (this.bot === bot) this.survival.checkAir(); });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
       this.survival.stop('Died; inspect the respawn state before resuming.');

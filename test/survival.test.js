@@ -210,7 +210,7 @@ test('drop recovery can clear a verified head block and then resume pickup', asy
   f.job.execute = async (name, args, signal) => {
     if (name === 'collect' && !dropped) { dropped = true; return { completed: false, remaining_drops: [{ id: 2 }] }; }
     if (name === 'dig_at') { cleared = true; assert.equal(args.expected_block, 'stone'); return { mined: 1 }; }
-    if (name === 'pickup') { assert.equal(cleared, true); f.add('oak_log', 1); return { inventory_changes: { oak_log: 1 }, remaining_drops: [] }; }
+    if (name === 'pickup') { assert.deepEqual(args.entity_ids, [2]); assert.equal(cleared, true); f.add('oak_log', 1); return { inventory_changes: { oak_log: 1 }, remaining_drops: [] }; }
     return f.execute(name, args, signal);
   };
   f.job.start(); await f.job.promise;
@@ -248,4 +248,103 @@ test('starter observes its crafting table even when generic inspection is full o
  runtime.execute=async()=>({position:{x:0.5,y:64,z:0.5},nearby_blocks:Array.from({length:64},()=>({name:'iron_ore',position:{x:0,y:60,z:0}}))});
  runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'crafting_table'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({matching})=>matching[0]===2?[new Vec3(2,64,0)]:[],blockAt:p=>({name:'crafting_table',position:p}),quit:()=>{}};
  try{const observation=await runtime.survival.observe();assert.equal(observation.tableInReach,true);assert.equal(observation.tables.length,1);assert.equal(observation.tables[0].x,2);}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('starter gathers its initial wooden prerequisites in one bounded batch',()=>{
+ const state={connected:true,health:20,food:20,dimension:'overworld',position:{x:0,y:64,z:0},inventory:[]};const job={home:{position:state.position,dimension:'overworld'}};
+ assert.equal(nextStarterStep(state,job,{wood:'oak'}).args.count,3);
+ state.inventory=[{name:'wooden_pickaxe',count:1}];
+ const step=nextStarterStep(state,job,{wood:'oak'});assert.equal(step.args.count,1);
+});
+
+test('starter excludes known failed tree coordinates before the observation result cap',async()=>{
+ const {Runtime}=await import('../src/runtime.js');const{loadConfig}=await import('../src/config.js');const{Vec3}=await import('vec3');const{mkdtemp,rm}=await import('node:fs/promises');const{tmpdir}=await import('node:os');const{join}=await import('node:path');
+ const dir=await mkdtemp(join(tmpdir(),'brobot-log-filter-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));
+ runtime.execute=async()=>({position:{x:0.5,y:64,z:0.5},nearby_blocks:[]});runtime.survival.job={excluded:{oak_log:[{x:1,y:64,z:0}]}};
+ const blocks=[{name:'oak_log',position:new Vec3(1,64,0)},{name:'birch_log',position:new Vec3(2,64,0)}];
+ runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'birch_log'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({useExtraInfo})=>blocks.filter(useExtraInfo).map(b=>b.position),blockAt:p=>blocks.find(b=>b.position.equals(p)),quit:()=>{}};
+ try{assert.equal((await runtime.survival.observe()).wood,'birch');}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('verified terrain clearing retries nearby blocked resources without forgetting distant failures',async()=>{
+ const f=fixture();let attempts=0,cleared=false;
+ const near={x:2,y:64,z:0},far={x:30,y:64,z:0};
+ f.job.observe=async()=>({wood:'oak',tableInReach:f.counts().wooden_pickaxe>0,foliage:{x:2,y:65,z:0,expected_block:'oak_leaves'}});
+ f.job.execute=async(name,args,signal)=>{
+  if(name==='collect'&&attempts++<2){f.job.job.ignoredTables=[near,far];throw Object.assign(new Error('Blocked route'),{result:{failures:[near,far].map(position=>({position,error:'Blocked route'}))}});}
+  if(name==='dig_at'){cleared=true;return{mined:1,completed:true};}
+  if(name==='collect'&&cleared){assert.ok(!args.skip_positions?.some(p=>p.x===near.x));assert.ok(args.skip_positions?.some(p=>p.x===far.x));assert.deepEqual(f.job.job.ignoredTables,[far]);cleared=false;}
+  return f.execute(name,args,signal);
+ };
+ f.job.start();await f.job.promise;assert.equal(f.job.state().status,'complete');assert.ok(f.data.survivalJob.history.some(h=>h.action==='dig_at'&&h.progress));
+});
+
+test('starter log observation and gathering share a bounded radius beyond the old 32-block fringe',async()=>{
+ const {STARTER_LOG_RADIUS}=await import('../src/survival.js');assert.equal(STARTER_LOG_RADIUS,48);
+ const state={connected:true,health:20,food:20,dimension:'overworld',position:{x:0,y:64,z:0},inventory:[]};const job={home:{position:state.position,dimension:'overworld'}};
+ assert.equal(nextStarterStep(state,job,{wood:'oak'}).args.radius,STARTER_LOG_RADIUS);
+ const {Runtime}=await import('../src/runtime.js');const{loadConfig}=await import('../src/config.js');const{Vec3}=await import('vec3');const{mkdtemp,rm}=await import('node:fs/promises');const{tmpdir}=await import('node:os');const{join}=await import('node:path');
+ const dir=await mkdtemp(join(tmpdir(),'brobot-log-radius-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));runtime.execute=async()=>({position:state.position,nearby_blocks:[]});const p=new Vec3(40,64,0);
+ runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({maxDistance})=>{assert.equal(maxDistance,48);return[p];},blockAt:q=>({name:'oak_log',position:q}),quit:()=>{}};
+ try{assert.equal((await runtime.survival.observe()).wood,'oak');}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('starter crafts from verified materials instead of chasing unnecessary leftover drops',async()=>{
+ const f=fixture();let first=true;
+ f.job.execute=async(name,args,signal)=>{
+   if(name==='pickup')throw new Error('Unnecessary pickup should not run');
+   const result=await f.execute(name,args,signal);
+   if(name==='collect'&&first){first=false;return{...result,remaining_drops:[{id:99}]};}
+   return result;
+ };
+ f.job.start();await f.job.promise;assert.equal(f.job.state().status,'complete');
+});
+
+test('a shared planning budget limit does not blacklist an unplanned resource', async () => {
+  const f = fixture(); let first = true;
+  f.job.execute = async (name, args, signal) => {
+    if (name === 'collect' && first) {
+      first = false;
+      throw Object.assign(new Error('Collection return-path planning budget exhausted'), { result: { planning_limited: true, failures: [{ position: { x: 2, y: 64, z: 0 }, error: 'Collection return-path planning budget exhausted', code: 'COLLECTION_PLANNING_LIMIT' }] } });
+    }
+    if (name === 'collect') assert.ok(!args.skip_positions?.some(p => p.x === 2));
+    return f.execute(name, args, signal);
+  };
+  f.job.start(); await f.job.promise;
+  assert.equal(f.job.state().status, 'complete');
+  assert.deepEqual(f.job.state().excluded.oak_log, []);
+});
+
+test('successful clearance cancels stale pickup when the tracked drops are already gone', async () => {
+  const f=fixture();let first=true,cleared=false,pickups=0;
+  f.job.observe=async()=>({wood:'oak',tableInReach:f.counts().wooden_pickaxe>0,pickupClearance:!first&&!cleared?{x:2,y:64,z:0,expected_block:'stone'}:null});
+  f.job.execute=async(name,args,signal)=>{
+    if(name==='collect'&&first){first=false;return{mined:1,completed:false,remaining_drops:[{id:2}]};}
+    if(name==='dig_at'){cleared=true;return{mined:1,remaining_drops:[]};}
+    if(name==='pickup'){pickups++;throw Error('Stale recovery must not chase unrelated litter');}
+    return f.execute(name,args,signal);
+  };
+  f.job.start();await f.job.promise;assert.equal(f.job.state().status,'complete');assert.equal(pickups,0);assert.equal(cleared,true);
+});
+
+test('low air blocks new starter work and immediately interrupts an active action', async () => {
+  const f=fixture();f.state.oxygen=8;
+  assert.match(nextStarterStep(f.state,{home:{position:f.state.position,dimension:'overworld'}}).blocked,/Air is low/);
+  f.state.oxygen=20;
+  let began;const started=new Promise(resolve=>{began=resolve});
+  f.job.execute=async(name,args,signal)=>{began();await new Promise(resolve=>signal.addEventListener('abort',resolve,{once:true}));signal.throwIfAborted();};
+  f.job.start();await started;f.state.oxygen=10;f.job.checkAir();await f.job.promise;
+  assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/world keeps running/);
+});
+
+test('another entity air update cannot pause the starter or mask its own low air', async () => {
+  const {ownOxygenLevel}=await import('../src/oxygen.js');const f=fixture();
+  const bot={registry:{entitiesByName:{player:{metadataKeys:['flags','air_supply']}}},entity:{name:'player',metadata:{1:300}},oxygenLevel:20};
+  f.job.snapshot=()=>({...structuredClone(f.state),oxygen:ownOxygenLevel(bot)});
+  let began;const started=new Promise(resolve=>{began=resolve});
+  f.job.execute=async(name,args,signal)=>{began();await new Promise(resolve=>signal.addEventListener('abort',resolve,{once:true}));signal.throwIfAborted();};
+  f.job.start();await started;
+  bot.oxygenLevel=0;f.job.checkAir();assert.equal(f.job.active.signal.aborted,false);
+  bot.entity.metadata[1]=60;bot.oxygenLevel=20;f.job.checkAir();await f.job.promise;
+  assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/Air is low/);
 });

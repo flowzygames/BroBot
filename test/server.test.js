@@ -67,3 +67,8 @@ test('download verifies content and leaves previous file intact on checksum mism
 test('property updates retain comments and unrelated keys', () => {
   assert.equal(mergeProperties('# mine\nlevel-name=test\nserver-port=1\n', { 'server-port': 2 }), '# mine\nlevel-name=test\nserver-port=2\n');
 });
+
+test('Minecraft server process does not inherit the optional model API key',async()=>{
+ const{serverEnvironment}=await import('../scripts/server.js');const source={PATH:'/example/bin',JAVA_HOME:'/example/java',OPENAI_API_KEY:'not-a-real-key',MC_SERVER_MEMORY:'2G'};
+ const env=serverEnvironment(source);assert.equal(Object.hasOwn(env,'OPENAI_API_KEY'),false);assert.equal(env.PATH,source.PATH);assert.equal(env.JAVA_HOME,source.JAVA_HOME);assert.equal(source.OPENAI_API_KEY,'not-a-real-key');
+});

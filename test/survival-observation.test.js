@@ -32,3 +32,18 @@ test('pickup recovery can clear a second overhead block needed for a return jump
   bot.world.raycast = () => ({ position: new Vec3(2, 65, 0) });
   assert.deepEqual(findPickupClearance(bot, [10]), { x: 2, y: 65, z: 0, expected_block: 'stone' });
 });
+
+test('tracked drops in a tree canopy can clear leaves above a real log support',()=>{
+ const {bot,put}=fixture();put('oak_log',62);put('oak_leaves',64);
+ assert.deepEqual(findPickupClearance(bot,[10]),{x:2,y:64,z:0,expected_block:'oak_leaves'});
+ put('chest',64);assert.equal(findPickupClearance(bot,[10]),null);
+});
+
+test('tracked-drop recovery clears a visible supported leaf wall but not hazardous or lower support',()=>{
+ for(const kind of ['safe','hazard','below']){
+  const{bot}=fixture();const p=new Vec3(1,kind==='below'?63:64,0);const original=bot.blockAt;
+  bot.blockAt=q=>q.equals(p)?{name:'oak_leaves',position:p,boundingBox:'block'}:q.equals(p.offset(0,-1,0))?{name:kind==='hazard'?'magma_block':'stone',position:q,boundingBox:'block'}:original(q);
+  bot.world.raycast=()=>({position:p});
+  const found=findPickupClearance(bot,[10]);if(kind==='safe')assert.deepEqual(found,{x:1,y:64,z:0,expected_block:'oak_leaves'});else assert.equal(found,null,kind);
+ }
+});

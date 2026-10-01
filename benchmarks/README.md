@@ -48,3 +48,17 @@ Trailhead fixes spawn radius to zero before the bot connects, to make starting
 positions comparable. It does not change terrain, supply items or intervene
 during the job. This differs from early development probes with vanilla random
 spawn positions; those probes are retained but not mixed into the final score.
+
+## Summarizing a measured suite
+
+Run `node scripts/summarize-survival.js RESULT_718224.json RESULT_42.json RESULT_20260930.json`.
+The reporter accepts one result per scheduled seed, requires clean matching
+source/environment/conditions and the fixed 300-second protocol, and verifies
+recorded inventory and return evidence for passing cases. It does not rerun tests
+or choose the best retry. Missing cases stay visible as `not_run`, with exit code
+2; invalid or mixed evidence exits with code 1. Retain the original JSON records.
+
+For an explicitly separate development cohort, pass
+`--seeds=314159,271828,8675309`. Such reruns are known development cases once they
+have informed fixes. A longer-budget diagnostic cannot be included in the fixed
+suite. This reporter is a consistency check, not independent proof of game state.
