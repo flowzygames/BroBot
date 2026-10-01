@@ -21,7 +21,7 @@ if (telemetryRoot) {
     svg.append(node('path',{d:path(positions.slice(0,index+1)),fill:'none',stroke:'#b5d576','stroke-width':3}));
     const h=project(home),p=project(sample.position);
     svg.append(node('rect',{x:h.x-6,y:h.y-6,width:12,height:12,rx:2,fill:'#f2a16c'}));
-    svg.append(node('text',{x:h.x+(h.x>430?-12:12),y:h.y+4,fill:'#f2caab','font-size':13,'text-anchor':h.x>430?'end':'start'},'START / HOME'));
+    svg.append(node('text',{x:h.x+(h.x>400?-12:12),y:h.y+4,fill:'#f2caab','font-size':13,'text-anchor':h.x>400?'end':'start'},'START / HOME'));
     svg.append(node('circle',{cx:p.x,cy:p.y,r:8,fill:'#d1f268',stroke:'#f6f7ef','stroke-width':2}));
     svg.append(node('text',{x:22,y:25,fill:'#c9d7c4','font-size':12},'N ↑   TOP-DOWN POSITION SAMPLES'));
     get('traceTime').textContent=`${sample.seconds.toFixed(1)}s / ${record.durationSeconds.toFixed(1)}s`;
