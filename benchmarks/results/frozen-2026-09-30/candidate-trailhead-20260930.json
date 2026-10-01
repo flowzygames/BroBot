@@ -1,0 +1,1765 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "candidate",
+  "commit": "5164554fdaf25d9139ace4becc9aa803861333f7",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "20260930",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T01:44:37.854Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 66,
+      "z": 16.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": 20,
+    "time": 66,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 145,
+        "name": "bee",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 69.2,
+          "z": 5.4
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 2,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -6,
+          "y": 63,
+          "z": 29
+        },
+        "distance": 16
+      },
+      {
+        "id": 6,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -5,
+          "y": 63,
+          "z": 39
+        },
+        "distance": 25
+      },
+      {
+        "id": 5,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -7.51,
+          "y": 63,
+          "z": 40.22
+        },
+        "distance": 25.2
+      },
+      {
+        "id": 75,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -39.75,
+          "y": 34,
+          "z": 7.48
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 144,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 1.5,
+          "y": 28,
+          "z": 18.5
+        },
+        "distance": 41.7
+      },
+      {
+        "id": 122,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -25.5,
+          "y": 34,
+          "z": -9.5
+        },
+        "distance": 42.4
+      },
+      {
+        "id": 134,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 14.5,
+          "y": 32,
+          "z": 19.5
+        },
+        "distance": 45.4
+      },
+      {
+        "id": 135,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 18.11,
+          "y": 32,
+          "z": 20.5
+        },
+        "distance": 48
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "7a79c70c-c86a-4de8-8b59-f18308809058"
+  },
+  "elapsedMs": 87541,
+  "job": {
+    "version": 1,
+    "id": "7a79c70c-c86a-4de8-8b59-f18308809058",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 66,
+        "z": 16.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 36,
+    "scouts": 8,
+    "clearings": 0,
+    "excluded": {
+      "birch_log": [
+        {
+          "x": -36,
+          "y": 63,
+          "z": -33
+        },
+        {
+          "x": -36,
+          "y": 64,
+          "z": -33
+        },
+        {
+          "x": -36,
+          "y": 65,
+          "z": -33
+        },
+        {
+          "x": -28,
+          "y": 70,
+          "z": -1
+        },
+        {
+          "x": -24,
+          "y": 69,
+          "z": -21
+        },
+        {
+          "x": -24,
+          "y": 70,
+          "z": -21
+        },
+        {
+          "x": -28,
+          "y": 71,
+          "z": -1
+        },
+        {
+          "x": -48,
+          "y": 72,
+          "z": -48
+        },
+        {
+          "x": -28,
+          "y": 72,
+          "z": -1
+        },
+        {
+          "x": -48,
+          "y": 73,
+          "z": -48
+        },
+        {
+          "x": -28,
+          "y": 73,
+          "z": -1
+        },
+        {
+          "x": -48,
+          "y": 74,
+          "z": -48
+        },
+        {
+          "x": -61,
+          "y": 80,
+          "z": -31
+        },
+        {
+          "x": -61,
+          "y": 81,
+          "z": -31
+        }
+      ],
+      "stone": [
+        {
+          "x": -34,
+          "y": 64,
+          "z": -25
+        }
+      ]
+    },
+    "history": [
+      {
+        "at": "2026-10-01T01:46:29.548Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      },
+      {
+        "at": "2026-10-01T01:46:29.843Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      },
+      {
+        "at": "2026-10-01T01:46:31.660Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 48,
+          "returnable": true
+        },
+        "error": "Return-path planning budget exhausted"
+      },
+      {
+        "at": "2026-10-01T01:46:31.988Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      },
+      {
+        "at": "2026-10-01T01:46:32.324Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      },
+      {
+        "at": "2026-10-01T01:46:34.157Z",
+        "action": "explore",
+        "args": {
+          "direction": "west",
+          "distance": 48,
+          "returnable": true
+        },
+        "error": "Return-path planning budget exhausted"
+      },
+      {
+        "at": "2026-10-01T01:46:34.487Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      },
+      {
+        "at": "2026-10-01T01:46:34.831Z",
+        "action": "collect",
+        "args": {
+          "block": "birch_log",
+          "count": 1,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -36,
+              "y": 63,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 64,
+              "z": -33
+            },
+            {
+              "x": -36,
+              "y": 65,
+              "z": -33
+            },
+            {
+              "x": -28,
+              "y": 70,
+              "z": -1
+            },
+            {
+              "x": -24,
+              "y": 69,
+              "z": -21
+            },
+            {
+              "x": -24,
+              "y": 70,
+              "z": -21
+            },
+            {
+              "x": -28,
+              "y": 71,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 72,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 72,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 73,
+              "z": -48
+            },
+            {
+              "x": -28,
+              "y": 73,
+              "z": -1
+            },
+            {
+              "x": -48,
+              "y": 74,
+              "z": -48
+            },
+            {
+              "x": -61,
+              "y": 80,
+              "z": -31
+            },
+            {
+              "x": -61,
+              "y": 81,
+              "z": -31
+            }
+          ]
+        },
+        "error": "Could not collect birch_log: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 1,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false
+        }
+      }
+    ],
+    "started": "2026-10-01T01:45:07.512Z",
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -35.39,
+      "y": 64,
+      "z": -27.14
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": 20,
+    "time": 1826,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 3
+      },
+      {
+        "name": "birch_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "cobblestone",
+        "count": 3,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 108,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -3.8,
+          "y": 63,
+          "z": -36.56
+        },
+        "distance": 33
+      },
+      {
+        "id": 230,
+        "name": "bee",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -41.57,
+          "y": 79.02,
+          "z": 2.25
+        },
+        "distance": 33.6
+      },
+      {
+        "id": 298,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -63.14,
+          "y": 46,
+          "z": -17.5
+        },
+        "distance": 34.4
+      },
+      {
+        "id": 231,
+        "name": "bee",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -39.54,
+          "y": 79,
+          "z": 7.35
+        },
+        "distance": 37.8
+      },
+      {
+        "id": 107,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 2.28,
+          "y": 64,
+          "z": -31.77
+        },
+        "distance": 38
+      },
+      {
+        "id": 323,
+        "name": "drowned",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 0.5,
+          "y": 49,
+          "z": -34.5
+        },
+        "distance": 39.6
+      },
+      {
+        "id": 109,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 5.16,
+          "y": 64,
+          "z": -38.84
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 110,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 6.28,
+          "y": 64,
+          "z": -38.21
+        },
+        "distance": 43.1
+      },
+      {
+        "id": 193,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -56.12,
+          "y": 71,
+          "z": -65.89
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 275,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -43.5,
+          "y": 37,
+          "z": -64.5
+        },
+        "distance": 46.8
+      },
+      {
+        "id": 341,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -29.75,
+          "y": 29.97,
+          "z": -59.25
+        },
+        "distance": 47.1
+      },
+      {
+        "id": 331,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -35.48,
+          "y": 27,
+          "z": -57.17
+        },
+        "distance": 47.7
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "7a79c70c-c86a-4de8-8b59-f18308809058",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -15.5,
+          "y": 66,
+          "z": 16.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 36,
+      "scouts": 8,
+      "clearings": 0,
+      "excluded": {
+        "birch_log": [
+          {
+            "x": -36,
+            "y": 63,
+            "z": -33
+          },
+          {
+            "x": -36,
+            "y": 64,
+            "z": -33
+          },
+          {
+            "x": -36,
+            "y": 65,
+            "z": -33
+          },
+          {
+            "x": -28,
+            "y": 70,
+            "z": -1
+          },
+          {
+            "x": -24,
+            "y": 69,
+            "z": -21
+          },
+          {
+            "x": -24,
+            "y": 70,
+            "z": -21
+          },
+          {
+            "x": -28,
+            "y": 71,
+            "z": -1
+          },
+          {
+            "x": -48,
+            "y": 72,
+            "z": -48
+          },
+          {
+            "x": -28,
+            "y": 72,
+            "z": -1
+          },
+          {
+            "x": -48,
+            "y": 73,
+            "z": -48
+          },
+          {
+            "x": -28,
+            "y": 73,
+            "z": -1
+          },
+          {
+            "x": -48,
+            "y": 74,
+            "z": -48
+          },
+          {
+            "x": -61,
+            "y": 80,
+            "z": -31
+          },
+          {
+            "x": -61,
+            "y": 81,
+            "z": -31
+          }
+        ],
+        "stone": [
+          {
+            "x": -34,
+            "y": 64,
+            "z": -25
+          }
+        ]
+      },
+      "history": [
+        {
+          "at": "2026-10-01T01:46:29.548Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        },
+        {
+          "at": "2026-10-01T01:46:29.843Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        },
+        {
+          "at": "2026-10-01T01:46:31.660Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 48,
+            "returnable": true
+          },
+          "error": "Return-path planning budget exhausted"
+        },
+        {
+          "at": "2026-10-01T01:46:31.988Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        },
+        {
+          "at": "2026-10-01T01:46:32.324Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        },
+        {
+          "at": "2026-10-01T01:46:34.157Z",
+          "action": "explore",
+          "args": {
+            "direction": "west",
+            "distance": 48,
+            "returnable": true
+          },
+          "error": "Return-path planning budget exhausted"
+        },
+        {
+          "at": "2026-10-01T01:46:34.487Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        },
+        {
+          "at": "2026-10-01T01:46:34.831Z",
+          "action": "collect",
+          "args": {
+            "block": "birch_log",
+            "count": 1,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -36,
+                "y": 63,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 64,
+                "z": -33
+              },
+              {
+                "x": -36,
+                "y": 65,
+                "z": -33
+              },
+              {
+                "x": -28,
+                "y": 70,
+                "z": -1
+              },
+              {
+                "x": -24,
+                "y": 69,
+                "z": -21
+              },
+              {
+                "x": -24,
+                "y": 70,
+                "z": -21
+              },
+              {
+                "x": -28,
+                "y": 71,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 72,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 72,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 73,
+                "z": -48
+              },
+              {
+                "x": -28,
+                "y": 73,
+                "z": -1
+              },
+              {
+                "x": -48,
+                "y": 74,
+                "z": -48
+              },
+              {
+                "x": -61,
+                "y": 80,
+                "z": -31
+              },
+              {
+                "x": -61,
+                "y": 81,
+                "z": -31
+              }
+            ]
+          },
+          "error": "Could not collect birch_log: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 1,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false
+          }
+        }
+      ],
+      "started": "2026-10-01T01:45:07.512Z",
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-01T01:46:36.852Z"
+}

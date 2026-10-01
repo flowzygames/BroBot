@@ -1,0 +1,2730 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "candidate",
+  "commit": "5164554fdaf25d9139ace4becc9aa803861333f7",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "42",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T01:39:59.797Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 71,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 86,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 59,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.92,
+          "y": 60.14,
+          "z": -25.08
+        },
+        "distance": 30.5
+      },
+      {
+        "id": 67,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.75,
+          "y": 63,
+          "z": -27.39
+        },
+        "distance": 31.7
+      },
+      {
+        "id": 100,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -56.5,
+          "y": 57,
+          "z": 14.5
+        },
+        "distance": 31.9
+      },
+      {
+        "id": 55,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -17.29,
+          "y": 60.09,
+          "z": -26.06
+        },
+        "distance": 32
+      },
+      {
+        "id": 53,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -16.35,
+          "y": 60.12,
+          "z": -25.81
+        },
+        "distance": 32.3
+      },
+      {
+        "id": 65,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.75,
+          "y": 63.52,
+          "z": -26.7
+        },
+        "distance": 32.3
+      },
+      {
+        "id": 57,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -17.31,
+          "y": 63,
+          "z": -27.47
+        },
+        "distance": 32.4
+      },
+      {
+        "id": 64,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.5,
+          "y": 62,
+          "z": -26.5
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 63,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.5,
+          "y": 61,
+          "z": -26.5
+        },
+        "distance": 32.9
+      },
+      {
+        "id": 99,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -58.5,
+          "y": 57,
+          "z": 14.5
+        },
+        "distance": 33.5
+      },
+      {
+        "id": 101,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -50.5,
+          "y": 36.11,
+          "z": 5.5
+        },
+        "distance": 40
+      },
+      {
+        "id": 77,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -12.26,
+          "y": 33.98,
+          "z": -2.91
+        },
+        "distance": 41.9
+      },
+      {
+        "id": 78,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -12.72,
+          "y": 33.83,
+          "z": -3.81
+        },
+        "distance": 41.9
+      },
+      {
+        "id": 102,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -14.56,
+          "y": 28.71,
+          "z": 0.8
+        },
+        "distance": 45.6
+      },
+      {
+        "id": 109,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 9.84,
+          "y": 55.32,
+          "z": 12.41
+        },
+        "distance": 45.8
+      },
+      {
+        "id": 103,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -14.57,
+          "y": 27.05,
+          "z": 1.4
+        },
+        "distance": 47.1
+      },
+      {
+        "id": 104,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -15.67,
+          "y": 26.56,
+          "z": 1.83
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 105,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -15.04,
+          "y": 26.06,
+          "z": 1
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "a7a2b944-8441-4982-9176-c0bd05ea2e14"
+  },
+  "elapsedMs": 245282,
+  "job": {
+    "version": 1,
+    "id": "a7a2b944-8441-4982-9176-c0bd05ea2e14",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -31.5,
+        "y": 71,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 28,
+    "scouts": 3,
+    "clearings": 0,
+    "excluded": {
+      "dark_oak_log": [],
+      "oak_log": [],
+      "stone": [
+        {
+          "x": -58,
+          "y": 63,
+          "z": -7
+        },
+        {
+          "x": -53,
+          "y": 63,
+          "z": -6
+        },
+        {
+          "x": -35,
+          "y": 68,
+          "z": -16
+        },
+        {
+          "x": -34,
+          "y": 68,
+          "z": -15
+        },
+        {
+          "x": -58,
+          "y": 62,
+          "z": -4
+        },
+        {
+          "x": -58,
+          "y": 62,
+          "z": -5
+        },
+        {
+          "x": -54,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": -58,
+          "y": 62,
+          "z": -6
+        },
+        {
+          "x": -53,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": -52,
+          "y": 62,
+          "z": -3
+        },
+        {
+          "x": -57,
+          "y": 62,
+          "z": -7
+        },
+        {
+          "x": -53,
+          "y": 62,
+          "z": -5
+        },
+        {
+          "x": -57,
+          "y": 64,
+          "z": -20
+        },
+        {
+          "x": -58,
+          "y": 63,
+          "z": -21
+        },
+        {
+          "x": -57,
+          "y": 63,
+          "z": -19
+        },
+        {
+          "x": -57,
+          "y": 63,
+          "z": -20
+        },
+        {
+          "x": -58,
+          "y": 63,
+          "z": -17
+        },
+        {
+          "x": -57,
+          "y": 63,
+          "z": -18
+        },
+        {
+          "x": -57,
+          "y": 63,
+          "z": -17
+        },
+        {
+          "x": -55,
+          "y": 63,
+          "z": -20
+        },
+        {
+          "x": -59,
+          "y": 62,
+          "z": -18
+        },
+        {
+          "x": -58,
+          "y": 62,
+          "z": -18
+        },
+        {
+          "x": -57,
+          "y": 62,
+          "z": -19
+        }
+      ]
+    },
+    "history": [
+      {
+        "at": "2026-10-01T01:42:31.579Z",
+        "action": "craft",
+        "args": {
+          "item": "stone_pickaxe",
+          "count": 1
+        },
+        "reason": "Upgrade to a stone pickaxe.",
+        "result": {
+          "item": "stone_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T01:42:49.537Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -58,
+              "y": 63,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -6
+            },
+            {
+              "x": -35,
+              "y": 68,
+              "z": -16
+            },
+            {
+              "x": -34,
+              "y": 68,
+              "z": -15
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -4
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -5
+            },
+            {
+              "x": -54,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -6
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -52,
+              "y": 62,
+              "z": -3
+            },
+            {
+              "x": -57,
+              "y": 62,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 62,
+              "z": -5
+            }
+          ]
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": false,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {
+            "cobblestone": 1
+          },
+          "remaining_drops": [
+            {
+              "id": 748,
+              "position": {
+                "x": -58.12,
+                "y": 63,
+                "z": -17.69
+              }
+            },
+            {
+              "id": 754,
+              "position": {
+                "x": -58.87,
+                "y": 63,
+                "z": -19.03
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ],
+          "failures": [
+            {
+              "position": {
+                "x": -57,
+                "y": 64,
+                "z": -20
+              },
+              "error": "Return-path planning budget exhausted"
+            }
+          ],
+          "search_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T01:42:58.376Z",
+        "action": "pickup",
+        "args": {
+          "radius": 16
+        },
+        "reason": "Recover observed dropped materials before mining more.",
+        "result": {
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 455,
+              "position": {
+                "x": -73.12,
+                "y": 64,
+                "z": -21.43
+              }
+            },
+            {
+              "id": 748,
+              "position": {
+                "x": -58.12,
+                "y": 63,
+                "z": -17.69
+              }
+            },
+            {
+              "id": 754,
+              "position": {
+                "x": -58.87,
+                "y": 63,
+                "z": -19.03
+              }
+            }
+          ],
+          "unreachable": [
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ]
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T01:43:20.558Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -58,
+              "y": 63,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -6
+            },
+            {
+              "x": -35,
+              "y": 68,
+              "z": -16
+            },
+            {
+              "x": -34,
+              "y": 68,
+              "z": -15
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -4
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -5
+            },
+            {
+              "x": -54,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -6
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -52,
+              "y": 62,
+              "z": -3
+            },
+            {
+              "x": -57,
+              "y": 62,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 62,
+              "z": -5
+            },
+            {
+              "x": -57,
+              "y": 64,
+              "z": -20
+            }
+          ]
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": false,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 748,
+              "position": {
+                "x": -58.12,
+                "y": 63,
+                "z": -17.69
+              }
+            },
+            {
+              "id": 754,
+              "position": {
+                "x": -58.87,
+                "y": 63,
+                "z": -19.03
+              }
+            },
+            {
+              "id": 787,
+              "position": {
+                "x": -57.12,
+                "y": 63,
+                "z": -19.1
+              }
+            },
+            {
+              "id": 795,
+              "position": {
+                "x": -57.12,
+                "y": 63,
+                "z": -17.12
+              }
+            },
+            {
+              "id": 804,
+              "position": {
+                "x": -58.12,
+                "y": 62,
+                "z": -18.87
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ],
+          "failures": [
+            {
+              "position": {
+                "x": -58,
+                "y": 63,
+                "z": -21
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -57,
+                "y": 63,
+                "z": -19
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -57,
+                "y": 63,
+                "z": -20
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -58,
+                "y": 63,
+                "z": -17
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -57,
+                "y": 63,
+                "z": -18
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -57,
+                "y": 63,
+                "z": -17
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -55,
+                "y": 63,
+                "z": -20
+              },
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ],
+          "search_limited": false
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T01:43:30.592Z",
+        "action": "pickup",
+        "args": {
+          "radius": 16
+        },
+        "reason": "Recover observed dropped materials before mining more.",
+        "result": {
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 455,
+              "position": {
+                "x": -73.12,
+                "y": 64,
+                "z": -21.43
+              }
+            },
+            {
+              "id": 748,
+              "position": {
+                "x": -58.12,
+                "y": 63,
+                "z": -17.69
+              }
+            },
+            {
+              "id": 754,
+              "position": {
+                "x": -58.87,
+                "y": 63,
+                "z": -19.03
+              }
+            },
+            {
+              "id": 787,
+              "position": {
+                "x": -57.12,
+                "y": 63,
+                "z": -19.1
+              }
+            },
+            {
+              "id": 795,
+              "position": {
+                "x": -57.12,
+                "y": 63,
+                "z": -17.12
+              }
+            },
+            {
+              "id": 804,
+              "position": {
+                "x": -58.12,
+                "y": 62,
+                "z": -18.87
+              }
+            }
+          ],
+          "unreachable": [
+            {
+              "id": 754,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 804,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 455,
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ]
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T01:43:54.017Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": -58,
+              "y": 63,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -6
+            },
+            {
+              "x": -35,
+              "y": 68,
+              "z": -16
+            },
+            {
+              "x": -34,
+              "y": 68,
+              "z": -15
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -4
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -5
+            },
+            {
+              "x": -54,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -58,
+              "y": 62,
+              "z": -6
+            },
+            {
+              "x": -53,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": -52,
+              "y": 62,
+              "z": -3
+            },
+            {
+              "x": -57,
+              "y": 62,
+              "z": -7
+            },
+            {
+              "x": -53,
+              "y": 62,
+              "z": -5
+            },
+            {
+              "x": -57,
+              "y": 64,
+              "z": -20
+            },
+            {
+              "x": -58,
+              "y": 63,
+              "z": -21
+            },
+            {
+              "x": -57,
+              "y": 63,
+              "z": -19
+            },
+            {
+              "x": -57,
+              "y": 63,
+              "z": -20
+            },
+            {
+              "x": -58,
+              "y": 63,
+              "z": -17
+            },
+            {
+              "x": -57,
+              "y": 63,
+              "z": -18
+            },
+            {
+              "x": -57,
+              "y": 63,
+              "z": -17
+            },
+            {
+              "x": -55,
+              "y": 63,
+              "z": -20
+            }
+          ]
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": false,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {},
+          "remaining_drops": [
+            {
+              "id": 748,
+              "position": {
+                "x": -58.12,
+                "y": 63,
+                "z": -17.69
+              }
+            },
+            {
+              "id": 787,
+              "position": {
+                "x": -57.12,
+                "y": 62,
+                "z": -19.1
+              }
+            },
+            {
+              "id": 795,
+              "position": {
+                "x": -57.12,
+                "y": 63,
+                "z": -17.12
+              }
+            },
+            {
+              "id": 837,
+              "position": {
+                "x": -58.12,
+                "y": 62,
+                "z": -19.18
+              }
+            },
+            {
+              "id": 872,
+              "position": {
+                "x": -58.49,
+                "y": 62,
+                "z": -20.87
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 748,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 795,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 837,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 837,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 837,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 787,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 872,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 872,
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "id": 872,
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ],
+          "failures": [
+            {
+              "position": {
+                "x": -59,
+                "y": 62,
+                "z": -18
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -58,
+                "y": 62,
+                "z": -18
+              },
+              "error": "Collection return-path planning budget exhausted"
+            },
+            {
+              "position": {
+                "x": -57,
+                "y": 62,
+                "z": -19
+              },
+              "error": "Collection return-path planning budget exhausted"
+            }
+          ],
+          "search_limited": false
+        },
+        "progress": false
+      },
+      {
+        "at": "2026-10-01T01:44:00.637Z",
+        "action": "explore",
+        "args": {
+          "direction": "east",
+          "distance": 12,
+          "returnable": true
+        },
+        "reason": "Repeated pickup failure. Look for a different approach.",
+        "result": {
+          "explored": true,
+          "distance": 12,
+          "position": {
+            "x": -47.5,
+            "y": 73,
+            "z": -17.51
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T01:44:05.504Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 24,
+          "returnable": true
+        },
+        "reason": "Repeated collect failure. Look for a different approach.",
+        "result": {
+          "explored": true,
+          "distance": 23.8,
+          "position": {
+            "x": -47.5,
+            "y": 73.23,
+            "z": 6.3
+          }
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-01T01:40:30.048Z",
+    "status": "paused",
+    "reason": "Low health: paused work to recover.",
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -40.63,
+      "y": 62,
+      "z": -7.51
+    },
+    "dimension": "overworld",
+    "health": 3.000001907348633,
+    "food": 20,
+    "oxygen": 400,
+    "time": 4986,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 3
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 12
+      },
+      {
+        "name": "cobblestone",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "dark_oak_log",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "stone_pickaxe",
+    "entities": [
+      {
+        "id": 277,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -39.3,
+          "y": 62,
+          "z": -7.3
+        },
+        "distance": 1.3
+      },
+      {
+        "id": 541,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -40.54,
+          "y": 61,
+          "z": -9.57
+        },
+        "distance": 2.3
+      },
+      {
+        "id": 99,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -42.83,
+          "y": 60,
+          "z": -9.97
+        },
+        "distance": 3.9
+      },
+      {
+        "id": 472,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -43.7,
+          "y": 59,
+          "z": -12.65
+        },
+        "distance": 6.7
+      },
+      {
+        "id": 542,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -44.6,
+          "y": 64,
+          "z": -13.83
+        },
+        "distance": 7.7
+      },
+      {
+        "id": 543,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -51.73,
+          "y": 63,
+          "z": -8.36
+        },
+        "distance": 11.2
+      },
+      {
+        "id": 275,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -50.45,
+          "y": 61,
+          "z": -15.7
+        },
+        "distance": 12.8
+      },
+      {
+        "id": 465,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -33.12,
+          "y": 73,
+          "z": -9.87
+        },
+        "distance": 13.5
+      },
+      {
+        "id": 795,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -57.12,
+          "y": 63,
+          "z": -17.12
+        },
+        "distance": 19.1
+      },
+      {
+        "id": 787,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -57.12,
+          "y": 62,
+          "z": -19.1
+        },
+        "distance": 20.2
+      },
+      {
+        "id": 748,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -58.12,
+          "y": 63,
+          "z": -17.69
+        },
+        "distance": 20.3
+      },
+      {
+        "id": 837,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -58.12,
+          "y": 62,
+          "z": -19.18
+        },
+        "distance": 21
+      },
+      {
+        "id": 872,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -58.49,
+          "y": 62,
+          "z": -20.87
+        },
+        "distance": 22.3
+      },
+      {
+        "id": 974,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -29.23,
+          "y": 43,
+          "z": -2.52
+        },
+        "distance": 22.7
+      },
+      {
+        "id": 891,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.44,
+          "y": 46,
+          "z": 1.81
+        },
+        "distance": 26
+      },
+      {
+        "id": 981,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -43.5,
+          "y": 38.14,
+          "z": 3.5
+        },
+        "distance": 26.4
+      },
+      {
+        "id": 899,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.81,
+          "y": 46,
+          "z": 2.83
+        },
+        "distance": 26.8
+      },
+      {
+        "id": 950,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.23,
+          "y": 46,
+          "z": 2.88
+        },
+        "distance": 27.2
+      },
+      {
+        "id": 851,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -58.26,
+          "y": 58,
+          "z": 15.49
+        },
+        "distance": 29.3
+      },
+      {
+        "id": 59,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.65,
+          "y": 62.59,
+          "z": -26.87
+        },
+        "distance": 29.3
+      },
+      {
+        "id": 67,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.75,
+          "y": 63,
+          "z": -27.39
+        },
+        "distance": 29.6
+      },
+      {
+        "id": 948,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.06,
+          "y": 49.75,
+          "z": 3.01
+        },
+        "distance": 30.2
+      },
+      {
+        "id": 858,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.27,
+          "y": 40.03,
+          "z": 2.66
+        },
+        "distance": 30.4
+      },
+      {
+        "id": 898,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.75,
+          "y": 40.31,
+          "z": 2.84
+        },
+        "distance": 30.6
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "a7a2b944-8441-4982-9176-c0bd05ea2e14",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -31.5,
+          "y": 71,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 28,
+      "scouts": 3,
+      "clearings": 0,
+      "excluded": {
+        "dark_oak_log": [],
+        "oak_log": [],
+        "stone": [
+          {
+            "x": -58,
+            "y": 63,
+            "z": -7
+          },
+          {
+            "x": -53,
+            "y": 63,
+            "z": -6
+          },
+          {
+            "x": -35,
+            "y": 68,
+            "z": -16
+          },
+          {
+            "x": -34,
+            "y": 68,
+            "z": -15
+          },
+          {
+            "x": -58,
+            "y": 62,
+            "z": -4
+          },
+          {
+            "x": -58,
+            "y": 62,
+            "z": -5
+          },
+          {
+            "x": -54,
+            "y": 63,
+            "z": -11
+          },
+          {
+            "x": -58,
+            "y": 62,
+            "z": -6
+          },
+          {
+            "x": -53,
+            "y": 63,
+            "z": -11
+          },
+          {
+            "x": -52,
+            "y": 62,
+            "z": -3
+          },
+          {
+            "x": -57,
+            "y": 62,
+            "z": -7
+          },
+          {
+            "x": -53,
+            "y": 62,
+            "z": -5
+          },
+          {
+            "x": -57,
+            "y": 64,
+            "z": -20
+          },
+          {
+            "x": -58,
+            "y": 63,
+            "z": -21
+          },
+          {
+            "x": -57,
+            "y": 63,
+            "z": -19
+          },
+          {
+            "x": -57,
+            "y": 63,
+            "z": -20
+          },
+          {
+            "x": -58,
+            "y": 63,
+            "z": -17
+          },
+          {
+            "x": -57,
+            "y": 63,
+            "z": -18
+          },
+          {
+            "x": -57,
+            "y": 63,
+            "z": -17
+          },
+          {
+            "x": -55,
+            "y": 63,
+            "z": -20
+          },
+          {
+            "x": -59,
+            "y": 62,
+            "z": -18
+          },
+          {
+            "x": -58,
+            "y": 62,
+            "z": -18
+          },
+          {
+            "x": -57,
+            "y": 62,
+            "z": -19
+          }
+        ]
+      },
+      "history": [
+        {
+          "at": "2026-10-01T01:42:31.579Z",
+          "action": "craft",
+          "args": {
+            "item": "stone_pickaxe",
+            "count": 1
+          },
+          "reason": "Upgrade to a stone pickaxe.",
+          "result": {
+            "item": "stone_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T01:42:49.537Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -58,
+                "y": 63,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -6
+              },
+              {
+                "x": -35,
+                "y": 68,
+                "z": -16
+              },
+              {
+                "x": -34,
+                "y": 68,
+                "z": -15
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -4
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -5
+              },
+              {
+                "x": -54,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -6
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -52,
+                "y": 62,
+                "z": -3
+              },
+              {
+                "x": -57,
+                "y": 62,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 62,
+                "z": -5
+              }
+            ]
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": false,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {
+              "cobblestone": 1
+            },
+            "remaining_drops": [
+              {
+                "id": 748,
+                "position": {
+                  "x": -58.12,
+                  "y": 63,
+                  "z": -17.69
+                }
+              },
+              {
+                "id": 754,
+                "position": {
+                  "x": -58.87,
+                  "y": 63,
+                  "z": -19.03
+                }
+              }
+            ],
+            "pickup_failures": [
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ],
+            "failures": [
+              {
+                "position": {
+                  "x": -57,
+                  "y": 64,
+                  "z": -20
+                },
+                "error": "Return-path planning budget exhausted"
+              }
+            ],
+            "search_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T01:42:58.376Z",
+          "action": "pickup",
+          "args": {
+            "radius": 16
+          },
+          "reason": "Recover observed dropped materials before mining more.",
+          "result": {
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 455,
+                "position": {
+                  "x": -73.12,
+                  "y": 64,
+                  "z": -21.43
+                }
+              },
+              {
+                "id": 748,
+                "position": {
+                  "x": -58.12,
+                  "y": 63,
+                  "z": -17.69
+                }
+              },
+              {
+                "id": 754,
+                "position": {
+                  "x": -58.87,
+                  "y": 63,
+                  "z": -19.03
+                }
+              }
+            ],
+            "unreachable": [
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ]
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T01:43:20.558Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -58,
+                "y": 63,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -6
+              },
+              {
+                "x": -35,
+                "y": 68,
+                "z": -16
+              },
+              {
+                "x": -34,
+                "y": 68,
+                "z": -15
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -4
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -5
+              },
+              {
+                "x": -54,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -6
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -52,
+                "y": 62,
+                "z": -3
+              },
+              {
+                "x": -57,
+                "y": 62,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 62,
+                "z": -5
+              },
+              {
+                "x": -57,
+                "y": 64,
+                "z": -20
+              }
+            ]
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": false,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 748,
+                "position": {
+                  "x": -58.12,
+                  "y": 63,
+                  "z": -17.69
+                }
+              },
+              {
+                "id": 754,
+                "position": {
+                  "x": -58.87,
+                  "y": 63,
+                  "z": -19.03
+                }
+              },
+              {
+                "id": 787,
+                "position": {
+                  "x": -57.12,
+                  "y": 63,
+                  "z": -19.1
+                }
+              },
+              {
+                "id": 795,
+                "position": {
+                  "x": -57.12,
+                  "y": 63,
+                  "z": -17.12
+                }
+              },
+              {
+                "id": 804,
+                "position": {
+                  "x": -58.12,
+                  "y": 62,
+                  "z": -18.87
+                }
+              }
+            ],
+            "pickup_failures": [
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ],
+            "failures": [
+              {
+                "position": {
+                  "x": -58,
+                  "y": 63,
+                  "z": -21
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -57,
+                  "y": 63,
+                  "z": -19
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -57,
+                  "y": 63,
+                  "z": -20
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -58,
+                  "y": 63,
+                  "z": -17
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -57,
+                  "y": 63,
+                  "z": -18
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -57,
+                  "y": 63,
+                  "z": -17
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -55,
+                  "y": 63,
+                  "z": -20
+                },
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ],
+            "search_limited": false
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T01:43:30.592Z",
+          "action": "pickup",
+          "args": {
+            "radius": 16
+          },
+          "reason": "Recover observed dropped materials before mining more.",
+          "result": {
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 455,
+                "position": {
+                  "x": -73.12,
+                  "y": 64,
+                  "z": -21.43
+                }
+              },
+              {
+                "id": 748,
+                "position": {
+                  "x": -58.12,
+                  "y": 63,
+                  "z": -17.69
+                }
+              },
+              {
+                "id": 754,
+                "position": {
+                  "x": -58.87,
+                  "y": 63,
+                  "z": -19.03
+                }
+              },
+              {
+                "id": 787,
+                "position": {
+                  "x": -57.12,
+                  "y": 63,
+                  "z": -19.1
+                }
+              },
+              {
+                "id": 795,
+                "position": {
+                  "x": -57.12,
+                  "y": 63,
+                  "z": -17.12
+                }
+              },
+              {
+                "id": 804,
+                "position": {
+                  "x": -58.12,
+                  "y": 62,
+                  "z": -18.87
+                }
+              }
+            ],
+            "unreachable": [
+              {
+                "id": 754,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 804,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 455,
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ]
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T01:43:54.017Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": -58,
+                "y": 63,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -6
+              },
+              {
+                "x": -35,
+                "y": 68,
+                "z": -16
+              },
+              {
+                "x": -34,
+                "y": 68,
+                "z": -15
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -4
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -5
+              },
+              {
+                "x": -54,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -58,
+                "y": 62,
+                "z": -6
+              },
+              {
+                "x": -53,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": -52,
+                "y": 62,
+                "z": -3
+              },
+              {
+                "x": -57,
+                "y": 62,
+                "z": -7
+              },
+              {
+                "x": -53,
+                "y": 62,
+                "z": -5
+              },
+              {
+                "x": -57,
+                "y": 64,
+                "z": -20
+              },
+              {
+                "x": -58,
+                "y": 63,
+                "z": -21
+              },
+              {
+                "x": -57,
+                "y": 63,
+                "z": -19
+              },
+              {
+                "x": -57,
+                "y": 63,
+                "z": -20
+              },
+              {
+                "x": -58,
+                "y": 63,
+                "z": -17
+              },
+              {
+                "x": -57,
+                "y": 63,
+                "z": -18
+              },
+              {
+                "x": -57,
+                "y": 63,
+                "z": -17
+              },
+              {
+                "x": -55,
+                "y": 63,
+                "z": -20
+              }
+            ]
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": false,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {},
+            "remaining_drops": [
+              {
+                "id": 748,
+                "position": {
+                  "x": -58.12,
+                  "y": 63,
+                  "z": -17.69
+                }
+              },
+              {
+                "id": 787,
+                "position": {
+                  "x": -57.12,
+                  "y": 62,
+                  "z": -19.1
+                }
+              },
+              {
+                "id": 795,
+                "position": {
+                  "x": -57.12,
+                  "y": 63,
+                  "z": -17.12
+                }
+              },
+              {
+                "id": 837,
+                "position": {
+                  "x": -58.12,
+                  "y": 62,
+                  "z": -19.18
+                }
+              },
+              {
+                "id": 872,
+                "position": {
+                  "x": -58.49,
+                  "y": 62,
+                  "z": -20.87
+                }
+              }
+            ],
+            "pickup_failures": [
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 748,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 795,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 837,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 837,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 837,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 787,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 872,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 872,
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "id": 872,
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ],
+            "failures": [
+              {
+                "position": {
+                  "x": -59,
+                  "y": 62,
+                  "z": -18
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -58,
+                  "y": 62,
+                  "z": -18
+                },
+                "error": "Collection return-path planning budget exhausted"
+              },
+              {
+                "position": {
+                  "x": -57,
+                  "y": 62,
+                  "z": -19
+                },
+                "error": "Collection return-path planning budget exhausted"
+              }
+            ],
+            "search_limited": false
+          },
+          "progress": false
+        },
+        {
+          "at": "2026-10-01T01:44:00.637Z",
+          "action": "explore",
+          "args": {
+            "direction": "east",
+            "distance": 12,
+            "returnable": true
+          },
+          "reason": "Repeated pickup failure. Look for a different approach.",
+          "result": {
+            "explored": true,
+            "distance": 12,
+            "position": {
+              "x": -47.5,
+              "y": 73,
+              "z": -17.51
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T01:44:05.504Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 24,
+            "returnable": true
+          },
+          "reason": "Repeated collect failure. Look for a different approach.",
+          "result": {
+            "explored": true,
+            "distance": 23.8,
+            "position": {
+              "x": -47.5,
+              "y": 73.23,
+              "z": 6.3
+            }
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-01T01:40:30.048Z",
+      "status": "paused",
+      "reason": "Low health: paused work to recover.",
+      "stopping": false
+    }
+  },
+  "reason": "Low health: paused work to recover.",
+  "finished": "2026-10-01T01:44:37.302Z"
+}

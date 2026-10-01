@@ -647,3 +647,43 @@ test('pickup aims at the drop rather than a nearer but out-of-reach standing cel
   const result = await createActions(bot).execute('pickup', { radius: 8 })
   assert.equal(result.inventory_changes.oak_log, 1)
 })
+
+test('collection honors bounded caller exclusions before selecting a target', async () => {
+  const bot = fakeBot(), skip = new Vec3(1, 64, 0), wanted = new Vec3(2, 64, 0);
+  bot.putBlock('oak_log', skip); bot.putBlock('oak_log', wanted);
+  bot.dig = async block => { assert.ok(block.position.equals(wanted)); bot.removeBlock(wanted); bot.addItem('oak_log'); };
+  const result = await createActions(bot).execute('collect', { block: 'oak_log', count: 1, radius: 8, skip_positions: [{ x: 1, y: 64, z: 0 }] });
+  assert.equal(result.inventory_changes.oak_log, 1);
+  await assert.rejects(createActions(bot).execute('collect', { block: 'oak_log', count: 1, skip_positions: Array(129).fill({ x: 1, y: 64, z: 0 }) }), /at most 128/);
+});
+
+test('job movement boundary filters collection targets and constrains path nodes', async () => {
+  const bot = fakeBot(); let movement;
+  bot.pathfinder.setMovements = m => { movement = m; };
+  const inside = new Vec3(2, 64, 0), outside = new Vec3(5, 64, 0);
+  bot.putBlock('oak_log', outside); bot.putBlock('oak_log', inside);
+  let boundary = { center: { x: 0.5, y: 64, z: 0.5 }, radius: 3 };
+  const actions = createActions(bot, { movementBoundary: () => boundary });
+  bot.dig = async b => { assert.ok(b.position.equals(inside)); bot.removeBlock(inside); bot.addItem('oak_log'); };
+  await actions.execute('collect', { block: 'oak_log', count: 1, radius: 8 });
+  await assert.rejects(actions.execute('go_to', { x: 5, y: 64, z: 0, radius: 0 }), /movement boundary/);
+  await actions.execute('go_to', { x: 1, y: 64, z: 0, radius: 0 });
+  assert.equal(movement.exclusionAreasStep.at(-1)({ position: inside }), 0);
+  assert.ok(movement.exclusionAreasStep.at(-1)({ position: outside }) > 100);
+  boundary = null;
+  assert.equal(movement.exclusionAreasStep.at(-1)({ position: outside }), 0);
+});
+
+test('mining protects support under the full player footprint at a block edge', async () => {
+  const bot = fakeBot(); bot.entity.position = new Vec3(1.05, 65, 0.5);
+  bot.putBlock('stone', new Vec3(0, 64, 0));
+  bot.dig = async () => { throw new Error('Must not remove an overlapping support'); };
+  await assert.rejects(createActions(bot).execute('dig_at', { x: 0, y: 64, z: 0 }), /supporting/);
+});
+
+test('targeted clearing refuses a block that no longer matches the observed type', async () => {
+  const bot = fakeBot(); bot.putBlock('chest', new Vec3(2, 64, 0));
+  let mined = false; bot.dig = async () => { mined = true; };
+  await assert.rejects(createActions(bot).execute('dig_at', { x: 2, y: 64, z: 0, expected_block: 'stone' }), /changed/);
+  assert.equal(mined, false);
+});
