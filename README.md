@@ -1,123 +1,206 @@
 # BroBot
 
-A local Minecraft companion you can talk to, send gathering and building jobs, or control directly. BroBot runs in a Java 1.21.8 world; Geyser lets Minecraft for Windows / Bedrock join that same world. The OpenAI agent chooses from bounded game actions and sees their actual results.
+### A Minecraft companion that turns commands into real actions
 
-**Autonomously beating a fresh Minecraft world is experimental and has not been demonstrated by this project.** The bot has survival and End progression tools, but difficult terrain, combat, and long plans can still stop it. [Validation details](docs/VALIDATION.md) distinguish tested behavior from implemented features.
+Explore together. Gather materials. Craft a starter kit. See exactly what happened when a plan works—or why it stopped.
 
-## Start playing
+**Local first · Java 1.21.8 · Direct controls without an API key · Optional OpenAI planning**
 
-You need a licensed Minecraft client and [Node.js](https://nodejs.org/en/download) **22.9 or newer**. Java 21 is downloaded into this project when a compatible installation is not found. The server and bot can run on Windows, Linux, or macOS; Bedrock availability depends on your device.
+[Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-Open a terminal in this folder:
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. One recent fresh-world recovery run completed successfully; reliable survival across worlds and beating the game remain unproved.
+
+## Meet your second pair of hands
+
+BroBot joins a local Minecraft Java world as a companion. Give it direct commands, start its bounded offline starter job, or connect an OpenAI API account for natural-language goals. Actions use observed terrain and actual inventory, with explicit results and limits.
+
+| You want to… | BroBot can… |
+| :--- | :--- |
+| Explore together | Follow a visible player, approach you, navigate to coordinates and return to saved waypoints |
+| Get materials | Find observed blocks, mine reachable targets and report which drops actually reached inventory |
+| Make useful items | Craft, equip tools, use furnaces and work with real inventory |
+| Build something small | Place blocks and construct simple floors, walls and hollow boxes where support and materials allow |
+| Try autonomous gathering | Attempt a wood → stone pickaxe → furnace → return-home starter job without an API key |
+| Stay in control | Stop work, inspect progress and explicitly resume paused starter jobs |
+
+Other implemented tools cover eating, sleeping, item transfer, block interaction and bounded combat. Portal and End progression tools are experimental: their presence is not a demonstrated full-game strategy.
+
+## Get started
+
+**You need:** Node.js **22.9+**, a licensed Minecraft client, and the repository downloaded to your computer. Setup downloads Java 21 if a compatible installation is missing. Initial downloads require internet access.
 
 ```sh
+git clone https://github.com/flowzygames/BroBot.git
+cd BroBot
+git checkout feat/starter-recovery-and-readme
 npm ci
 npm run setup
 npm run play
 ```
 
-Setup asks for your exact player name and an optional OpenAI API key. Enter the key in the local setup prompt, where it is hidden. It is saved in the ignored `.env` file. You can leave it blank and use direct commands.
+This README describes the development branch `feat/starter-recovery-and-readme`. Until its draft pull request is merged, a default-branch checkout may not contain these features.
 
-`npm run play` asks you to review and accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula), prepares the local server, then starts BroBot. First launch downloads server files and may take a minute. Open the dashboard at **[http://127.0.0.1:3000](http://127.0.0.1:3000)**.
+1. Enter your exact player name during setup. Leave the API key blank to start with direct controls.
+2. Review and accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula) when the launcher asks.
+3. Open the dashboard at **http://127.0.0.1:3000**.
+4. Join the local world and set the owner name to the connected player name shown in the dashboard.
 
-Join the world from Minecraft:
+| Client | Join address |
+| :--- | :--- |
+| Minecraft Java **1.21.8** | `127.0.0.1:25565` |
+| Minecraft for Windows / supported Bedrock client | `127.0.0.1`, port `19132`, through Geyser |
 
-| Your client | Connection |
-| --- | --- |
-| Minecraft for Windows / Bedrock | Play → Servers → Add Server; name `BroBot`, address `127.0.0.1`, port `19132` |
-| Minecraft Java | Use a **1.21.8** installation, then Multiplayer → Direct Connection → `127.0.0.1:25565` |
+**Local by default.** The server's Java and Bedrock listeners bind to your computer only. No router port forwarding is needed. Another device cannot use these loopback addresses to join. Server authentication is disabled for this local setup; do not expose it publicly. You still need a licensed Minecraft client.
 
-The local server accepts Bedrock connections **without a Microsoft/Xbox sign-in**, and BroBot does not need an account. Setup disables Geyser's Bedrock login validation as well as Java authentication, and keeps both listeners bound to `127.0.0.1`. You still need your installed, licensed Minecraft client. Client launch and signed-out menu behavior are separate from server authentication; see [validation details](docs/VALIDATION.md).
+For Windows loopback issues, client-version mismatches or setup questions, see the [full play guide](docs/USAGE.md#if-bedrock-cannot-connect). Run `npm run doctor` for connection diagnostics.
 
-After joining, set **Your name on this server** in the dashboard. Use the connected name shown there; a Bedrock name may differ from your gamertag. Then try `follow me` or `come here` in the dashboard, terminal, or `!bro follow me` in Minecraft chat.
+## Your first five minutes
 
-The default setup accepts connections from this computer only. **No router port forwarding is needed.** Another device cannot join `127.0.0.1` on your computer using these defaults.
-
-Use **Stop everything**, type `stop`, or say `!bro stop` to interrupt work. To finish the session, click **Close BroBot** in the dashboard, type `quit`, or press Ctrl+C in the launcher terminal. With `npm run play`, closing BroBot also saves and stops the world. With standalone `npm start`, it closes only the bot; stop the separate server in its own terminal.
-
-An idle bot remains vulnerable to mobs and environmental hazards in survival. Close the session when you are away; stopping its work does not pause the Minecraft world.
-
-### If Bedrock cannot connect
-
-Run `npm run doctor` while the server is running. It checks Java, the Java TCP port, the Bedrock UDP response, and Windows loopback configuration. Some Minecraft for Windows installations require this one-time command in an **Administrator terminal**:
-
-```powershell
-CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.MinecraftUWP_8wekyb3d8bbwe"
-```
-
-This permits the Windows app to reach a server on the same computer. See [Geyser's connection guide](https://geysermc.org/wiki/geyser/fixing-unable-to-connect-to-world/). If the server disconnects you with “Please log into Xbox to join this server,” close BroBot and run `npm run server:setup`, then `npm run play` to apply the account-free configuration. The generated Geyser configuration has `advanced.bedrock.validate-bedrock-login: false`. A sign-in prompt in Minecraft's own menu, before connecting, is a separate client limitation.
-
-If Bedrock updates and reports an outdated server, close BroBot first, then run `npm run server:update-bridge` followed by `npm run play`. This refreshes the bridge downloads and verifies their published checksums while keeping the Java world on 1.21.8. Check [validation limits](docs/VALIDATION.md) before assuming a newly updated client has been tested.
-
-## Talk or give direct commands
-
-With an API key, write a goal such as:
+Use commands in the dashboard or launcher terminal. In Minecraft chat, prefix owner commands with `!bro`, for example `!bro follow me`.
 
 ```text
-goal Follow me while I explore. Keep some distance and tell me if you get stuck.
-goal Gather nearby oak logs and craft a crafting table and wooden pickaxe.
-goal Help me build a small shelter using the materials we have. Tell me what is missing.
+status
+inventory
+follow me
+remember home
+home
+stop
 ```
 
-Natural language uses paid OpenAI API calls. `OPENAI_MODEL` in `.env` must name a model available to your API account. The configured default is not proof that your account can access it. ChatGPT subscriptions and API billing are separate. No live OpenAI request was made during the build validation because no API key was available.
+For the experimental offline starter:
 
-The Minecraft world is local. Initial installation downloads and OpenAI reasoning require internet access. **Direct commands do not call OpenAI**; a totally disconnected natural-language assistant would need a separate local-model integration, which this version does not include. Offline startup of individual Minecraft clients may also depend on their saved account session.
+```text
+survive starter
+```
 
-These commands work without an API key:
+BroBot observes its surroundings, gathers wood, makes tools, attempts a stone pickaxe and furnace, then returns alive to the starting point. It reuses verified crafting tables and can clear a limited amount of visible obstruction around tracked drops. It may still stop when terrain, hunger, health or planning limits prevent progress.
 
-| Command | Behavior |
-| --- | --- |
-| `status`, `inventory`, `help` | Read the current state |
-| `follow me`, `follow NAME` | Follow a visible player for up to one minute |
-| `come here`, `come NAME` | Walk to a currently visible player |
-| `goto X Y Z` | Walk to nearby coordinates |
-| `remember home`, `home` | Save and return to a waypoint in the same dimension |
-| `stop` | Cancel current work; wait for any in-flight inventory operation to settle |
-| `action NAME {JSON}` | Run one tool directly; the dashboard lists all arguments |
+`survive resume` explicitly resumes a saved paused or blocked job. Check the world and inventory first. Death, disconnects and process restarts do not silently restart the job.
 
-For example:
+For an individual action:
 
 ```text
 action inspect {"radius":16}
 action collect {"block":"oak_log","count":4,"radius":24}
 action craft {"item":"oak_planks","count":8}
-action craft {"item":"crafting_table","count":1}
-action progression_status {}
 ```
 
-Craft counts mean **desired output items**, not recipe repetitions. Collect counts mean blocks mined; the result separately reports actual item pickups. Blocks and item names must match Minecraft registry names. Jobs use owned inventory and ordinary survival interactions; the bot is not given operator privileges.
+Craft counts mean desired output items. Collect counts mean blocks mined; pickups are reported separately. Four broken blocks do not automatically mean four items in your inventory.
 
-Floor, wall, and hollow-box building are supported. Builds need sufficient materials, existing support, and reachable placement faces. BroBot refuses to overwrite occupied blocks. Choose coordinates after inspecting your actual terrain; these tools do not provide a general architectural editor or automatically clear a site.
+**Leaving the game?** Close BroBot from the dashboard, type `quit`, or press Ctrl+C in the launcher. With `npm run play`, this saves and stops the world too. `stop` cancels work; it does not pause Minecraft, so an idle bot remains vulnerable.
 
-Only the configured owner can issue in-game commands, with the `!bro` prefix. The local dashboard and terminal remain available if the owner field is blank.
+## Three ways to use BroBot
 
-## What to expect
+| Mode | Needs an API key | What it does |
+| :--- | :---: | :--- |
+| Direct commands | No | Runs explicit supported controls or individual actions |
+| Offline starter | No | Chooses the next step for one bounded starter-kit objective from live observations |
+| OpenAI planner | Yes | Uses a model to select bounded tools for written goals |
 
-The action set includes navigation, following, exploration, observed gathering, targeted digging, crafting, furnace use, equipment, eating, sleeping, giving items, block interaction, and simple construction. Combat actions have time limits and stop on low health. Stops, deaths, disconnects, and API budgets interrupt work instead of leaving an unbounded loop running.
+The offline starter is a deterministic controller, not a local language model. Fully offline natural-language planning would require a separate local-model integration.
 
-Progression tools can construct and light an obsidian portal, wait for a real portal transition, observe eye-of-ender throws and triangulate bearings, fill a correctly oriented End portal, shoot a bow, and attempt bounded dragon combat. They report missing materials, obstructions, failed paths, and unconfirmed outcomes. Fortress exploration, stronghold excavation, crystal cages, and a reliable full-game strategy still need substantial live-world validation.
+To try the optional planner, enter your key through the local setup prompt and configure `OPENAI_MODEL` for a model your API account can access. Then give a goal such as:
 
-The planner pauses repeated no-progress failures, including unsuccessful results that do not throw errors. Partial mining or building can still count as progress. Simple whole-goal inventory, dimension, and dragon-death requests have runtime completion checks; `finish_goal` completion claims for other wording and compound goals produce an explicitly **unverified** report. See [completion verification](docs/ARCHITECTURE.md#completion-verification) for supported forms and limitations. Ordinary conversation remains available.
+```text
+goal Gather nearby oak logs and craft a crafting table and wooden pickaxe.
+```
 
-Default API limits persist across restarts: 30 requests, 120,000 input tokens, and 30,000 output tokens. The agent reserves a conservative allowance before each request, so it may stop before those reported totals are fully consumed. The dashboard shows usage and an explicit reset button. Resetting allows more paid requests; these are token/request limits, not a dollar guarantee.
+OpenAI API calls are paid separately from ChatGPT subscriptions. No live API planner evaluation was run in the current validation work. The default request/token limits persist across restarts, but are not a dollar-spending guarantee. Keep `.env` and API keys out of GitHub.
 
-## Files and troubleshooting
+## How it works
 
-- `.env`: your local configuration and optional API key; never commit it.
-- `.server/`: downloaded Java/server/plugins, the world, configuration, and logs.
-- `.server/launcher.log`: server output from `npm run play`.
-- `.brobot/`: persistent notes, waypoints, API usage, and bounded event logs.
-- [Architecture and tools](docs/ARCHITECTURE.md): how planning, execution, memory, and cancellation fit together.
-- [Validation and limitations](docs/VALIDATION.md): exact test coverage and what remains unverified.
+```mermaid
+flowchart TD
+    A[Your command] --> B{Choose execution mode}
+    B --> C[Direct action]
+    B --> D[Offline starter controller]
+    B --> E[Optional OpenAI planner]
+    D --> F[Observe inventory and world]
+    E --> F
+    F --> G[Choose one bounded action]
+    C --> H[Safety and reachability checks]
+    G --> H
+    H --> I[Execute in Minecraft]
+    I --> J[Verify actual results]
+    J --> K{Outcome}
+    K -->|Goal verified| L[Report completion]
+    K -->|Continue or recover| F
+    K -->|Unsafe or exhausted| M[Pause with a reason]
+```
 
-If the server is already running, use `npm start` to launch only the bot. For separate terminals, use `npm run server:setup`, then `npm run server`, and run `npm start` in another terminal. Do not run two server processes against the same world.
+The runtime separates decisions from game actions. It verifies pickups, crafting outputs and supported completion conditions rather than trusting a plan's wording. Unsupported or compound goal completion may remain explicitly unverified.
 
-Run `npm run doctor` for connection/setup checks, `npm test` for local tests, `npm run check` for source syntax checks, and `npm run test:live` for an isolated game-server integration test. The live test creates a separate fixture world and does not use the normal play world.
+Starter jobs have health, hunger, dimension, travel and work limits: up to eight scouting attempts, 64 work steps and ten minutes by default. BroBench uses five minutes. Stops and safeguards reduce risk; they do not guarantee success.
 
-If an action fails, read its result before retrying. Common causes are missing materials, unloaded chunks, an inaccessible block face, the wrong player name, a full inventory, or insufficient food. Model-access or API-key errors do not disable direct controls.
+[Architecture and tools](docs/ARCHITECTURE.md) · [Navigation safeguards](docs/NAVIGATION_SAFEGUARDS.md)
 
-## Version choice
+## Measured, not guessed
 
-The Java world is deliberately pinned to **1.21.8**. Mineflayer's advertised protocol support extends further, but upstream reports identify movement regressions on newer versions. See [Mineflayer's tested versions](https://github.com/PrismarineJS/mineflayer/blob/master/lib/version.js) and [the pathfinder report](https://github.com/PrismarineJS/mineflayer-pathfinder/issues/366). Paper, Geyser, and ViaVersion downloads are recorded with their hashes in `.server/manifest.json`; Bedrock protocol support follows the installed bridge, not the Java world version.
+### Current recovery checkpoint
 
-This rebuild replaces the application files while retaining the repository's Git history.
+- **141 automated tests pass**, plus source syntax checks
+- **16 real-server regression scenarios pass** on Linux, including mining, crafting, movement, cancellation and supplied-material portal fixtures
+- **One complete starter development run passed in 215.975 seconds** on seed `20260930`: empty inventory → stone pickaxe and furnace → alive at the start
+- The earlier published PR 4 code passed Windows/Ubuntu checks on Node 22/24; this branch's CI status must be checked separately
+- Actual rendered Windows Minecraft gameplay and live OpenAI planner behavior remain unverified here
+
+One successful development world is encouraging, not a broad reliability claim. The latest fixes have not received a new full three-seed comparison. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
+
+### Frozen BroBench comparison
+
+These results compare the earlier PR 4 source with the original offline-starter candidate **before the latest recovery fixes**. They remain unchanged; the later success is reported separately.
+
+| Benchmark | What it measures | Earlier candidate | Starter candidate |
+| :--- | :--- | ---: | ---: |
+| **MineLine** | Mining and actual pickup in prepared scenarios | 3/3 | 3/3 |
+| **Workbench** | Crafting with supplied ingredients | 6/6 | 6/6 |
+| **Pathfinder** | Prepared detour and climb/return routes | 2/2 | 2/2 |
+| **CommandSense** | Supported local command grammar | 12/14 | 14/14 |
+| **SafetyLatch** | Simulated control and failure checks | 6/6 | 6/6 |
+| **Trailhead** | Fresh-world starter kit and return | 0/3, mode absent | 0/3 |
+| **GoalSense LLM** | Live model language and planning | Not run | Not run |
+
+Trailhead used three fixed development seeds, normal survival, empty inventory, fixed spawn settings and a five-minute limit. It supplied no items and changed no terrain. Prepared skill tests are different: they supply ingredients and fixtures. CommandSense is not a general language-understanding score, and the earlier candidate's absent starter mode says nothing about its separate paid planner.
+
+There is no invented overall intelligence score. Failed and unsupported cases remain visible. [Protocol and reproduction](benchmarks/README.md) · [Results and limitations](benchmarks/RESULTS.md) · [Historical validation](docs/VALIDATION.md)
+
+## The road to Alpha 1
+
+Alpha 1 should mean a useful, dependable starter companion with clear failures—not a promise to do everything in Minecraft.
+
+- [x] Direct controls and bounded action execution
+- [x] Experimental observation-driven starter controller
+- [x] Reproducible named benchmarks with retained failures
+- [x] Complete one fresh-world starter development run after recovery fixes
+- [ ] Repeat the complete starter loop across more worlds and terrain
+- [ ] Validate interruption, reconnect and recovery in broader live scenarios
+- [ ] Test the actual Windows/Bedrock client experience
+- [ ] Review and merge the draft changes into a clear release
+- [ ] Evaluate optional language planning with a separately approved API budget
+- [ ] Expand toward food, shelter and longer progression after starter reliability improves
+
+There is no Alpha 1 release date yet. The starter job does not cover food production, shelter, night survival, iron progression or beating the game.
+
+## For builders
+
+```sh
+npm run check       # Source syntax and automated tests
+npm run test:live   # Isolated real-server regression world
+npm run doctor     # Local setup and connection checks
+```
+
+Benchmark commands and version-comparison instructions are in [BroBench](benchmarks/README.md). Live tests use isolated worlds, not your normal play save. Follow the normal server setup and EULA flow before running them.
+
+| Area | Source |
+| :--- | :--- |
+| Runtime and orchestration | `src/runtime.js` |
+| Game actions and movement checks | `src/actions.js` |
+| Offline starter decisions | `src/survival.js` |
+| Tracked-drop clearance observations | `src/survival-observation.js` |
+| Local command parsing | `src/commands.js` |
+| Regression tests | `test/` |
+| Benchmark harnesses and protocol | `scripts/benchmark-*.js`, `benchmarks/` |
+
+Built with JavaScript, Node.js, Mineflayer, mineflayer-pathfinder and the OpenAI SDK. The local Minecraft world uses Paper with Geyser and bridge components.
+
+**Troubleshooting:** [Full play guide](docs/USAGE.md) · [Validation limits](docs/VALIDATION.md) · [Open an issue](https://github.com/flowzygames/BroBot/issues)

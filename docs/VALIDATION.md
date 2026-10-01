@@ -2,6 +2,10 @@
 
 Status is recorded separately for offline logic tests, real-server fixture tests, client access, and an actual autonomous survival run. Passing one category does not establish the others.
 
+## Latest recovery checkpoint
+
+The September 30 recovery source passed 141 automated tests and all 16 Linux real-server regression phases. One targeted fresh-world starter run passed in 215.975 seconds. This does not establish general survival reliability; the earlier frozen comparison remains 0/3. See [current results and raw evidence](../benchmarks/RESULTS.md). The dated records below describe earlier source versions and remain historical.
+
 ## Commands
 
 ```sh
