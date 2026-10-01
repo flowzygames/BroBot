@@ -165,7 +165,7 @@ natural-world run of seed 454806089 on application a3e2242 passed in 107.416
 seconds, with verified pickup gains, stone pickaxe, furnace and a living return
 to the start. Its complete result is retained separately as targeted-pocket-254.json.
 This single targeted pass does not replace the retained 8/20 experiment or the
-released 10/20 score. A new complete same-20 regression is in progress.
+released 10/20 score. The complete same-20 regression now matches the previous published 10/20 pass/fail set; see the latest validation below.
 
 ## Latest complete validation
 
