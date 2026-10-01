@@ -1,0 +1,53 @@
+{
+  "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "minecraft": "1.21.8",
+  "automatedChecks": 219,
+  "liveRegressionPhases": 17,
+  "groups": {
+    "core": {
+      "label": "Original development worlds",
+      "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+      "passed": 3,
+      "scheduled": 3,
+      "cases": [
+        {
+          "seed": "42",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 159168,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "718224",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 94701,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "20260930",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 91327,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        }
+      ]
+    },
+    "targeted": {
+      "label": "Targeted recovery replay",
+      "sourceCommit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+      "passed": 1,
+      "scheduled": 1,
+      "cases": [
+        {
+          "seed": "1542908414",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 242380,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        }
+      ]
+    }
+  },
+  "pairedEvaluationPending": true
+}

@@ -9,6 +9,7 @@ import { createActions, visibleBlockFace } from './actions.js';
 import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
 import { SurvivalJob, STARTER_LOG_RADIUS } from './survival.js';
+import { findTransitPickupClearance } from './pickup-transit.js';
 import { findPickupClearance } from './survival-observation.js';
 import { publicConfig } from './config.js';
 import { parseCommand, authorizedChat, HELP } from './commands.js';
@@ -64,7 +65,7 @@ export class Runtime {
         const foundTables = tableId == null ? [] : this.bot.findBlocks({ matching: [tableId], maxDistance: 32, count: 16 });
         const tablePositions = [...foundTables, ...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
         const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => this.bot.blockAt(new Vec3(p.x, p.y, p.z))?.name === 'crafting_table').slice(0, 8);
-        return { wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds), tables, tableInReach: tables.some(t => {
+        return { wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach: tables.some(t => {
           if (!p || Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) > 4) return false;
           const position = new Vec3(t.x, t.y, t.z);
           if (this.bot.world?.raycast) return visibleBlockFace(this.bot.world, this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0), position, 4.5);

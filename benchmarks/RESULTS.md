@@ -1,3 +1,15 @@
+# Transit recovery checkpoint — October 1, 2026
+
+Clean application `682bf46b3d77691ba5e4d8e357819f90ad14e775` passes **219 automated checks, 17/17 prepared live phases, 11/11 prepared skill cases and 20/20 local controls**. The three original development worlds passed: 42 in 159.168s, 718224 in 94.701s and 20260930 in 91.327s. A targeted replay of previously failing world 1542908414 completed in 242.380s.
+
+A bounded read-only terrain probe now checks whether removing one visible natural obstruction could open both the pickup route and its return route. Normal mining rechecks safety before any edit. Aquatic adjacency checks and thin-snow pickup handling were also tightened. [Implementation and limits](../docs/PICKUP_TRANSIT.md).
+
+In a separately prepared saved-world diagnostic, ordinary pickup initially acquired nothing. Removing the verified dirt obstruction recovered ten existing cobblestone, and the bot returned with that inventory and no deaths or respawns. Two other unreachable stacks remained; this is mechanism evidence, not complete collection or fresh survival. The targeted natural replay also used the dirt-clearance recovery, then completed the starter kit and return. Its earlier path differed, so one pass does not isolate the cause or prove broad reliability.
+
+[Current source manifest and complete available records](results/transit-2026-10-01/) preserve those results. A same-protocol rerun of all twenty wider seeds is now in progress on frozen 682 source. Those worlds are now known cases. No completed paired score is claimed yet, and the prior **8/20 first-pass result below remains intact**. Stable 1.0 remains unverified.
+
+---
+
 # Twenty-world first-pass coverage — October 1, 2026
 
 **8/20 completed (40%).** On frozen application `1e7ab1f96656cabcdfd28c4f077ce49699e0234a`, twenty preselected new worlds were each tested once under the same 300-second normal-survival protocol. The objective required both a stone pickaxe and furnace, being alive, and returning to the starting point. No materials or terrain were supplied and no paid model was used.

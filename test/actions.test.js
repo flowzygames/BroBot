@@ -856,3 +856,31 @@ test('craft places a carried table locally when the nearby existing table is obs
   const result=await createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1})
   assert.equal(result.crafted,1)
 })
+
+test('pickup accepts zero-shape snow cover but refuses raised snow as an integer standing cell', async () => {
+ for(const raised of [false,true]) {
+  const bot=fakeBot();
+  for(let x=1;x<=3;x++)for(let z=-1;z<=1;z++) {
+   bot.putBlock('dirt',new Vec3(x,63,z));
+   bot.putBlock('snow',new Vec3(x,64,z),{boundingBox:'empty',shapes:raised?[[0,0,0,1,.125,1]]:[]});
+  }
+  bot.entities[99]={id:99,name:'item',position:new Vec3(2.5,64,.5)};
+  let walked=0;
+  bot.pathfinder.goto=async goal=>{walked++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);delete bot.entities[99];bot.addItem('cobblestone');};
+  const result=await createActions(bot).execute('pickup',{radius:8,entity_ids:[99]});
+  if(raised){assert.equal(walked,0);assert.deepEqual(result.inventory_changes,{});assert.equal(result.remaining_drops.length,1);}
+  else{assert.equal(walked,1);assert.equal(result.inventory_changes.cobblestone,1);assert.equal(result.remaining_drops.length,0);}
+ }
+});
+
+test('harvesting refuses an adjacent waterlogged block before digging',async()=>{
+ const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('oak_log',p);bot.putBlock('oak_leaves',p.offset(1,0,0),{isWaterlogged:true});let dug=false;bot.dig=async()=>{dug=true;};
+ await assert.rejects(createActions(bot).execute('dig_at',{x:p.x,y:p.y,z:p.z,expected_block:'oak_log'}),/adjacent liquid/);assert.equal(dug,false);
+});
+
+test('harvesting rejects water-bearing plants and bubble columns beside a target',async()=>{
+ for(const name of ['kelp','kelp_plant','seagrass','tall_seagrass','bubble_column']) {
+  const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('oak_log',p);bot.putBlock(name,p.offset(1,0,0),{isWaterlogged:false});let dug=false;bot.dig=async()=>{dug=true;};
+  await assert.rejects(createActions(bot).execute('dig_at',{x:p.x,y:p.y,z:p.z,expected_block:'oak_log'}),/adjacent liquid/,name);assert.equal(dug,false,name);
+ }
+});
