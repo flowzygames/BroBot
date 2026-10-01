@@ -195,7 +195,7 @@ test('completion on the final allowed action is verified rather than lost to the
 });
 
 test('starter returns to a known table instead of requiring redundant wood', () => {
-  const state = { connected: true, health: 20, food: 20, dimension: 'overworld', position: { x: 20, y: 64, z: 0 }, inventory: [{ name: 'wooden_pickaxe', count: 1 }, { name: 'stick', count: 2 }, { name: 'cobblestone', count: 3 }, { name: 'birch_planks', count: 3 }] };
+  const state = { connected: true, health: 20, food: 20, dimension: 'overworld', position: { x: 20, y: 64, z: 0 }, inventory: [{ name: 'wooden_pickaxe', count: 1 }, { name: 'stick', count: 2 }, { name: 'cobblestone', count: 11 }, { name: 'birch_planks', count: 3 }] };
   const table = { x: 0, y: 64, z: 2 };
   const job = { home: { position: { x: 0, y: 64, z: 0 }, dimension: 'overworld' }, tables: [table] };
   const step = nextStarterStep(state, job, { wood: 'birch', tableInReach: false });
@@ -215,4 +215,29 @@ test('drop recovery can clear a verified head block and then resume pickup', asy
   };
   f.job.start(); await f.job.promise;
   assert.equal(cleared, true); assert.equal(f.job.state().status, 'complete'); assert.equal(f.job.state().clearanceDigs, 1);
+});
+
+test('explicit resume grants a new bounded step budget while preserving total progress', async () => {
+  const f = fixture({ maxSteps: 1 });
+  f.job.start(); await f.job.promise;
+  assert.equal(f.job.state().status, 'blocked');
+  assert.equal(f.job.state().steps, 1);
+  for (let attempt = 0; attempt < 30 && f.job.state().status !== 'complete'; attempt++) {
+    const previous = f.job.state().steps;
+    f.job.start({ resume: true }); await f.job.promise;
+    assert.ok(f.job.state().steps <= previous + 1);
+  }
+  assert.equal(f.job.state().status, 'complete');
+  assert.ok(f.job.state().steps > 1);
+  assert.equal(f.counts().stone_pickaxe, 1);
+  assert.equal(f.counts().furnace, 1);
+});
+
+test('starter gathers the kit stone before returning to a distant crafting table', () => {
+ const state={connected:true,health:20,food:20,dimension:'overworld',position:{x:8,y:64,z:0},inventory:[{name:'wooden_pickaxe',count:1},{name:'stick',count:2},{name:'cobblestone',count:3}]};
+ const job={home:{position:{x:0,y:64,z:0},dimension:'overworld'},tables:[{x:0,y:64,z:0}]};
+ const away=nextStarterStep(state,job,{tableInReach:false});assert.equal(away.name,'collect');assert.equal(away.args.count,4);
+ const near=nextStarterStep(state,job,{tableInReach:true});assert.equal(near.name,'craft');assert.equal(near.args.item,'stone_pickaxe');
+ state.inventory.find(i=>i.name==='cobblestone').count=11;
+ assert.equal(nextStarterStep(state,job,{tableInReach:false}).waypointKind,'table');
 });

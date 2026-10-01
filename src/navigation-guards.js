@@ -76,3 +76,44 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
     try { ownsGoal = true; bot.pathfinder.setGoal(goal) } catch (error) { finish(error) }
   })
 }
+
+// Bound walking separately from the whole collection action, so a blocked
+// approach can be recorded and another resource tried before the action expires.
+export function walkToGoal(bot, goal, { signal, timeoutMs = 15000, stallMs = 3000, pollMs = 100 } = {}) {
+  return new Promise((resolve, reject) => {
+    let settled = false, timer, ownsGoal = false;
+    let position = bot.entity.position.clone(), lastMove = performance.now();
+    const started = lastMove;
+    const finish = error => {
+      if (settled) return;
+      settled = true; clearInterval(timer);
+      signal?.removeEventListener('abort', aborted);
+      bot.removeListener('goal_reached', reached); bot.removeListener('goal_updated', changed); bot.removeListener('path_update', pathUpdate);
+      if (ownsGoal && (bot.pathfinder.goal === undefined || bot.pathfinder.goal === goal)) {
+        try { bot.pathfinder.setGoal(null); } catch {}
+        try { bot.clearControlStates?.(); } catch {}
+      }
+      if (error) reject(error); else resolve({ arrived: true });
+    };
+    const aborted = () => finish(abortError());
+    const reached = g => {
+      if (g && g !== goal) return;
+      if (typeof goal.isEnd === 'function' && !goal.isEnd(bot.entity.position.floored())) return;
+      finish();
+    };
+    const changed = g => { if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Walking navigation goal replaced')); };
+    const pathUpdate = result => { if (['noPath', 'timeout'].includes(result.status)) finish(new Error(`Walking route ${result.status}`)); };
+    if (signal?.aborted) return aborted();
+    if (typeof goal.isEnd === 'function' && goal.isEnd(bot.entity.position.floored())) return finish();
+    signal?.addEventListener('abort', aborted, { once: true });
+    bot.on('goal_reached', reached); bot.on('goal_updated', changed); bot.on('path_update', pathUpdate);
+    timer = setInterval(() => {
+      if (signal?.aborted) return aborted();
+      const now = performance.now();
+      if (bot.entity.position.distanceTo(position) >= 0.35) { position = bot.entity.position.clone(); lastMove = now; }
+      if (now - started >= timeoutMs) finish(new Error('Walking route exceeded its local time budget'));
+      else if (now - lastMove >= stallMs) finish(new Error('Walking route made no movement progress'));
+    }, pollMs);
+    try { ownsGoal = true; bot.pathfinder.setGoal(goal); } catch (error) { finish(error); }
+  });
+}

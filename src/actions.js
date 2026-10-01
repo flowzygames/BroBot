@@ -1,7 +1,7 @@
 import pathfinderPackage from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import { configureCollisionMargin } from './collision-margin.js'
-import { planReturnablePath, pursueDroppedItem } from './navigation-guards.js'
+import { planReturnablePath, pursueDroppedItem, walkToGoal } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
 const AIR = new Set(['air', 'cave_air', 'void_air'])
@@ -182,7 +182,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     configureMovement()
     let goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
     if (returnable) goal = await returnableGoal(ctx, goal)
-    await step(ctx, () => bot.pathfinder.goto(goal))
+    await step(ctx, () => returnable ? walkToGoal(bot, goal, { signal: ctx.signal }) : bot.pathfinder.goto(goal))
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
@@ -193,8 +193,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     assert(used < 7000, 'Collection return-path planning budget exhausted')
     const start = performance.now()
     try {
+      // A player can stand across a block edge while its center is above air.
+      // Requiring the floored center as a reverse endpoint invents an impossible
+      // standing cell. Verify a real walking route back within one block instead.
       const home = ctx.origin.floored()
-      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalBlock(home.x, home.y, home.z), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), yieldControl: () => pause(ctx, 0) })
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), yieldControl: () => pause(ctx, 0) })
       checked(ctx)
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
     } finally { ctx.planningUsed = used + performance.now() - start }

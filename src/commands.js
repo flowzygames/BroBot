@@ -1,6 +1,9 @@
+import { parseOfflinePhrase } from './offline-commands.js';
 export function parseCommand(input, owner = '') {
   if (typeof input !== 'string' || !input.trim() || input.length > 2000) throw new Error('Enter 1–2000 characters.');
   const text = input.trim().replace(/^!bro\s+/i, '').replace(/^@?brobot[:,]?\s+/i, '').trim();
+  const local = parseOfflinePhrase(text);
+  if (local) return local;
   const [word, ...parts] = text.split(/\s+/);
   const rest = parts.join(' ');
   switch (word.toLowerCase()) {
@@ -37,4 +40,4 @@ export function authorizedChat(username, message, owner, botName) {
   return Boolean(owner && username.toLowerCase() === owner.toLowerCase() && username.toLowerCase() !== botName.toLowerCase() && /^(?:!bro\b|@?brobot\b)/i.test(message));
 }
 
-export const HELP = 'Chat naturally with AI, or use stop, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, survive starter, survive resume, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';
+export const HELP = 'Chat naturally with AI, or use stop, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, survive starter, survive resume, collect 4 oak logs, craft a furnace, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';

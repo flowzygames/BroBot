@@ -29,6 +29,20 @@ Other implemented tools cover eating, sleeping, item transfer, block interaction
 
 **You need:** Node.js **22.9+**, a licensed Minecraft client, and the repository downloaded to your computer. Setup downloads Java 21 if a compatible installation is missing. Initial downloads require internet access.
 
+### Download and launch
+
+Unzip the [development download](https://brobot-showcase.vercel.app/download), then:
+
+- **Windows:** double-click `Start-BroBot.cmd`
+- **macOS / Linux:** open a terminal in the extracted folder and run `sh start-brobot.sh`
+
+Install Node.js 22.9+ first. The launcher installs the locked dependencies,
+opens setup if needed, and starts the local world. It asks you to review the
+Minecraft EULA rather than accepting it silently. Keep the terminal open while
+playing; Ctrl+C saves and closes the world.
+
+### Prefer Git?
+
 ```sh
 git clone https://github.com/flowzygames/BroBot.git
 cd BroBot
@@ -40,7 +54,7 @@ npm run play
 
 This README describes the development branch `feat/starter-recovery-and-readme`. Until its draft pull request is merged, a default-branch checkout may not contain these features.
 
-1. Enter your exact player name during setup. Leave the API key blank to start with direct controls.
+1. Enter your exact player name during setup. Leave the API key blank to use direct controls and the offline starter.
 2. Review and accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula) when the launcher asks.
 3. Open the dashboard at **http://127.0.0.1:3000**.
 4. Join the local world and set the owner name to the connected player name shown in the dashboard.
@@ -66,6 +80,20 @@ remember home
 home
 stop
 ```
+
+A small set of ordinary phrases also works **offline**, without an API key:
+
+```text
+collect 4 oak logs
+mine two iron ore
+craft a furnace
+make me a stone pickaxe
+```
+
+These are exact supported command patterns, not general language understanding.
+Use a specific wood species and a count from 1 to 64. BroBot still checks tools,
+materials and reachable terrain. Compound requests and explicit `goal`/`ask`
+commands use the optional paid planner.
 
 For the experimental offline starter:
 
