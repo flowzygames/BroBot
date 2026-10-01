@@ -1,0 +1,21 @@
+name: Check BroBot showcase
+on:
+  push:
+    branches: [web/brobot-showcase]
+  pull_request:
+    paths: ['showcase/**', '.github/workflows/website.yml']
+permissions:
+  contents: read
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: node --test showcase/test/*.test.cjs
+      - run: node showcase/test/validate-site.cjs
