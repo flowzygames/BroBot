@@ -1,5 +1,6 @@
 import pathfinderPackage from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
+import { configureCollisionMargin } from './collision-margin.js'
 import { planReturnablePath, pursueDroppedItem } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
@@ -81,6 +82,7 @@ function matchesPlacedBlock (actual, item) {
 
 /** One serialized physical action at a time. In-flight inventory operations drain before reuse. */
 export function createActions (bot, { memory, log = () => {} } = {}) {
+  configureCollisionMargin(bot)
   let active = null
   let movements = null
   const items = () => bot.inventory?.items() ?? []
@@ -254,13 +256,17 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       // airborne Y creates an impossible path; project onto loaded ground.
       const dropPosition = target.position.floored()
       const destinations = []
-      for (const [x, z] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) {
-        for (let down = 0; down <= 8; down++) {
+      configureMovement()
+      const passable = b => b && (isAir(b) || /^(short_grass|tall_grass|fern|large_fern|leaf_litter)$/.test(b.name)) && b.boundingBox === 'empty' && !movements.blocksToAvoid.has(b.type) && !movements.liquids.has(b.type)
+      for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
+        for (let down = -1; down <= 8; down++) {
           const p = dropPosition.offset(x, -down, z)
-          if (isAir(bot.blockAt(p)) && isAir(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
+          if (passable(bot.blockAt(p)) && passable(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
         }
       }
-      destinations.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position))
+      // A cell close to the bot can still be outside item-pickup reach,
+      // especially diagonally. Aim at the drop rather than the nearest cell.
+      destinations.sort((a, b) => a.offset(0.5, 0, 0.5).distanceTo(target.position) - b.offset(0.5, 0, 0.5).distanceTo(target.position))
       try {
         assert(destinations.length, 'No validated standing space near dropped item')
         let goal, lastError
@@ -288,6 +294,7 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     const failures = []
     let mined = 0
     let searchLimited = false
+    let consecutiveFailures = 0
     while (mined < count) {
       checked(ctx)
       // Filter before findBlocks applies its count cap. Dense buried stone must
@@ -301,7 +308,7 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
       const deadline = performance.now() + 500
       let inspected = 0
       try {
-        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 128, useExtraInfo: block => {
+        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 512, useExtraInfo: block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
           const p = block.position
@@ -314,7 +321,15 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
         if (error !== searchLimit) throw error
         searchLimited = true
       }
-      const choices = candidates.sort((a, b) => a.distanceTo(bot.entity.position) - b.distanceTo(bot.entity.position)).slice(0, 128)
+      // Nearby depth can be a misleading shortcut: prefer surface-height resources
+      // before trying a dense cave face. Returnability is still verified separately.
+      const effort = p => {
+        // Drops scatter off ledges. Prefer a supported landing area to a cliff
+        // edge, without excluding trees or resources that lack a full platform.
+        const stableLanding = [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]].every(([x, z]) => isSolid(bot.blockAt(p.offset(x, -1, z))))
+        return p.distanceTo(bot.entity.position) + 3 * Math.abs(p.y - bot.entity.position.y) + (stableLanding ? 0 : 32)
+      }
+      const choices = candidates.sort((a, b) => effort(a) - effort(b)).slice(0, 128)
       if (!choices.length) break
       const p = choices[0]
       skipped.add(p.toString())
@@ -324,12 +339,13 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
         if (block.name !== name) continue
         await harvestBlock(ctx, p)
         mined++
+        consecutiveFailures = 0
         await pause(ctx, 300)
         await pickupInternal(ctx, 6)
       } catch (error) {
         checked(ctx)
         failures.push({ position: plainPos(p), error: error.message })
-        if (failures.length >= 8) break
+        if (++consecutiveFailures >= 8) break
       }
     }
     let pickup = { remaining_drops: [], unreachable: [] }
@@ -416,7 +432,9 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
   }
 
   async function workstation (ctx, name) {
-    let block = nearby(name, 24)
+    // Reuse a workstation already in reach. If carrying one, place it locally
+    // rather than crossing difficult terrain to a distant duplicate.
+    let block = nearby(name, 4) ?? (itemCount(name) ? null : nearby(name, 24))
     if (block) { await approachBlock(ctx, block.position); return loaded(block.position) }
     owned(name)
     const feet = bot.entity.position.floored()
@@ -444,7 +462,14 @@ export function createActions (bot, { memory, log = () => {} } = {}) {
     while (produced < wanted) {
       checked(ctx)
       let recipes = bot.recipesFor(definition.id, null, 1, table)
-      if (!recipes.length && !table && (nearby('crafting_table', 24) || itemCount('crafting_table'))) { table = await workstation(ctx, 'crafting_table'); recipes = bot.recipesFor(definition.id, null, 1, table) }
+      if (!recipes.length && !table && (nearby('crafting_table', 24) || itemCount('crafting_table'))) {
+        // Mineflayer uses table presence as a recipe filter, not its distance.
+        // Check ingredients first so a missing cobblestone does not trigger a
+        // long journey to a table that cannot help with the requested craft.
+        assert(bot.recipesFor(definition.id, null, 1, true).length, `Cannot craft ${name}: missing ingredients; produced ${produced}/${wanted}`)
+        table = await workstation(ctx, 'crafting_table')
+        recipes = bot.recipesFor(definition.id, null, 1, table)
+      }
       assert(recipes.length, `Cannot craft ${name}: missing ingredients or crafting table; produced ${produced}/${wanted}`)
       const recipe = recipes[0]
       if (recipe.requiresTable) { assert(table, 'Recipe requires a crafting table'); await approachBlock(ctx, table.position) }

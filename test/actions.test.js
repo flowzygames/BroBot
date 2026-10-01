@@ -516,3 +516,134 @@ test('pickup disappearance is not fabricated as inventory gain', async () => {
   assert.deepEqual(result.remaining_drops, [])
   assert.equal(bot.listenerCount('entityGone'), 0)
 })
+
+test('collection considers level ground beyond the nearest 128 deep exposed targets', async () => {
+  const bot = fakeBot()
+  for (let i = 0; i < 160; i++) bot.putBlock('stone', new Vec3(3 + i % 10, 53 + Math.floor(i / 40), Math.floor(i / 10) % 4))
+  const surface = new Vec3(25, 64, 0)
+  bot.putBlock('stone', surface)
+  for (const [x, z] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) bot.putBlock('dirt', surface.offset(x, -1, z))
+  let firstApproach
+  bot.pathfinder.getPathFromTo = function * (m, start, goal) {
+    if (goal.target) firstApproach ??= goal.target
+    const p = goal.target ? goal.target.offset(-1, 0, 0) : new Vec3(goal.x, goal.y, goal.z)
+    yield { result: { status: 'success', path: [p] } }
+  }
+  bot.dig = async block => { assert.ok(block.position.equals(surface)); bot.removeBlock(surface); bot.addItem('cobblestone') }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 })
+  assert.ok(firstApproach.equals(surface))
+  assert.equal(result.inventory_changes.cobblestone, 1)
+})
+
+test('craft rejects missing ingredients before traveling to a distant table', async () => {
+  const bot = fakeBot()
+  bot.putBlock('crafting_table', new Vec3(20, 64, 0))
+  bot.recipesFor = () => []
+  bot.pathfinder.goto = async () => { throw new Error('Must not travel without ingredients') }
+  await assert.rejects(createActions(bot).execute('craft', { item: 'stone_pickaxe', count: 1 }), /missing ingredients/)
+})
+
+test('collection prefers supported drop landings over a closer ledge', async () => {
+  const bot = fakeBot()
+  const ledge = new Vec3(2, 64, 0)
+  const supported = new Vec3(3, 64, 0)
+  bot.putBlock('stone', ledge)
+  bot.putBlock('stone', supported)
+  for (const [x, z] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) bot.putBlock('dirt', supported.offset(x, -1, z))
+  bot.dig = async block => { assert.ok(block.position.equals(supported)); bot.removeBlock(supported); bot.addItem('cobblestone') }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 8 })
+  assert.equal(result.inventory_changes.cobblestone, 1)
+})
+
+test('craft checks prospective table recipes before placing a carried table', async () => {
+  const bot = fakeBot()
+  bot.addItem('crafting_table')
+  bot.recipesFor = () => []
+  bot.placeBlock = async () => { throw new Error('Must not place a table without ingredients') }
+  await assert.rejects(createActions(bot).execute('craft', { item: 'stone_pickaxe', count: 1 }), /missing ingredients/)
+  assert.equal(bot.inventory.items()[0].count, 1)
+})
+
+test('collection failure budget resets when a block is successfully harvested', async () => {
+  const bot = fakeBot()
+  // A successful harvest between two runs of four rejected candidates must
+  // allow the second success, rather than stop at eight lifetime failures.
+  const positions = Array.from({ length: 10 }, (_, i) => new Vec3(i + 1, 64, 0))
+  positions.forEach(p => bot.putBlock('stone', p))
+  bot.canDigBlock = block => [5, 10].includes(block.position.x)
+  bot.dig = async block => { bot.removeBlock(block.position); bot.addItem('cobblestone') }
+  bot.pathfinder.getPathFromTo = function * (m, start, goal) {
+    const p = goal.target ? goal.target.offset(-1, 0, 0) : new Vec3(goal.x, goal.y, goal.z)
+    yield { result: { status: 'success', path: [p] } }
+  }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 2, radius: 16 })
+  assert.equal(result.mined, 2)
+  assert.equal(result.failures.length, 8)
+  assert.equal(result.inventory_changes.cobblestone, 2)
+})
+
+test('pickup can use a diagonal grass-covered landing without terrain modification', async () => {
+  const bot = fakeBot()
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.1, 64, 2.1) }
+  const landing = new Vec3(1, 64, 1)
+  bot.putBlock('stone', landing.offset(0, -1, 0))
+  bot.putBlock('short_grass', landing, { boundingBox: 'empty' })
+  let reached = false
+  bot.pathfinder.setMovements = m => { assert.equal(m.canDig, false) }
+  bot.pathfinder.setGoal = goal => {
+    bot.pathfinder.goal = goal
+    if (goal) {
+      assert.deepEqual([goal.x, goal.y, goal.z], [1, 64, 1]); reached = true
+      const drop = bot.entities[2]; delete bot.entities[2]; bot.addItem('cobblestone'); bot.emit('playerCollect', bot.entity, drop)
+    }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.equal(reached, true)
+  assert.equal(result.inventory_changes.cobblestone, 1)
+  assert.equal(result.remaining_drops.length, 0)
+})
+
+test('craft uses a carried table locally instead of traveling to a distant duplicate', async () => {
+  const bot = fakeBot()
+  bot.putBlock('crafting_table', new Vec3(20, 64, 0))
+  bot.putBlock('dirt', new Vec3(-1, 63, -1))
+  bot.addItem('crafting_table')
+  const recipe = { requiresTable: true, result: { count: 1 } }
+  bot.recipesFor = (id, meta, count, table) => table ? [recipe] : []
+  bot.pathfinder.goto = async () => { throw new Error('Must not travel to a distant table when carrying one') }
+  bot.craft = async (r, count, table) => {
+    assert.ok(table.position.equals(new Vec3(-1, 64, -1)))
+    bot.addItem('stone_pickaxe')
+  }
+  const result = await createActions(bot).execute('craft', { item: 'stone_pickaxe', count: 1 })
+  assert.equal(result.crafted, 1)
+  assert.equal(bot.blockAt(new Vec3(-1, 64, -1)).name, 'crafting_table')
+})
+
+test('pickup does not treat hazardous empty-collision blocks as standing space', async () => {
+  for (const name of ['water', 'lava', 'fire', 'sweet_berry_bush', 'powder_snow']) {
+    const bot = fakeBot()
+    bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.5, 64, 0.5) }
+    bot.putBlock('stone', new Vec3(2, 63, 0))
+    bot.putBlock(name, new Vec3(2, 64, 0), { boundingBox: 'empty' })
+    bot.pathfinder.setGoal = goal => { assert.equal(goal, null) }
+    const result = await createActions(bot).execute('pickup', { radius: 8 })
+    assert.equal(result.remaining_drops.length, 1)
+  }
+})
+
+test('pickup aims at the drop rather than a nearer but out-of-reach standing cell', async () => {
+  const bot = fakeBot()
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.9, 64, 0.5) }
+  bot.putBlock('stone', new Vec3(1, 63, 0))
+  bot.putBlock('stone', new Vec3(2, 63, 0))
+  bot.pathfinder.setGoal = goal => {
+    bot.pathfinder.goal = goal
+    if (goal) {
+      assert.deepEqual([goal.x, goal.y, goal.z], [2, 64, 0])
+      const drop = bot.entities[2]; delete bot.entities[2]; bot.addItem('oak_log'); bot.emit('playerCollect', bot.entity, drop)
+    }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.equal(result.inventory_changes.oak_log, 1)
+})
