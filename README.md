@@ -1,5 +1,3 @@
-> **Experimental recovery branch:** includes a separately invoked `action descend_notch {}`, bounded tree observation, and newly opened standing-cell pickup recovery. The latest application passes 254 automated checks and a targeted natural-world starter run in 107.416 seconds. The earlier 245-check experiment scored 8/20 against the released build’s 10/20 on the same known seeds; the latest full cohort is still running. Prepared live checks belong to their recorded source versions. The website download remains the published 219-check build. See [the experiment and its limits](docs/FOLIAGE_RECOVERY.md).
-
 # BroBot
 
 ### A Minecraft companion that turns commands into real actions
@@ -10,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest measured build completed 10/20 (50%) on the same twenty worlds where the earlier build completed 8/20 (40%). These are now known development cases, with every failed run retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest measured build completed 10/20 (50%) on the same twenty known worlds, matching every success and failure of the previous published build. These are now known development cases, with every failed run retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
@@ -166,7 +164,20 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ## Measured, not guessed
 
-### Transit recovery checkpoint · October 1, 2026
+### Standing-cell recovery checkpoint · October 1, 2026
+
+- **254 automated checks**, **17/17 prepared live phases**, **11/11 prepared skill cases**, and **20/20 local controls** pass on frozen app `a3e2242`
+- **10/20 known worlds completed**, matching the previous published `682bf46` build on every seed; ten failures remain
+- The intermediate `6b26ad5` experiment scored **8/20** and is retained, including its two losses
+- A separate targeted replay completed in **107.416 seconds**, with observed inventory gains, a stone pickaxe and furnace, and a living return to the start
+- A bounded pickup probe can now certify one visible removal that creates safe standing space near a tracked drop, while checking both walking directions
+- `action descend_notch {}` is a separately invoked experimental one-leaf descent; it does not automatically descend a whole canopy
+
+[Complete current evidence and tested-file manifest](benchmarks/results/pocket-standing-2026-10-01/) · [Recovery mechanism and limits](docs/FOLIAGE_RECOVERY.md)
+
+These are known-case single-run outcomes. Variable mob and item timing means the paired successes do not isolate the fix's effect. One server startup stopped before world creation and was restarted unchanged; no completed gameplay result was replaced. Stable 1.0, rendered Windows/Mac or actual Bedrock-client gameplay, and paid-planner behavior remain unverified.
+
+### Previous transit recovery checkpoint · October 1, 2026
 
 - **219 automated checks**, **17/17 prepared live phases**, **11/11 prepared skill cases** and **20/20 local controls** pass on clean app `682bf46`
 - All three original known worlds completed the full starter objective, in 159.168s, 94.701s and 91.327s
@@ -176,7 +187,7 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 [Current records and exact tested-file manifest](benchmarks/results/transit-2026-10-01/) · [How safe transit clearance works](docs/PICKUP_TRANSIT.md)
 
-The hosted development download includes this measured transit-recovery checkpoint. Individual runs can vary with mob/item timing, and these worlds informed development. Stable 1.0, rendered Windows/Mac client gameplay and paid-planner behavior remain unverified.
+This previous checkpoint remains preserved for comparison. Individual runs can vary with mob/item timing, and these worlds informed development. Stable 1.0, rendered Windows/Mac client gameplay and paid-planner behavior remain unverified.
 
 ### Earlier measured recovery checkpoint
 

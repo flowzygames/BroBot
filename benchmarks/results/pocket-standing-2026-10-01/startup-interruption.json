@@ -1,0 +1,9 @@
+{
+  "observedAt": "2026-10-01T22:59:18.472839+00:00",
+  "seed": "355620996",
+  "status": "infrastructure-interrupted-before-gameplay",
+  "directory": "2026-10-01T22-55-44-796Z-1ee94841",
+  "reason": "Execution session no longer existed and no benchmark/server process remained. Startup log ends at server remapping; no world or bot memory was created.",
+  "completedCasesPreserved": 17,
+  "retryPolicy": "Retain startup attempt, resume same source and settings for seed355620996, then previously unstarted1276821265 and1244186709. No completed gameplay result replaced."
+}

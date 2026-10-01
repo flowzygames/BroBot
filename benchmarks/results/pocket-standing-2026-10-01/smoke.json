@@ -1,0 +1,332 @@
+{
+  "started": "2026-10-01T23:06:49.231Z",
+  "minecraft": "1.21.8",
+  "directory": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/smoke/2026-10-01T23-06-49-217Z-20770889",
+  "fixture": "Fresh isolated world and console-prepared arena. Initial gathering/crafting/building starts with empty survival inventory. Later furnace tests supply cobblestone, sand and coal; equipment/food tests supply a chestplate, shield and cooked beef and apply hunger; portal tests supply obsidian, flint and steel, and eyes. The bot remains in survival. This is a skills integration test, not an autonomous Ender Dragon run.",
+  "selection": "full integration suite",
+  "phases": [
+    {
+      "name": "Paper and bridge startup",
+      "passed": true,
+      "elapsedMs": 15494,
+      "details": {
+        "edition": "MCPE",
+        "motd": "\"BroBot - local Minecraft companion\"",
+        "protocol": "2193",
+        "version": "26.51"
+      }
+    },
+    {
+      "name": "Mineflayer joins the real server",
+      "passed": true,
+      "elapsedMs": 2233,
+      "details": {
+        "position": {
+          "x": 0.5,
+          "y": 65,
+          "z": 0.5
+        },
+        "mode": "survival"
+      }
+    },
+    {
+      "name": "Walk around a grass corner with sub-epsilon contact precision",
+      "passed": true,
+      "elapsedMs": 4375,
+      "details": {
+        "fixture": "Prepared grass corner and exact saved contact, repeated three times; no terrain modification by the bot.",
+        "trials": [
+          {
+            "elapsedMs": 413,
+            "corrections": 0,
+            "resets": [],
+            "position": {
+              "x": -26.49,
+              "y": 69,
+              "z": -3.5
+            }
+          },
+          {
+            "elapsedMs": 452,
+            "corrections": 0,
+            "resets": [],
+            "position": {
+              "x": -26.49,
+              "y": 69,
+              "z": -3.5
+            }
+          },
+          {
+            "elapsedMs": 406,
+            "corrections": 0,
+            "resets": [],
+            "position": {
+              "x": -26.49,
+              "y": 69,
+              "z": -3.5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Walk around a solid obstacle without digging",
+      "passed": true,
+      "elapsedMs": 1963,
+      "details": {
+        "arrived": true,
+        "position": {
+          "x": 8.31,
+          "y": 65,
+          "z": 4.5
+        },
+        "target": {
+          "x": 8,
+          "y": 65,
+          "z": 4
+        },
+        "radius": 0
+      }
+    },
+    {
+      "name": "Mine four logs by hand and collect real drops in survival",
+      "passed": true,
+      "elapsedMs": 16106,
+      "details": {
+        "completed": true,
+        "requested": 4,
+        "mined": 4,
+        "inventory_changes": {
+          "oak_log": 4
+        },
+        "remaining_drops": [],
+        "pickup_failures": [],
+        "failures": [],
+        "search_limited": false,
+        "planning_limited": false
+      }
+    },
+    {
+      "name": "Craft sixteen planks from gathered logs",
+      "passed": true,
+      "elapsedMs": 3077,
+      "details": {
+        "item": "oak_planks",
+        "requested": 16,
+        "crafted": 16,
+        "inventory_count": 16,
+        "recipe_batches": 4
+      }
+    },
+    {
+      "name": "Place and verify an inventory block",
+      "passed": true,
+      "elapsedMs": 1000,
+      "details": {
+        "placed": true,
+        "block": "oak_planks",
+        "position": {
+          "x": 10,
+          "y": 65,
+          "z": 4
+        }
+      }
+    },
+    {
+      "name": "Build and verify a four-block floor from inventory",
+      "passed": true,
+      "elapsedMs": 1450,
+      "details": {
+        "completed": true,
+        "block": "oak_planks",
+        "expected": 4,
+        "placed": 4,
+        "already_present": 0,
+        "verified": 4,
+        "remaining": [],
+        "failures": []
+      }
+    },
+    {
+      "name": "Craft a table, sticks, and wooden pickaxe in survival",
+      "passed": true,
+      "elapsedMs": 5832,
+      "details": {
+        "table": {
+          "item": "crafting_table",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "sticks": {
+          "item": "stick",
+          "requested": 4,
+          "crafted": 4,
+          "inventory_count": 4,
+          "recipe_batches": 1
+        },
+        "pickaxe": {
+          "item": "wooden_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "tablePosition": {
+          "x": 9,
+          "y": 65,
+          "z": 1
+        }
+      }
+    },
+    {
+      "name": "Smelt glass in a crafted furnace using supplied test materials",
+      "passed": true,
+      "elapsedMs": 25064,
+      "details": {
+        "furnace": {
+          "item": "furnace",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "smelt": {
+          "input": "sand",
+          "output": "glass",
+          "smelted": 1,
+          "furnace": {
+            "x": 9,
+            "y": 65,
+            "z": 2
+          },
+          "fuel_added": {
+            "item": "coal",
+            "count": 1
+          },
+          "existing_heat_seconds": 0
+        },
+        "reusedHeat": {
+          "input": "sand",
+          "output": "glass",
+          "smelted": 1,
+          "furnace": {
+            "x": 9,
+            "y": 65,
+            "z": 2
+          },
+          "fuel_added": {
+            "item": null,
+            "count": 0
+          },
+          "existing_heat_seconds": 67.55
+        }
+      }
+    },
+    {
+      "name": "Equip supplied armor and offhand shield with server confirmation",
+      "passed": true,
+      "elapsedMs": 504,
+      "details": {
+        "armor": {
+          "equipped": "iron_chestplate",
+          "destination": "torso"
+        },
+        "shield": {
+          "equipped": "shield",
+          "destination": "off-hand"
+        }
+      }
+    },
+    {
+      "name": "Eat supplied food after controlled hunger and verify recovery",
+      "passed": true,
+      "elapsedMs": 6076,
+      "details": {
+        "before": 17,
+        "after": 20,
+        "details": {
+          "eaten": "cooked_beef",
+          "food": 20,
+          "health": 20
+        }
+      }
+    },
+    {
+      "name": "Cancel active walking and release action lock",
+      "passed": true,
+      "elapsedMs": 1003,
+      "details": {
+        "stoppedAt": {
+          "x": 11.223446428490472,
+          "y": 65,
+          "z": 2.4900173242538433
+        }
+      }
+    },
+    {
+      "name": "In-game commands obey the configured owner and transfer an item",
+      "passed": true,
+      "elapsedMs": 7507,
+      "details": {
+        "nonOwnerIgnored": true,
+        "ownerCommandExecuted": true,
+        "transferred": {
+          "dropped_for": "SmokeOwner",
+          "item": "oak_planks",
+          "count": 1,
+          "delivery": "dropped nearby; recipient pickup unverified"
+        },
+        "recipientReceived": 1,
+        "materials": "plank crafted from gathered logs"
+      }
+    },
+    {
+      "name": "Construct and light Nether portal with supplied test materials",
+      "passed": true,
+      "elapsedMs": 10770,
+      "details": {
+        "active": true,
+        "placed": 14,
+        "entry": {
+          "x": 17,
+          "y": 66,
+          "z": -6
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "name": "Activate an End portal ring with supplied test eyes",
+      "passed": true,
+      "elapsedMs": 25131,
+      "details": {
+        "active": true,
+        "inserted": 12,
+        "center": {
+          "x": 24,
+          "y": 64,
+          "z": 8
+        }
+      }
+    },
+    {
+      "name": "Enter the active End portal and observe dimension change",
+      "passed": true,
+      "elapsedMs": 1219,
+      "details": {
+        "transitioned": true,
+        "from": "overworld",
+        "to": "end",
+        "position": {
+          "x": 100.5,
+          "y": 49,
+          "z": 0.5
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-01T23:08:59.876Z"
+}

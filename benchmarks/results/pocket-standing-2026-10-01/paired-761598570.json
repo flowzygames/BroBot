@@ -1,0 +1,3278 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-pocket-254",
+  "commit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "761598570",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T22:17:24.522Z",
+  "status": "passed",
+  "passed": true,
+  "trace": [
+    {
+      "at": "2026-10-01T22:17:50.955Z",
+      "position": {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -1
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -1
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": 0
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": 1
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": 1
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": -1
+        },
+        {
+          "name": "short_grass",
+          "x": 0,
+          "y": 68,
+          "z": -1
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": 0
+        },
+        {
+          "name": "short_grass",
+          "x": 0,
+          "y": 68,
+          "z": 0
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": 1
+        },
+        {
+          "name": "short_grass",
+          "x": 0,
+          "y": 68,
+          "z": 1
+        },
+        {
+          "name": "grass_block",
+          "x": 1,
+          "y": 67,
+          "z": -1
+        },
+        {
+          "name": "short_grass",
+          "x": 1,
+          "y": 68,
+          "z": -1
+        },
+        {
+          "name": "grass_block",
+          "x": 1,
+          "y": 67,
+          "z": 0
+        },
+        {
+          "name": "grass_block",
+          "x": 1,
+          "y": 67,
+          "z": 1
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:17:55.956Z",
+      "position": {
+        "x": -0.5,
+        "y": 68,
+        "z": -4.4
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "dirt",
+          "x": -2,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_log",
+          "x": -2,
+          "y": 69,
+          "z": -5
+        },
+        {
+          "name": "oak_log",
+          "x": -2,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": 0,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": 0,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": 0,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": 0,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": 0,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": 0,
+          "y": 70,
+          "z": -4
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:00.957Z",
+      "position": {
+        "x": -1.34,
+        "y": 68,
+        "z": -4.48
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -3,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_log",
+          "x": -2,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -4
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:05.956Z",
+      "position": {
+        "x": -1.34,
+        "y": 68,
+        "z": -4.48
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "oak_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -3,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -4
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:11.140Z",
+      "position": {
+        "x": -1.34,
+        "y": 68,
+        "z": -4.48
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 6,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -3,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -3,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -2,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -2,
+          "y": 70,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -6
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -5
+        },
+        {
+          "name": "grass_block",
+          "x": -1,
+          "y": 67,
+          "z": -4
+        },
+        {
+          "name": "short_grass",
+          "x": -1,
+          "y": 68,
+          "z": -4
+        },
+        {
+          "name": "oak_leaves",
+          "x": -1,
+          "y": 70,
+          "z": -4
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:16.140Z",
+      "position": {
+        "x": -9.39,
+        "y": 66.85,
+        "z": -2.53
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -11,
+          "y": 65,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -11,
+          "y": 65,
+          "z": -2
+        },
+        {
+          "name": "grass_block",
+          "x": -11,
+          "y": 66,
+          "z": -2
+        },
+        {
+          "name": "short_grass",
+          "x": -11,
+          "y": 67,
+          "z": -2
+        },
+        {
+          "name": "short_grass",
+          "x": -10,
+          "y": 65,
+          "z": -4
+        },
+        {
+          "name": "grass_block",
+          "x": -10,
+          "y": 65,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -10,
+          "y": 65,
+          "z": -2
+        },
+        {
+          "name": "dirt",
+          "x": -10,
+          "y": 66,
+          "z": -2
+        },
+        {
+          "name": "grass_block",
+          "x": -10,
+          "y": 67,
+          "z": -2
+        },
+        {
+          "name": "dirt",
+          "x": -9,
+          "y": 65,
+          "z": -2
+        },
+        {
+          "name": "dirt",
+          "x": -9,
+          "y": 66,
+          "z": -2
+        },
+        {
+          "name": "grass_block",
+          "x": -9,
+          "y": 67,
+          "z": -2
+        },
+        {
+          "name": "short_grass",
+          "x": -9,
+          "y": 68,
+          "z": -2
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:21.143Z",
+      "position": {
+        "x": 6.56,
+        "y": 62,
+        "z": -0.71
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 61,
+          "z": -2
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 62,
+          "z": -2
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 63,
+          "z": -2
+        },
+        {
+          "name": "dirt",
+          "x": 5,
+          "y": 64,
+          "z": -2
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 61,
+          "z": -1
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 62,
+          "z": -1
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 63,
+          "z": -1
+        },
+        {
+          "name": "dirt",
+          "x": 5,
+          "y": 64,
+          "z": -1
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 61,
+          "z": 0
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 62,
+          "z": 0
+        },
+        {
+          "name": "copper_ore",
+          "x": 5,
+          "y": 63,
+          "z": 0
+        },
+        {
+          "name": "dirt",
+          "x": 5,
+          "y": 64,
+          "z": 0
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 61,
+          "z": -1
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 61,
+          "z": 0
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 61,
+          "z": -1
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 61,
+          "z": 0
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:26.227Z",
+      "position": {
+        "x": 4.69,
+        "y": 66,
+        "z": 9.55
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 1
+        },
+        {
+          "name": "cobblestone",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 66,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 67,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 68,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 9
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 67,
+          "z": 9
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 68,
+          "z": 9
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 66,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 10
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 68,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 4,
+          "y": 66,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 4,
+          "y": 67,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 4,
+          "y": 68,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 9
+        },
+        {
+          "name": "dirt",
+          "x": 4,
+          "y": 68,
+          "z": 9
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 9
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 10
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:31.365Z",
+      "position": {
+        "x": 4.52,
+        "y": 66,
+        "z": 11.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 3
+        },
+        {
+          "name": "cobblestone",
+          "count": 3,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 10
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 68,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 11
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 11
+        },
+        {
+          "name": "dirt",
+          "x": 3,
+          "y": 68,
+          "z": 11
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 66,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 68,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 11
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 10
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 11
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 12
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:36.365Z",
+      "position": {
+        "x": 4.51,
+        "y": 66,
+        "z": 13.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 5
+        },
+        {
+          "name": "cobblestone",
+          "count": 5,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 68,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 68,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 65,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 66,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 67,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 3,
+          "y": 68,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 68,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 68,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 12
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 14
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:41.366Z",
+      "position": {
+        "x": 5.32,
+        "y": 66,
+        "z": 14.7
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 7
+        },
+        {
+          "name": "cobblestone",
+          "count": 7,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 68,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 68,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 65,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 67,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 4,
+          "y": 68,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 68,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 13
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 14
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 15
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:46.365Z",
+      "position": {
+        "x": 6.5,
+        "y": 66,
+        "z": 16.59
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 10
+        },
+        {
+          "name": "cobblestone",
+          "count": 9,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 68,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 16
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 67,
+          "z": 16
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 68,
+          "z": 16
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 65,
+          "z": 17
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 67,
+          "z": 17
+        },
+        {
+          "name": "stone",
+          "x": 5,
+          "y": 68,
+          "z": 17
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 16
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 65,
+          "z": 17
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 68,
+          "z": 17
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 65,
+          "z": 15
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 65,
+          "z": 16
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 65,
+          "z": 17
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:51.366Z",
+      "position": {
+        "x": 7.5,
+        "y": 65,
+        "z": 7.54
+      },
+      "health": 20,
+      "food": 20,
+      "action": "go_to",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 11
+        },
+        {
+          "name": "cobblestone",
+          "count": 11,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 64,
+          "z": 6
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 64,
+          "z": 7
+        },
+        {
+          "name": "stone",
+          "x": 6,
+          "y": 64,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 64,
+          "z": 6
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 64,
+          "z": 7
+        },
+        {
+          "name": "stone",
+          "x": 7,
+          "y": 64,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 8,
+          "y": 64,
+          "z": 6
+        },
+        {
+          "name": "stone",
+          "x": 8,
+          "y": 64,
+          "z": 7
+        },
+        {
+          "name": "stone",
+          "x": 8,
+          "y": 64,
+          "z": 8
+        },
+        {
+          "name": "stone",
+          "x": 8,
+          "y": 65,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 8,
+          "y": 66,
+          "z": 8
+        },
+        {
+          "name": "dirt",
+          "x": 8,
+          "y": 67,
+          "z": 8
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:18:56.366Z",
+      "position": {
+        "x": -4.16,
+        "y": 63,
+        "z": -3.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "go_to",
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 11
+        },
+        {
+          "name": "cobblestone",
+          "count": 11,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "granite",
+          "x": -6,
+          "y": 62,
+          "z": -5
+        },
+        {
+          "name": "granite",
+          "x": -6,
+          "y": 62,
+          "z": -4
+        },
+        {
+          "name": "granite",
+          "x": -6,
+          "y": 62,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -6,
+          "y": 63,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -6,
+          "y": 65,
+          "z": -3
+        },
+        {
+          "name": "granite",
+          "x": -5,
+          "y": 62,
+          "z": -5
+        },
+        {
+          "name": "granite",
+          "x": -5,
+          "y": 62,
+          "z": -4
+        },
+        {
+          "name": "granite",
+          "x": -5,
+          "y": 62,
+          "z": -3
+        },
+        {
+          "name": "stone",
+          "x": -5,
+          "y": 63,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -5,
+          "y": 64,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -5,
+          "y": 65,
+          "z": -3
+        },
+        {
+          "name": "granite",
+          "x": -4,
+          "y": 62,
+          "z": -5
+        },
+        {
+          "name": "granite",
+          "x": -4,
+          "y": 62,
+          "z": -4
+        },
+        {
+          "name": "dirt",
+          "x": -4,
+          "y": 65,
+          "z": -4
+        },
+        {
+          "name": "granite",
+          "x": -4,
+          "y": 62,
+          "z": -3
+        },
+        {
+          "name": "stone",
+          "x": -4,
+          "y": 63,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -4,
+          "y": 64,
+          "z": -3
+        },
+        {
+          "name": "dirt",
+          "x": -4,
+          "y": 65,
+          "z": -3
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:19:01.365Z",
+      "position": {
+        "x": -4.68,
+        "y": 68,
+        "z": -5.32
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 11
+        },
+        {
+          "name": "cobblestone",
+          "count": 11,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "tall_grass",
+          "x": -6,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "tall_grass",
+          "x": -6,
+          "y": 68,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -6,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -5,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -4,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -7
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -4,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -5
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:19:06.365Z",
+      "position": {
+        "x": -4.68,
+        "y": 68,
+        "z": -5.32
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 11
+        },
+        {
+          "name": "cobblestone",
+          "count": 8,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "tall_grass",
+          "x": -6,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "tall_grass",
+          "x": -6,
+          "y": 68,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -6,
+          "y": 68,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -5,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "short_grass",
+          "x": -4,
+          "y": 67,
+          "z": -7
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -7
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -6
+        },
+        {
+          "name": "grass_block",
+          "x": -4,
+          "y": 67,
+          "z": -5
+        },
+        {
+          "name": "oak_leaves",
+          "x": -4,
+          "y": 70,
+          "z": -5
+        }
+      ]
+    }
+  ],
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 68,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 80,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 11,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 2,
+          "y": 68,
+          "z": -5
+        },
+        "distance": 5.7
+      },
+      {
+        "id": 10,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 0.4,
+          "y": 68,
+          "z": -7
+        },
+        "distance": 7.5
+      },
+      {
+        "id": 12,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 2,
+          "y": 68,
+          "z": -7
+        },
+        "distance": 7.6
+      },
+      {
+        "id": 13,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 2,
+          "y": 68,
+          "z": -8
+        },
+        "distance": 8.6
+      },
+      {
+        "id": 64,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 24.54,
+          "y": 53.03,
+          "z": 10.39
+        },
+        "distance": 30
+      },
+      {
+        "id": 73,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -6.46,
+          "y": 37.92,
+          "z": -5.33
+        },
+        "distance": 31.4
+      },
+      {
+        "id": 72,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -6.82,
+          "y": 37.02,
+          "z": -4.4
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 74,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -11.25,
+          "y": 37.1,
+          "z": -8.39
+        },
+        "distance": 34.2
+      },
+      {
+        "id": 168,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 41,
+          "z": 5.5
+        },
+        "distance": 36.5
+      },
+      {
+        "id": 166,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -26.5,
+          "y": 41,
+          "z": 2.5
+        },
+        "distance": 38.2
+      },
+      {
+        "id": 165,
+        "name": "enderman",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -26.5,
+          "y": 41,
+          "z": 3.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 21,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -27,
+          "y": 65,
+          "z": -26
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 131,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -19.5,
+          "y": 35,
+          "z": -4.5
+        },
+        "distance": 38.9
+      },
+      {
+        "id": 167,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -26.5,
+          "y": 41,
+          "z": 8.5
+        },
+        "distance": 39
+      },
+      {
+        "id": 20,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -28,
+          "y": 64,
+          "z": -26
+        },
+        "distance": 39.1
+      },
+      {
+        "id": 130,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -21.5,
+          "y": 35,
+          "z": -1.5
+        },
+        "distance": 39.7
+      },
+      {
+        "id": 23,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -27,
+          "y": 64,
+          "z": -28
+        },
+        "distance": 39.8
+      },
+      {
+        "id": 22,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -27,
+          "y": 64,
+          "z": -29
+        },
+        "distance": 40.5
+      },
+      {
+        "id": 31,
+        "name": "armadillo",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -43,
+          "y": 71,
+          "z": 6
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 156,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -19.5,
+          "y": 29,
+          "z": 8.5
+        },
+        "distance": 44.6
+      },
+      {
+        "id": 67,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 6.5,
+          "y": 52,
+          "z": 42.5
+        },
+        "distance": 45.3
+      },
+      {
+        "id": 29,
+        "name": "armadillo",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -45,
+          "y": 71,
+          "z": 9
+        },
+        "distance": 46.4
+      },
+      {
+        "id": 38,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 27,
+          "y": 64,
+          "z": -38
+        },
+        "distance": 46.9
+      },
+      {
+        "id": 36,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 27,
+          "y": 64,
+          "z": -39
+        },
+        "distance": 47.7
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "b69dd2ba-42a3-4ae9-91b5-3a7c1910a851"
+  },
+  "elapsedMs": 77540,
+  "job": {
+    "version": 1,
+    "id": "b69dd2ba-42a3-4ae9-91b5-3a7c1910a851",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 14,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {
+      "oak_log": [],
+      "stone": []
+    },
+    "history": [
+      {
+        "at": "2026-10-01T22:18:13.297Z",
+        "action": "craft",
+        "args": {
+          "item": "wooden_pickaxe",
+          "count": 1
+        },
+        "reason": "Craft the first mining tool.",
+        "result": {
+          "item": "wooden_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:18:30.546Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 3,
+          "mined": 3,
+          "inventory_changes": {
+            "cobblestone": 3
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:18:39.945Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {
+            "cobblestone": 4
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:18:49.196Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {
+            "cobblestone": 4
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:19:01.242Z",
+        "action": "go_to",
+        "args": {
+          "x": -3,
+          "y": 68,
+          "z": -6,
+          "radius": 2
+        },
+        "reason": "Return to an observed crafting table instead of searching for more wood.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": -4.68,
+            "y": 68,
+            "z": -5.32
+          },
+          "target": {
+            "x": -3,
+            "y": 68,
+            "z": -6
+          },
+          "radius": 2
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:19:03.494Z",
+        "action": "craft",
+        "args": {
+          "item": "stone_pickaxe",
+          "count": 1
+        },
+        "reason": "Upgrade to a stone pickaxe.",
+        "result": {
+          "item": "stone_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:19:06.623Z",
+        "action": "craft",
+        "args": {
+          "item": "furnace",
+          "count": 1
+        },
+        "reason": "Craft a furnace from eight verified cobblestone.",
+        "result": {
+          "item": "furnace",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:19:08.012Z",
+        "action": "go_to",
+        "args": {
+          "x": 0,
+          "y": 68,
+          "z": 0,
+          "radius": 1
+        },
+        "reason": "Return to the job starting point with the starter kit.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": 0.5,
+            "y": 68,
+            "z": -0.5
+          },
+          "target": {
+            "x": 0,
+            "y": 68,
+            "z": 0
+          },
+          "radius": 1
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-01T22:17:50.957Z",
+    "recoverDropIds": [],
+    "status": "complete",
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "tables": [
+      {
+        "x": -3,
+        "y": 68,
+        "z": -6
+      }
+    ],
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 1
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 68,
+      "z": -0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1620,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 11
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 10,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -15.46,
+          "y": 66,
+          "z": -8.8
+        },
+        "distance": 18.1
+      },
+      {
+        "id": 21,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -13.79,
+          "y": 67,
+          "z": -13.79
+        },
+        "distance": 19.5
+      },
+      {
+        "id": 22,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -23.69,
+          "y": 69,
+          "z": 6.82
+        },
+        "distance": 25.3
+      },
+      {
+        "id": 13,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 16.07,
+          "y": 69,
+          "z": -26.15
+        },
+        "distance": 30
+      },
+      {
+        "id": 72,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 8.43,
+          "y": 41.1,
+          "z": -14.25
+        },
+        "distance": 31.2
+      },
+      {
+        "id": 12,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 25.65,
+          "y": 68,
+          "z": -19.2
+        },
+        "distance": 31.3
+      },
+      {
+        "id": 11,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 18.07,
+          "y": 69,
+          "z": -27.06
+        },
+        "distance": 31.9
+      },
+      {
+        "id": 74,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -8.39,
+          "y": 38.1,
+          "z": -7.75
+        },
+        "distance": 32
+      },
+      {
+        "id": 20,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -26.2,
+          "y": 67,
+          "z": -19.25
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 342,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 2.19,
+          "y": 38,
+          "z": -15.13
+        },
+        "distance": 33.4
+      },
+      {
+        "id": 325,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 28.52,
+          "y": 64,
+          "z": 17.82
+        },
+        "distance": 33.7
+      },
+      {
+        "id": 318,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 52,
+          "z": -21.8
+        },
+        "distance": 35.2
+      },
+      {
+        "id": 168,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -23.49,
+          "y": 41,
+          "z": 1.76
+        },
+        "distance": 36.2
+      },
+      {
+        "id": 64,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 25.7,
+          "y": 45.43,
+          "z": 15.52
+        },
+        "distance": 37.4
+      },
+      {
+        "id": 399,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -26.5,
+          "y": 40,
+          "z": -2.5
+        },
+        "distance": 38.9
+      },
+      {
+        "id": 167,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -28.16,
+          "y": 41,
+          "z": -1.65
+        },
+        "distance": 39.4
+      },
+      {
+        "id": 38,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 28.1,
+          "y": 66,
+          "z": -28.83
+        },
+        "distance": 39.6
+      },
+      {
+        "id": 131,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -22.12,
+          "y": 35,
+          "z": -1.99
+        },
+        "distance": 40
+      },
+      {
+        "id": 130,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -22.43,
+          "y": 35,
+          "z": -1.3
+        },
+        "distance": 40.2
+      },
+      {
+        "id": 23,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -25.75,
+          "y": 65,
+          "z": -32.56
+        },
+        "distance": 41.5
+      },
+      {
+        "id": 185,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -17.5,
+          "y": 48,
+          "z": 32.5
+        },
+        "distance": 42.6
+      },
+      {
+        "id": 165,
+        "name": "enderman",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -30.54,
+          "y": 39,
+          "z": 9.55
+        },
+        "distance": 43.7
+      },
+      {
+        "id": 203,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 27.8,
+          "y": 59,
+          "z": 32.52
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 360,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 3.5,
+          "y": 34,
+          "z": 27.5
+        },
+        "distance": 44.1
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "b69dd2ba-42a3-4ae9-91b5-3a7c1910a851",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 68,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 14,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {
+        "oak_log": [],
+        "stone": []
+      },
+      "history": [
+        {
+          "at": "2026-10-01T22:18:13.297Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "reason": "Craft the first mining tool.",
+          "result": {
+            "item": "wooden_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:18:30.546Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 3,
+            "mined": 3,
+            "inventory_changes": {
+              "cobblestone": 3
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:18:39.945Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {
+              "cobblestone": 4
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:18:49.196Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {
+              "cobblestone": 4
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:19:01.242Z",
+          "action": "go_to",
+          "args": {
+            "x": -3,
+            "y": 68,
+            "z": -6,
+            "radius": 2
+          },
+          "reason": "Return to an observed crafting table instead of searching for more wood.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": -4.68,
+              "y": 68,
+              "z": -5.32
+            },
+            "target": {
+              "x": -3,
+              "y": 68,
+              "z": -6
+            },
+            "radius": 2
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:19:03.494Z",
+          "action": "craft",
+          "args": {
+            "item": "stone_pickaxe",
+            "count": 1
+          },
+          "reason": "Upgrade to a stone pickaxe.",
+          "result": {
+            "item": "stone_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:19:06.623Z",
+          "action": "craft",
+          "args": {
+            "item": "furnace",
+            "count": 1
+          },
+          "reason": "Craft a furnace from eight verified cobblestone.",
+          "result": {
+            "item": "furnace",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:19:08.012Z",
+          "action": "go_to",
+          "args": {
+            "x": 0,
+            "y": 68,
+            "z": 0,
+            "radius": 1
+          },
+          "reason": "Return to the job starting point with the starter kit.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": 0.5,
+              "y": 68,
+              "z": -0.5
+            },
+            "target": {
+              "x": 0,
+              "y": 68,
+              "z": 0
+            },
+            "radius": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-01T22:17:50.957Z",
+      "recoverDropIds": [],
+      "status": "complete",
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "tables": [
+        {
+          "x": -3,
+          "y": 68,
+          "z": -6
+        }
+      ],
+      "evidence": {
+        "stone_pickaxe": 1,
+        "furnace": 1,
+        "homeDistance": 1
+      },
+      "stopping": false
+    }
+  },
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "finished": "2026-10-01T22:19:10.233Z"
+}

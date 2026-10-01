@@ -166,3 +166,7 @@ seconds, with verified pickup gains, stone pickaxe, furnace and a living return
 to the start. Its complete result is retained separately as targeted-pocket-254.json.
 This single targeted pass does not replace the retained 8/20 experiment or the
 released 10/20 score. A new complete same-20 regression is in progress.
+
+## Latest complete validation
+
+The new standing-cell application a3e2242 completed 10/20 known worlds, retaining every published 682 success and failure. Full prepared live 17/17, skills 11/11, controls 20/20 and all 254 automated checks also passed on that frozen source. Full records and the tested-code manifest are in benchmarks/results/pocket-standing-2026-10-01/. The targeted replay remains separate; neither it nor this known-case cohort establishes broad reliability or stable 1.0 readiness.
