@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { setTimeout as sleep } from 'node:timers/promises';
 
+export const STARTER_LOG_RADIUS = 48;
+const LOW_AIR_MESSAGE = 'Air is low. Work stopped, but the world keeps running. Bring BroBot above water before resuming.';
 const WOODS = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry', 'pale_oak'];
 const FOODS = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple'];
 const countItems = state => Object.fromEntries((state.inventory ?? []).map(i => [i.name, (state.inventory ?? []).filter(j => j.name === i.name).reduce((n, j) => n + j.count, 0)]));
@@ -16,6 +18,7 @@ export function nextStarterStep(state, job, observation = {}) {
   const has = name => (items[name] ?? 0) > 0;
   if (!state.connected || !state.position) return { blocked: 'Minecraft is disconnected.' };
   if (dimension(state.dimension) !== dimension(job.home.dimension)) return { blocked: 'The world dimension changed. Start a new job in the intended world.' };
+  if (Number.isFinite(state.oxygen) && state.oxygen <= 10) return { blocked: LOW_AIR_MESSAGE };
   if (state.health <= 8) return { blocked: 'Health is too low to continue gathering safely.' };
   if (distance(state.position, job.home.position) > 96) return { blocked: 'The starter job reached its 96-block travel boundary.' };
   if (state.food != null && state.food <= 10) {
@@ -32,7 +35,9 @@ export function nextStarterStep(state, job, observation = {}) {
     const wood = WOODS.find(w => has(`${w}_log`));
     if (wood) return action('craft', { item: `${wood}_planks`, count: Math.min(wanted - (items[`${wood}_planks`] ?? 0), items[`${wood}_log`] * 4) }, 'Turn carried logs into the needed planks.');
     if (!observation.wood) return { scout: 'No supported tree logs are visible nearby.' };
-    return action('collect', { block: `${observation.wood}_log`, count: Math.max(1, Math.min(3, Math.ceil(wanted / 4))), radius: 32 }, 'Gather only the wood currently needed.');
+    const startingTools = !['wooden_pickaxe', 'stone_pickaxe', 'iron_pickaxe', 'diamond_pickaxe', 'netherite_pickaxe'].some(has);
+    const logCount = startingTools ? 3 : Math.max(1, Math.min(3, Math.ceil(wanted / 4)));
+    return action('collect', { block: `${observation.wood}_log`, count: logCount, radius: STARTER_LOG_RADIUS }, startingTools ? 'Gather one bounded batch for the table, sticks and first pickaxe.' : 'Gather only the wood currently needed.');
   };
   const table = has('crafting_table') || observation.tableInReach;
   const ensureTable = () => {
@@ -70,6 +75,10 @@ export class SurvivalJob {
   save() { this.memory.set('survivalJob', this.job); }
   state() { return this.job ? structuredClone({ ...this.job, history: this.job.history.slice(-8), stopping: Boolean(this.active?.signal.aborted) }) : null; }
   stop(reason = 'Paused by player') { this.active?.abort(new Error(reason)); this.stopActions(reason); }
+  checkAir() {
+    const oxygen = this.snapshot().oxygen;
+    if (this.active && Number.isFinite(oxygen) && oxygen <= 10) this.stop(LOW_AIR_MESSAGE);
+  }
   start({ resume = false } = {}) {
     if (this.active) throw new Error('A starter job is already running or stopping.');
     const state = this.snapshot();
@@ -99,7 +108,7 @@ export class SurvivalJob {
       if (decision.name !== 'collect' || !result?.failures) return;
       this.job.excluded ??= {};
       const old = this.job.excluded[decision.args.block] ?? [];
-      const positions = result.failures.filter(f => f.position && /route|reach|planning|obstruct/i.test(f.error ?? '')).map(f => f.position);
+      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && /route|reach|planning|obstruct/i.test(f.error ?? '')).map(f => f.position);
       const unique = new Map([...old, ...positions].map(p => [JSON.stringify(p), p]));
       this.job.excluded[decision.args.block] = [...unique.values()].slice(-128);
     };
@@ -117,11 +126,23 @@ export class SurvivalJob {
       decision = nextStarterStep(this.snapshot(), this.job, observation);
       if (decision.blocked) throw new Error(decision.blocked);
       if (decision.complete) { this.job.status = 'complete'; this.job.evidence = decision.evidence; this.job.reason = 'Observed a stone pickaxe and furnace in inventory, alive and back at the start.'; this.log('survival', this.job.reason); return; }
-      if (recovery) { decision = recovery; recovery = null; }
+      if (recovery?.name === 'pickup') {
+        // A clearance action may already collect the tracked materials. Never
+        // turn its stale continuation into an unscoped trip after other litter.
+        const remaining = new Set(this.job.recoverDropIds ?? []);
+        recovery.args.entity_ids = (recovery.args.entity_ids ?? []).filter(id => remaining.has(id));
+        if (!recovery.args.entity_ids.length) recovery = null;
+      }
+      if (recovery) {
+        // Fresh inventory may already satisfy the next prerequisite. Do not
+        // chase leftover drops instead of crafting or taking a finished kit home.
+        if (decision.name === 'collect' || decision.scout) decision = recovery;
+        recovery = null;
+      }
       if (decision.name === 'pickup' && observation.pickupClearance && (this.job.clearanceDigs ?? 0) < 8) {
         this.job.clearanceDigs = (this.job.clearanceDigs ?? 0) + 1;
         decision = action('dig_at', observation.pickupClearance, 'Open safe headroom above an observed drop, then pick it up.');
-        recovery = action('pickup', { radius: 16 }, 'Pick up the materials after opening headroom.');
+        recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Pick up the materials after opening headroom.');
       }
       if (decision.scout) {
         if (this.job.scouts >= 8) throw new Error(`Exploration budget exhausted: ${decision.scout}`);
@@ -160,12 +181,21 @@ export class SurvivalJob {
         excludeFailures(decision, result);
         const initialItems = countItems(before), finalItems = countItems(after);
         const gained = Object.entries(finalItems).some(([name, count]) => count > (initialItems[name] ?? 0));
-        const progress = gained || (decision.name === 'explore' && distance(before.position, after.position) > 1) || (decision.name === 'go_to' && distance(after.position, decision.args) < distance(before.position, decision.args) - 1) || (after.food ?? 0) > (before.food ?? 0);
+        const terrainCleared = decision.name === 'dig_at' && result.mined === 1;
+        if (terrainCleared) {
+          // A verified local terrain change can invalidate an earlier blocked
+          // approach. Retry nearby resources while retaining distant failures.
+          for (const [block, positions] of Object.entries(this.job.excluded ?? {})) {
+            this.job.excluded[block] = positions.filter(p => distance(p, decision.args) > 6);
+          }
+          this.job.ignoredTables = (this.job.ignoredTables ?? []).filter(p => distance(p, decision.args) > 6);
+        }
+        const progress = gained || terrainCleared || (decision.name === 'explore' && distance(before.position, after.position) > 1) || (decision.name === 'go_to' && distance(after.position, decision.args) < distance(before.position, decision.args) - 1) || (after.food ?? 0) > (before.food ?? 0);
         remember({ action: decision.name, args: decision.args, reason: decision.reason, result, progress });
         if (progress) failures.clear();
         else failures.set(signature, (failures.get(signature) ?? 0) + 1);
         if (Array.isArray(result.remaining_drops)) this.job.recoverDropIds = result.remaining_drops.map(d => d.id).slice(0, 24);
-        if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16 }, 'Recover observed dropped materials before mining more.');
+        if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);

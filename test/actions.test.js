@@ -668,10 +668,10 @@ test('job movement boundary filters collection targets and constrains path nodes
   await actions.execute('collect', { block: 'oak_log', count: 1, radius: 8 });
   await assert.rejects(actions.execute('go_to', { x: 5, y: 64, z: 0, radius: 0 }), /movement boundary/);
   await actions.execute('go_to', { x: 1, y: 64, z: 0, radius: 0 });
-  assert.equal(movement.exclusionAreasStep.at(-1)({ position: inside }), 0);
-  assert.ok(movement.exclusionAreasStep.at(-1)({ position: outside }) > 100);
+  assert.equal(movement.exclusionStep({ position: inside }), 0);
+  assert.ok(movement.exclusionStep({ position: outside }) > 100);
   boundary = null;
-  assert.equal(movement.exclusionAreasStep.at(-1)({ position: outside }), 0);
+  assert.equal(movement.exclusionStep({ position: outside }), 0);
 });
 
 test('mining protects support under the full player footprint at a block edge', async () => {
@@ -702,3 +702,135 @@ test('return anchor permits a neighboring supported cell but never a two-block s
  const result = await createActions(bot).execute('explore',{direction:'north',distance:4,returnable:true});
  assert.equal(result.explored,true); assert.equal(plans,2);
 });
+
+test('wood collection prefers a reachable upper trunk over a distant supported tree base', async () => {
+ const bot=fakeBot(),upper=new Vec3(1,66,0),distant=new Vec3(10,64,0);
+ bot.putBlock('oak_log',upper);bot.putBlock('oak_log',distant);
+ for(const [x,z]of [[0,0],[-1,0],[1,0],[0,-1],[0,1]])bot.putBlock('dirt',distant.offset(x,-1,z));
+ bot.dig=async block=>{assert.ok(block.position.equals(upper));bot.removeBlock(upper);bot.addItem('oak_log');};
+ const result=await createActions(bot).execute('collect',{block:'oak_log',count:1,radius:16});assert.equal(result.inventory_changes.oak_log,1);
+});
+
+test('nearby hostiles remain visible when dropped items crowd the observation cap',()=>{
+ const bot=fakeBot();for(let id=2;id<40;id++)bot.entities[id]={id,name:'item',type:'other',position:new Vec3(0.6,64,0.6)};
+ bot.entities[100]={id:100,name:'creeper',type:'hostile',position:new Vec3(5,64,0.5)};
+ const state=createActions(bot).snapshot();assert.equal(state.entities.length,24);assert.equal(state.entities[0].id,100);assert.equal(state.entities[0].distance,4.5);
+});
+
+test('collection stops harvesting and pursuing when its shared planning budget is exhausted', async t => {
+  const bot = fakeBot()
+  let now = 0, plans = 0, digs = 0, pursuits = 0
+  t.mock.method(performance, 'now', () => now)
+  for (let x = 0; x < 8; x++) for (let z = -1; z <= 1; z++) bot.putBlock('dirt', new Vec3(x, 63, z))
+  bot.putBlock('oak_log', new Vec3(2, 64, 0))
+  bot.putBlock('oak_log', new Vec3(3, 64, 0))
+  bot.dig = async block => {
+    digs++; bot.removeBlock(block.position)
+    bot.entities[99] = { id: 99, name: 'item', position: new Vec3(4.5, 64, .5) }
+  }
+  bot.pathfinder.getPathFromTo = function * () { plans++; now += 7100; yield { result: { status: 'partial', path: [] } } }
+  bot.pathfinder.goto = async () => { pursuits++ }
+  const result = await createActions(bot).execute('collect', { block: 'oak_log', count: 2, radius: 8 })
+  assert.equal(digs, 1)
+  assert.equal(plans, 1)
+  assert.equal(pursuits, 0)
+  assert.equal(result.completed, false)
+  assert.equal(result.planning_limited, true)
+  assert.equal(result.remaining_drops[0].id, 99)
+  assert.equal(result.pickup_failures.length, 1)
+  assert.equal(result.pickup_failures[0].code, 'COLLECTION_PLANNING_LIMIT')
+  assert.deepEqual(result.inventory_changes, {})
+})
+
+test('pickup gives a farther item a turn before retrying the closest blocked item', async () => {
+  const bot = fakeBot(), planned = []
+  for (let x = 0; x < 8; x++) for (let z = -1; z <= 1; z++) bot.putBlock('dirt', new Vec3(x, 63, z))
+  bot.entities[10] = { id: 10, name: 'item', position: new Vec3(2.5, 64, .5) }
+  bot.entities[11] = { id: 11, name: 'item', position: new Vec3(5.5, 64, .5) }
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+    planned.push(goal.x)
+    yield { result: { status: goal.x === 2 ? 'noPath' : 'success', path: [{ x: goal.x, y: goal.y, z: goal.z }] } }
+  }
+  bot.pathfinder.goto = async goal => {
+    bot.entity.position = new Vec3(goal.x + .5, goal.y, goal.z + .5)
+    if (goal.x === 5) { delete bot.entities[11]; bot.addItem('oak_log'); delete bot.entities[10] }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.deepEqual(planned.slice(0, 2), [2, 5])
+  assert.equal(result.inventory_changes.oak_log, 1)
+  assert.equal(result.planning_limited, false)
+})
+
+test('pickup stops on cumulative planning exhaustion after fairly rotating targets and cells', async t => {
+  const bot = fakeBot(), planned = []
+  let now = 0
+  t.mock.method(performance, 'now', () => now)
+  for (let x = 0; x < 8; x++) for (let z = -1; z <= 1; z++) bot.putBlock('dirt', new Vec3(x, 63, z))
+  bot.entities[10] = { id: 10, name: 'item', position: new Vec3(2.5, 64, .5) }
+  bot.entities[11] = { id: 11, name: 'item', position: new Vec3(5.5, 64, .5) }
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+    planned.push([goal.x, goal.z]); now += 1601
+    yield { result: { status: 'partial', path: [] } }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 })
+  assert.equal(planned.length, 5)
+  assert.deepEqual(result.unreachable.map(f => f.id), [10, 11, 10, 11, 10])
+  assert.notDeepEqual(planned[0], planned[2])
+  assert.notDeepEqual(planned[1], planned[3])
+  assert.equal(result.planning_limited, true)
+  assert.equal(result.unreachable.at(-1).code, 'COLLECTION_PLANNING_LIMIT')
+  assert.equal(result.remaining_drops.length, 2)
+  assert.deepEqual(result.inventory_changes, {})
+})
+
+test('mining refuses a waterlogged target even when surrounding blocks are dry', async () => {
+  const bot = fakeBot()
+  bot.putBlock('oak_leaves', new Vec3(2, 64, 0), { isWaterlogged: true })
+  let dug = false
+  bot.dig = async () => { dug = true }
+  await assert.rejects(createActions(bot).execute('dig_at', { x: 2, y: 64, z: 0 }), /waterlogged/)
+  assert.equal(dug, false)
+})
+
+test('scoped pickup ignores unrelated drops and an empty target list does not move', async () => {
+  const bot = fakeBot(), pursued = []
+  for (let x=0;x<8;x++) for(let z=-1;z<=1;z++) bot.putBlock('dirt',new Vec3(x,63,z))
+  bot.entities[10] = { id:10, name:'item', position:new Vec3(2.5,64,.5) }
+  bot.entities[11] = { id:11, name:'item', position:new Vec3(5.5,64,.5) }
+  bot.pathfinder.goto = async goal => { pursued.push(goal.x); bot.entity.position = new Vec3(goal.x+.5,goal.y,goal.z+.5); delete bot.entities[11]; bot.addItem('cobblestone') }
+  const actions = createActions(bot)
+  const empty = await actions.execute('pickup', { radius:8, entity_ids:[] })
+  assert.deepEqual(empty.remaining_drops,[]); assert.equal(pursued.length,0)
+  const result = await actions.execute('pickup', { radius:8, entity_ids:[11] })
+  assert.deepEqual(pursued,[5]); assert.equal(result.inventory_changes.cobblestone,1); assert.ok(bot.entities[10]); assert.deepEqual(result.remaining_drops,[])
+  for (const entity_ids of ['all',[-1],[1.5],Array(65).fill(1)]) await assert.rejects(actions.execute('pickup',{entity_ids}),/valid item ids/)
+})
+
+test('starter movement avoids water while ordinary direct movement keeps its original policy', async () => {
+  const bot=fakeBot();let bounded=true,movement;
+  bot.pathfinder.setMovements=value=>{movement=value}
+  const actions=createActions(bot,{movementBoundary:()=>bounded?{center:{x:0,y:64,z:0},radius:20}:null})
+  await actions.execute('go_to',{x:2,y:64,z:0,radius:0})
+  assert.equal(movement.blocksToAvoid.has(registry.blocksByName.water.id),true)
+  assert.equal(movement.blocksToAvoid.has(registry.blocksByName.bubble_column.id),true)
+  bounded=false
+  await actions.execute('go_to',{x:3,y:64,z:0,radius:0})
+  assert.equal(movement.blocksToAvoid.has(registry.blocksByName.water.id),false)
+  assert.equal(movement.blocksToAvoid.has(registry.blocksByName.lava.id),true)
+})
+
+test('actual starter neighbor generation rejects water, aquatic plants and waterlogged standing cells', async () => {
+  const {default:loadBlock}=await import('prismarine-block'),{default:Move}=await import('mineflayer-pathfinder/lib/move.js')
+  const Block=loadBlock('1.21.11')
+  for(const name of ['water','bubble_column','kelp','kelp_plant','seagrass','tall_seagrass','oak_sign']) {
+    const bot=fakeBot();let bounded=true,movement
+    bot.blockAt=p=>{const q=p.floored(),column=q.x===1&&q.z===0&&(q.y===64||q.y===65);const b=Block.fromStateId(registry.blocksByName[q.y===63?'stone':column?name:'air'].defaultState,0);b.position=q;if(column&&name==='oak_sign')b.isWaterlogged=true;return b}
+    bot.pathfinder.setMovements=value=>{movement=value}
+    const actions=createActions(bot,{movementBoundary:()=>bounded?{center:{x:0,y:64,z:0},radius:20}:null})
+    await actions.execute('go_to',{x:0,y:64,z:0,radius:0})
+    const forward=()=>movement.getNeighbors(new Move(0,64,0,0,0)).some(p=>p.x===1&&p.y===64&&p.z===0)
+    assert.equal(forward(),false,`${name} must not be a starter walking destination`)
+    bounded=false;await actions.execute('go_to',{x:0,y:64,z:0,radius:0})
+    assert.equal(forward(),true,`${name} retains the original direct-command movement policy`)
+  }
+})

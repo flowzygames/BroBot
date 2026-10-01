@@ -11,7 +11,7 @@ Local follow-up to the planner and exposed-block selection patches. No change to
 - Item-aware pickup navigation releases its own goal and listeners as soon as the target is collected/disappears. Disappearance does not count as a verified inventory gain.
 - Bound each pickup navigation attempt by local timeout and stalled movement. Preserve caller cancellation and never clear a replacement movement goal.
 
-## Verification
+## Initial verification (historical)
 
 101 tests and syntax checks pass. New coverage includes one-way descent rejection, valid reverse routes, partial/timeout/terrain-modifying plan rejection, planning cancellation, item acquisition/disappearance, wrong-item events, stalled replans, local deadlines, goal replacement, unsafe headroom and listener cleanup.
 
@@ -26,3 +26,7 @@ The unchanged full real-server fixture suite passed all 16 phases, including gat
 Preflight establishes paths in the currently loaded world. It is not a proof against later terrain changes, moving entities, movement drift, interruption midway through a route, or mining away a block used by the planned return route. Planning budgets can conservatively reject a route that would be found with a longer search. Long pickup trips may require another bounded command. No automatic rescue digging/building was enabled.
 
 Tests are direct server controls and deterministic planner simulations, not live-model autonomous play or rendered Windows-client verification.
+
+## Current checkpoint
+
+See [the latest measured results](../benchmarks/RESULTS.md). Newer recovery work adds shared-budget exhaustion handling, fair pickup scheduling, tracked recovery IDs, starter-only dry-land path restrictions, and a narrowly scoped [collision-contact correction](COLLISION_CONTACT.md). An exhausted budget is not evidence that an unattempted block is unreachable. Stopping work does not pause Minecraft or guarantee rescue from a hazard.

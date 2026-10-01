@@ -1,3 +1,35 @@
+# Latest measured recovery checkpoint — October 1, 2026
+
+The application snapshot `c1e01963a8eea0b6446c47a1f4dd6302a91986f8` passed 194 automated checks, all 17 prepared live regression phases, all 11 prepared skill cases and all 20 local control/grammar cases. The published documentation/evidence commit may differ; application code is unchanged from this tested snapshot.
+
+| Development world | Complete starter and return | Elapsed |
+|---|---:|---:|
+| 718224 | Pass | 99.100s |
+| 42 | Pass | 182.106s |
+| 20260930 | Pass | 88.720s |
+| **Original cohort** | **3/3** | |
+| 314159 | Pass | 89.896s |
+| 271828 | Pass | 91.871s |
+| 8675309 | Fail | 274.493s |
+| **Additional cohort** | **2/3** | |
+
+All six runs used the same clean source, Linux/Node 24.19.0, Minecraft 1.21.8, normal survival, empty inventory and the fixed 300-second protocol. They had no supplied items or edited terrain. These seeds have informed development and are not a held-out set. The canopy failure reached the 64-step work limit while repeatedly failing to reach its crafting table; no completion is claimed.
+
+[Per-world summary records, cohort reports and prepared-test records](results/recovery-2026-10-01/) preserve the denominators and conditions. World records explicitly omit duplicate runtime history/trace; full local harness records and unsuccessful intermediate runs were retained. This small sample does not establish general reliability. Prepared skill fixtures supply materials and differ from natural survival. No paid model evaluation was run.
+
+## Diagnosed recovery problems
+
+- A microscopic collision-contact error could make the client predictor think it could sprint into a solid grass corner. A scoped predictor adapter now clips that inward motion; the exact prepared corner completed three consecutive trials in the earlier targeted replay, and the final full suite also passed its repeated-corner phase. See [the numerical analysis and limits](../docs/COLLISION_CONTACT.md).
+- A stale pickup continuation could run after clearance had already recovered all tracked drops, then pursue unrelated litter into water. Recovery now uses observed entity IDs and cancels empty continuations.
+- The installed Mineflayer modern shared oxygen field can contain another entity's air. The current snapshot reads only the bot's own mapped player metadata; earlier shared-field oxygen values must not be treated as proof of its air level.
+- Canopy and other difficult terrain still need more recovery work. Earlier static analysis showed one canopy state could descend but not walk back to stone under the existing no-dig/no-placement navigation policy. That analysis is diagnostic, not a claim about every later run's exact topology.
+
+The prior 1aa7788 same-source cohort passed 2/3 original and 1/3 additional worlds. Later targeted successes were not substituted into it; the table above is a complete rerun on c1e0196. Longer 600-second diagnostics remain separate from the fixed protocol. Windows/macOS rendered-client gameplay and live API planning remain unverified. This is a development checkpoint, not a stable 1.0 release.
+
+---
+
+## Preserved earlier results
+
 # BroBench results and recovery checkpoint
 
 ## Frozen comparison

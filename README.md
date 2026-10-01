@@ -164,16 +164,26 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ## Measured, not guessed
 
-### Recovery checkpoints
+### Latest recovery checkpoint Â· October 1, 2026
 
-- **160 automated tests pass**, plus source syntax checks
-- **16 real-server regression scenarios passed** on Linux before the final return-anchor refinement, including mining, crafting, movement, cancellation and supplied-material portal fixtures; the final rerun is pending
-- Development seed `718224` completed in **191.344 seconds** on the bounded-walk revision; seed `42` completed in **263.566 seconds** after the return-anchor refinement
-- The earlier recovery revision completed seed `20260930` in **215.975 seconds**. Each started empty and returned alive with a stone pickaxe and furnace
-- Check the latest [PR 7 CI results](https://github.com/flowzygames/BroBot/pull/7) for Windows/Ubuntu on Node 22/24
-- Actual rendered Windows Minecraft gameplay and live OpenAI planner behavior remain unverified here
+- **194 automated checks pass**, plus source syntax checks
+- **17/17 real-server regression phases pass**, including three repetitions of a previously troublesome grass-corner route
+- **11/11 prepared skill cases** and **20/20 local grammar/control cases** pass
+- **3/3 original development worlds** completed the full starter objective on one clean app revision: 99.100s, 182.106s and 88.720s
+- **2/3 additional development worlds** completed it: 89.896s and 91.871s. The canopy case stopped at the work-step limit while trying to reach its crafting table
+- Windows/Ubuntu Node 22/24 checks run on [PR 7](https://github.com/flowzygames/BroBot/pull/7). Actual rendered Windows/Mac gameplay and live paid-planner behavior remain unverified here
 
-These successes come from different development revisions, not one new aggregate score. The latest fixes are undergoing a complete same-revision multi-world evaluation. [Read the checkpoint and evidence](benchmarks/RESULTS.md).
+The tested app snapshot is `c1e0196`. These six worlds are known development cases, not held-out proof or a general reliability percentage. Every scheduled result, including the failed canopy case, is [published with its conditions](benchmarks/results/recovery-2026-10-01/). The original frozen comparison below remains unchanged.
+
+#### What improved
+
+- More reliable corner movement through a narrowly scoped floating-point collision correction
+- Fairer dropped-item recovery, bounded planning, and no more stale recovery trips after the tracked items are gone
+- Starter-only avoidance of water, aquatic plants and waterlogged standing cells, plus player-specific air checks
+- Better tree/table observation, batched starter materials, and safer support/liquid checks
+- Friendly platform launchers, direct offline gathering/crafting phrases, and clearer dashboard progress
+
+The build is still a **development preview**, not a completed stable 1.0. See the [evidence and remaining limits](benchmarks/RESULTS.md).
 
 ### Frozen BroBench comparison
 
@@ -208,7 +218,7 @@ Alpha 1 should mean a useful, dependable starter companion with clear failuresâ€
 - [ ] Evaluate optional language planning with a separately approved API budget
 - [ ] Expand toward food, shelter and longer progression after starter reliability improves
 
-There is no Alpha 1 release date yet. The starter job does not cover food production, shelter, night survival, iron progression or beating the game.
+Alpha 1 has not been declared ready. The starter job does not cover food production, shelter, night survival, iron progression or beating the game.
 
 ## For builders
 

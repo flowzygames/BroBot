@@ -1,0 +1,64 @@
+{
+  "sourceCommit": "c1e01963a8eea0b6446c47a1f4dd6302a91986f8",
+  "minecraft": "1.21.8",
+  "automatedChecks": 194,
+  "liveRegressionPhases": 17,
+  "groups": {
+    "core": {
+      "label": "Original development worlds",
+      "passed": 3,
+      "scheduled": 3,
+      "cases": [
+        {
+          "seed": "718224",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 99100,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "42",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 182106,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "20260930",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 88720,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        }
+      ]
+    },
+    "additional": {
+      "label": "Additional development worlds",
+      "passed": 2,
+      "scheduled": 3,
+      "cases": [
+        {
+          "seed": "314159",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 89896,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "271828",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 91871,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "8675309",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 274493,
+          "reason": "Starter job step budget reached. No completion claimed."
+        }
+      ]
+    }
+  }
+}
