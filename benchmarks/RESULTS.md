@@ -1,4 +1,47 @@
-# Latest workstation and recovery checkpoint — October 1, 2026
+# Latest pickup and pause-recovery checkpoint — October 1, 2026
+
+Tested clean application `1e7ab1f96656cabcdfd28c4f077ce49699e0234a`: **208 automated checks**, **17/17 prepared live regression phases**, **11/11 prepared skill cases**, and **20/20 local controls**. All ten known-world reruns used this same frozen source. The source manifest verifies the tested application bytes in a documentation/evidence package.
+
+| Cohort / world | Complete starter and return | Elapsed |
+|---|---:|---:|
+| 718224 | Pass | 100.478s |
+| 42 | Pass | 158.151s |
+| 20260930 | Pass | 76.891s |
+| **Original development worlds** | **3/3** | |
+| 314159 | Pass | 86.129s |
+| 271828 | Pass | 99.866s |
+| 8675309 | Fail | 300.021s |
+| **Additional development worlds** | **2/3** | |
+| 256004205 | Pass | 93.812s |
+| 345250156 | Fail | 67.300s |
+| 387394791 | Pass | 99.725s |
+| 904314939 | Fail | 193.955s |
+| **Wider known development worlds** | **2/4** | |
+
+All ten are now known development worlds. The four wider seeds were new first-pass cases only in the earlier 6e checkpoint; these reruns must not be called held-out or new. Every failed case remains in its denominator. A separate preselected twenty-world first-pass evaluation is underway on this unchanged application; no score is claimed before it finishes.
+
+## What changed
+
+- Fixed pickup standing cells are checked for a return route first, then a forward route under the same deadline. Sealed pockets can be rejected cheaply; neither direction is optional. See [the diagnostic and safeguards](../docs/PICKUP_PREFLIGHT.md).
+- Pausing between collection and recovery preserves scoped pending drops in the same play session. Respawn, reconnect and process restoration do not blindly trust old entity IDs.
+- Specific stop and low-air instructions survive an interruption during the controller's inter-step delay.
+- “Craft four torches” stays in the offline grammar, with the same 1–64 quantity boundary. Capitalized “Follow Me” and “Come Here” resolve the owner without changing literal player-name case.
+
+The earlier 526 build failed world 42 during pickup. That full 2/3 original-cohort result remains [preserved](results/pause-resume-2026-10-01/); it is not replaced by the later successful retry on this new source. The trajectories differ, so one later pass does not by itself establish causality or general reliability.
+
+## Remaining limits
+
+The canopy case 8675309 reached the five-minute limit. World 345250156 still found no tree logs within the bounded search; world 904314939 still stopped on difficult mangrove terrain. These gaps prevent a stable 1.0 readiness claim. No live paid-model evaluation or rendered Windows/macOS client playthrough has been completed here. [The manual player checklist](../docs/PLAYTEST.md) makes those client checks explicit.
+
+[Per-world records, prepared suites and file manifest](results/pickup-preflight-2026-10-01/) retain conditions, source identity and failures. The natural runs use normal survival, empty inventory, no supplied items or edited terrain, and the fixed 300-second protocol. Prepared fixtures are separate. Identical verified binary caches were reused; world/config/log/result data stayed isolated. Full local raw records were retained; published summaries omit duplicate traces.
+
+---
+
+## Prior pause/resume validation (preserved)
+
+The later pause/resume fixes on clean source `526bfb8` passed 203 checks and the full prepared suites, but the complete ten-world rerun scored **2/3 original, 2/3 additional, and 2/4 wider known worlds**. In particular, world 42 failed again during pickup recovery. [All ten later records](results/pause-resume-2026-10-01/) are retained. The 6e results below describe that earlier coherent build; they are not substituted for the later failure. The resulting reverse-first change is measured in the latest table above; this failed cohort remains unchanged.
+
+## Earlier workstation and recovery checkpoint — October 1, 2026
 
 Tested app `6e63360210f525baa3d53af6a8cfffa2b63015df`: **198 automated checks**, **17/17 prepared live regression phases**, **11/11 prepared skill cases**, and **20/20 local controls**. Source stayed frozen and clean throughout this suite. Documentation and evidence are packaged afterward with a matching tested-file manifest.
 
@@ -35,7 +78,7 @@ The original and additional cohorts are known development worlds. Four new seeds
 
 ## Previous complete checkpoint (preserved)
 
-# Latest measured recovery checkpoint — October 1, 2026
+## Earlier measured recovery checkpoint — October 1, 2026
 
 The application snapshot `c1e01963a8eea0b6446c47a1f4dd6302a91986f8` passed 194 automated checks, all 17 prepared live regression phases, all 11 prepared skill cases and all 20 local control/grammar cases. The published documentation/evidence commit may differ; application code is unchanged from this tested snapshot.
 

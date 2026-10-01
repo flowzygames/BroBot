@@ -65,9 +65,11 @@ export function nextStarterStep(state, job, observation = {}) {
 }
 
 export class SurvivalJob {
-  constructor({ memory, snapshot, observe, execute, stopActions, context, log = () => {}, maxSteps = 64, maxDurationMs = 600000, intervalMs = 150 }) {
+  constructor({ memory, snapshot, observe, execute, stopActions, context, session = null, log = () => {}, maxSteps = 64, maxDurationMs = 600000, intervalMs = 150 }) {
     Object.assign(this, { memory, snapshot, observe, execute, stopActions, context, log, maxSteps, maxDurationMs, intervalMs });
     this.active = null;
+    this.session = session ?? (() => this);
+    this.dropRecoverySession = null;
     this.job = memory.get('survivalJob', null);
     if (this.job && (this.job.version !== 1 || typeof this.job.context !== 'string' || !Array.isArray(this.job.history) || !Number.isSafeInteger(this.job.steps) || this.job.steps < 0 || !Number.isSafeInteger(this.job.scouts) || this.job.scouts < 0 || !this.job.home?.position || !['x', 'y', 'z'].every(k => Number.isFinite(this.job.home.position[k])) || !['running', 'paused', 'blocked', 'complete'].includes(this.job.status))) throw new Error('Saved starter job is invalid. Restore its record before resuming.');
     if (this.job?.status === 'running') { this.job.status = 'paused'; this.job.reason = 'Process restarted. Resume explicitly after checking the world.'; this.save(); }
@@ -89,13 +91,14 @@ export class SurvivalJob {
     } else {
       this.job = { version: 1, id: randomUUID(), goal: 'starter', context: this.context, home: { position: { ...state.position }, dimension: state.dimension }, steps: 0, scouts: 0, clearings: 0, excluded: {}, history: [], started: new Date().toISOString() };
     }
+    if (!resume || this.dropRecoverySession !== this.session()) this.job.recoverDropIds = [];
     this.job.status = 'running'; this.job.reason = null; this.save();
     this.log('survival', `${resume ? 'Resuming' : 'Starting'} offline starter kit: stone pickaxe, furnace, then return to start.`);
     const controller = new AbortController(); this.active = controller;
     const timer = setTimeout(() => { controller.abort(new Error('Starter job time budget reached.')); this.stopActions('Starter job time budget reached.'); }, this.maxDurationMs); timer.unref?.();
     this.promise = this.loop(controller.signal).catch(error => {
-      this.job.status = controller.signal.aborted ? 'paused' : 'blocked'; this.job.reason = error.message;
-      this.log('survival', `Starter job ${this.job.status}: ${error.message}`);
+      this.job.status = controller.signal.aborted ? 'paused' : 'blocked'; this.job.reason = controller.signal.aborted ? (controller.signal.reason?.message || error.message) : error.message;
+      this.log('survival', `Starter job ${this.job.status}: ${this.job.reason}`);
     }).finally(() => { clearTimeout(timer); this.save(); if (this.active === controller) this.active = null; });
     return { started: true, mode: 'offline-observation-driven', goal: 'stone pickaxe and furnace, then return to start', id: this.job.id };
   }
@@ -103,7 +106,7 @@ export class SurvivalJob {
     const deadline = Date.now() + this.maxDurationMs;
     const failures = new Map();
     const firstStep = this.job.steps;
-    let recovery = null;
+    let recovery = this.job.recoverDropIds?.length ? action('pickup', { radius: 16, entity_ids: [...this.job.recoverDropIds] }, 'Recover still-observed drops from this play session after resuming.') : null;
     const excludeFailures = (decision, result) => {
       if (decision.name !== 'collect' || !result?.failures) return;
       this.job.excluded ??= {};
@@ -194,7 +197,10 @@ export class SurvivalJob {
         remember({ action: decision.name, args: decision.args, reason: decision.reason, result, progress });
         if (progress) failures.clear();
         else failures.set(signature, (failures.get(signature) ?? 0) + 1);
-        if (Array.isArray(result.remaining_drops)) this.job.recoverDropIds = result.remaining_drops.map(d => d.id).slice(0, 24);
+        if (Array.isArray(result.remaining_drops)) {
+          this.job.recoverDropIds = result.remaining_drops.map(d => d.id).filter(Number.isSafeInteger).slice(0, 24);
+          this.dropRecoverySession = this.session();
+        }
         if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);

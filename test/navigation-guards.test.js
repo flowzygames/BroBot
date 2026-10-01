@@ -85,3 +85,35 @@ test('walking abort and no-path stop promptly without claiming arrival',async()=
  const { walkToGoal }=await import('../src/navigation-guards.js');
  for(const kind of ['abort','path']){const b=bot(),c=new AbortController();const p=walkToGoal(b,goal,{signal:c.signal});if(kind==='abort')c.abort();else b.emit('path_update',{status:'noPath'});await assert.rejects(p,kind==='abort'?/cancelled/:/noPath/);clean(b);assert.equal(b.pathfinder.goal,null);}
 });
+
+test('fixed pickup endpoint rejects an isolated reverse component before forward search', async () => {
+ const b=bot(),p=new Vec3(2,68,0),g={isEnd:n=>n.equals(p)};let calls=0;
+ b.pathfinder.getPathFromTo=function*(m,start,target){calls++;assert.ok(start.equals(p));assert.equal(target,anchor);yield result('noPath');};
+ await assert.rejects(planReturnablePath(b,{},g,anchor,{fixedEndpoint:p}),/No verified returnable/);
+ assert.equal(calls,1);assert.equal(b.pathfinder.goal,null);
+});
+test('fixed pickup endpoint requires both reverse and forward routes under unchanged movement rules', async () => {
+ const b=bot(),p=new Vec3(2,68,0),g={isEnd:n=>n.equals(p)},m={canDig:false,allowParkour:false};const starts=[];
+ b.pathfinder.getPathFromTo=function*(movement,start,target){assert.equal(movement,m);starts.push(start.clone());yield result('success',[target===anchor?anchor:p]);};
+ const r=await planReturnablePath(b,m,g,anchor,{fixedEndpoint:p});
+ assert.ok(starts[0].equals(p));assert.ok(starts[1].equals(b.entity.position));assert.ok(r.endpoint.equals(p));assert.equal(m.canDig,false);assert.equal(m.allowParkour,false);
+});
+test('reverse success cannot hide forward failure or a mismatched endpoint', async () => {
+ for(const second of [result('noPath'),result('success',[new Vec3(9,68,0)])]){
+  const b=bot(),p=new Vec3(2,68,0),g={isEnd:n=>n.equals(p)};let calls=0;
+  b.pathfinder.getPathFromTo=function*(){yield ++calls===1?result('success',[anchor]):second;};
+  await assert.rejects(planReturnablePath(b,{},g,anchor,{fixedEndpoint:p}),/No verified|different fixed endpoint/);
+ }
+});
+test('fixed endpoint timeouts and terrain edits remain unknown or unsafe, never success', async () => {
+ for(const outcome of [result('timeout'),result('success',[{...anchor,toPlace:[{}]}])]){
+  const b=bot(),p=new Vec3(2,68,0),g={isEnd:n=>n.equals(p)};
+  b.pathfinder.getPathFromTo=function*(){yield outcome;};
+  await assert.rejects(planReturnablePath(b,{},g,anchor,{fixedEndpoint:p}),/timeout|modify terrain/);
+ }
+});
+test('fixed endpoint must satisfy its exact goal before planning begins',async()=>{
+ const b=bot();b.pathfinder.getPathFromTo=function*(){throw Error('must not plan');};
+ await assert.rejects(planReturnablePath(b,{}, {isEnd:()=>false},anchor,{fixedEndpoint:new Vec3(2,68,0)}),/does not satisfy/);
+ await assert.rejects(planReturnablePath(b,{}, {isEnd:()=>true},anchor,{fixedEndpoint:new Vec3(2.1,68,0)}),/exact standing/);
+});

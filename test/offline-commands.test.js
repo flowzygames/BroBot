@@ -17,3 +17,9 @@ test('ambiguous, compound, negated and explicit AI requests never become offline
 test('recognized phrases reject unreasonable amounts rather than falling through to paid AI',()=>{
  for(const count of ['0','65','999999999999999999999'])assert.throws(()=>parseCommand(`collect ${count} oak logs`),/1 to 64/);
 });
+
+test('English plural torches stays offline and retains the count boundary', () => {
+ assert.deepEqual(parseOfflinePhrase('craft four torches'), {kind:'action',name:'craft',args:{item:'torch',count:4}});
+ assert.throws(()=>parseOfflinePhrase('craft 65 torches'), /1 to 64/);
+ assert.equal(parseOfflinePhrase('craft 4 oak planks').args.item,'oak_planks');
+});

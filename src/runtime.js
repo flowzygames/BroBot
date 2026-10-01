@@ -36,8 +36,9 @@ export class Runtime {
       strictTool('say', 'Send a short friendly chat message to the player; never a slash command.', { message: { type: 'string' } }),
     ];
     this.brain = new Brain({ config: config.ai, memory: this.memory, definitions: () => this.definitions(), snapshot: () => this.snapshot(), execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), say: text => this.say(text), log: this.log.bind(this) });
+    this.playSession = 0;
     this.survival = new SurvivalJob({
-      memory: this.memory, snapshot: () => this.snapshot(), context: `${config.minecraft.host}:${config.minecraft.port}/${config.minecraft.username}`,
+      memory: this.memory, snapshot: () => this.snapshot(), session: () => this.playSession, context: `${config.minecraft.host}:${config.minecraft.port}/${config.minecraft.username}`,
       observe: async signal => {
         const seen = await this.execute('inspect', { radius: 32 }, signal);
         const blocks = seen.nearby_blocks ?? [];
@@ -119,6 +120,7 @@ export class Runtime {
     }
     bot.on('spawn', () => {
       if (this.bot !== bot) return;
+      this.playSession++;
       const movements = new pathfinderModule.Movements(bot);
       movements.canDig = false;
       movements.allow1by1towers = false;

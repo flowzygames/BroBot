@@ -13,7 +13,7 @@ if (panel) {
       const card = document.createElement('article'); card.className = 'world-case';
       const heading = document.createElement('div'); heading.className = 'world-case-head';
       const seed = document.createElement('h3'); seed.textContent = `World ${run.seed}`;
-      const badge = document.createElement('span'); badge.className = 'world-result ' + (run.passed ? 'passed' : 'failed'); badge.textContent = run.status === 'passed' ? 'Completed' : run.status === 'failed' ? 'Stopped' : run.status;
+      const badge = document.createElement('span'); badge.className = 'world-result ' + (run.passed ? 'passed' : 'failed'); badge.textContent = ({passed:'Completed',failed:'Stopped',error:'Error',unsupported:'Unsupported',not_run:'Not run'})[run.status];
       heading.append(seed, badge);
       const elapsed = document.createElement('p'); elapsed.className = 'world-elapsed'; elapsed.textContent = Number.isFinite(run.elapsedMs) ? `${(run.elapsedMs / 1000).toFixed(1)} seconds` : 'No completed timing';
       const reason = document.createElement('p'); reason.textContent = run.reason || 'See the saved record for details.';

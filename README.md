@@ -8,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest build completed three original worlds, two of three additional worlds and two of four new first-pass worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest build completed three original worlds, two of three additional worlds and two of four wider known worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
@@ -166,20 +166,23 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to eight
 
 ### Latest recovery checkpoint · October 1, 2026
 
-- **198 automated checks pass**, plus source syntax checks
+- **208 automated checks pass**, plus source syntax checks
 - **17/17 real-server regression phases pass**, including three repetitions of a previously troublesome grass-corner route
 - **11/11 prepared skill cases** and **20/20 local grammar/control cases** pass
-- **3/3 original development worlds** completed the full starter objective on one clean app revision: 99.653s, 150.625s and 91.643s
-- **2/3 additional development worlds** completed it: 95.489s and 108.002s. The canopy case reached the 300-second limit
+- **3/3 original development worlds** completed the full starter objective on one clean app revision: 100.478s, 158.151s and 76.891s
+- **2/3 additional development worlds** completed it: 86.129s and 99.866s. The canopy case reached the 300-second limit
 - Windows/Ubuntu Node 22/24 checks run on [PR 7](https://github.com/flowzygames/BroBot/pull/7). Actual rendered Windows/Mac gameplay and live paid-planner behavior remain unverified here
 
-**2/4 new first-pass worlds** completed the objective. These seeds were selected before inspection and tested once on the frozen build; failures found a treeless area and an unreachable mangrove-canopy stone route.
+**2/4 wider known worlds** completed the objective. These are reruns of the earlier first-pass sample; the treeless and mangrove cases still failed. A separate preselected twenty-world first-pass evaluation is in progress, with no result claimed yet.
 
-The tested app snapshot is `6e63360`. The original six worlds are known development cases; the four first-pass cases are a small additional check, not a general reliability percentage. Every scheduled result, including all failures, is [published with its conditions](benchmarks/results/workstations-2026-10-01/). The original frozen comparison below remains unchanged.
+The tested app snapshot is `1e7ab1f`. All ten are known development cases, not a general reliability percentage. The earlier 526 source failed world 42; that result remains visible alongside this later complete rerun. Every scheduled result, including all failures, is [published with its conditions](benchmarks/results/pickup-preflight-2026-10-01/). The original frozen comparison below remains unchanged.
 
 #### What improved
 
 - More reliable corner movement through a narrowly scoped floating-point collision correction
+- Reverse-first pickup planning that rejects sealed target pockets while still requiring a verified round trip
+- Same-session pickup recovery after explicit resume, with stale IDs discarded after respawn/reconnect
+- Specific safety pause reasons retained, and offline torch plurals / capitalized owner pronouns handled correctly
 - Fairer dropped-item recovery, bounded planning, and no more stale recovery trips after the tracked items are gone
 - Starter-only avoidance of water, aquatic plants and waterlogged standing cells, plus player-specific air checks
 - Better tree/table observation, batched starter materials, and safer support/liquid checks
@@ -203,7 +206,7 @@ These results compare the earlier PR 4 source with the original offline-starter 
 
 Trailhead used three fixed development seeds, normal survival, empty inventory, fixed spawn settings and a five-minute limit. It supplied no items and changed no terrain. Prepared skill tests are different: they supply ingredients and fixtures. CommandSense is not a general language-understanding score, and the earlier candidate's absent starter mode says nothing about its separate paid planner.
 
-There is no invented overall intelligence score. Failed and unsupported cases remain visible. [Protocol and reproduction](benchmarks/README.md) · [Results and limitations](benchmarks/RESULTS.md) · [Historical validation](docs/VALIDATION.md)
+There is no invented overall intelligence score. Failed and unsupported cases remain visible. [Protocol and reproduction](benchmarks/README.md) · [Results and limitations](benchmarks/RESULTS.md) · [Historical validation](docs/VALIDATION.md) · [Manual player check](docs/PLAYTEST.md)
 
 ## The road to Alpha 1
 
@@ -212,8 +215,8 @@ Alpha 1 should mean a useful, dependable starter companion with clear failures�
 - [x] Direct controls and bounded action execution
 - [x] Experimental observation-driven starter controller
 - [x] Reproducible named benchmarks with retained failures
-- [x] Complete one fresh-world starter development run after recovery fixes
-- [ ] Repeat the complete starter loop across more worlds and terrain
+- [x] Measured starter completion and return across several development worlds
+- [ ] Resolve remaining canopy and resource-scarce terrain limits
 - [ ] Validate interruption, reconnect and recovery in broader live scenarios
 - [ ] Test the actual Windows/Bedrock client experience
 - [ ] Review and merge the draft changes into a clear release

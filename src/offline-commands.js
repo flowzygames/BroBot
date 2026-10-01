@@ -3,7 +3,7 @@ const quantities = Object.fromEntries(['one','two','three','four','five','six','
 const woods = ['oak','spruce','birch','jungle','acacia','dark_oak','mangrove','cherry','pale_oak'];
 const blocks = [...woods.map(w=>`${w}_log`),'stone','cobblestone','dirt','sand','gravel','coal_ore','iron_ore','copper_ore','gold_ore','diamond_ore','deepslate_coal_ore','deepslate_iron_ore'];
 const items = [...woods.map(w=>`${w}_planks`),'stick','crafting_table','furnace','wooden_pickaxe','stone_pickaxe','iron_pickaxe','wooden_axe','stone_axe','iron_axe','wooden_shovel','stone_shovel','torch','chest','bread'];
-function aliases(names){const map=new Map();for(const name of names){const words=name.replaceAll('_',' ');for(const alias of [name,words,`${words}s`])map.set(alias,name);}return map;}
+function aliases(names){const map=new Map();for(const name of names){const words=name.replaceAll('_',' ');for(const alias of [name,words,words.endsWith('s') ? words : `${words}${/(ch|sh|x|z)$/.test(words) ? 'es' : 's'}`])map.set(alias,name);}return map;}
 const blockNames=aliases(blocks), itemNames=aliases(items);
 for(const wood of woods){itemNames.set(`${wood.replaceAll('_',' ')} plank`,`${wood}_planks`);}
 export function parseOfflinePhrase(input){

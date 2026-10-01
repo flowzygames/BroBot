@@ -31,7 +31,11 @@ const checkpoint = JSON.parse(fs.readFileSync(path.join(root, 'checkpoint.json')
 assert.equal(checkpoint.sourceCommit, release.testedApplicationCommit);
 assert.equal(checkpoint.automatedChecks, release.automatedChecks);
 assert.equal(checkpoint.liveRegressionPhases, release.liveRegressionPhases);
-for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','firstPassWorlds']]) {
+const replay = JSON.parse(fs.readFileSync(path.join(root, 'run-telemetry.json'), 'utf8'));
+const scorecard = JSON.parse(fs.readFileSync(path.join(root, 'brobench-current.json'), 'utf8'));
+assert.equal(replay.sourceCommit, release.testedApplicationCommit);
+assert.equal(scorecard.commits.candidate, release.testedApplicationCommit);
+for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','widerKnownWorlds']]) {
   const g = checkpoint.groups[group];
   assert.equal(g.cases.length, g.scheduled);
   assert.equal(g.cases.filter(r=>r.passed).length,g.passed);

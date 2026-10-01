@@ -9,8 +9,8 @@ export function parseCommand(input, owner = '') {
   switch (word.toLowerCase()) {
     case 'stop': case 'pause': return { kind: 'stop' };
     case 'status': case 'inventory': case 'help': return { kind: word.toLowerCase() };
-    case 'follow': return { kind: 'follow', player: rest === 'me' || !rest ? owner : rest };
-    case 'come': return { kind: 'come', player: rest === 'here' || rest === 'me' || !rest ? owner : rest };
+    case 'follow': return { kind: 'follow', player: rest.toLowerCase() === 'me' || !rest ? owner : rest };
+    case 'come': return { kind: 'come', player: rest.toLowerCase() === 'here' || rest.toLowerCase() === 'me' || !rest ? owner : rest };
     case 'remember': return { kind: 'waypoint', name: rest || 'home' };
     case 'home': return { kind: 'waypoint_go', name: 'home' };
     case 'goto': {

@@ -1,12 +1,12 @@
 {
   "channel": "development",
-  "sourceCommit": "8b3d9ae7c9026ad96dcba544c974882370085cfb",
-  "sourceTree": "53dade440abbc9b463d21bbbd2bc473e466ab67b",
-  "packagedCommit": "47dacf3f6f7d150158556862fe61ee05ff613dcd",
-  "testedApplicationCommit": "6e63360210f525baa3d53af6a8cfffa2b63015df",
-  "sha256": "0ed4d2839458d7a988cd3cf01ebbaa0e3f93684cc590f4979315e5adee62e699",
-  "bytes": 266042,
-  "automatedChecks": 198,
+  "sourceCommit": "8b47cddf527efe02f2e19cae566155b348f8ae38",
+  "sourceTree": "39f13d12ca07e2bce111314034ad73a39a086d23",
+  "packagedCommit": "24be8791705d473475bb100cad6cda6a216ac04d",
+  "testedApplicationCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "sha256": "084dfcf43c07a200bffcc76e18f6608d50d07381ac46b24e6cee7f263acda641",
+  "bytes": 319319,
+  "automatedChecks": 208,
   "liveRegressionPhases": 17,
   "originalDevelopmentWorlds": {
     "passed": 3,
@@ -16,10 +16,10 @@
     "passed": 2,
     "scheduled": 3
   },
-  "multiWorldEvaluation": "all ten scheduled worlds retained: original3/3, additional2/3, new first-pass2/4",
+  "multiWorldEvaluation": "Complete known-world checkpoint: original3/3, additional2/3, wider2/4. A separate20-world first-pass evaluation is pending.",
   "readyForStable1_0": false,
   "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest.",
-  "firstPassWorlds": {
+  "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4
   }
