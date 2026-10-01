@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "overnight-526",
+  "commit": "526bfb82486f66602dc1fb3e2c4d9e2088985dad",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T08:20:02.355Z",
+  "finished": "2026-10-01T08:21:39.684Z",
+  "status": "failed",
+  "passed": false,
+  "elapsedMs": 67388,
+  "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+  "seed": "345250156",
+  "recordKind": "Summary with initial/final evidence; duplicate runtime history and trace omitted. Full local harness records retained.",
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 16.5,
+      "y": 74,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -7.5,
+      "y": 68.23,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "job": {
+    "status": "blocked",
+    "home": {
+      "position": {
+        "x": 16.5,
+        "y": 74,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 8,
+    "scouts": 8,
+    "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+    "evidence": null
+  }
+}

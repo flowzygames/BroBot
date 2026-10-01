@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "wide-first-pass-1e7",
+  "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T09:03:56.863Z",
+  "finished": "2026-10-01T09:09:26.082Z",
+  "status": "failed",
+  "passed": false,
+  "elapsedMs": 300005,
+  "reason": "Starter job time budget reached.",
+  "seed": "1542908414",
+  "recordKind": "Summary with initial/final evidence. Duplicate runtime history and trace omitted; full original records retained.",
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 112.5,
+      "y": 68,
+      "z": 96.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 123.5,
+      "y": 65,
+      "z": 116.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 23
+      },
+      {
+        "name": "spruce_log",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "cobblestone",
+        "count": 10,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ]
+  },
+  "job": {
+    "status": "paused",
+    "home": {
+      "position": {
+        "x": 112.5,
+        "y": 68,
+        "z": 96.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 46,
+    "scouts": 3,
+    "reason": "Starter job time budget reached.",
+    "evidence": null
+  },
+  "fullRecordSha256": "36d7a8d46f2bf8cd8f3ce8084f9057b86d6022f7814086509d84615fff1326dc"
+}

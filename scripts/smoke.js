@@ -28,6 +28,7 @@ async function main() {
   const portalsOnly = process.argv.includes('--portals-only');
   const craftOnly = process.argv.includes('--craft-only');
   const ownerOnly = process.argv.includes('--owner-only');
+  const collisionOnly = process.argv.includes('--collision-only');
   await requireEula(SERVER_DIR, { accept: process.argv.includes('--accept-eula'), interactive: true });
   const { java } = await setupServer({ log: console.log });
   const port = Number(process.env.SMOKE_JAVA_PORT || 25575);
@@ -41,7 +42,7 @@ async function main() {
   const result = {
     started: new Date().toISOString(), minecraft: VERSION, directory,
     fixture: 'Fresh isolated world and console-prepared arena. Initial gathering/crafting/building starts with empty survival inventory. Later furnace tests supply cobblestone, sand and coal; equipment/food tests supply a chestplate, shield and cooked beef and apply hunger; portal tests supply obsidian, flint and steel, and eyes. The bot remains in survival. This is a skills integration test, not an autonomous Ender Dragon run.',
-    selection: portalsOnly ? 'portals only' : craftOnly ? 'craft only, four logs supplied as fixture' : ownerOnly ? 'owner controls only' : 'full integration suite', phases: [], passed: false
+    selection: collisionOnly ? 'collision contact only, prepared grass corner' : portalsOnly ? 'portals only' : craftOnly ? 'craft only, four logs supplied as fixture' : ownerOnly ? 'owner controls only' : 'full integration suite', phases: [], passed: false
   };
   const log = createWriteStream(join(directory, 'smoke-server.log'));
   let output = '';
@@ -71,6 +72,7 @@ async function main() {
     await sleep(200);
   }
   async function phase(name, operation) {
+    if (collisionOnly && !/startup|joins the real server|contact precision/i.test(name)) { result.phases.push({ name, skipped: true }); return; }
     if (portalsOnly && !/startup|joins the real server|portal/i.test(name)) { result.phases.push({ name, skipped: true }); return; }
     if (craftOnly && !/startup|joins the real server|Craft |Smelt |Equip |Eat /i.test(name)) { result.phases.push({ name, skipped: true }); return; }
     if (ownerOnly && !/startup|joins the real server|configured owner/i.test(name)) { result.phases.push({ name, skipped: true }); return; }
@@ -118,6 +120,30 @@ async function main() {
       assert.equal(bot.game.gameMode, 'survival');
       assert.equal(bot.inventory.items().length, 0);
       return { position: bot.entity.position, mode: bot.game.gameMode };
+    });
+    await phase('Walk around a grass corner with sub-epsilon contact precision', async () => {
+      await commands(['fill -32 68 -10 -20 68 2 grass_block', 'fill -32 69 -10 -20 74 2 air', 'setblock -28 69 -4 grass_block']);
+      const trials = [];
+      for (let attempt = 0; attempt < 3; attempt++) {
+        actions.stop();
+        await commands(['tp BroBotSmoke -27.562169459617916 69 -4.30000003 -53.017581939697266 0']);
+        await sleep(400);
+        assert.ok(bot.entity.position.distanceTo(new Vec3(-27.562169459617916, 69, -4.30000003)) < .01, 'Corner fixture must begin at the saved contact');
+        let corrections = 0; const resets = [];
+        const corrected = () => { corrections++; }, reset = reason => resets.push(reason);
+        bot._client.on('position', corrected); bot.on('path_reset', reset);
+        const began = Date.now();
+        try {
+          const details = await perform('go_to', { x: -27, y: 69, z: -4, radius: 0 });
+          const elapsedMs = Date.now() - began;
+          assert.ok(elapsedMs < 10000, 'Short corner route must not loop through repeated stuck resets');
+          assert.equal(bot.blockAt(new Vec3(-28, 69, -4)).name, 'grass_block');
+          assert.equal(bot.inventory.items().length, 0);
+          trials.push({ elapsedMs, corrections, resets, position: details.position });
+        } finally { bot._client.removeListener('position', corrected); bot.removeListener('path_reset', reset); }
+      }
+      await commands(['tp BroBotSmoke 0.5 65 0.5']); await sleep(400);
+      return { fixture: 'Prepared grass corner and exact saved contact, repeated three times; no terrain modification by the bot.', trials };
     });
     await phase('Walk around a solid obstacle without digging', async () => {
       const details = await perform('go_to', { x: 8, y: 65, z: 4, radius: 0 });

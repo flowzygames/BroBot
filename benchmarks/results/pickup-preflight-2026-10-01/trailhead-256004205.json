@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "overnight-1e7",
+  "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T08:50:50.764Z",
+  "finished": "2026-10-01T08:52:57.373Z",
+  "status": "passed",
+  "passed": true,
+  "elapsedMs": 93812,
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "seed": "256004205",
+  "recordKind": "Summary with initial/final evidence; duplicate runtime history and trace omitted. Full local harness records retained.",
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 176.5,
+      "y": 63,
+      "z": 128.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 176.69,
+      "y": 63,
+      "z": 128.6
+    },
+    "dimension": "overworld",
+    "health": 18.01673126220703,
+    "food": 17,
+    "oxygen": null,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 10
+      },
+      {
+        "name": "dirt",
+        "count": 10,
+        "durability_used": null
+      }
+    ]
+  },
+  "job": {
+    "status": "complete",
+    "home": {
+      "position": {
+        "x": 176.5,
+        "y": 63,
+        "z": 128.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 15,
+    "scouts": 0,
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 0.21470910553583422
+    }
+  }
+}

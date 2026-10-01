@@ -2,6 +2,10 @@
 
 Status is recorded separately for offline logic tests, real-server fixture tests, client access, and an actual autonomous survival run. Passing one category does not establish the others.
 
+## Latest recovery checkpoint
+
+The September 30 recovery source passed 141 automated tests and all 16 Linux real-server regression phases. One targeted fresh-world starter run passed in 215.975 seconds. This does not establish general survival reliability; the earlier frozen comparison remains 0/3. See [current results and raw evidence](../benchmarks/RESULTS.md). The dated records below describe earlier source versions and remain historical.
+
 ## Commands
 
 ```sh
@@ -58,6 +62,14 @@ A separate isolated test on 2026-09-26 local time (`2026-09-27T01:14:43.870Z`) p
 The user confirmed **Add Server is available while signed out** in their Minecraft for Windows menu. An actual rendered client joining and playing remains to be confirmed. The protocol test establishes the server path, not every client UI. Geyser still rejects the separate split-screen `GUEST` login type; the passing test used `SELF_SIGNED`.
 
 These tests exposed and helped repair inventory synchronization, elevated-block visibility, item-transfer timing, and portal-entry pathing defects. They exercise prepared, loaded terrain; they do not certify unrestricted autonomous survival.
+
+## Planner safeguard regression record (2026-09-30)
+
+`npm run check` passes syntax checks and **83 tests** after adding planner safeguards (the original 58 plus 25 regressions). The new tests use mocked Responses output and runtime observations; they do not establish live model behavior.
+
+Coverage includes returned partial/blocked outcomes and action-specific pickup/combat/eye-bearing result contracts, canonical argument order, cross-argument no-progress limits, mixed thrown/returned failures, positive partial progress and recovery, observation/chat non-progress, rejected and retried premature completion, fresh inventory verification and stack totals, text-only bypass rejection, ordinary conversation, compound/unsupported goal reports, actual destination dimensions, and current-goal dragon-death evidence. The original `completed: false, mined: 1` example is deliberately treated as partial mining progress; zero-progress partial results and blocked results are bounded independently. Mined blocks alone still cannot certify inventory acquisition.
+
+No gameplay action implementations were changed for these safeguards. They do not provide an arbitrary natural-language goal verifier, a full autonomous survival strategy, or new proof of live model access. The earlier real-server validation record remains separate from these planner tests.
 
 ## Explicitly unverified
 

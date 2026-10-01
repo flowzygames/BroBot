@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 1,
+  "protocol": "skills-v1",
+  "label": "overnight-6e",
+  "commit": "6e63360210f525baa3d53af6a8cfffa2b63015df",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "preparedTerrain": true,
+    "suppliedIngredients": true,
+    "mode": "survival",
+    "difficulty": "peaceful",
+    "paidModel": false,
+    "perActionSeconds": 45
+  },
+  "cases": [
+    {
+      "group": "MineLine",
+      "id": "timber",
+      "passed": true,
+      "initialInventory": [],
+      "result": {
+        "completed": true,
+        "requested": 4,
+        "mined": 4,
+        "inventory_changes": {
+          "oak_log": 4
+        },
+        "remaining_drops": [],
+        "pickup_failures": [],
+        "failures": [],
+        "search_limited": false,
+        "planning_limited": false
+      },
+      "finalInventory": [
+        {
+          "name": "oak_log",
+          "count": 4,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 16499
+    },
+    {
+      "group": "MineLine",
+      "id": "stone",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        }
+      ],
+      "result": {
+        "completed": true,
+        "requested": 4,
+        "mined": 4,
+        "inventory_changes": {
+          "cobblestone": 4
+        },
+        "remaining_drops": [],
+        "pickup_failures": [],
+        "failures": [],
+        "search_limited": false,
+        "planning_limited": false
+      },
+      "finalInventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 4
+        },
+        {
+          "name": "cobblestone",
+          "count": 4,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 8998
+    },
+    {
+      "group": "MineLine",
+      "id": "iron",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        }
+      ],
+      "result": {
+        "completed": true,
+        "requested": 3,
+        "mined": 3,
+        "inventory_changes": {
+          "raw_iron": 3
+        },
+        "remaining_drops": [],
+        "pickup_failures": [],
+        "failures": [],
+        "search_limited": false,
+        "planning_limited": false
+      },
+      "finalInventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1,
+          "durability_used": 3
+        },
+        {
+          "name": "raw_iron",
+          "count": 3,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 17458
+    },
+    {
+      "group": "Workbench",
+      "id": "planks",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "oak_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "oak_planks",
+        "requested": 8,
+        "crafted": 8,
+        "inventory_count": 8,
+        "recipe_batches": 2
+      },
+      "finalInventory": [
+        {
+          "name": "oak_planks",
+          "count": 8,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 1768
+    },
+    {
+      "group": "Workbench",
+      "id": "handles",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "oak_planks",
+          "count": 4,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "stick",
+        "requested": 8,
+        "crafted": 8,
+        "inventory_count": 8,
+        "recipe_batches": 2
+      },
+      "finalInventory": [
+        {
+          "name": "stick",
+          "count": 8,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 2383
+    },
+    {
+      "group": "Workbench",
+      "id": "table",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "oak_planks",
+          "count": 4,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "crafting_table",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "finalInventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 1954
+    },
+    {
+      "group": "Workbench",
+      "id": "wood-pick",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "oak_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "wooden_pickaxe",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "finalInventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        }
+      ],
+      "elapsedMs": 3107
+    },
+    {
+      "group": "Workbench",
+      "id": "stone-pick",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "cobblestone",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "stone_pickaxe",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "finalInventory": [
+        {
+          "name": "stone_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        }
+      ],
+      "elapsedMs": 2941
+    },
+    {
+      "group": "Workbench",
+      "id": "furnace",
+      "passed": true,
+      "initialInventory": [
+        {
+          "name": "cobblestone",
+          "count": 8,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "result": {
+        "item": "furnace",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "finalInventory": [
+        {
+          "name": "furnace",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "elapsedMs": 3966
+    },
+    {
+      "group": "Pathfinder",
+      "id": "wall-detour",
+      "passed": true,
+      "initialInventory": [],
+      "result": {
+        "arrived": true,
+        "position": {
+          "x": 8.31,
+          "y": 65,
+          "z": 4.5
+        },
+        "target": {
+          "x": 8,
+          "y": 65,
+          "z": 4
+        },
+        "radius": 0
+      },
+      "finalInventory": [],
+      "elapsedMs": 2399
+    },
+    {
+      "group": "Pathfinder",
+      "id": "climb-and-return",
+      "passed": true,
+      "initialInventory": [],
+      "result": {
+        "arrived": true,
+        "position": {
+          "x": 0.5,
+          "y": 65,
+          "z": 0.53
+        },
+        "target": {
+          "x": 0,
+          "y": 65,
+          "z": 0
+        },
+        "radius": 0
+      },
+      "finalInventory": [],
+      "elapsedMs": 3766
+    }
+  ],
+  "started": "2026-10-01T07:11:49.908Z",
+  "passed": true,
+  "finished": "2026-10-01T07:13:18.558Z"
+}

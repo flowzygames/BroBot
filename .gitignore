@@ -1,9 +1,9 @@
-node_modules/
+node_modules
 .env
 .env.*
 !.env.example
 .brobot/
-.server/
+.server
 *.log
 .DS_Store
 coverage/

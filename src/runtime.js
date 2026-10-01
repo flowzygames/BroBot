@@ -2,11 +2,15 @@ import mineflayer from 'mineflayer';
 import pathfinderModule from 'mineflayer-pathfinder';
 import toolModule from 'mineflayer-tool';
 import { join } from 'node:path';
+import { Vec3 } from 'vec3';
 import { Memory } from './memory.js';
 import { ActionRunner } from './runner.js';
-import { createActions } from './actions.js';
+import { createActions, visibleBlockFace } from './actions.js';
 import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
+import { SurvivalJob, STARTER_LOG_RADIUS } from './survival.js';
+import { findTransitPickupClearance } from './pickup-transit.js';
+import { findPickupClearance } from './survival-observation.js';
 import { publicConfig } from './config.js';
 import { parseCommand, authorizedChat, HELP } from './commands.js';
 
@@ -33,6 +37,43 @@ export class Runtime {
       strictTool('say', 'Send a short friendly chat message to the player; never a slash command.', { message: { type: 'string' } }),
     ];
     this.brain = new Brain({ config: config.ai, memory: this.memory, definitions: () => this.definitions(), snapshot: () => this.snapshot(), execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), say: text => this.say(text), log: this.log.bind(this) });
+    this.playSession = 0;
+    this.survival = new SurvivalJob({
+      memory: this.memory, snapshot: () => this.snapshot(), session: () => this.playSession, context: `${config.minecraft.host}:${config.minecraft.port}/${config.minecraft.username}`,
+      observe: async signal => {
+        const seen = await this.execute('inspect', { radius: 32 }, signal);
+        const blocks = seen.nearby_blocks ?? [];
+        // Search logs separately: dense underground ore must not fill inspect's
+        // generic resource cap before a nearby tree is considered.
+        const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
+        const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
+        const excludedLogs = this.survival.job?.excluded ?? {};
+        const positions = this.bot.findBlocks({ matching: ids, maxDistance: STARTER_LOG_RADIUS, count: 16, useExtraInfo: block => !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
+        const wood = positions.map(p => this.bot.blockAt(p)).find(b => b && pattern.test(b.name));
+        const p = seen.position;
+        let foliage = null;
+        if (wood && this.bot.world?.raycast) {
+          const eye = this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0);
+          const delta = wood.position.offset(0.5, 0.5, 0.5).minus(eye);
+          const hit = delta.norm() > 0 ? this.bot.world.raycast(eye, delta.scaled(1 / delta.norm()), Math.min(4.2, delta.norm())) : null;
+          const feet = this.bot.entity.position.floored();
+          if (hit && /_leaves$/.test(hit.name) && !(hit.position.x === feet.x && hit.position.z === feet.z && hit.position.y < feet.y)) foliage = { x: hit.position.x, y: hit.position.y, z: hit.position.z, expected_block: hit.name };
+        }
+        // A dense ore field can also crowd our placed table out of inspect's
+        // generic result cap. Search this critical workstation independently.
+        const tableId = this.bot.registry.blocksArray.find(b => b.name === 'crafting_table')?.id;
+        const foundTables = tableId == null ? [] : this.bot.findBlocks({ matching: [tableId], maxDistance: 32, count: 16 });
+        const tablePositions = [...foundTables, ...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
+        const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => this.bot.blockAt(new Vec3(p.x, p.y, p.z))?.name === 'crafting_table').slice(0, 8);
+        return { wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach: tables.some(t => {
+          if (!p || Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) > 4) return false;
+          const position = new Vec3(t.x, t.y, t.z);
+          if (this.bot.world?.raycast) return visibleBlockFace(this.bot.world, this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0), position, 4.5);
+          return !this.bot.canSeeBlock || this.bot.canSeeBlock(this.bot.blockAt(position));
+        }) };
+      },
+      execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
+    });
     this.lastEat = 0;
     this.reflexTimer = setInterval(() => this.reflex(), 1000);
     this.reflexTimer.unref();
@@ -57,7 +98,7 @@ export class Runtime {
     let progression = {};
     try { progression = observeProgression(world); } catch { /* no spawned world yet */ }
     const players = this.bot ? Object.values(this.bot.players).filter(p => p.entity && p.username !== this.bot.username).map(p => p.username) : [];
-    return { ...world, players, connected: this.connection === 'connected', connection: this.connection, owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression };
+    return { ...world, players, connected: this.connection === 'connected', connection: this.connection, owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression, survival: this.survival?.state() ?? null };
   }
   state() { return { ...this.snapshot(), config: publicConfig(this.config), ai: this.brain.state(), events: this.events, tools: this.definitions() }; }
   connect() {
@@ -80,6 +121,7 @@ export class Runtime {
     }
     bot.on('spawn', () => {
       if (this.bot !== bot) return;
+      this.playSession++;
       const movements = new pathfinderModule.Movements(bot);
       movements.canDig = false;
       movements.allow1by1towers = false;
@@ -87,7 +129,7 @@ export class Runtime {
       movements.allowFreeMotion = false;
       movements.maxDropDown = 3;
       bot.pathfinder.setMovements(movements);
-      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this) });
+      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this), movementBoundary: () => this.survival.active ? { center: this.survival.job.home.position, radius: 90 } : null });
       this.progression = createProgression(bot, { actions: this.actions, memory: this.memory, log: this.log.bind(this) });
       this.connection = 'connected';
       this.log('connection', `${bot.username} joined Minecraft ${bot.version}.`);
@@ -98,8 +140,10 @@ export class Runtime {
         if (result?.message) this.say(result.message);
       }).catch(error => this.say(error.message));
     });
+    bot.on('breath', () => { if (this.bot === bot) this.survival.checkAir(); });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
+      this.survival.stop('Died; inspect the respawn state before resuming.');
       if (bot.entity?.position) this.memory.setWaypoint('death', bot.entity.position, bot.game.dimension);
       this.connection = 'respawning';
       this.log('death', 'Death location saved. Goals stay paused after respawn.');
@@ -109,6 +153,7 @@ export class Runtime {
     bot.on('end', reason => {
       if (this.bot !== bot) return;
       this.brain.stop('Minecraft disconnected');
+      this.survival.stop('Minecraft disconnected; resume explicitly after reconnecting.');
       this.runner.retire('Minecraft connection ended');
       this.connection = 'disconnected';
       this.bot = null;
@@ -126,6 +171,7 @@ export class Runtime {
   }
   stop(reason = 'Stopped by player') {
     this.brain.stop(reason);
+    this.survival.stop(reason);
     this.actions?.stop();
     this.log('stop', reason);
     return { message: 'Stopped. Any in-flight inventory operation must finish before new work starts.' };
@@ -170,9 +216,13 @@ export class Runtime {
     const command = parseCommand(input, speaker);
     if (command.kind === 'stop') return this.stop();
     if (command.kind === 'help') return { message: HELP };
-    if (command.kind === 'status') return { message: `${this.connection}; ${this.runner.state()?.name || 'idle'}; AI ${this.brain.active ? 'working' : 'idle'}`, state: this.snapshot() };
+    if (command.kind === 'status') return { message: `${this.connection}; ${this.runner.state()?.name || 'idle'}; AI ${this.brain.active ? 'working' : 'idle'}; starter ${this.survival.active ? 'working' : (this.survival.state()?.status ?? 'idle')}`, state: this.snapshot() };
     if (command.kind === 'inventory') return { message: JSON.stringify(this.snapshot().inventory || []), inventory: this.snapshot().inventory };
-    if (this.brain.active) throw new Error('Stop the current AI goal before giving a new instruction.');
+    if (this.brain.active || this.survival.active) throw new Error('Stop the current AI or starter job before giving a new instruction.');
+    if (command.kind === 'survival') {
+      if (this.runner.active) throw new Error('Wait for the current action to finish before starting a starter job.');
+      return this.survival.start({ resume: command.resume });
+    }
     if (command.kind === 'goal') {
       if (this.runner.active) throw new Error('An action is running. Stop it or wait before starting an AI goal.');
       return this.brain.start(command.text, { persistent: command.persistent || false });
@@ -194,7 +244,7 @@ export class Runtime {
     const bot = this.bot;
     if (this.connection !== 'connected' || !bot || this.closed) return;
     if (bot.health <= 6 && this.runner.active && !this.runner.active.controller.signal.aborted && this.runner.active.name !== 'eat') this.stop('Low health: paused work to recover.');
-    if (bot.food >= 18 || this.runner.active || Date.now() - this.lastEat < 10000) return;
+    if (bot.food >= 18 || this.runner.active || this.survival.active || Date.now() - this.lastEat < 10000) return;
     const foods = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple', 'melon_slice', 'sweet_berries'];
     const item = bot.inventory.items().find(item => foods.includes(item.name));
     if (!item) return;

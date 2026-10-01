@@ -1,0 +1,399 @@
+{
+  "kind": "prepared-saved-world-transit-diagnostic",
+  "started": "2026-10-01T10:04:04.819Z",
+  "commit": "682bf46b3d77691ba5e4d8e357819f90ad14e775",
+  "dirty": false,
+  "minecraft": "1.21.8",
+  "passed": true,
+  "sourceSeed": "1542908414",
+  "fixture": "Copy of an isolated failed test world. Console resets weather/mobs, supplies the recorded inventory and respawns recorded item stacks. Not fresh survival and not a Trailhead score.",
+  "phases": [
+    {
+      "name": "Reconstruct the isolated prepared state",
+      "passed": true,
+      "elapsedMs": 8,
+      "detail": {
+        "position": {
+          "x": 123.5,
+          "y": 65,
+          "z": 116.49879194800742
+        },
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_log",
+            "count": 1
+          },
+          {
+            "name": "cobblestone",
+            "count": 10
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "stick",
+            "count": 2
+          }
+        ],
+        "observedItemIds": [
+          337,
+          338,
+          339,
+          340,
+          341,
+          342,
+          343,
+          344
+        ]
+      }
+    },
+    {
+      "name": "Observe blocked pickup before clearance",
+      "passed": true,
+      "elapsedMs": 3651,
+      "detail": {
+        "inventory_changes": {},
+        "remaining_drops": [
+          {
+            "id": 337,
+            "position": {
+              "x": 122.88,
+              "y": 63,
+              "z": 114.13
+            }
+          },
+          {
+            "id": 338,
+            "position": {
+              "x": 127.88,
+              "y": 63,
+              "z": 116.32
+            }
+          },
+          {
+            "id": 339,
+            "position": {
+              "x": 126.88,
+              "y": 63,
+              "z": 118.36
+            }
+          },
+          {
+            "id": 340,
+            "position": {
+              "x": 122.13,
+              "y": 63,
+              "z": 115.88
+            }
+          },
+          {
+            "id": 341,
+            "position": {
+              "x": 122.88,
+              "y": 63,
+              "z": 115.58
+            }
+          },
+          {
+            "id": 342,
+            "position": {
+              "x": 122.88,
+              "y": 63,
+              "z": 116.88
+            }
+          },
+          {
+            "id": 343,
+            "position": {
+              "x": 121.58,
+              "y": 63,
+              "z": 116.88
+            }
+          },
+          {
+            "id": 344,
+            "position": {
+              "x": 121.57,
+              "y": 63,
+              "z": 115.13
+            }
+          }
+        ],
+        "unreachable": [
+          {
+            "id": 342,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 341,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 340,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 343,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 344,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 337,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 339,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          },
+          {
+            "id": 338,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          },
+          {
+            "id": 342,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 341,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 340,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 343,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 344,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 337,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 339,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          },
+          {
+            "id": 338,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          },
+          {
+            "id": 342,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 341,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 340,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 343,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 344,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 337,
+            "error": "No verified returnable walking route (noPath)",
+            "code": null
+          },
+          {
+            "id": 339,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          },
+          {
+            "id": 338,
+            "error": "No validated standing space near dropped item",
+            "code": null
+          }
+        ],
+        "planning_limited": false
+      }
+    },
+    {
+      "name": "Choose a verified visible transit edit",
+      "passed": true,
+      "elapsedMs": 26,
+      "detail": {
+        "x": 123,
+        "y": 65,
+        "z": 115,
+        "expected_block": "dirt"
+      }
+    },
+    {
+      "name": "Clear normally and verify real item acquisition",
+      "passed": true,
+      "elapsedMs": 3854,
+      "detail": {
+        "result": {
+          "completed": false,
+          "mined": 1,
+          "block": "dirt",
+          "position": {
+            "x": 123,
+            "y": 65,
+            "z": 115
+          },
+          "inventory_changes": {
+            "cobblestone": 10,
+            "dirt": 4
+          },
+          "remaining_drops": [
+            {
+              "id": 338,
+              "position": {
+                "x": 127.88,
+                "y": 63,
+                "z": 116.32
+              }
+            },
+            {
+              "id": 339,
+              "position": {
+                "x": 126.88,
+                "y": 63,
+                "z": 118.36
+              }
+            }
+          ],
+          "pickup_failures": [
+            {
+              "id": 339,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            },
+            {
+              "id": 338,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            },
+            {
+              "id": 339,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            },
+            {
+              "id": 338,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            },
+            {
+              "id": 339,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            },
+            {
+              "id": 338,
+              "error": "No validated standing space near dropped item",
+              "code": null
+            }
+          ]
+        },
+        "trackedCobblestoneCollected": [
+          340,
+          342,
+          343,
+          344,
+          337
+        ],
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_log",
+            "count": 1
+          },
+          {
+            "name": "cobblestone",
+            "count": 20
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "stick",
+            "count": 2
+          },
+          {
+            "name": "dirt",
+            "count": 4
+          }
+        ],
+        "position": {
+          "x": 122.78049437089769,
+          "y": 63,
+          "z": 115.30000003
+        }
+      }
+    },
+    {
+      "name": "Walk back to the original standing cell",
+      "passed": true,
+      "elapsedMs": 1468,
+      "detail": {
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": 123.5,
+            "y": 65,
+            "z": 116.53
+          },
+          "target": {
+            "x": 123,
+            "y": 65,
+            "z": 116
+          },
+          "radius": 0
+        },
+        "retainedCobblestone": 20,
+        "deaths": 0,
+        "respawns": 0
+      }
+    }
+  ],
+  "finished": "2026-10-01T10:04:40.273Z",
+  "harnessSha256": "a39cd7d19928af1d938807abb46ef0c57c249d25de486b107f0194aa85c1479c"
+}

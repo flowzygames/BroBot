@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "protocol": "controls-v1",
+  "label": "overnight-c1",
+  "commit": "c1e01963a8eea0b6446c47a1f4dd6302a91986f8",
+  "dirty": false,
+  "environment": {
+    "platform": "linux",
+    "node": "v24.19.0"
+  },
+  "conditions": {
+    "mode": "local-command-grammar-and-simulated-control-failures",
+    "paidModel": false,
+    "languageModelUnderstanding": "not tested"
+  },
+  "cases": [
+    {
+      "group": "CommandSense",
+      "id": "stop",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "pause",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "!bro follow me",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "come here",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "goto 1 64 -2",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "goto camp",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "remember camp",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "home",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "inventory",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "status",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "action collect {\"block\":\"stone\",\"count\":3}",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "goal Gather wood",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "survive starter",
+      "passed": true
+    },
+    {
+      "group": "CommandSense",
+      "id": "survive resume",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "only-owner-commands",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "invalid-action-json",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "stop-retains-lock",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "pre-cancelled-does-not-act",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "completion-needs-observed-items",
+      "passed": true
+    },
+    {
+      "group": "SafetyLatch",
+      "id": "api-failure-does-not-execute",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-01T06:13:19.364Z"
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "classification": "development",
+  "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "protocol": "trailhead-v1",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "passed": 3,
+  "scheduled": 3,
+  "completed": 3,
+  "complete": true,
+  "cases": [
+    {
+      "seed": "718224",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 100478,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    },
+    {
+      "seed": "42",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 158151,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    },
+    {
+      "seed": "20260930",
+      "status": "passed",
+      "passed": true,
+      "elapsedMs": 76891,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    }
+  ],
+  "note": "Known development worlds; not evidence of broad or held-out reliability. Retain all individual run records and failed attempts."
+}
