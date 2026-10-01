@@ -95,6 +95,155 @@
         }
       ],
       "note": "These worlds were inspected after the earlier6e run; this is no longer a first-pass sample"
+    },
+    "fresh": {
+      "label": "Preselected first-pass worlds",
+      "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+      "passed": 8,
+      "scheduled": 20,
+      "cases": [
+        {
+          "seed": "454806089",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 54615,
+          "reason": "A hostile mob is too close for unarmored starter gathering."
+        },
+        {
+          "seed": "1542908414",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 300005,
+          "reason": "Starter job time budget reached."
+        },
+        {
+          "seed": "761598570",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 77559,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1587439118",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 111019,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "924242050",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 69349,
+          "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+        },
+        {
+          "seed": "113919219",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 81358,
+          "reason": "No bounded exploration target remains inside the job area."
+        },
+        {
+          "seed": "474859294",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 66607,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1576696577",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 76876,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1382194916",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 268456,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "386690312",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 240929,
+          "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+        },
+        {
+          "seed": "1744809425",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 300004,
+          "reason": "Starter job time budget reached."
+        },
+        {
+          "seed": "61544722",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 39682,
+          "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+        },
+        {
+          "seed": "1041160109",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 52441,
+          "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+        },
+        {
+          "seed": "1888406977",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 94592,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1547703085",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 50049,
+          "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+        },
+        {
+          "seed": "1146093953",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 121782,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1014875191",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 182430,
+          "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+        },
+        {
+          "seed": "355620996",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 230148,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1276821265",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 300021,
+          "reason": "Starter job time budget reached."
+        },
+        {
+          "seed": "1244186709",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 67099,
+          "reason": "Exploration budget exhausted: No supported tree logs are visible nearby."
+        }
+      ],
+      "note": "One run per new world; all failures retained"
     }
   }
 }

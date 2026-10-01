@@ -8,7 +8,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. The latest build completed three original worlds, two of three additional worlds and two of four wider known worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Its autonomous starter mode is experimental. In a preselected twenty-world first-pass evaluation, the latest measured build completed 8/20 (40%). It also completed three original known worlds, two of three additional known worlds and two of four wider known worlds. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 

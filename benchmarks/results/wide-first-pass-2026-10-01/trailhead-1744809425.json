@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "wide-first-pass-1e7",
+  "commit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T09:31:20.810Z",
+  "finished": "2026-10-01T09:36:51.620Z",
+  "status": "failed",
+  "passed": false,
+  "elapsedMs": 300004,
+  "reason": "Starter job time budget reached.",
+  "seed": "1744809425",
+  "recordKind": "Summary with initial/final evidence. Duplicate runtime history and trace omitted; full original records retained.",
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 75,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": []
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 37.42,
+      "y": 53,
+      "z": 12.99
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "inventory": [
+      {
+        "name": "birch_log",
+        "count": 5,
+        "durability_used": null
+      },
+      {
+        "name": "birch_sapling",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 12
+      },
+      {
+        "name": "cobblestone",
+        "count": 11,
+        "durability_used": null
+      },
+      {
+        "name": "wildflowers",
+        "count": 10,
+        "durability_used": null
+      },
+      {
+        "name": "birch_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "dirt",
+        "count": 2,
+        "durability_used": null
+      }
+    ]
+  },
+  "job": {
+    "status": "paused",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 75,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 37,
+    "scouts": 1,
+    "reason": "Starter job time budget reached.",
+    "evidence": null
+  },
+  "fullRecordSha256": "11f9c31330ebb42caea0ecfb0bda344ae6036b6614cf049fe06a4c7dadb6bdd7"
+}

@@ -16,11 +16,15 @@
     "passed": 2,
     "scheduled": 3
   },
-  "multiWorldEvaluation": "Complete known-world checkpoint: original3/3, additional2/3, wider2/4. A separate20-world first-pass evaluation is pending.",
+  "multiWorldEvaluation": "Twenty preselected first-pass worlds completed8/20 (40%) on1e7. Separate known-world results3/3,2/3,2/4. No stable1.0 claim.",
   "readyForStable1_0": false,
   "note": "Published and packaged trees match; tested application files are unchanged, verified by the included tested-code manifest.",
   "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4
+  },
+  "firstPassWorlds": {
+    "passed": 8,
+    "scheduled": 20
   }
 }

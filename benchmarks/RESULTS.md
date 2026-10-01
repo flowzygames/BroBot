@@ -1,4 +1,39 @@
-# Latest pickup and pause-recovery checkpoint — October 1, 2026
+# Twenty-world first-pass coverage — October 1, 2026
+
+**8/20 completed (40%).** On frozen application `1e7ab1f96656cabcdfd28c4f077ce49699e0234a`, twenty preselected new worlds were each tested once under the same 300-second normal-survival protocol. The objective required both a stone pickaxe and furnace, being alive, and returning to the starting point. No materials or terrain were supplied and no paid model was used.
+
+This is the wider readiness result, separate from the better scores on known development worlds below. **Twelve runs did not complete. BroBot is not ready to claim reliable autonomous survival or stable 1.0.**
+
+| Seed | Outcome | Seconds | Recorded reason |
+|---|---|---:|---|
+| 454806089 | Fail | 54.615 | A hostile mob is too close for unarmored starter gathering. |
+| 1542908414 | Fail | 300.005 | Starter job time budget reached. |
+| 761598570 | Pass | 77.559 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1587439118 | Pass | 111.019 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 924242050 | Fail | 69.349 | Exploration budget exhausted: Repeated collect failure. Look for a different approach. |
+| 113919219 | Fail | 81.358 | No bounded exploration target remains inside the job area. |
+| 474859294 | Pass | 66.607 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1576696577 | Pass | 76.876 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1382194916 | Pass | 268.456 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 386690312 | Fail | 240.929 | Exploration budget exhausted: Repeated collect failure. Look for a different approach. |
+| 1744809425 | Fail | 300.004 | Starter job time budget reached. |
+| 61544722 | Fail | 39.682 | Exploration budget exhausted: No supported tree logs are visible nearby. |
+| 1041160109 | Fail | 52.441 | Exploration budget exhausted: No supported tree logs are visible nearby. |
+| 1888406977 | Pass | 94.592 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1547703085 | Fail | 50.049 | Exploration budget exhausted: No supported tree logs are visible nearby. |
+| 1146093953 | Pass | 121.782 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1014875191 | Fail | 182.430 | Exploration budget exhausted: Repeated collect failure. Look for a different approach. |
+| 355620996 | Pass | 230.148 | Observed a stone pickaxe and furnace in inventory, alive and back at the start. |
+| 1276821265 | Fail | 300.021 | Starter job time budget reached. |
+| 1244186709 | Fail | 67.099 | Exploration budget exhausted: No supported tree logs are visible nearby. |
+
+Seeds were selected before world inspection using a recorded deterministic random selection. All twenty scheduled cases finished and every failure remains in the denominator, including resource-poor spawns, hostile interruptions and terrain failures. The application remained unchanged throughout the run queue. These worlds may inform subsequent fixes; future runs on them are known-case reruns, not new first-pass evidence.
+
+[Preselection, validated summary and every individual record](results/wide-first-pass-2026-10-01/) retain source, conditions and initial/final evidence. Original full records are retained, with SHA-256 identities in the published summaries. This small sample is not an overall intelligence score.
+
+---
+
+## Pickup and pause-recovery checkpoint — October 1, 2026
 
 Tested clean application `1e7ab1f96656cabcdfd28c4f077ce49699e0234a`: **208 automated checks**, **17/17 prepared live regression phases**, **11/11 prepared skill cases**, and **20/20 local controls**. All ten known-world reruns used this same frozen source. The source manifest verifies the tested application bytes in a documentation/evidence package.
 
@@ -18,7 +53,7 @@ Tested clean application `1e7ab1f96656cabcdfd28c4f077ce49699e0234a`: **208 autom
 | 904314939 | Fail | 193.955s |
 | **Wider known development worlds** | **2/4** | |
 
-All ten are now known development worlds. The four wider seeds were new first-pass cases only in the earlier 6e checkpoint; these reruns must not be called held-out or new. Every failed case remains in its denominator. A separate preselected twenty-world first-pass evaluation is underway on this unchanged application; no score is claimed before it finishes.
+All ten are now known development worlds. The four wider seeds were new first-pass cases only in the earlier 6e checkpoint; these reruns must not be called held-out or new. Every failed case remains in its denominator. The separate twenty-world first-pass evaluation above completed 8/20 on this unchanged application.
 
 ## What changed
 

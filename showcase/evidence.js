@@ -1,7 +1,7 @@
 const panel = document.querySelector('#worldEvidence');
 if (panel) {
   const list = panel.querySelector('#worldCases'), status = panel.querySelector('#worldStatus');
-  let data, selected = 'core';
+  let data, selected = 'fresh';
   const render = () => {
     if (!data) return;
     const group = data.groups[selected];
@@ -21,14 +21,14 @@ if (panel) {
       const explanation = document.createElement('p'); explanation.textContent = 'Normal survival. Empty inventory. No supplied materials or edited terrain. One offline command: gather a stone pickaxe and furnace, then return alive to the starting point within 300 seconds.';
       detail.append(summary, explanation); card.append(heading, elapsed, reason, detail); list.append(card);
     }
-    panel.querySelector('#worldSource').textContent = `Tested app snapshot ${data.sourceCommit.slice(0, 7)} · Minecraft ${data.minecraft} · Linux · no paid model calls`;
+    panel.querySelector('#worldSource').textContent = `Tested app snapshot ${(group.sourceCommit || data.sourceCommit).slice(0, 7)} · Minecraft ${data.minecraft} · Linux · no paid model calls`;
   };
   panel.querySelectorAll('[data-cohort]').forEach(button => button.addEventListener('click', () => { selected = button.dataset.cohort; render(); }));
   fetch('/checkpoint.json').then(response => { if (!response.ok) throw Error('unavailable'); return response.json(); }).then(value => {
     if (!/^[a-f0-9]{40}$/.test(value.sourceCommit ?? '') || typeof value.minecraft !== 'string') throw Error('invalid');
     for (const button of panel.querySelectorAll('[data-cohort]')) {
       const group = value.groups?.[button.dataset.cohort];
-      if (!group || !Array.isArray(group.cases) || !Number.isInteger(group.scheduled) || group.scheduled < 1 || group.cases.length !== group.scheduled || group.passed !== group.cases.filter(run => run.passed === true).length || new Set(group.cases.map(run => run.seed)).size !== group.cases.length) throw Error('invalid');
+      if (!group || (group.sourceCommit != null && !/^[a-f0-9]{40}$/.test(group.sourceCommit)) || !Array.isArray(group.cases) || !Number.isInteger(group.scheduled) || group.scheduled < 1 || group.cases.length !== group.scheduled || group.passed !== group.cases.filter(run => run.passed === true).length || new Set(group.cases.map(run => run.seed)).size !== group.cases.length) throw Error('invalid');
       if (group.cases.some(run => typeof run.seed !== 'string' || !['passed', 'failed', 'error', 'unsupported', 'not_run'].includes(run.status) || run.passed !== (run.status === 'passed') || (run.elapsedMs !== null && (!Number.isFinite(run.elapsedMs) || run.elapsedMs < 0)))) throw Error('invalid');
     }
     data = value; render();

@@ -35,7 +35,7 @@ const replay = JSON.parse(fs.readFileSync(path.join(root, 'run-telemetry.json'),
 const scorecard = JSON.parse(fs.readFileSync(path.join(root, 'brobench-current.json'), 'utf8'));
 assert.equal(replay.sourceCommit, release.testedApplicationCommit);
 assert.equal(scorecard.commits.candidate, release.testedApplicationCommit);
-for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','widerKnownWorlds']]) {
+for (const [group,key] of [['core','originalDevelopmentWorlds'],['additional','additionalDevelopmentWorlds'],['firstPass','widerKnownWorlds'],['fresh','firstPassWorlds']]) {
   const g = checkpoint.groups[group];
   assert.equal(g.cases.length, g.scheduled);
   assert.equal(g.cases.filter(r=>r.passed).length,g.passed);
