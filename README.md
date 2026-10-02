@@ -1,3 +1,5 @@
+> Latest development checkpoint: 293 automated checks; selected natural-world trials 1/2, not a full-cohort reliability score. Includes partial wood-batch sizing and powder-snow contact warnings. [Evidence](benchmarks/results/wood-deficit-2026-10-02/README.md).
+
 # BroBot
 
 ### A Minecraft companion that turns commands into real actions
