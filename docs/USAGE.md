@@ -133,7 +133,7 @@ of requiring the player to issue every gathering/crafting command.
 The job can try other resource positions, recover dropped items, clear up to
 four observed leaf obstructions in front of a needed tree, and scout bounded
 returnable paths. It stops on dangerous health/hunger, dimension changes,
-disconnects, eight exhausted scouting attempts, 64 work steps or its ten-minute default time budget (benchmarks use five minutes).
+disconnects, 24 exhausted scouting attempts, 96 work steps or its ten-minute default time budget (benchmarks use five minutes).
 These are conservative stops, not guarantees of success in every world.
 
 Use `stop` at any point. `survive resume` resumes a saved paused/blocked job only
@@ -144,3 +144,5 @@ food production, shelter, night survival, iron progression or beating the game.
 
 See [BroBench](../benchmarks/README.md) for versioned scores, test conditions and
 how to repeat the benchmarks without confusing offline commands with LLM tests.
+
+Expanded starter exploration uses a 256-block job radius (262-block emergency stop), up to 24 scouts with legs no longer than 64 blocks, and observed intermediate waypoints for longer home/table returns. Each return leg must have a verified forward-and-return walking route; unknown or blocked routes stop the job. The ten-minute job deadline remains. A larger allowed region is not a promise of complete coverage or safe arrival. The separate one-leaf canopy descent keeps its narrower proof limits.

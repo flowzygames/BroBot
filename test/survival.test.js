@@ -54,7 +54,7 @@ test('reported action success cannot fake starter completion without actual inve
 test('missing resources trigger bounded scouting instead of an endless collect retry', async () => {
   const f = fixture(); f.job.observe = async () => ({});
   f.job.start(); await f.job.promise;
-  assert.equal(f.calls.length, 8); assert.ok(f.calls.every(c => c.name === 'explore' && c.args.returnable));
+  assert.equal(f.calls.length, 24); assert.ok(f.calls.every(c => c.name === 'explore' && c.args.returnable));
   assert.match(f.job.state().reason, /Exploration budget/);
 });
 
@@ -419,4 +419,105 @@ test('tree observation sorts a bounded wider sample before selecting its sixteen
   runtime.execute=async()=>({position:{x:.5,y:64,z:.5},nearby_blocks:[]});
   runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'birch_log'}]},entity:{position:new Vec3(.5,64,.5)},findBlocks:options=>{assert.equal(options.count,128);assert.equal(options.maxDistance,48);return [...far,near];},blockAt:p=>({name:p.equals(near)?'birch_log':'oak_log',position:p}),world:{raycast:()=>null},quit(){}};
   try{assert.equal((await runtime.survival.observe()).wood,'birch');}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('scout recovery records actual attempted alternatives and partial observation positions', async () => {
+  const f=fixture({maxSteps:2}); f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    assert.equal(name,'explore');const tried=[args.direction,args.alternatives[0]];
+    f.state.position.x+=3;
+    throw Object.assign(Error('Partial walk failed'),{result:{directions_tried:tried}});
+  };
+  f.job.start();await f.job.promise;
+  const saved=f.job.state();assert.equal(saved.scouts,2);assert.equal(saved.scoutAttempts.length,4);
+  assert.deepEqual(saved.scoutAttempts[0].origin,{x:0.5,y:64,z:0.5});
+  assert.deepEqual(saved.scoutAttempts[2].origin,{x:3.5,y:64,z:0.5});
+  assert.ok(saved.observedPositions.some(p=>p.x===3.5));
+  assert.ok(saved.observedPositions.every(p=>p.x===0.5||p.x===3.5));
+});
+test('cancelled scout retains actual probe evidence without counting desired targets as visited', async () => {
+  const f=fixture();f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    const directions_tried=[args.direction,args.alternatives[0]];
+    f.job.stop('Player cancelled');throw Object.assign(Error('Action cancelled'),{name:'AbortError',result:{directions_tried}});
+  };
+  f.job.start();await f.job.promise;const s=f.job.state();
+  assert.equal(s.status,'paused');assert.equal(s.scouts,1);assert.equal(s.scoutAttempts.length,2);
+  assert.deepEqual(s.observedPositions,[{x:0.5,y:64,z:0.5}]);
+});
+test('expanded starter allows work beyond90 but blocks beyond262', () => {
+  const f=fixture(),job={home:{position:{x:0,y:64,z:0},dimension:'overworld'}};
+  f.state.position.x=200;assert.ok(!nextStarterStep(f.state,job,{}).blocked);
+  f.state.position.x=263;assert.match(nextStarterStep(f.state,job,{}).blocked,/262-block/);
+});
+test('far starter home return follows observed short legs without claiming early completion', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);
+  const job={home:{position:{x:0.5,y:64,z:0.5},dimension:'overworld'},observedPositions:[0.5,70.5,140.5,210.5].map(x=>({x,y:64,z:0.5}))};
+  f.state.position.x=230.5;
+  for(const x of [140,70,0]){
+    const step=nextStarterStep(f.state,job,{});assert.equal(step.name,'go_to');assert.equal(step.args.x,x);assert.equal(step.args.returnable,true);
+    assert.ok(Math.abs(step.args.x-f.state.position.x)<97);f.state.position.x=x+0.5;
+  }
+  assert.equal(nextStarterStep(f.state,job,{}).complete,true);
+});
+test('far return never invents an unobserved midpoint or claims a completed kit at distance', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position.x=230;
+  const step=nextStarterStep(f.state,{home:{position:{x:0,y:64,z:0},dimension:'overworld'}},{});
+  assert.match(step.blocked,/No observed intermediate waypoint/);assert.ok(!step.complete);
+});
+test('far table travel keeps actual table identity while choosing a local observed hop', () => {
+  const f=fixture();f.state.position.x=230;
+  const table={x:0,y:64,z:0},job={home:{position:table,dimension:'overworld'},tables:[table],observedPositions:[{x:150,y:64,z:0},{x:70,y:64,z:0}]};
+  const step=nextStarterStep(f.state,job,{});
+  assert.equal(step.name,'go_to');assert.equal(step.args.x,150);assert.equal(step.args.returnable,true);
+  assert.deepEqual(step.waypointTarget,table);
+});
+test('unloaded remembered table survives observations but never counts as reachable until loaded', async () => {
+  const {Runtime}=await import('../src/runtime.js'),{loadConfig}=await import('../src/config.js'),{Vec3}=await import('vec3');
+  const {mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+  const dir=await mkdtemp(join(tmpdir(),'brobot-unloaded-table-')),r=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));
+  const table={x:2,y:64,z:0};let block=null;
+  r.survival.job={tables:[table]};r.execute=async()=>({position:{x:0,y:64,z:0},nearby_blocks:[]});
+  r.bot={registry:{blocksArray:[{name:'crafting_table',id:1}]},entity:{position:new Vec3(0,64,0)},findBlocks:()=>[],blockAt:()=>block,canSeeBlock:()=>true,quit:()=>{}};
+  try{
+    let o=await r.survival.observe();assert.deepEqual(o.tables,[table]);assert.equal(o.tableInReach,false);
+    block={name:'air'};o=await r.survival.observe();assert.equal(o.tables.length,0);
+    block={name:'crafting_table'};o=await r.survival.observe();assert.equal(o.tableInReach,true);
+  }finally{await r.close();await rm(dir,{recursive:true,force:true})}
+});
+test('expanded return can retrace a U-shaped observed trail away from home first', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position={x:160,y:64,z:0};
+  const observedPositions=[[0,0],[0,64],[0,128],[64,128],[128,128],[176,96],[176,48],[160,0]].map(([x,z])=>({x,y:64,z}));
+  const job={home:{position:{x:0,y:64,z:0},dimension:'overworld'},observedPositions};
+  for(let i=0;i<12;i++){
+    const step=nextStarterStep(f.state,job,{});if(step.complete)return;
+    assert.equal(step.name,'go_to');assert.equal(step.args.returnable,true);
+    assert.ok(Math.hypot(f.state.position.x-step.args.x,f.state.position.z-step.args.z)<=96);
+    f.state.position={x:step.args.x,y:step.args.y,z:step.args.z};
+  }
+  assert.fail('Observed return chain did not converge');
+});
+test('a rejected shortcut uses an alternative observed edge rather than repeating it', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position={x:150,y:64,z:0};
+  const job={home:{position:{x:0,y:64,z:0},dimension:'overworld'},observedPositions:[{x:80,y:64,z:0},{x:140,y:64,z:60},{x:70,y:64,z:60}],ignoredTravelEdges:[{from:f.state.position,to:{x:80,y:64,z:0}}]};
+  const step=nextStarterStep(f.state,job,{});assert.equal(step.name,'go_to');assert.notEqual(step.args.z,0);
+});
+test('a remembered table without a candidate breadcrumb route does not block local rebuilding', () => {
+  const f=fixture();f.state.position.x=200;
+  const job={home:{position:{x:0,y:64,z:0},dimension:'overworld'},tables:[{x:0,y:64,z:0}]};
+  const step=nextStarterStep(f.state,job,{wood:'oak'});
+  assert.equal(step.name,'collect');assert.equal(step.args.block,'oak_log');
+});
+test('two failed shortcut executions persist an edge exclusion and return by another observed chain', async () => {
+  const f=fixture({maxSteps:12});f.add('stone_pickaxe',1);f.add('furnace',1);
+  let failures=0;
+  f.job.execute=async(name,args,signal)=>{
+    if(name==='go_to'&&args.x===80&&args.z===0&&Math.hypot(f.state.position.x-150,f.state.position.z)<2){f.calls.push({name,args});failures++;throw Error('No verified returnable walking route (noPath)');}
+    return f.execute(name,args,signal);
+  };
+  f.job.start();f.state.position={x:150,y:64,z:0};
+  f.job.job.observedPositions=[{x:80,y:64,z:0},{x:140,y:64,z:60},{x:70,y:64,z:60}];
+  await f.job.promise;
+  assert.equal(failures,2);assert.equal(f.job.state().ignoredTravelEdges.length,1);
+  assert.equal(f.calls[2].args.z,60);assert.equal(f.job.state().status,'complete');
 });

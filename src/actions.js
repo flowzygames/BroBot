@@ -5,7 +5,7 @@ import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
 import { planLeafNotch } from './canopy-descent.js'
 import { retainedLeafAnchor } from './construction-guards.js'
-import { planReturnablePath, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES } from './navigation-guards.js'
+import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
 const AIR = new Set(['air', 'cave_air', 'void_air'])
@@ -49,7 +49,7 @@ const def = (name, description, properties) => ({ type: 'function', name, descri
 export const definitions = [
   def('inspect', 'Read real position, health, inventory, visible entities, nearby useful blocks, and immediately craftable recipe hints. This does not reveal unloaded terrain.', { radius: optional(number('Block search radius; default 16', 1, 32, true)) }),
   def('descend_notch', 'Experimental bounded descent: remove at most one observed adjacent leaf to step down one block, only with a verified walking return route and retained leaf-support anchors. Requires health 12+, food 10+, and a grounded start. Refuses unsupported terrain. Does not perform a complete treetop escape.', {}),
-  def('go_to', 'Walk to a loaded location within 128 blocks. Never digs or places blocks while navigating. Radius 0 requires standing at the exact block.', { ...posSchema, radius: optional(number('Acceptable distance; default 1', 0, 8)) }),
+  def('go_to', 'Walk to a loaded location within 128 blocks. Never digs or places blocks while navigating. Radius 0 requires standing at the exact block.', { ...posSchema, radius: optional(number('Acceptable distance; default 1', 0, 8)), returnable: optional({ type: 'boolean', description: 'Certify a terrain-preserving round trip before walking; default false' }) }),
   def('follow', 'Follow a visible player for a bounded number of seconds; repeat if necessary. Never changes terrain.', { player: str('Exact visible player username'), duration: optional(number('Seconds; default 15', 1, 60)), distance: optional(number('Following distance; default 3', 1, 8)) }),
   def('collect', 'Mine up to the requested number of named blocks using a suitable owned tool, then pick up nearby drops. Reports blocks mined and actual inventory gains separately. Requires visible reachable blocks.', { block: str('Exact registry block name, for example oak_log or iron_ore'), count: number('Number of blocks to mine', 1, 64, true), radius: optional(number('Search radius; default 24', 1, 64, true)), skip_positions: optional({ type: 'array', maxItems: 128, items: { type: 'object', properties: { x: number('X', -29999984, 29999984, true), y: number('Y', -2048, 2048, true), z: number('Z', -29999984, 29999984, true) }, required: ['x', 'y', 'z'], additionalProperties: false }, description: 'Previously unreachable positions to skip for this request; default none' }) }),
   def('dig_at', 'Mine one exact loaded block and collect drops using an appropriate owned tool. Useful for planned stairs, tunnels, or clearing a specific obstruction. Refuses to mine under the bot, expose adjacent water/lava, or release an overhead falling block.', { ...posSchema, expected_block: optional(str('Refuse if the target no longer has this block name; default no precondition')) }),
@@ -65,7 +65,7 @@ export const definitions = [
   def('activate', 'Right-click a loaded reachable block, such as a door, button, lever, or workstation. Reports observed block/window change, not unverified mechanism results.', { ...posSchema }),
   def('use_item', 'Use an owned/current held item in a chosen direction for a bounded time, then release it. Yaw/pitch are radians. Useful for bow, shield, fishing, eyes of ender, or other right-click items. Reports actual item use and inventory changes, not guessed hits.', { item: optional(str('Item to equip, or null for current held item')), yaw: optional(number('Yaw radians; null keeps current direction', -Math.PI, Math.PI)), pitch: optional(number('Pitch radians; positive looks up', -Math.PI / 2, Math.PI / 2)), duration: optional(number('Hold seconds before release; default 1', 0, 10)) }),
   def('pickup', 'Walk over nearby dropped item entities and report verified inventory gains.', { radius: optional(number('Maximum radius; default 12', 1, 32, true)), entity_ids: optional({ type: 'array', maxItems: 64, items: number('Observed item entity id', 0, 2147483647, true), description: 'Only recover these observed item ids; null chooses all nearby drops, an empty list chooses none' }) }),
-  def('explore', 'Walk a bounded distance in a compass direction while loading new terrain, without digging or placing.', { direction: optional({ type: 'string', enum: ['north', 'south', 'east', 'west', null], description: 'Compass direction; null uses current facing' }), distance: optional(number('Distance; default 24', 4, 96, true)), returnable: optional({ type: 'boolean', description: 'Require a verified walking return path before exploration; default false' }) })
+  def('explore', 'Walk a bounded distance in a compass direction while loading new terrain, without digging or placing.', { direction: optional({ type: 'string', enum: ['north', 'south', 'east', 'west', null], description: 'Compass direction; null uses current facing' }), distance: optional(number('Distance; default 24', 4, 96, true)), returnable: optional({ type: 'boolean', description: 'Require a verified walking return path before exploration; default false' }), alternatives: optional({ type: 'array', maxItems: 3, items: { type: 'string', enum: ['north', 'east', 'south', 'west'] }, description: 'Ranked fallback directions; requires explicit direction and returnable true; shares one planning budget' }) })
 ]
 
 function abortError () { const error = new Error('Action cancelled'); error.name = 'AbortError'; return error }
@@ -190,7 +190,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return p
   }
 
-  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false } = {}) {
+  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false, walkingTimeoutMs = 15000 } = {}) {
     checked(ctx)
     assert(target.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start')
     assert(insideBoundary(target), 'Target is outside the current job movement boundary')
@@ -198,11 +198,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     configureMovement()
     let goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
     if (returnable) goal = await returnableGoal(ctx, goal)
-    await step(ctx, () => returnable ? walkToGoal(bot, goal, { signal: ctx.signal }) : bot.pathfinder.goto(goal))
+    await step(ctx, () => returnable ? walkToGoal(bot, goal, { signal: ctx.signal, timeoutMs: walkingTimeoutMs }) : bot.pathfinder.goto(goal))
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
-  async function returnableGoal (ctx, goal, fixedEndpoint = null) {
+  async function returnableGoal (ctx, goal, fixedEndpoint = null, planningBudget = 1600) {
     checked(ctx)
     configureMovement()
     const used = ctx.planningUsed ?? 0
@@ -213,7 +213,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // Requiring the floored center as a reverse endpoint invents an impossible
       // standing cell. Verify a real walking route back within one block instead.
       const home = ctx.origin.floored()
-      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used), fixedEndpoint, yieldControl: () => pause(ctx, 0) })
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, yieldControl: () => pause(ctx, 0) })
       checked(ctx)
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
     } catch (error) {
@@ -911,7 +911,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
 
   const handlers = {
     inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt, descend_notch: descendNotch,
-    go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
+    go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius, { returnable: args.returnable === true, walkingTimeoutMs: 45000 }); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
     place: async (args, ctx) => placeOne(ctx, cleanName(args.block, 'block'), coordinates(args, ctx)),
     pickup: async (args, ctx) => pickupInternal(ctx, numeric(args.radius, 12, 1, 32, true), args.entity_ids),
     equip: async (args, ctx) => { const name = cleanName(args.item); const destination = args.destination ?? 'hand'; assert(['hand', 'off-hand', 'head', 'torso', 'legs', 'feet'].includes(destination), 'Invalid equipment slot'); await step(ctx, () => bot.equip(owned(name), destination)); const slot = destination === 'hand' ? bot.heldItem : bot.inventory.slots[bot.getEquipmentDestSlot(destination)]; assert(slot?.name === name, `Equip was not confirmed in ${destination}`); return { equipped: name, destination } },
@@ -984,18 +984,40 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     explore: async (args, ctx) => {
       const distance = numeric(args.distance, 24, 4, 96, true)
       const vectors = { north: [0, -1], south: [0, 1], east: [1, 0], west: [-1, 0] }
-      assert(args.direction == null || vectors[args.direction], 'Invalid compass direction')
-      const [dx, dz] = args.direction == null ? [-Math.sin(bot.entity.yaw ?? 0), -Math.cos(bot.entity.yaw ?? 0)] : vectors[args.direction]
+      assert(args.direction == null || (typeof args.direction === 'string' && Object.hasOwn(vectors, args.direction)), 'Invalid compass direction')
+      const alternatives = args.alternatives ?? []
+      assert(Array.isArray(alternatives) && alternatives.length <= 3 && alternatives.every(d => typeof d === 'string' && Object.hasOwn(vectors, d)), 'Invalid exploration alternatives')
+      assert(!alternatives.length || (Object.hasOwn(vectors, args.direction) && args.returnable === true), 'Exploration alternatives require an explicit direction and verified return route')
+      assert(new Set([args.direction, ...alternatives]).size === alternatives.length + 1, 'Exploration directions must be distinct')
       const start = bot.entity.position.clone()
-      const target = start.offset(dx * distance, 0, dz * distance).floored()
-      assert(Math.abs(target.x) < 29999984 && Math.abs(target.z) < 29999984, 'Exploration exceeds world bounds')
+      const targetFor = direction => {
+        const [dx, dz] = direction == null ? [-Math.sin(bot.entity.yaw ?? 0), -Math.cos(bot.entity.yaw ?? 0)] : vectors[direction]
+        const target = start.offset(dx * distance, 0, dz * distance).floored()
+        assert(Math.abs(target.x) < 29999984 && Math.abs(target.z) < 29999984, 'Exploration exceeds world bounds')
+        assert(insideBoundary(target), 'Exploration target is outside the current job movement boundary')
+        return new goals.GoalXZ(target.x, target.z)
+      }
       configureMovement()
-      let goal = new goals.GoalXZ(target.x, target.z)
-      if (args.returnable === true) goal = await returnableGoal(ctx, goal)
-      await step(ctx, () => bot.pathfinder.goto(goal))
-      const actual = Math.hypot(bot.entity.position.x - start.x, bot.entity.position.z - start.z)
-      assert(actual >= distance - 2, 'Exploration ended before requested distance')
-      return { explored: true, distance: Math.round(actual * 10) / 10, position: plainPos(bot.entity.position) }
+      let direction = args.direction, tried = [direction], routeAttempts = [], goal
+      if (alternatives.length) {
+        const selected = await planRankedRoutes([direction, ...alternatives], async (candidate, budget) => {
+          checked(ctx)
+          return returnableGoal(ctx, targetFor(candidate), null, budget)
+        }, { signal: ctx.signal })
+        goal = selected.route; direction = selected.candidate; tried = selected.tried; routeAttempts = selected.outcomes
+      } else {
+        goal = targetFor(direction)
+        if (args.returnable === true) goal = await returnableGoal(ctx, goal)
+      }
+      // Never switch candidates after movement starts: a walking failure ends
+      // this scout and the controller must inspect the real position again.
+      try {
+        await step(ctx, () => bot.pathfinder.goto(goal))
+        const actual = Math.hypot(bot.entity.position.x - start.x, bot.entity.position.z - start.z)
+        assert(actual >= distance - 2, 'Exploration ended before requested distance')
+        return { explored: true, direction, directions_tried: tried, route_attempts: routeAttempts, distance: Math.round(actual * 10) / 10, position: plainPos(bot.entity.position) }
+      } catch (error) { error.result = { ...(error.result ?? {}), directions_tried: tried, route_attempts: routeAttempts }; throw error }
+
     }
   }
 
