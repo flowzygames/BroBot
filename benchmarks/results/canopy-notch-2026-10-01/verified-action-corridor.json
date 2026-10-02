@@ -1,0 +1,175 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:57:56.650Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 23,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Execute observed bounded descent action",
+      "passed": true,
+      "elapsedMs": 1113,
+      "detail": {
+        "completed": true,
+        "mined": 1,
+        "descended_blocks": 1,
+        "position": {
+          "x": 225.62,
+          "y": 84,
+          "z": -31.41
+        },
+        "return_home": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "experimental": true
+      }
+    },
+    {
+      "name": "Return home alive",
+      "passed": true,
+      "elapsedMs": 497,
+      "detail": {
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "spruce_log",
+            "count": 3
+          },
+          {
+            "name": "stick",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "Retained home support under normal random ticks",
+      "passed": true,
+      "elapsedMs": 10352,
+      "detail": {
+        "before": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "after": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "observationSeconds": 10
+      }
+    }
+  ],
+  "passed": true,
+  "sourceHashes": {
+    "src/actions.js": "1452136b51cd6fcb0e2e922c303d1f74808e2b0041a7cf8df38e4dafe8e403e6",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/memory.js": "11d5ce92c770b6f2894b1443afcd37caa0d8f7ff0dd55de4ad6daacdebe0096a",
+    "src/navigation-guards.js": "83260fec10d4f66fb1cc29996b1b805418dbda2a7233eea4a19034987ce4dc53",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/pickup-transit.js": "481f31a562f575ae38cde9fe34ab4114e9596f359b115f63ba85e81f90131cc6",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "60cb46ece587e12e19fac6886b75d887156de8ff745e10420a685057d2f5d2b7",
+    "src/runner.js": "acc0da55a868220e6ac0f50367615cbafd3f4290f28ff0f6e3b61ff080a80a5a",
+    "src/runtime.js": "1fad4baf4ac21425d5d5381b5a351a63d40eee158f54e0ef2957f03289ca833f",
+    "src/survival-observation.js": "109498895fa329062a023b37fa83325037f13d78e9d1bd4415e793d2f089a1fe",
+    "src/survival.js": "d1c492339d410d847c74e1feb7598620b2f5283e6a5ce01c0435c3ad2b8eb254",
+    "src/web.js": "4db1b46a35586d2725e599b7d1773a3c141a5b419676ef71c55f306ea40d8559",
+    "scripts/server.js": "cf5695479e880b686f9984e4a59695a0ade681d16eb2044f8890fbd500728a0c",
+    "scripts/diagnostic-canopy-notch.js": "6769e9fa36024178f7a0cf7b28a1314eafe0c6afdcf6d1b2391cb6645c040c39"
+  },
+  "finished": "2026-10-01T19:58:22.139Z"
+}

@@ -36,7 +36,31 @@ export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNo
     }
   }
   const endpoints = [...cells.values()].sort((a,b)=>a.distanceTo(position)-b.distanceTo(position)).slice(0,12);
-  if (!endpoints.length) return null;
+  // Some drops sit in one-block-high pockets with no standing endpoint yet.
+  // Existing reachable cells (including our own origin) are not evidence that
+  // those drops can be collected. Only consider a new cell for an item with no
+  // pre-existing supported standing cell close enough to it.
+  const nearDrop = (p, item) => Math.abs(p.y - item.position.y) <= 0.5 && p.offset(0.5, 0, 0.5).distanceTo(item.position) <= 1.4;
+  const standing = (getBlock, p, naturalOnly = true) => {
+    const floor = getBlock(p.offset(0, -1, 0));
+    return passable(getBlock(p)) && passable(getBlock(p.offset(0, 1, 0))) && (naturalOnly ? supportable(floor) : floor?.boundingBox === 'block') &&
+      !isFluidBearingBlock(floor) && !movement.blocksToAvoid.has(floor.type) && !movement.liquids.has(floor.type);
+  };
+  const pocketItems = items.filter(item => {
+    const base = item.position.floored();
+    for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
+      for (let y = Math.ceil(item.position.y - 0.5); y <= Math.floor(item.position.y + 0.5); y++) {
+        if (exhausted()) return false;
+        const p = new Vec3(base.x + x, y, base.z + z);
+        if (!nearDrop(p, item)) continue;
+        // Unknown cells cannot prove that an existing destination is absent.
+        if ([-1, 0, 1].some(dy => !bot.blockAt(p.offset(0, dy, 0)))) return false;
+        if (standing(q => bot.blockAt(q), p, false)) return false;
+      }
+    }
+    return true;
+  });
+  if (!endpoints.length && !pocketItems.length) return null;
   function view(removed = null) {
     let unknown=false;
     const virtualBot=Object.create(bot);
@@ -69,7 +93,7 @@ export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNo
   }
   const baseline=view();
   const sealed=endpoints.filter(p=>reach(baseline,p,origin)==='unreachable');
-  if (!sealed.length || exhausted()) return null;
+  if ((!sealed.length && !pocketItems.length) || exhausted()) return null;
   const candidates=[];
   for(let x=-2;x<=2;x++)for(let z=-2;z<=2;z++)for(let y=0;y<=3;y++) {
     if(exhausted())return null;
@@ -82,10 +106,15 @@ export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNo
     if(b.canHarvest && !b.canHarvest(held) && !inventory.some(i=>b.canHarvest(i.type)))continue;
     candidates.push(b);
   }
-  candidates.sort((a,b)=>Math.min(...sealed.map(p=>p.distanceTo(a.position)))+a.position.distanceTo(position)-Math.min(...sealed.map(p=>p.distanceTo(b.position)))-b.position.distanceTo(position));
+  const priorities = sealed.length ? sealed : pocketItems.map(item => item.position);
+  candidates.sort((a,b)=>Math.min(...priorities.map(p=>p.distanceTo(a.position)))+a.position.distanceTo(position)-Math.min(...priorities.map(p=>p.distanceTo(b.position)))-b.position.distanceTo(position));
   for(const block of candidates.slice(0,12)) {
     const hypothesis=view(block.position);
-    for(const endpoint of sealed) {
+    const opened = [block.position.offset(0, -1, 0), block.position].filter(p =>
+      !standing(q => bot.blockAt(q), p) && standing(q => hypothesis.graph.bot.blockAt(q), p) &&
+      pocketItems.some(item => nearDrop(p, item)));
+    const targets = [...new Map([...sealed, ...opened].map(p => [key(p), p])).values()].slice(0, 12);
+    for(const endpoint of targets) {
       if(exhausted())return null;
       if(reach(hypothesis,endpoint,origin)==='reachable' && reach(hypothesis,origin,endpoint)==='reachable') {
         return {x:block.position.x,y:block.position.y,z:block.position.z,expected_block:block.name};

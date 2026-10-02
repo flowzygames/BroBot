@@ -1,0 +1,110 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:37:45.837Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 19,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Dig one adjacent lower leaf without removing occupied support",
+      "passed": true,
+      "elapsedMs": 661,
+      "detail": {
+        "completed": true,
+        "mined": 1,
+        "block": "spruce_leaves",
+        "position": {
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        "inventory_changes": {},
+        "remaining_drops": [],
+        "pickup_failures": []
+      }
+    },
+    {
+      "name": "Verify real lower landing and return route",
+      "passed": true,
+      "elapsedMs": 2,
+      "detail": {
+        "endpoint": {
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Settle on lower landing",
+      "passed": true,
+      "elapsedMs": 710,
+      "detail": [
+        226.43573314134537,
+        84,
+        -32.65415032799951
+      ]
+    },
+    {
+      "name": "Enter trunk at Y84",
+      "passed": true,
+      "elapsedMs": 3815,
+      "detail": {
+        "digs": [
+          {
+            "completed": true,
+            "mined": 1,
+            "block": "spruce_log",
+            "position": {
+              "x": 227,
+              "y": 84,
+              "z": -33
+            },
+            "inventory_changes": {
+              "spruce_log": 1
+            },
+            "remaining_drops": [],
+            "pickup_failures": []
+          }
+        ],
+        "proof": {
+          "endpoint": {
+            "x": 227,
+            "y": 84,
+            "z": -33
+          },
+          "forwardNodes": 1,
+          "reverseNodes": 1
+        },
+        "position": [
+          227.30839610332004,
+          84,
+          -32.530086918170504
+        ]
+      }
+    },
+    {
+      "name": "Enter lower trunk at Y83",
+      "passed": false,
+      "error": "Will not dig the block supporting the bot"
+    }
+  ],
+  "passed": false,
+  "error": "Error: Will not dig the block supporting the bot\n    at assert (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/src/actions.js:69:62)\n    at harvestBlock (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/src/actions.js:421:5)\n    at async Object.digAt [as dig_at] (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/src/actions.js:447:18)\n    at async Object.execute (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/src/actions.js:935:22)\n    at async file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:54:106\n    at async phase (file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:32:71)\n    at async file:///workspace/scratch/ec0ad557001f/brobot-canopy-next/scripts/diagnostic-canopy-notch.js:52:7",
+  "finished": "2026-10-01T19:38:06.911Z"
+}

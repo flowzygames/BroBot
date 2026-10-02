@@ -1,0 +1,359 @@
+{
+  "kind": "prepared-canopy-notch",
+  "sourceWorld": "/workspace/scratch/ec0ad557001f/brobot-canopy-next/.server/benchmarks/2026-10-01T11-42-32-631Z-c93619a8",
+  "started": "2026-10-01T19:47:55.621Z",
+  "fixture": "Copied failed world; fixed time, weather and mobs; reconstructed inventory and staging position. Specified reversible leaf/log digs. Not natural survival, autonomous selection, or proof of long-term leaf support stability.",
+  "phases": [
+    {
+      "name": "Staging and original home route",
+      "passed": true,
+      "elapsedMs": 48,
+      "detail": {
+        "endpoint": {
+          "x": 224,
+          "y": 85,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Select a notch from live observations",
+      "passed": true,
+      "elapsedMs": 694,
+      "detail": {
+        "stage": [
+          224,
+          85,
+          -31
+        ],
+        "landing": [
+          225,
+          84,
+          -32
+        ],
+        "home": [
+          224,
+          85,
+          -32
+        ],
+        "dig": {
+          "x": 225,
+          "y": 84,
+          "z": -32,
+          "expected_block": "spruce_leaves"
+        },
+        "protectedBlocks": [
+          [
+            224,
+            84,
+            -32
+          ],
+          [
+            224,
+            84,
+            -33
+          ],
+          [
+            225,
+            84,
+            -33
+          ],
+          [
+            226,
+            84,
+            -33
+          ],
+          [
+            227,
+            84,
+            -33
+          ],
+          [
+            224,
+            84,
+            -31
+          ],
+          [
+            225,
+            84,
+            -31
+          ],
+          [
+            226,
+            84,
+            -31
+          ],
+          [
+            227,
+            84,
+            -31
+          ],
+          [
+            227,
+            84,
+            -32
+          ],
+          [
+            225,
+            84,
+            -30
+          ],
+          [
+            226,
+            84,
+            -30
+          ],
+          [
+            227,
+            84,
+            -30
+          ],
+          [
+            224,
+            83,
+            -33
+          ],
+          [
+            225,
+            83,
+            -33
+          ],
+          [
+            226,
+            83,
+            -33
+          ],
+          [
+            227,
+            83,
+            -33
+          ],
+          [
+            225,
+            83,
+            -32
+          ],
+          [
+            226,
+            83,
+            -32
+          ],
+          [
+            227,
+            83,
+            -32
+          ],
+          [
+            225,
+            83,
+            -31
+          ],
+          [
+            226,
+            83,
+            -31
+          ],
+          [
+            227,
+            83,
+            -31
+          ],
+          [
+            223,
+            84,
+            -33
+          ]
+        ],
+        "routes": [
+          [
+            [
+              224,
+              85,
+              -31
+            ],
+            [
+              225,
+              84,
+              -32
+            ]
+          ],
+          [
+            [
+              225,
+              84,
+              -32
+            ],
+            [
+              224,
+              85,
+              -32
+            ]
+          ],
+          [
+            [
+              224,
+              85,
+              -32
+            ],
+            [
+              225,
+              84,
+              -32
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Dig one adjacent lower leaf without removing occupied support",
+      "passed": true,
+      "elapsedMs": 655,
+      "detail": {
+        "completed": true,
+        "mined": 1,
+        "block": "spruce_leaves",
+        "position": {
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        "inventory_changes": {},
+        "remaining_drops": [],
+        "pickup_failures": []
+      }
+    },
+    {
+      "name": "Verify real lower landing and return route",
+      "passed": true,
+      "elapsedMs": 2,
+      "detail": {
+        "endpoint": {
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        "forwardNodes": 1,
+        "reverseNodes": 1
+      }
+    },
+    {
+      "name": "Settle on lower landing",
+      "passed": true,
+      "elapsedMs": 773,
+      "detail": [
+        225.61921598880286,
+        84,
+        -31.41085803448757
+      ]
+    },
+    {
+      "name": "Return home alive",
+      "passed": true,
+      "elapsedMs": 499,
+      "detail": {
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1
+          },
+          {
+            "name": "spruce_planks",
+            "count": 3
+          },
+          {
+            "name": "spruce_log",
+            "count": 3
+          },
+          {
+            "name": "stick",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "Retained home support under normal random ticks",
+      "passed": true,
+      "elapsedMs": 10353,
+      "detail": {
+        "before": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "after": {
+          "leaves": [
+            [
+              224,
+              84,
+              -32
+            ],
+            [
+              224,
+              84,
+              -33
+            ],
+            [
+              225,
+              84,
+              -33
+            ],
+            [
+              226,
+              84,
+              -33
+            ]
+          ],
+          "anchor": [
+            227,
+            84,
+            -33
+          ],
+          "distance": 4
+        },
+        "position": [
+          224.5,
+          85,
+          -31.533693116368514
+        ],
+        "health": 20,
+        "observationSeconds": 10
+      }
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-01T19:48:21.408Z"
+}

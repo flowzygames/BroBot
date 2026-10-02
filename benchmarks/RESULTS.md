@@ -1,3 +1,15 @@
+# Standing-cell recovery checkpoint — October 1, 2026
+
+Frozen application `a3e22428c7dbb873518a7720ccf58a1f3f54a3ae` passes **254 automated checks, 17/17 prepared live phases, 11/11 prepared skills and 20/20 local controls**. Its complete same-20 known-world cohort completed **10/20**, with exactly the same pass/fail set as the previously published `682bf46` cohort. The intermediate `6b26ad5` experiment completed **8/20**; its two losses and all remaining outcomes remain visible.
+
+A separate targeted run of seed 454806089 completed in 107.416 seconds and is not substituted into the cohort. It recorded actual obstruction removal and inventory gains. The paired successes alone do not establish causality. Seed 454806089 recorded two pickup-clearance digs, including a five-cobblestone inventory gain; the zero foliage-clearings counter is a different measure. Seed 1382194916 recorded no pickup-clearance counter. Timing, mobs and drops can vary, and these records do not identify which clearance helper caused a suggestion.
+
+One attempt at seed 355620996 was interrupted during server remapping, before world creation or bot gameplay. Its startup log is retained; the same frozen source/settings were restarted and completed. No gameplay failure was replaced. All twenty seeds have a completed gameplay outcome.
+
+[Every current record, selection plan, startup interruption and tested-code manifest](results/pocket-standing-2026-10-01/). These are known development cases, not held-out reliability. Ten failures remain. Stable 1.0 and live paid-planner/client-platform validation remain unproved.
+
+---
+
 # Transit recovery checkpoint — October 1, 2026
 
 Clean application `682bf46b3d77691ba5e4d8e357819f90ad14e775` passes **219 automated checks, 17/17 prepared live phases, 11/11 prepared skill cases and 20/20 local controls**. The three original development worlds passed: 42 in 159.168s, 718224 in 94.701s and 20260930 in 91.327s. A targeted replay of previously failing world 1542908414 completed in 242.380s.

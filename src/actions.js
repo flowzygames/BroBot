@@ -3,6 +3,8 @@ import { Vec3 } from 'vec3'
 import { configureCollisionMargin } from './collision-margin.js'
 import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
+import { planLeafNotch } from './canopy-descent.js'
+import { retainedLeafAnchor } from './construction-guards.js'
 import { planReturnablePath, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
@@ -46,6 +48,7 @@ const def = (name, description, properties) => ({ type: 'function', name, descri
 
 export const definitions = [
   def('inspect', 'Read real position, health, inventory, visible entities, nearby useful blocks, and immediately craftable recipe hints. This does not reveal unloaded terrain.', { radius: optional(number('Block search radius; default 16', 1, 32, true)) }),
+  def('descend_notch', 'Experimental bounded descent: remove at most one observed adjacent leaf to step down one block, only with a verified walking return route and retained leaf-support anchors. Requires health 12+, food 10+, and a grounded start. Refuses unsupported terrain. Does not perform a complete treetop escape.', {}),
   def('go_to', 'Walk to a loaded location within 128 blocks. Never digs or places blocks while navigating. Radius 0 requires standing at the exact block.', { ...posSchema, radius: optional(number('Acceptable distance; default 1', 0, 8)) }),
   def('follow', 'Follow a visible player for a bounded number of seconds; repeat if necessary. Never changes terrain.', { player: str('Exact visible player username'), duration: optional(number('Seconds; default 15', 1, 60)), distance: optional(number('Following distance; default 3', 1, 8)) }),
   def('collect', 'Mine up to the requested number of named blocks using a suitable owned tool, then pick up nearby drops. Reports blocks mined and actual inventory gains separately. Requires visible reachable blocks.', { block: str('Exact registry block name, for example oak_log or iron_ore'), count: number('Number of blocks to mine', 1, 64, true), radius: optional(number('Search radius; default 24', 1, 64, true)), skip_positions: optional({ type: 'array', maxItems: 128, items: { type: 'object', properties: { x: number('X', -29999984, 29999984, true), y: number('Y', -2048, 2048, true), z: number('Z', -29999984, 29999984, true) }, required: ['x', 'y', 'z'], additionalProperties: false }, description: 'Previously unreachable positions to skip for this request; default none' }) }),
@@ -409,8 +412,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return result
   }
 
-  async function harvestBlock (ctx, p, { expectedBlock = null } = {}) {
-    await approachBlock(ctx, p)
+  async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null } = {}) {
+    if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
+    else await approachBlock(ctx, p)
     const block = loaded(p)
     assert(!isAir(block), 'Requested block is already air')
     assert(expectedBlock == null || block.name === expectedBlock, 'Target block changed before mining')
@@ -432,7 +436,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (tool) await step(ctx, () => bot.equip(tool, 'hand'))
     assert(!block.canHarvest || block.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${block.name}; refusing to destroy it without drops`)
     assert(expectedBlock == null || loaded(p).name === expectedBlock, 'Target block changed before mining')
-    await step(ctx, () => bot.dig(block, true))
+    await step(ctx, () => { beforeDig?.(); return bot.dig(block, true) })
     assert(loaded(p).name !== block.name, `Server did not confirm mining ${block.name}`)
     return block.name
   }
@@ -448,6 +452,82 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     await pause(ctx, 350)
     const pickup = await pickupInternal(ctx, 8)
     return { completed: pickup.remaining_drops.length === 0, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
+  }
+
+  async function descendNotch (args, ctx) {
+    assert(bot.health >= 12 && bot.food >= 10, 'Descent requires health 12+ and food 10+')
+    const deadline = setTimeout(() => stop(), 20000)
+    const dryStep = block => isFluidBearingBlock(block) ? 1000 : 0
+    let onCorridorChange = null, constrained = null
+    try {
+      configureMovement()
+      movements.exclusionAreasStep.push(dryStep)
+      for (const name of WATER_BEARING_BLOCK_NAMES) {
+        const id = bot.registry.blocksByName[name]?.id
+        if (id != null) movements.blocksToAvoid.add(id)
+      }
+      const bound = movementBoundary()
+      const home = bound ? new Vec3(bound.center.x, bound.center.y, bound.center.z).floored() : ctx.origin.floored()
+      const plan = await planLeafNotch(bot, home, { signal: ctx.signal })
+      assert(plan, 'No certified one-leaf descent is available from this grounded position')
+      const target = new Vec3(...plan.landing)
+      assert(insideBoundary(target), 'Descent would leave the job boundary')
+      let targetCleared = false
+      const validateSupports = () => {
+        for (const cell of plan.corridor) {
+          const p = new Vec3(...cell.position)
+          if (!targetCleared && p.equals(target)) continue
+          const block = loaded(p)
+          assert(!isFluidBearingBlock(block) && block.name === cell.name && JSON.stringify(block.shapes) === JSON.stringify(cell.shapes), 'Certified descent corridor geometry changed')
+        }
+        for (const coordinates of plan.protectedBlocks) {
+          const block = loaded(new Vec3(...coordinates))
+          assert(!isFluidBearingBlock(block), 'A protected descent support became wet')
+          if (/_leaves$/.test(block.name)) assert(retainedLeafAnchor(p => bot.blockAt(p), block.position), 'A return leaf lost its retained log anchor')
+          else assert(/_log$/.test(block.name), 'A protected log anchor changed')
+        }
+      }
+      const watched = new Set(plan.protectedBlocks.map(p => p.join(',')))
+      for (const p of plan.routes.flat()) for (let dx=-1; dx<=1; dx++) for (let dy=-1; dy<=1; dy++) for (let dz=-1; dz<=1; dz++) watched.add([p[0]+dx,p[1]+dy,p[2]+dz].join(','))
+      onCorridorChange = (oldBlock, newBlock) => {
+        const p = newBlock?.position ?? oldBlock?.position
+        if (p?.equals(target) && oldBlock?.name === plan.dig.expected_block && isAir(newBlock)) return
+        if (p && watched.has(p.toArray().join(',')) && (!oldBlock || !newBlock || oldBlock.name !== newBlock.name || Boolean(oldBlock.isWaterlogged) !== Boolean(newBlock.isWaterlogged) || JSON.stringify(oldBlock.shapes) !== JSON.stringify(newBlock.shapes))) stop()
+      }
+      bot.on('blockUpdate', onCorridorChange)
+      const validateStage = () => {
+        assert(bot.entity.onGround && bot.entity.position.distanceTo(ctx.origin) <= 0.1, 'Bot moved from its certified descent stage')
+        assert(bot.health >= 12 && bot.food >= 10, 'Health or food changed before mining')
+        assert(visibleHere(loaded(target)), 'Descent leaf is no longer visible from the stage')
+        validateSupports()
+      }
+      validateStage()
+      await harvestBlock(ctx, target, { expectedBlock: plan.dig.expected_block, requireCurrentReach: true, beforeDig: validateStage })
+      targetCleared = true
+      validateSupports()
+      const allowed = new Set(plan.routes.flat().map(p => p.join(',')))
+      constrained = Object.create(movements)
+      constrained.getNeighbors = node => movements.getNeighbors(node).filter(next => allowed.has([next.x, next.y, next.z].join(',')))
+      bot.pathfinder.setMovements(constrained)
+      const goal = new goals.GoalBlock(target.x, target.y, target.z)
+      await planReturnablePath(bot, constrained, goal, new goals.GoalBlock(home.x, home.y, home.z), { signal: ctx.signal, fixedEndpoint: target })
+      validateSupports()
+      assert(bot.health >= 12 && bot.food >= 10, 'Health or food changed before descent')
+      await step(ctx, () => walkToGoal(bot, goal, { signal: ctx.signal, timeoutMs: 6000 }))
+      const settleUntil = Date.now() + 2000
+      while (!(bot.entity.onGround && bot.entity.position.floored().equals(target) && Math.abs(bot.entity.position.y - target.y) < 0.03)) {
+        assert(Date.now() < settleUntil, 'Descent did not settle on its certified landing')
+        await pause(ctx, 50)
+      }
+      validateSupports()
+      assert(bot.health >= 12, 'Health fell below the safe descent threshold')
+      return { completed: true, mined: 1, descended_blocks: 1, position: plainPos(bot.entity.position), return_home: plainPos(home), experimental: true }
+    } finally {
+      clearTimeout(deadline)
+      if (onCorridorChange) bot.removeListener('blockUpdate', onCorridorChange)
+      if (constrained && bot.pathfinder.movements === constrained) bot.pathfinder.setMovements(movements)
+      if (movements) movements.exclusionAreasStep = movements.exclusionAreasStep.filter(guard => guard !== dryStep)
+    }
   }
 
   async function moveOutOfBlock (ctx, p) {
@@ -830,7 +910,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   const handlers = {
-    inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt,
+    inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt, descend_notch: descendNotch,
     go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
     place: async (args, ctx) => placeOne(ctx, cleanName(args.block, 'block'), coordinates(args, ctx)),
     pickup: async (args, ctx) => pickupInternal(ctx, numeric(args.radius, 12, 1, 32, true), args.entity_ids),

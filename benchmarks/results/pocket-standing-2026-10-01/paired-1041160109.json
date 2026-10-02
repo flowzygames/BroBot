@@ -1,0 +1,1607 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-pocket-254",
+  "commit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1041160109",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-01T22:43:55.734Z",
+  "status": "failed",
+  "passed": false,
+  "trace": [
+    {
+      "at": "2026-10-01T22:44:20.318Z",
+      "position": {
+        "x": -15.5,
+        "y": 67,
+        "z": 16.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 66,
+          "z": 15
+        },
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 66,
+          "z": 16
+        },
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 66,
+          "z": 17
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 66,
+          "z": 15
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 66,
+          "z": 16
+        },
+        {
+          "name": "short_grass",
+          "x": -16,
+          "y": 67,
+          "z": 16
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 66,
+          "z": 17
+        },
+        {
+          "name": "short_grass",
+          "x": -15,
+          "y": 66,
+          "z": 16
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:25.343Z",
+      "position": {
+        "x": -15.56,
+        "y": 64,
+        "z": 4.67
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 63,
+          "z": 3
+        },
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 63,
+          "z": 4
+        },
+        {
+          "name": "short_grass",
+          "x": -17,
+          "y": 64,
+          "z": 4
+        },
+        {
+          "name": "dirt",
+          "x": -17,
+          "y": 63,
+          "z": 5
+        },
+        {
+          "name": "grass_block",
+          "x": -17,
+          "y": 64,
+          "z": 5
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 63,
+          "z": 3
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 63,
+          "z": 4
+        },
+        {
+          "name": "grass_block",
+          "x": -16,
+          "y": 63,
+          "z": 5
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 63,
+          "z": 3
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 63,
+          "z": 4
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 63,
+          "z": 5
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:30.343Z",
+      "position": {
+        "x": -13.5,
+        "y": 66,
+        "z": 25.61
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "dirt",
+          "x": -15,
+          "y": 65,
+          "z": 24
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 66,
+          "z": 24
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 65,
+          "z": 25
+        },
+        {
+          "name": "grass_block",
+          "x": -15,
+          "y": 65,
+          "z": 26
+        },
+        {
+          "name": "grass_block",
+          "x": -14,
+          "y": 65,
+          "z": 24
+        },
+        {
+          "name": "grass_block",
+          "x": -14,
+          "y": 65,
+          "z": 25
+        },
+        {
+          "name": "grass_block",
+          "x": -14,
+          "y": 65,
+          "z": 26
+        },
+        {
+          "name": "grass_block",
+          "x": -13,
+          "y": 65,
+          "z": 24
+        },
+        {
+          "name": "grass_block",
+          "x": -13,
+          "y": 65,
+          "z": 25
+        },
+        {
+          "name": "short_grass",
+          "x": -13,
+          "y": 66,
+          "z": 25
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:35.342Z",
+      "position": {
+        "x": -28.87,
+        "y": 66,
+        "z": 26.46
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -30,
+          "y": 65,
+          "z": 25
+        },
+        {
+          "name": "short_grass",
+          "x": -30,
+          "y": 66,
+          "z": 25
+        },
+        {
+          "name": "grass_block",
+          "x": -30,
+          "y": 65,
+          "z": 26
+        },
+        {
+          "name": "short_grass",
+          "x": -30,
+          "y": 66,
+          "z": 26
+        },
+        {
+          "name": "grass_block",
+          "x": -30,
+          "y": 65,
+          "z": 27
+        },
+        {
+          "name": "grass_block",
+          "x": -29,
+          "y": 65,
+          "z": 26
+        },
+        {
+          "name": "short_grass",
+          "x": -29,
+          "y": 66,
+          "z": 26
+        },
+        {
+          "name": "grass_block",
+          "x": -29,
+          "y": 65,
+          "z": 27
+        },
+        {
+          "name": "short_grass",
+          "x": -28,
+          "y": 65,
+          "z": 25
+        },
+        {
+          "name": "short_grass",
+          "x": -28,
+          "y": 65,
+          "z": 26
+        },
+        {
+          "name": "grass_block",
+          "x": -28,
+          "y": 65,
+          "z": 27
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:40.343Z",
+      "position": {
+        "x": -39.5,
+        "y": 67,
+        "z": 15.38
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "dirt",
+          "x": -41,
+          "y": 66,
+          "z": 14
+        },
+        {
+          "name": "grass_block",
+          "x": -41,
+          "y": 67,
+          "z": 14
+        },
+        {
+          "name": "dirt",
+          "x": -41,
+          "y": 66,
+          "z": 15
+        },
+        {
+          "name": "grass_block",
+          "x": -41,
+          "y": 67,
+          "z": 15
+        },
+        {
+          "name": "dirt",
+          "x": -41,
+          "y": 66,
+          "z": 16
+        },
+        {
+          "name": "grass_block",
+          "x": -41,
+          "y": 67,
+          "z": 16
+        },
+        {
+          "name": "grass_block",
+          "x": -40,
+          "y": 66,
+          "z": 14
+        },
+        {
+          "name": "grass_block",
+          "x": -40,
+          "y": 66,
+          "z": 15
+        },
+        {
+          "name": "grass_block",
+          "x": -40,
+          "y": 66,
+          "z": 16
+        },
+        {
+          "name": "grass_block",
+          "x": -39,
+          "y": 66,
+          "z": 14
+        },
+        {
+          "name": "grass_block",
+          "x": -39,
+          "y": 66,
+          "z": 15
+        },
+        {
+          "name": "grass_block",
+          "x": -39,
+          "y": 66,
+          "z": 16
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:45.344Z",
+      "position": {
+        "x": -36.44,
+        "y": 66.92,
+        "z": -7.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "dirt",
+          "x": -38,
+          "y": 65,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -38,
+          "y": 66,
+          "z": -9
+        },
+        {
+          "name": "dirt",
+          "x": -38,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "name": "grass_block",
+          "x": -38,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "name": "dirt",
+          "x": -38,
+          "y": 65,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -38,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -37,
+          "y": 65,
+          "z": -9
+        },
+        {
+          "name": "short_grass",
+          "x": -37,
+          "y": 66,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -37,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "name": "short_grass",
+          "x": -37,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "name": "dirt",
+          "x": -37,
+          "y": 65,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -37,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -36,
+          "y": 65,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -36,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "name": "short_grass",
+          "x": -36,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "name": "dirt",
+          "x": -36,
+          "y": 65,
+          "z": -7
+        },
+        {
+          "name": "grass_block",
+          "x": -36,
+          "y": 66,
+          "z": -7
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:50.344Z",
+      "position": {
+        "x": -11.38,
+        "y": 64,
+        "z": -8.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -13,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "name": "grass_block",
+          "x": -13,
+          "y": 63,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -13,
+          "y": 63,
+          "z": -8
+        },
+        {
+          "name": "grass_block",
+          "x": -12,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "name": "grass_block",
+          "x": -12,
+          "y": 63,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -12,
+          "y": 63,
+          "z": -8
+        },
+        {
+          "name": "short_grass",
+          "x": -12,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "name": "grass_block",
+          "x": -11,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "name": "short_grass",
+          "x": -11,
+          "y": 64,
+          "z": -10
+        },
+        {
+          "name": "grass_block",
+          "x": -11,
+          "y": 63,
+          "z": -9
+        },
+        {
+          "name": "grass_block",
+          "x": -11,
+          "y": 63,
+          "z": -8
+        },
+        {
+          "name": "short_grass",
+          "x": -11,
+          "y": 64,
+          "z": -8
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:44:55.344Z",
+      "position": {
+        "x": -4.5,
+        "y": 63,
+        "z": 9.34
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 62,
+          "z": 8
+        },
+        {
+          "name": "gravel",
+          "x": -6,
+          "y": 62,
+          "z": 9
+        },
+        {
+          "name": "grass_block",
+          "x": -6,
+          "y": 62,
+          "z": 10
+        },
+        {
+          "name": "gravel",
+          "x": -5,
+          "y": 62,
+          "z": 8
+        },
+        {
+          "name": "gravel",
+          "x": -5,
+          "y": 62,
+          "z": 9
+        },
+        {
+          "name": "gravel",
+          "x": -5,
+          "y": 62,
+          "z": 10
+        },
+        {
+          "name": "sand",
+          "x": -4,
+          "y": 62,
+          "z": 8
+        },
+        {
+          "name": "gravel",
+          "x": -4,
+          "y": 62,
+          "z": 9
+        },
+        {
+          "name": "gravel",
+          "x": -4,
+          "y": 62,
+          "z": 10
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:45:00.344Z",
+      "position": {
+        "x": -3.5,
+        "y": 64,
+        "z": 35.49
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 63,
+          "z": 34
+        },
+        {
+          "name": "short_grass",
+          "x": -5,
+          "y": 64,
+          "z": 34
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 63,
+          "z": 35
+        },
+        {
+          "name": "grass_block",
+          "x": -5,
+          "y": 63,
+          "z": 36
+        },
+        {
+          "name": "grass_block",
+          "x": -4,
+          "y": 63,
+          "z": 34
+        },
+        {
+          "name": "grass_block",
+          "x": -4,
+          "y": 63,
+          "z": 35
+        },
+        {
+          "name": "short_grass",
+          "x": -4,
+          "y": 64,
+          "z": 35
+        },
+        {
+          "name": "grass_block",
+          "x": -4,
+          "y": 63,
+          "z": 36
+        },
+        {
+          "name": "short_grass",
+          "x": -4,
+          "y": 64,
+          "z": 36
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 63,
+          "z": 34
+        },
+        {
+          "name": "short_grass",
+          "x": -3,
+          "y": 64,
+          "z": 34
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 63,
+          "z": 35
+        },
+        {
+          "name": "grass_block",
+          "x": -3,
+          "y": 63,
+          "z": 36
+        },
+        {
+          "name": "short_grass",
+          "x": -3,
+          "y": 64,
+          "z": 36
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:45:05.345Z",
+      "position": {
+        "x": -19.04,
+        "y": 67,
+        "z": 39.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "dirt",
+          "x": -21,
+          "y": 66,
+          "z": 38
+        },
+        {
+          "name": "grass_block",
+          "x": -21,
+          "y": 67,
+          "z": 38
+        },
+        {
+          "name": "grass_block",
+          "x": -21,
+          "y": 66,
+          "z": 39
+        },
+        {
+          "name": "short_grass",
+          "x": -21,
+          "y": 67,
+          "z": 39
+        },
+        {
+          "name": "grass_block",
+          "x": -21,
+          "y": 66,
+          "z": 40
+        },
+        {
+          "name": "dirt",
+          "x": -20,
+          "y": 66,
+          "z": 38
+        },
+        {
+          "name": "grass_block",
+          "x": -20,
+          "y": 67,
+          "z": 38
+        },
+        {
+          "name": "dandelion",
+          "x": -20,
+          "y": 68,
+          "z": 38
+        },
+        {
+          "name": "grass_block",
+          "x": -20,
+          "y": 66,
+          "z": 39
+        },
+        {
+          "name": "grass_block",
+          "x": -20,
+          "y": 66,
+          "z": 40
+        },
+        {
+          "name": "grass_block",
+          "x": -19,
+          "y": 66,
+          "z": 38
+        },
+        {
+          "name": "grass_block",
+          "x": -19,
+          "y": 66,
+          "z": 39
+        },
+        {
+          "name": "grass_block",
+          "x": -19,
+          "y": 66,
+          "z": 40
+        }
+      ]
+    },
+    {
+      "at": "2026-10-01T22:45:10.345Z",
+      "position": {
+        "x": -42.64,
+        "y": 66,
+        "z": 40.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "grass_block",
+          "x": -44,
+          "y": 65,
+          "z": 39
+        },
+        {
+          "name": "grass_block",
+          "x": -44,
+          "y": 65,
+          "z": 40
+        },
+        {
+          "name": "grass_block",
+          "x": -44,
+          "y": 65,
+          "z": 41
+        },
+        {
+          "name": "grass_block",
+          "x": -43,
+          "y": 65,
+          "z": 39
+        },
+        {
+          "name": "grass_block",
+          "x": -43,
+          "y": 65,
+          "z": 40
+        },
+        {
+          "name": "grass_block",
+          "x": -43,
+          "y": 65,
+          "z": 41
+        },
+        {
+          "name": "grass_block",
+          "x": -42,
+          "y": 65,
+          "z": 40
+        },
+        {
+          "name": "grass_block",
+          "x": -42,
+          "y": 65,
+          "z": 41
+        },
+        {
+          "name": "short_grass",
+          "x": -42,
+          "y": 66,
+          "z": 41
+        }
+      ]
+    }
+  ],
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 67,
+      "z": 16.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 74,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 83,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 25.21,
+          "y": 54.94,
+          "z": 18.11
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 81,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 26.05,
+          "y": 55.28,
+          "z": 19.15
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 82,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 27.5,
+          "y": 55,
+          "z": 17.5
+        },
+        "distance": 44.7
+      },
+      {
+        "id": 148,
+        "name": "drowned",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 20.5,
+          "y": 39.3,
+          "z": 18.5
+        },
+        "distance": 45.5
+      },
+      {
+        "id": 4,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -61,
+          "y": 68,
+          "z": 6
+        },
+        "distance": 46.7
+      },
+      {
+        "id": 5,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -62,
+          "y": 68,
+          "z": 5
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "26427c83-ab10-4fca-b06d-b385c3f1a3ba"
+  },
+  "elapsedMs": 52002,
+  "job": {
+    "version": 1,
+    "id": "26427c83-ab10-4fca-b06d-b385c3f1a3ba",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 67,
+        "z": 16.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 8,
+    "scouts": 8,
+    "clearings": 0,
+    "excluded": {},
+    "history": [
+      {
+        "at": "2026-10-01T22:44:23.450Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 12,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 11.8,
+          "position": {
+            "x": -15.56,
+            "y": 64,
+            "z": 4.67
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:44:25.562Z",
+        "action": "explore",
+        "args": {
+          "direction": "east",
+          "distance": 12,
+          "returnable": true
+        },
+        "error": "Return-path planning budget exhausted"
+      },
+      {
+        "at": "2026-10-01T22:44:31.471Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 24,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 23.9,
+          "position": {
+            "x": -15.33,
+            "y": 65,
+            "z": 28.52
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:44:37.397Z",
+        "action": "explore",
+        "args": {
+          "direction": "west",
+          "distance": 24,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 24,
+          "position": {
+            "x": -39.34,
+            "y": 66,
+            "z": 28.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:44:44.515Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 36,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 36,
+          "position": {
+            "x": -39.5,
+            "y": 67,
+            "z": -7.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:44:51.767Z",
+        "action": "explore",
+        "args": {
+          "direction": "east",
+          "distance": 36,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 35.8,
+          "position": {
+            "x": -3.69,
+            "y": 64,
+            "z": -7.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:45:01.184Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 48,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 48,
+          "position": {
+            "x": -3.5,
+            "y": 64,
+            "z": 40.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-01T22:45:11.853Z",
+        "action": "explore",
+        "args": {
+          "direction": "west",
+          "distance": 48,
+          "returnable": true
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "distance": 47.8,
+          "position": {
+            "x": -51.33,
+            "y": 66,
+            "z": 40.5
+          }
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-01T22:44:20.319Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+    "tables": [],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -51.33,
+      "y": 66,
+      "z": 40.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1114,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 6,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -63.18,
+          "y": 68,
+          "z": 13.24
+        },
+        "distance": 29.8
+      },
+      {
+        "id": 5,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -60.7,
+          "y": 68,
+          "z": 8.3
+        },
+        "distance": 33.6
+      },
+      {
+        "id": 4,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -62.71,
+          "y": 67,
+          "z": 8.9
+        },
+        "distance": 33.6
+      },
+      {
+        "id": 379,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -73.5,
+          "y": 35,
+          "z": 47.5
+        },
+        "distance": 38.7
+      },
+      {
+        "id": 390,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -69.5,
+          "y": 48,
+          "z": 72.5
+        },
+        "distance": 41
+      },
+      {
+        "id": 303,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -69.5,
+          "y": 29,
+          "z": 48.5
+        },
+        "distance": 42
+      },
+      {
+        "id": 460,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -79.5,
+          "y": 42,
+          "z": 61.19
+        },
+        "distance": 42.4
+      },
+      {
+        "id": 342,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -61.5,
+          "y": 24,
+          "z": 33.5
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 338,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -61.5,
+          "y": 22,
+          "z": 40.5
+        },
+        "distance": 45.2
+      },
+      {
+        "id": 330,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -62.5,
+          "y": 22,
+          "z": 37.5
+        },
+        "distance": 45.5
+      },
+      {
+        "id": 329,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -66.2,
+          "y": 22,
+          "z": 34.5
+        },
+        "distance": 46.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "26427c83-ab10-4fca-b06d-b385c3f1a3ba",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -15.5,
+          "y": 67,
+          "z": 16.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 8,
+      "scouts": 8,
+      "clearings": 0,
+      "excluded": {},
+      "history": [
+        {
+          "at": "2026-10-01T22:44:23.450Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 12,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 11.8,
+            "position": {
+              "x": -15.56,
+              "y": 64,
+              "z": 4.67
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:44:25.562Z",
+          "action": "explore",
+          "args": {
+            "direction": "east",
+            "distance": 12,
+            "returnable": true
+          },
+          "error": "Return-path planning budget exhausted"
+        },
+        {
+          "at": "2026-10-01T22:44:31.471Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 24,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 23.9,
+            "position": {
+              "x": -15.33,
+              "y": 65,
+              "z": 28.52
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:44:37.397Z",
+          "action": "explore",
+          "args": {
+            "direction": "west",
+            "distance": 24,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 24,
+            "position": {
+              "x": -39.34,
+              "y": 66,
+              "z": 28.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:44:44.515Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 36,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 36,
+            "position": {
+              "x": -39.5,
+              "y": 67,
+              "z": -7.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:44:51.767Z",
+          "action": "explore",
+          "args": {
+            "direction": "east",
+            "distance": 36,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 35.8,
+            "position": {
+              "x": -3.69,
+              "y": 64,
+              "z": -7.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:45:01.184Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 48,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 48,
+            "position": {
+              "x": -3.5,
+              "y": 64,
+              "z": 40.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-01T22:45:11.853Z",
+          "action": "explore",
+          "args": {
+            "direction": "west",
+            "distance": 48,
+            "returnable": true
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "distance": 47.8,
+            "position": {
+              "x": -51.33,
+              "y": 66,
+              "z": 40.5
+            }
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-01T22:44:20.319Z",
+      "recoverDropIds": [],
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "tables": [],
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+  "finished": "2026-10-01T22:45:14.026Z"
+}

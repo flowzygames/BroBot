@@ -1,0 +1,30 @@
+{
+  "created": "2026-10-01T22:10:59.702086+00:00",
+  "commit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
+  "label": "paired-pocket-254",
+  "seeds": [
+    454806089,
+    1542908414,
+    761598570,
+    1587439118,
+    924242050,
+    113919219,
+    474859294,
+    1576696577,
+    1382194916,
+    386690312,
+    1744809425,
+    61544722,
+    1041160109,
+    1888406977,
+    1547703085,
+    1146093953,
+    1014875191,
+    355620996,
+    1276821265,
+    1244186709
+  ],
+  "seconds": 300,
+  "kind": "same twenty known-case regression; no retries substituted",
+  "note": "New complete same-20 regression after new-standing-cell pickup extension. Earlier targeted454806089 pass retained separately and not substituted."
+}

@@ -10,7 +10,7 @@ import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
 import { SurvivalJob, STARTER_LOG_RADIUS } from './survival.js';
 import { findTransitPickupClearance } from './pickup-transit.js';
-import { findPickupClearance } from './survival-observation.js';
+import { findPickupClearance, findTreeFoliage } from './survival-observation.js';
 import { publicConfig } from './config.js';
 import { parseCommand, authorizedChat, HELP } from './commands.js';
 
@@ -48,17 +48,14 @@ export class Runtime {
         const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
         const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
         const excludedLogs = this.survival.job?.excluded ?? {};
-        const positions = this.bot.findBlocks({ matching: ids, maxDistance: STARTER_LOG_RADIUS, count: 16, useExtraInfo: block => !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
-        const wood = positions.map(p => this.bot.blockAt(p)).find(b => b && pattern.test(b.name));
+        const positions = this.bot.findBlocks({ matching: ids, maxDistance: STARTER_LOG_RADIUS, count: 128, useExtraInfo: block => !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
+        // findBlocks may fill a small cap in one chunk section before examining a
+        // closer tree across its boundary. Sort a larger bounded sample, then
+        // keep only sixteen logs for the local foliage rays.
+        const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
+        const wood = observedLogs[0];
         const p = seen.position;
-        let foliage = null;
-        if (wood && this.bot.world?.raycast) {
-          const eye = this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0);
-          const delta = wood.position.offset(0.5, 0.5, 0.5).minus(eye);
-          const hit = delta.norm() > 0 ? this.bot.world.raycast(eye, delta.scaled(1 / delta.norm()), Math.min(4.2, delta.norm())) : null;
-          const feet = this.bot.entity.position.floored();
-          if (hit && /_leaves$/.test(hit.name) && !(hit.position.x === feet.x && hit.position.z === feet.z && hit.position.y < feet.y)) foliage = { x: hit.position.x, y: hit.position.y, z: hit.position.z, expected_block: hit.name };
-        }
+        const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
         // A dense ore field can also crowd our placed table out of inspect's
         // generic result cap. Search this critical workstation independently.
         const tableId = this.bot.registry.blocksArray.find(b => b.name === 'crafting_table')?.id;

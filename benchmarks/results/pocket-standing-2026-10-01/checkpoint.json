@@ -1,0 +1,24 @@
+{
+  "testedCommit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
+  "automatedChecks": 254,
+  "preparedLivePhases": {
+    "passed": 17,
+    "total": 17
+  },
+  "preparedSkills": {
+    "passed": 11,
+    "total": 11
+  },
+  "localControls": {
+    "passed": 20,
+    "total": 20
+  },
+  "sameKnownWorlds": {
+    "passed": 10,
+    "total": 20
+  },
+  "stable1_0Verified": false,
+  "windowsRenderedGameplayVerified": false,
+  "bedrockClientGameplayVerified": false,
+  "paidPlannerEvaluated": false
+}
