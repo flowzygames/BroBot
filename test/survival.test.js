@@ -182,7 +182,7 @@ test('runtime tree observation is not starved by ore and returns only a nearby l
     blockAt: p => ({ name: p.equals(new Vec3(4,64,0)) ? 'oak_log' : p.equals(new Vec3(2,65,0)) ? 'oak_leaves' : 'air', position: p }),
     world: { raycast: (eye, direction, distance) => { assert.ok(Math.abs(direction.norm() - 1) < 0.001); assert.ok(distance <= 4.2); return { name: 'oak_leaves', position: new Vec3(2, 65, 0) }; } }, quit: () => {}
   };
-  try { assert.deepEqual(await runtime.survival.observe(), { wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
+  try { assert.deepEqual(await runtime.survival.observe(), { powderSnowContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
   finally { await runtime.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
@@ -520,4 +520,13 @@ test('two failed shortcut executions persist an edge exclusion and return by ano
   await f.job.promise;
   assert.equal(failures,2);assert.equal(f.job.state().ignoredTravelEdges.length,1);
   assert.equal(f.calls[2].args.z,60);assert.equal(f.job.state().status,'complete');
+});
+
+test('starter refuses gathering or completion while already touching powder snow', () => {
+  const state={connected:true,dimension:'overworld',health:20,food:20,position:{x:0,y:64,z:0},inventory:[],entities:[]};
+  const job={home:{position:state.position,dimension:'overworld'}};
+  for (const inventory of [[],[{name:'stone_pickaxe',count:1},{name:'furnace',count:1}]]) {
+    const result=nextStarterStep({...state,inventory},job,{wood:'spruce',powderSnowContact:true});
+    assert.match(result.blocked,/freezing continues/);assert.equal(result.name,undefined);assert.equal(result.complete,undefined);
+  }
 });

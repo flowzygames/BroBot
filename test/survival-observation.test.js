@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Vec3 } from 'vec3';
-import { findPickupClearance, findTreeFoliage } from '../src/survival-observation.js';
+import { findPickupClearance, findTreeFoliage, hasPowderSnowContact } from '../src/survival-observation.js';
 function fixture() {
   const blocks = new Map();
   const bot = { entity: { position: new Vec3(0.5, 64, 0.5) }, entities: { 10: { id: 10, name: 'item', position: new Vec3(2.5, 63, 0.5) } }, world: { raycast: () => ({ position: new Vec3(2, 64, 0) }) } };
@@ -89,4 +89,28 @@ test('tree foliage scan can continue past an unsafe leaf to a different visible 
   const f=foliageFixture(),unsafe=f.leaf.offset(0,-2,0);f.blocks.set(unsafe.toString(),{name:'spruce_leaves',position:unsafe,boundingBox:'block'});
   let calls=0;f.bot.world.raycast=()=>({position:++calls===1?unsafe:f.leaf});
   assert.deepEqual(findTreeFoliage(f.bot,f.logs),{x:2,y:65,z:0,expected_block:'spruce_leaves'});
+});
+
+test('powder contact checks feet, head and body edges without treating nearby snow as contact', () => {
+  const {bot}=fixture();
+  for (const y of [64,65]) {
+    bot.blockAt=p=>({name:p.x===0&&p.y===y&&p.z===0?'powder_snow':'air'});
+    assert.equal(hasPowderSnowContact(bot),true);
+  }
+  bot.entity.position=new Vec3(0.8,64,0.5);
+  bot.blockAt=p=>({name:p.x===1&&p.y===64&&p.z===0?'powder_snow':'air'});
+  assert.equal(hasPowderSnowContact(bot),true);
+  bot.entity.position=new Vec3(0.5,64,0.5);
+  assert.equal(hasPowderSnowContact(bot),false);
+  bot.blockAt=()=>({name:'snow'});assert.equal(hasPowderSnowContact(bot),false);
+});
+
+test('powder contact includes thin overlap but excludes exact face contact', () => {
+  const {bot}=fixture();
+  bot.blockAt=p=>({name:p.x===1&&p.y===64&&p.z===0?'powder_snow':'air'});
+  bot.entity.position=new Vec3(0.7005,64,0.5);assert.equal(hasPowderSnowContact(bot),true);
+  bot.entity.position=new Vec3(0.7,64,0.5);assert.equal(hasPowderSnowContact(bot),false);
+  bot.blockAt=p=>({name:p.y===66?'powder_snow':'air'});
+  bot.entity.position=new Vec3(0.5,64.2005,0.5);assert.equal(hasPowderSnowContact(bot),true);
+  bot.entity.position=new Vec3(0.5,64.2,0.5);assert.equal(hasPowderSnowContact(bot),false);
 });

@@ -943,3 +943,16 @@ test('verified long return leg remains bounded but is not cut off by the old15-s
   await new Promise(resolve=>setTimeout(resolve,100));assert.equal(finished,false);
   release();assert.equal((await pending).arrived,true);
 });
+
+test('starter neighbor generation refuses powder snow and restores direct movement policy', async () => {
+  const {default:loadBlock}=await import('prismarine-block'),{default:Move}=await import('mineflayer-pathfinder/lib/move.js')
+  const Block=loadBlock('1.21.11'),bot=fakeBot();let bounded=true,movement
+  bot.blockAt=p=>{const q=p.floored(),column=q.x===1&&q.z===0&&(q.y===64||q.y===65);const b=Block.fromStateId(registry.blocksByName[q.y===63?'stone':column?'powder_snow':'air'].defaultState,0);b.position=q;return b}
+  bot.pathfinder.setMovements=value=>{movement=value}
+  const actions=createActions(bot,{movementBoundary:()=>bounded?{center:{x:0,y:64,z:0},radius:20}:null})
+  await actions.execute('go_to',{x:0,y:64,z:0,radius:0})
+  const forward=()=>movement.getNeighbors(new Move(0,64,0,0,0)).some(p=>p.x===1&&p.y===64&&p.z===0)
+  assert.equal(forward(),false,'starter must not walk into freezing powder snow')
+  bounded=false;await actions.execute('go_to',{x:0,y:64,z:0,radius:0})
+  assert.equal(forward(),true,'ordinary direct commands retain their existing policy')
+})
