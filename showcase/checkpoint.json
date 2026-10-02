@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
+  "sourceCommit": "9633598deccfa718421775d9ef602785ba8abb6d",
   "minecraft": "1.21.8",
-  "automatedChecks": 287,
+  "automatedChecks": 293,
   "liveRegressionPhases": 17,
   "groups": {
     "core": {
@@ -398,7 +398,7 @@
       "note": "Two gains and no lost prior passes. Known same-seed fresh-world comparison, not identical-state or unseen-world evidence."
     },
     "targeted": {
-      "label": "Current256-block app: one selected development world",
+      "label": "Previous287 selected passing world",
       "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
       "passed": 1,
       "scheduled": 1,
@@ -743,7 +743,7 @@
       "note": "Not substituted into the twenty-world cohort."
     },
     "expanded": {
-      "label": "Current 256-block run with disclosed infrastructure recovery",
+      "label": "Previous287 expanded run with disclosed infrastructure recovery",
       "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
       "passed": 9,
       "scheduled": 20,
@@ -910,7 +910,30 @@
         }
       ],
       "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
+    },
+    "woodDeficit": {
+      "label": "Current293 selected known-world replays",
+      "sourceCommit": "9633598deccfa718421775d9ef602785ba8abb6d",
+      "passed": 1,
+      "scheduled": 2,
+      "cases": [
+        {
+          "seed": "1041160109",
+          "status": "passed",
+          "passed": true,
+          "elapsedMs": 184464,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+        },
+        {
+          "seed": "1276821265",
+          "status": "failed",
+          "passed": false,
+          "elapsedMs": 128868,
+          "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
+        }
+      ],
+      "note": "Selected cases only, not a full cohort. Passing104 took a different scouting route and never exercised the changed partial-wood branch; no causal improvement claim. One pre-gameplay download error was repaired and restarted unchanged, retained separately."
     }
   },
-  "pairedEvaluationPending": false
+  "pairedEvaluationPending": true
 }

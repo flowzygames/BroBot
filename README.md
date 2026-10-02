@@ -1,3 +1,5 @@
+> Latest development checkpoint: 293 automated checks; selected natural-world trials 1/2, not a full-cohort reliability score. Includes partial wood-batch sizing and powder-snow contact warnings. [Evidence](benchmarks/results/wood-deficit-2026-10-02/README.md).
+
 # BroBot
 
 ### A Minecraft companion that turns commands into real actions
@@ -164,16 +166,25 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to 24 sc
 
 ## Measured, not guessed
 
-### Expanded exploration checkpoint · October 2, 2026 UTC
+### Current wood and safety checkpoint · October 2, 2026 UTC
+
+- **293 automated checks**, **17/17 prepared smoke phases**, **11/11 skills**, and **20/20 local controls** passed
+- Reduced redundant wood collection after partial crafting; immediate powder-snow contact warning
+- **1/2 selected known-world replays** completed; no full 20-world score on this source
+- The passing replay changed route before gathering and did not exercise the changed partial-wood branch, so it is not causal proof of improvement
+
+[Current evidence and tested-code manifest](benchmarks/results/wood-deficit-2026-10-02/)
+
+### Previous expanded exploration checkpoint · October 2, 2026 UTC
 
 - **256-block search region**, up to **24 scouts** and **96 work steps**
 - Long returns use observed waypoint chains with forward-and-reverse route checks
 - **287 automated checks**, **17/17 prepared smoke phases**, **11/11 skills**, **20/20 local controls** passed
 - Selected world 1041160109 completed in 290.165s, reaching 193.26 blocks from home before returning with the kit and full health
-- The **full 20-world score for this expanded build is not yet measured**
+- The later full evaluation completed **9/20**, including one explicitly disclosed infrastructure recovery; all original failures remain retained
 - The separate previous 90-block scouting candidate completed **12/20**, versus the older release's10/20; that is a different source
 
-[Current evidence and tested-code manifest](benchmarks/results/expanded-exploration-2026-10-02/) · [Previous scouting cohort](benchmarks/results/scout-routes-2026-10-02/)
+[Earlier selected evidence](benchmarks/results/expanded-exploration-2026-10-02/) · [Completed 287 cohort](benchmarks/results/expanded-cohort-2026-10-02/) · [Previous scouting cohort](benchmarks/results/scout-routes-2026-10-02/)
 
 ### Previous standing-cell recovery checkpoint · October 1, 2026
 

@@ -530,3 +530,20 @@ test('starter refuses gathering or completion while already touching powder snow
     assert.match(result.blocked,/freezing continues/);assert.equal(result.name,undefined);assert.equal(result.complete,undefined);
   }
 });
+
+test('starter requests only missing wood after crafting some prerequisites', () => {
+  const state={connected:true,dimension:'overworld',health:20,food:20,position:{x:0,y:64,z:0},entities:[],inventory:[{name:'crafting_table',count:1},{name:'stick',count:4},{name:'spruce_planks',count:2}]};
+  const job={home:{position:state.position,dimension:'overworld'}};
+  const step=nextStarterStep(state,job,{wood:'spruce'});
+  assert.equal(step.name,'collect');assert.equal(step.args.count,1);
+  const placed=nextStarterStep({...state,inventory:state.inventory.filter(i=>i.name!=='crafting_table')},job,{wood:'spruce',tableInReach:true});
+  assert.equal(placed.name,'collect');assert.equal(placed.args.count,1);
+});
+
+test('starter wood deficit retains missing table and stick requirements', () => {
+  const state={connected:true,dimension:'overworld',health:20,food:20,position:{x:0,y:64,z:0},entities:[],inventory:[{name:'spruce_planks',count:1}]};
+  const job={home:{position:state.position,dimension:'overworld'}};
+  const step=nextStarterStep(state,job,{wood:'spruce'});
+  assert.equal(step.name,'collect');assert.equal(step.args.count,2);
+  assert.equal(nextStarterStep({...state,inventory:[]},job,{wood:'spruce'}).args.count,3);
+});

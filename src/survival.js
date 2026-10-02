@@ -65,7 +65,13 @@ export function nextStarterStep(state, job, observation = {}) {
     if (wood) return action('craft', { item: `${wood}_planks`, count: Math.min(wanted - (items[`${wood}_planks`] ?? 0), items[`${wood}_log`] * 4) }, 'Turn carried logs into the needed planks.');
     if (!observation.wood) return { scout: 'No supported tree logs are visible nearby.' };
     const startingTools = !['wooden_pickaxe', 'stone_pickaxe', 'iron_pickaxe', 'diamond_pickaxe', 'netherite_pickaxe'].some(has);
-    const logCount = startingTools ? 3 : Math.max(1, Math.min(3, Math.ceil(wanted / 4)));
+    // Initial empty inventory needs nine planks (table, sticks, pickaxe), but
+    // later observations may already contain most prerequisites. Do not fetch
+    // another full three-log batch for a one-plank deficit.
+    const bestPlanks = Math.max(0, ...WOODS.map(w => items[`${w}_planks`] ?? 0));
+    const prerequisitePlanks = (has('crafting_table') || observation.tableInReach ? 0 : 4) + ((items.stick ?? 0) >= 2 ? 0 : 2) + 3;
+    const missingPlanks = startingTools ? prerequisitePlanks - bestPlanks : wanted - bestPlanks;
+    const logCount = Math.max(1, Math.min(3, Math.ceil(missingPlanks / 4)));
     return action('collect', { block: `${observation.wood}_log`, count: logCount, radius: STARTER_LOG_RADIUS }, startingTools ? 'Gather one bounded batch for the table, sticks and first pickaxe.' : 'Gather only the wood currently needed.');
   };
   const table = has('crafting_table') || observation.tableInReach;
