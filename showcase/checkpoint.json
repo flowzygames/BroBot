@@ -411,7 +411,7 @@
           "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
         }
       ],
-      "note": "Reached193.26 blocks and returned. Selected case; full20-world cohort not run."
+      "note": "Separate selected success beyond190blocks; the later full-cohort replay of this seed timed out. Never substituted into the cohort."
     },
     "priorTransit": {
       "label": "Previous published transit build",
@@ -741,7 +741,176 @@
         }
       ],
       "note": "Not substituted into the twenty-world cohort."
+    },
+    "expanded": {
+      "label": "Current 256-block run with disclosed infrastructure recovery",
+      "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
+      "passed": 9,
+      "scheduled": 20,
+      "cases": [
+        {
+          "seed": "454806089",
+          "status": "failed",
+          "elapsedMs": 103387,
+          "reason": "A hostile mob is too close for unarmored starter gathering.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1542908414",
+          "status": "failed",
+          "elapsedMs": 300026,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "761598570",
+          "status": "passed",
+          "elapsedMs": 77502,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1587439118",
+          "status": "passed",
+          "elapsedMs": 107126,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "924242050",
+          "status": "failed",
+          "elapsedMs": 81879,
+          "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "113919219",
+          "status": "passed",
+          "elapsedMs": 287566,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "474859294",
+          "status": "passed",
+          "elapsedMs": 59784,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1576696577",
+          "status": "passed",
+          "elapsedMs": 88037,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1382194916",
+          "status": "passed",
+          "elapsedMs": 163033,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "386690312",
+          "status": "failed",
+          "elapsedMs": 300005,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1744809425",
+          "status": "failed",
+          "elapsedMs": 300013,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1041160109",
+          "status": "failed",
+          "elapsedMs": 300004,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1888406977",
+          "status": "failed",
+          "elapsedMs": 37648,
+          "reason": "Health is too low to continue gathering safely.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1547703085",
+          "status": "failed",
+          "elapsedMs": 300006,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1146093953",
+          "status": "passed",
+          "elapsedMs": 118641,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1014875191",
+          "status": "failed",
+          "elapsedMs": 300003,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "355620996",
+          "status": "passed",
+          "elapsedMs": 110643,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1276821265",
+          "status": "failed",
+          "elapsedMs": 300004,
+          "reason": "Starter job time budget reached.",
+          "passed": false,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "1244186709",
+          "status": "passed",
+          "elapsedMs": 192410,
+          "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+          "passed": true,
+          "infrastructureRecovery": false
+        },
+        {
+          "seed": "61544722",
+          "status": "failed",
+          "elapsedMs": 292867,
+          "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+          "passed": false,
+          "infrastructureRecovery": true
+        }
+      ],
+      "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
     }
   },
-  "pairedEvaluationPending": true
+  "pairedEvaluationPending": false
 }

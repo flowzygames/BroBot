@@ -2,7 +2,7 @@ const panel = document.querySelector('#worldEvidence');
 if (panel) {
   const list = panel.querySelector('#worldCases'), status = panel.querySelector('#worldStatus');
   const filter = panel.querySelector('#worldFilter'), query = panel.querySelector('#worldSearch'), shown = panel.querySelector('#worldShown');
-  let data, selected = 'paired';
+  let data, selected = 'expanded';
   const render = () => {
     if (!data) return;
     const group = data.groups[selected];
@@ -21,7 +21,7 @@ if (panel) {
       const badge = document.createElement('span'); badge.className = 'world-result ' + (run.passed ? 'passed' : 'failed'); badge.textContent = ({passed:'Completed',failed:'Stopped',error:'Error',unsupported:'Unsupported',not_run:'Not run'})[run.status];
       heading.append(seed, badge);
       const elapsed = document.createElement('p'); elapsed.className = 'world-elapsed'; elapsed.textContent = Number.isFinite(run.elapsedMs) ? `${(run.elapsedMs / 1000).toFixed(1)} seconds` : 'No completed timing';
-      const reason = document.createElement('p'); reason.textContent = run.reason || 'See the saved record for details.';
+      const reason = document.createElement('p'); reason.textContent = (run.infrastructureRecovery ? 'Infrastructure recovery run. ' : '') + (run.reason || 'See the saved record for details.');
       const detail = document.createElement('details'), summary = document.createElement('summary'); summary.textContent = 'What this test asked';
       const explanation = document.createElement('p'); explanation.textContent = 'Normal survival. Empty inventory. No supplied materials or edited terrain. One offline command: gather a stone pickaxe and furnace, then return alive to the starting point within 300 seconds.';
       detail.append(summary, explanation); card.append(heading, elapsed, reason, detail); list.append(card);
