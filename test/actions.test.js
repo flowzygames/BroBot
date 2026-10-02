@@ -898,3 +898,48 @@ test('experimental descent refuses an ungrounded start without mining', async ()
   await assert.rejects(createActions(bot).execute('descend_notch', {}), /No certified/);
   assert.equal(digs, 0);
 });
+
+test('exploration alternatives certify before one move and report rejected directions', async () => {
+  const bot=fakeBot();let moves=0;const go=bot.pathfinder.goto;
+  bot.pathfinder.goto=async goal=>{moves++;return go(goal)};
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){yield{result:goal.z<0?{status:'noPath',path:[]}:{status:'success',path:[{x:goal.x,y:goal.y??64,z:goal.z}]}}};
+  const result=await createActions(bot).execute('explore',{direction:'north',distance:12,returnable:true,alternatives:['east','south']});
+  assert.equal(result.direction,'east');assert.deepEqual(result.directions_tried,['north','east']);assert.equal(moves,1);
+  assert.equal(result.route_attempts[0].status,'unverified');
+});
+test('exploration cannot fall back after a partial physical walk fails', async () => {
+  const bot=fakeBot();let moves=0;
+  bot.pathfinder.goto=async()=>{moves++;bot.entity.position.x+=2;throw Error('Walking stalled')};
+  await assert.rejects(createActions(bot).execute('explore',{direction:'north',distance:12,returnable:true,alternatives:['east']}),/Walking stalled/);
+  assert.equal(moves,1);assert.equal(bot.entity.position.x,2.5);
+});
+test('exploration rejects malformed, duplicate or unguarded alternatives before movement', async () => {
+  for(const args of [
+    {direction:'north',returnable:false,alternatives:['east']},
+    {direction:null,returnable:true,alternatives:['east']},
+    {direction:'north',returnable:true,alternatives:['north']},
+    {direction:'north',returnable:true,alternatives:['east','south','west','north']},
+    {direction:'north',returnable:true,alternatives:['bogus']},
+  ]){
+    const bot=fakeBot();let moved=false;bot.pathfinder.goto=async()=>{moved=true};
+    await assert.rejects(createActions(bot).execute('explore',{distance:12,...args}));assert.equal(moved,false);
+  }
+});
+test('explicit returnable go_to rejects one-way route before movement', async () => {
+  const bot=fakeBot();let plans=0,moved=false;
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){yield{result:++plans===1?{status:'success',path:[{x:goal.x,y:64,z:goal.z}]}:{status:'noPath',path:[]}}};
+  bot.pathfinder.goto=async()=>{moved=true};
+  await assert.rejects(createActions(bot).execute('go_to',{x:80,y:64,z:0,returnable:true}),/No verified returnable/);
+  assert.equal(plans,2);assert.equal(moved,false);
+});
+test('verified long return leg remains bounded but is not cut off by the old15-second walk limit', async t => {
+  let now=0;t.mock.method(performance,'now',()=>now);
+  const bot=fakeBot();let release,started=false;
+  bot.pathfinder.goto=goal=>new Promise(resolve=>{started=true;release=()=>{bot.entity.position=new Vec3(goal.x+0.5,goal.y,goal.z+0.5);resolve()}});
+  const pending=createActions(bot).execute('go_to',{x:80,y:64,z:0,returnable:true});
+  let finished=false;pending.then(()=>{finished=true},()=>{finished=true});
+  while(!started)await new Promise(resolve=>setImmediate(resolve));
+  now=20000;bot.entity.position.x=60;
+  await new Promise(resolve=>setTimeout(resolve,100));assert.equal(finished,false);
+  release();assert.equal((await pending).arrived,true);
+});

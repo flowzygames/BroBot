@@ -49,6 +49,34 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
   return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
 }
 
+// Ranked scout alternatives share one planning window. Failed probes never
+// move the bot and do not consume a second, fresh planning allowance.
+export async function planRankedRoutes(candidates, plan, { signal, budget = 1600, now = () => performance.now() } = {}) {
+  if (!Array.isArray(candidates) || !candidates.length || candidates.length > 4) throw new Error('Expected one to four route candidates');
+  const deadline = now() + Math.min(1600, Math.max(0, budget));
+  const tried = [], outcomes = [];
+  const annotate = error => { error.result = { ...(error.result ?? {}), directions_tried: [...tried], route_attempts: [...outcomes] }; return error; };
+  let lastError;
+  for (let index = 0; index < candidates.length; index++) {
+    if (signal?.aborted) throw annotate(abortError());
+    const remaining = deadline - now();
+    if (remaining <= 0) break;
+    const candidate = candidates[index]; tried.push(candidate);
+    try {
+      const route = await plan(candidate, remaining / (candidates.length - index));
+      if (signal?.aborted) throw abortError();
+      if (now() >= deadline) throw new Error('Scout planning budget exhausted');
+      outcomes.push({ direction: candidate, status: 'verified' });
+      return { route, candidate, tried, outcomes };
+    } catch (error) {
+      outcomes.push({ direction: candidate, status: signal?.aborted || error.name === 'AbortError' ? 'cancelled' : 'unverified', reason: error.message });
+      if (signal?.aborted || error.name === 'AbortError' || !/^(No verified returnable walking route|Return-path planning budget exhausted|Collection route would modify terrain|Scout planning budget exhausted)/.test(error.message)) throw annotate(error);
+      lastError = error;
+    }
+  }
+  throw Object.assign(new Error(`No verified scout route: ${lastError?.message ?? 'planning budget exhausted'}`), { result: { directions_tried: tried, route_attempts: outcomes } });
+}
+
 // Item-aware navigation owns its listeners/goal. No never-ending goto promise is
 // left behind when an item is acquired, disappears, or a local budget expires.
 export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75 } = {}) {

@@ -1,3 +1,4 @@
+import { STARTER_MOVEMENT_RADIUS } from './starter-limits.js';
 import mineflayer from 'mineflayer';
 import pathfinderModule from 'mineflayer-pathfinder';
 import toolModule from 'mineflayer-tool';
@@ -61,9 +62,9 @@ export class Runtime {
         const tableId = this.bot.registry.blocksArray.find(b => b.name === 'crafting_table')?.id;
         const foundTables = tableId == null ? [] : this.bot.findBlocks({ matching: [tableId], maxDistance: 32, count: 16 });
         const tablePositions = [...foundTables, ...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
-        const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => this.bot.blockAt(new Vec3(p.x, p.y, p.z))?.name === 'crafting_table').slice(0, 8);
+        const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => { const block = this.bot.blockAt(new Vec3(p.x, p.y, p.z)); return block == null || block.name === 'crafting_table'; }).slice(0, 8);
         return { wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach: tables.some(t => {
-          if (!p || Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) > 4) return false;
+          if (!p || this.bot.blockAt(new Vec3(t.x, t.y, t.z))?.name !== 'crafting_table' || Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) > 4) return false;
           const position = new Vec3(t.x, t.y, t.z);
           if (this.bot.world?.raycast) return visibleBlockFace(this.bot.world, this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0), position, 4.5);
           return !this.bot.canSeeBlock || this.bot.canSeeBlock(this.bot.blockAt(position));
@@ -126,7 +127,7 @@ export class Runtime {
       movements.allowFreeMotion = false;
       movements.maxDropDown = 3;
       bot.pathfinder.setMovements(movements);
-      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this), movementBoundary: () => this.survival.active ? { center: this.survival.job.home.position, radius: 90 } : null });
+      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this), movementBoundary: () => this.survival.active ? { center: this.survival.job.home.position, radius: STARTER_MOVEMENT_RADIUS } : null });
       this.progression = createProgression(bot, { actions: this.actions, memory: this.memory, log: this.log.bind(this) });
       this.connection = 'connected';
       this.log('connection', `${bot.username} joined Minecraft ${bot.version}.`);

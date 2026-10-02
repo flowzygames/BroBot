@@ -158,13 +158,24 @@ flowchart TD
 
 The runtime separates decisions from game actions. It verifies pickups, crafting outputs and supported completion conditions rather than trusting a plan's wording. Unsupported or compound goal completion may remain explicitly unverified.
 
-Starter jobs have health, hunger, dimension, travel and work limits: up to eight scouting attempts, 64 work steps and ten minutes by default. BroBench uses five minutes. Stops and safeguards reduce risk; they do not guarantee success.
+Starter jobs have health, hunger, dimension, travel and work limits: up to 24 scouting attempts, 96 work steps and ten minutes by default. BroBench uses five minutes. Stops and safeguards reduce risk; they do not guarantee success.
 
 [Architecture and tools](docs/ARCHITECTURE.md) · [Navigation safeguards](docs/NAVIGATION_SAFEGUARDS.md)
 
 ## Measured, not guessed
 
-### Standing-cell recovery checkpoint · October 1, 2026
+### Expanded exploration checkpoint · October 2, 2026 UTC
+
+- **256-block search region**, up to **24 scouts** and **96 work steps**
+- Long returns use observed waypoint chains with forward-and-reverse route checks
+- **287 automated checks**, **17/17 prepared smoke phases**, **11/11 skills**, **20/20 local controls** passed
+- Selected world 1041160109 completed in 290.165s, reaching 193.26 blocks from home before returning with the kit and full health
+- The **full 20-world score for this expanded build is not yet measured**
+- The separate previous 90-block scouting candidate completed **12/20**, versus the older release's10/20; that is a different source
+
+[Current evidence and tested-code manifest](benchmarks/results/expanded-exploration-2026-10-02/) · [Previous scouting cohort](benchmarks/results/scout-routes-2026-10-02/)
+
+### Previous standing-cell recovery checkpoint · October 1, 2026
 
 - **254 automated checks**, **17/17 prepared live phases**, **11/11 prepared skill cases**, and **20/20 local controls** pass on frozen app `a3e2242`
 - **10/20 known worlds completed**, matching the previous published `682bf46` build on every seed; ten failures remain
@@ -273,3 +284,5 @@ Benchmark commands and version-comparison instructions are in [BroBench](benchma
 Built with JavaScript, Node.js, Mineflayer, mineflayer-pathfinder and the OpenAI SDK. The local Minecraft world uses Paper with Geyser and bridge components.
 
 **Troubleshooting:** [Full play guide](docs/USAGE.md) · [Validation limits](docs/VALIDATION.md) · [Open an issue](https://github.com/flowzygames/BroBot/issues)
+
+Expanded starter exploration uses a 256-block job radius (262-block emergency stop), up to 24 scouts with legs no longer than 64 blocks, and observed intermediate waypoints for longer home/table returns. Each return leg must have a verified forward-and-return walking route; unknown or blocked routes stop the job. The ten-minute job deadline remains. A larger allowed region is not a promise of complete coverage or safe arrival. The separate one-leaf canopy descent keeps its narrower proof limits.

@@ -117,3 +117,42 @@ test('fixed endpoint must satisfy its exact goal before planning begins',async()
  await assert.rejects(planReturnablePath(b,{}, {isEnd:()=>false},anchor,{fixedEndpoint:new Vec3(2,68,0)}),/does not satisfy/);
  await assert.rejects(planReturnablePath(b,{}, {isEnd:()=>true},anchor,{fixedEndpoint:new Vec3(2.1,68,0)}),/exact standing/);
 });
+
+test('ranked route probes share one window and reserve time for alternatives', async () => {
+  const { planRankedRoutes } = await import('../src/navigation-guards.js');
+  let time=0;const budgets=[];
+  const r=await planRankedRoutes(['north','east','south','west'],async(direction,budget)=>{
+    budgets.push(budget);
+    if(direction==='north'){time+=budget;throw Error('Return-path planning budget exhausted');}
+    time+=100;return {endpoint:goal};
+  },{now:()=>time});
+  assert.deepEqual(budgets,[400,400]);assert.equal(r.candidate,'east');assert.equal(time,500);
+  assert.deepEqual(r.tried,['north','east']);assert.equal(r.outcomes[0].status,'unverified');
+});
+test('ranked certification never resets its total deadline after failures', async () => {
+  const { planRankedRoutes } = await import('../src/navigation-guards.js');
+  let time=0,calls=0;
+  await assert.rejects(planRankedRoutes(['north','east','south','west'],async(d,budget)=>{
+    calls++;time+=budget;throw Error('No verified returnable walking route (timeout)');
+  },{now:()=>time}),error=>{assert.equal(error.result.route_attempts.length,4);return /No verified scout route/.test(error.message)});
+  assert.equal(time,1600);assert.equal(calls,4);
+});
+test('ranked probes propagate cancellation and unexpected errors without trying another route', async () => {
+  const { planRankedRoutes } = await import('../src/navigation-guards.js');
+  for(const mode of ['abort','disconnect']){
+    let calls=0;const c=new AbortController();
+    await assert.rejects(planRankedRoutes(['north','east'],async()=>{
+      calls++;if(mode==='abort')c.abort();throw Error(mode==='abort'?'No verified returnable walking route (timeout)':'Minecraft is disconnected');
+    },{signal:c.signal}));assert.equal(calls,1);
+  }
+});
+test('late route results never certify after the shared deadline', async () => {
+  const { planRankedRoutes } = await import('../src/navigation-guards.js');let time=0;
+  await assert.rejects(planRankedRoutes(['north','east'],async()=>{time=1601;return{}},{now:()=>time}),/No verified scout route/);
+});
+test('unexpected ranked-probe failure preserves prior attempts while propagating the original error', async () => {
+  const {planRankedRoutes}=await import('../src/navigation-guards.js');const failure=Error('Minecraft is disconnected');
+  await assert.rejects(planRankedRoutes(['north','east','west'],async direction=>{
+    if(direction==='north')throw Error('No verified returnable walking route (noPath)');throw failure;
+  }),error=>{assert.equal(error,failure);assert.deepEqual(error.result.directions_tried,['north','east']);assert.equal(error.result.route_attempts.length,2);return true});
+});

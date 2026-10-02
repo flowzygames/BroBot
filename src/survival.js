@@ -1,4 +1,6 @@
+import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
+import { recordScoutObservation, rankScouts } from './scout-coverage.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 export const STARTER_LOG_RADIUS = 48;
@@ -10,6 +12,32 @@ const distance = (a, b) => a && b ? Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) 
 const dimension = d => String(d).replace(/^minecraft:/, '');
 const action = (name, args, reason) => ({ name, args, reason });
 
+// Long returns use actually observed intermediate positions, not invented
+// straight-line points in potentially unloaded terrain. Each leg is certified.
+function starterTravel(state, job, target, reason, waypointKind) {
+  const valid = p => p && ['x', 'y', 'z'].every(k => Number.isFinite(p[k]));
+  const nodes = [{ ...state.position }, { ...target }];
+  for (const p of (Array.isArray(job.observedPositions) ? job.observedPositions : []).slice(-64)) {
+    if (valid(p) && distance(p, job.home.position) <= STARTER_MOVEMENT_RADIUS && !nodes.some(q => distance(p,q) <= 2)) nodes.push({ ...p });
+  }
+  const excluded = (Array.isArray(job.ignoredTravelEdges) ? job.ignoredTravelEdges : []).filter(e => valid(e?.from) && valid(e?.to)).slice(-128);
+  const rejected = (a,b) => excluded.some(e => (distance(a,e.from)<=2 && distance(b,e.to)<=2) || (distance(a,e.to)<=2 && distance(b,e.from)<=2));
+  // This bounded graph chooses a candidate chain, not a terrain safety proof.
+  // The action executor certifies each actual leg. BFS can retrace U-shaped
+  // walks that must temporarily move farther from home.
+  const queue = [0], parents = new Map([[0,null]]);
+  for (let cursor=0; cursor<queue.length && !parents.has(1); cursor++) {
+    const current=queue[cursor];
+    const neighbors=nodes.map((p,i)=>i).filter(i=>!parents.has(i) && distance(nodes[current],nodes[i])<=STARTER_LEG_RADIUS && !rejected(nodes[current],nodes[i]))
+      .sort((a,b)=>distance(nodes[a],target)-distance(nodes[b],target));
+    for(const i of neighbors){parents.set(i,current);queue.push(i);}
+  }
+  if (!parents.has(1)) return { blocked: 'No observed intermediate waypoint can verify a bounded return. Review the route before resuming.' };
+  let first=1;while(parents.get(first)!==0)first=parents.get(first);
+  const next=nodes[first];
+  return { ...action('go_to', { x: Math.floor(next.x), y: Math.floor(next.y), z: Math.floor(next.z), radius: first===1 && waypointKind==='table' ? 2 : 1, returnable: true }, reason), travelOrigin:{...state.position}, travelTarget:{...next}, ...(waypointKind ? { waypointKind, waypointTarget:{...target} } : {}) };
+}
+
 // An explicit offline controller, not a substitute label for an untested LLM.
 // Every decision is recomputed from observed inventory/world state. No assumed
 // recipe success, granted items, teleport, seed lookup, or console commands.
@@ -20,7 +48,7 @@ export function nextStarterStep(state, job, observation = {}) {
   if (dimension(state.dimension) !== dimension(job.home.dimension)) return { blocked: 'The world dimension changed. Start a new job in the intended world.' };
   if (Number.isFinite(state.oxygen) && state.oxygen <= 10) return { blocked: LOW_AIR_MESSAGE };
   if (state.health <= 8) return { blocked: 'Health is too low to continue gathering safely.' };
-  if (distance(state.position, job.home.position) > 96) return { blocked: 'The starter job reached its 96-block travel boundary.' };
+  if (distance(state.position, job.home.position) > STARTER_STOP_RADIUS) return { blocked: `The starter job reached its ${STARTER_STOP_RADIUS}-block travel boundary.` };
   if (state.food != null && state.food <= 10) {
     const food = FOODS.find(has);
     return food ? action('eat', { item: food }, 'Recover hunger before working.') : { blocked: 'Food is low and no supported safe food is carried.' };
@@ -28,7 +56,7 @@ export function nextStarterStep(state, job, observation = {}) {
   if ((state.entities ?? []).some(e => e.type === 'hostile' && e.distance < 6)) return { blocked: 'A hostile mob is too close for unarmored starter gathering.' };
   if (has('stone_pickaxe') && has('furnace')) {
     if (distance(state.position, job.home.position) <= 2.5) return { complete: true, evidence: { stone_pickaxe: items.stone_pickaxe, furnace: items.furnace, homeDistance: distance(state.position, job.home.position) } };
-    return action('go_to', { x: Math.floor(job.home.position.x), y: Math.floor(job.home.position.y), z: Math.floor(job.home.position.z), radius: 1 }, 'Return to the job starting point with the starter kit.');
+    return starterTravel(state, job, job.home.position, 'Return to the job starting point with the starter kit.');
   }
   const ensurePlanks = wanted => {
     if (WOODS.some(w => (items[`${w}_planks`] ?? 0) >= wanted)) return null;
@@ -42,8 +70,11 @@ export function nextStarterStep(state, job, observation = {}) {
   const table = has('crafting_table') || observation.tableInReach;
   const ensureTable = () => {
     const ignored = job.ignoredTables ?? [];
-    const known = (job.tables ?? []).filter(p => distance(p, job.home.position) <= 90).filter(p => !ignored.some(q => distance(p, q) < 1)).sort((a, b) => distance(a, state.position) - distance(b, state.position))[0];
-    if (known) return { ...action('go_to', { x: known.x, y: known.y, z: known.z, radius: 2 }, 'Return to an observed crafting table instead of searching for more wood.'), waypointKind: 'table' };
+    const known = (job.tables ?? []).filter(p => distance(p, job.home.position) <= STARTER_MOVEMENT_RADIUS).filter(p => !ignored.some(q => distance(p, q) < 1)).sort((a, b) => distance(a, state.position) - distance(b, state.position));
+    for (const table of known) {
+      const route = starterTravel(state, job, table, 'Return to an observed crafting table instead of searching for more wood.', 'table');
+      if (!route.blocked) return route;
+    }
     return ensurePlanks(4) ?? action('craft', { item: 'crafting_table', count: 1 }, 'Make a portable crafting table.');
   };
   const hasMiningTool = ['wooden_pickaxe', 'stone_pickaxe', 'iron_pickaxe', 'diamond_pickaxe', 'netherite_pickaxe'].some(has);
@@ -65,7 +96,7 @@ export function nextStarterStep(state, job, observation = {}) {
 }
 
 export class SurvivalJob {
-  constructor({ memory, snapshot, observe, execute, stopActions, context, session = null, log = () => {}, maxSteps = 64, maxDurationMs = 600000, intervalMs = 150 }) {
+  constructor({ memory, snapshot, observe, execute, stopActions, context, session = null, log = () => {}, maxSteps = 96, maxDurationMs = 600000, intervalMs = 150 }) {
     Object.assign(this, { memory, snapshot, observe, execute, stopActions, context, log, maxSteps, maxDurationMs, intervalMs });
     this.active = null;
     this.session = session ?? (() => this);
@@ -125,6 +156,7 @@ export class SurvivalJob {
       if (decision.blocked) throw new Error(decision.blocked);
       const observation = await this.observe(signal);
       signal.throwIfAborted();
+      this.job.observedPositions = recordScoutObservation(this.job.observedPositions, this.snapshot().position);
       if (Array.isArray(observation.tables)) this.job.tables = observation.tables.slice(0, 8);
       decision = nextStarterStep(this.snapshot(), this.job, observation);
       if (decision.blocked) throw new Error(decision.blocked);
@@ -148,23 +180,30 @@ export class SurvivalJob {
         recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Pick up the materials after opening headroom.');
       }
       if (decision.scout) {
-        if (this.job.scouts >= 8) throw new Error(`Exploration budget exhausted: ${decision.scout}`);
-        const directions = ['north', 'east', 'south', 'west'];
-        const index = this.job.scouts++;
-        const direction = directions[index % 4], travel = 12 * (1 + Math.floor(index / 2));
-        const offsets = { north: [0, -travel], east: [travel, 0], south: [0, travel], west: [-travel, 0] };
-        const [dx, dz] = offsets[direction];
-        const target = { ...before.position, x: before.position.x + dx, z: before.position.z + dz };
-        if (distance(target, this.job.home.position) > 90) throw new Error('No bounded exploration target remains inside the job area.');
-        decision = action('explore', { direction, distance: travel, returnable: true }, decision.scout);
+        if (this.job.scouts >= STARTER_SCOUT_LIMIT) throw new Error(`Exploration budget exhausted: ${decision.scout}`);
+        const origin = this.snapshot().position;
+        const choices = rankScouts({ position: origin, home: this.job.home.position, index: this.job.scouts,
+          observations: this.job.observedPositions, attempts: this.job.scoutAttempts });
+        if (!choices.length) throw new Error('No bounded exploration target remains inside the job area.');
+        this.job.scouts++;
+        decision = { ...action('explore', { ...choices[0], alternatives: choices.slice(1).map(c => c.direction) }, decision.scout), scoutOrigin: { ...origin } };
       }
       const signature = JSON.stringify([decision.name, decision.args]);
       if (decision.name === 'collect' && this.job.excluded?.[decision.args.block]?.length) decision.args.skip_positions = this.job.excluded[decision.args.block];
       if ((failures.get(signature) ?? 0) >= 2) {
         if (decision.name === 'go_to') {
+          if (decision.travelOrigin && decision.travelTarget) {
+            this.job.ignoredTravelEdges = [...(Array.isArray(this.job.ignoredTravelEdges) ? this.job.ignoredTravelEdges : []), {from:decision.travelOrigin,to:decision.travelTarget}].slice(-128);
+            // Keep other observed ways home available; never blacklist a table
+            // merely because one intermediate shortcut could not be verified.
+            if (decision.waypointKind==='table' && distance(decision.travelTarget,decision.waypointTarget)<=2) {
+              this.job.ignoredTables ??=[];this.job.ignoredTables.push(decision.waypointTarget);
+            }
+            failures.delete(signature);this.save();continue;
+          }
           if (decision.waypointKind !== 'table') throw new Error('Cannot verify a route home after two attempts. Starter kit is not marked complete.');
           this.job.ignoredTables ??= [];
-          this.job.ignoredTables.push({ x: decision.args.x, y: decision.args.y, z: decision.args.z });
+          this.job.ignoredTables.push(decision.waypointTarget ?? { x: decision.args.x, y: decision.args.y, z: decision.args.z });
           failures.delete(signature); continue;
         }
         if (decision.name === 'collect' && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
@@ -176,9 +215,19 @@ export class SurvivalJob {
         failures.delete(signature);
         continue;
       }
+      let scoutRecorded = false;
+      const rememberScout = result => {
+        if (decision.name !== 'explore' || scoutRecorded) return;
+        scoutRecorded = true;
+        const allowed = [decision.args.direction, ...(decision.args.alternatives ?? [])];
+        const tried = Array.isArray(result?.directions_tried) ? result.directions_tried.filter(d => allowed.includes(d)).slice(0, 4) : [decision.args.direction];
+        this.job.scoutAttempts = [...(Array.isArray(this.job.scoutAttempts) ? this.job.scoutAttempts : []),
+          ...tried.map(direction => ({ origin: { ...(decision.scoutOrigin ?? before.position) }, direction }))].slice(-STARTER_SCOUT_LIMIT * 4);
+      };
       this.job.steps++; this.save();
       try {
         const result = await this.execute(decision.name, decision.args, signal);
+        rememberScout(result);
         signal.throwIfAborted();
         const after = this.snapshot();
         excludeFailures(decision, result);
@@ -203,6 +252,7 @@ export class SurvivalJob {
         }
         if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
+        rememberScout(error.result);
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
         remember({ action: decision.name, args: decision.args, error: error.message, result: error.result });

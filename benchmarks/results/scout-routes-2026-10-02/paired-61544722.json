@@ -1,0 +1,2511 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-scout-routes-275",
+  "commit": "8cd5724408d7b37dbfd710795a907711f6512905",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "61544722",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-02T01:30:21.511Z",
+  "status": "failed",
+  "passed": false,
+  "trace": [
+    {
+      "at": "2026-10-02T01:30:48.318Z",
+      "position": {
+        "x": -287.5,
+        "y": 69,
+        "z": -191.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -192
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -192
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 69,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -192
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 69,
+          "z": -191
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:30:53.330Z",
+      "position": {
+        "x": -287.5,
+        "y": 64,
+        "z": -203.56
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 63,
+          "z": -204
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 63,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 64,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 63,
+          "z": -204
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 63,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 64,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 65,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 63,
+          "z": -205
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 63,
+          "z": -204
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 64,
+          "z": -204
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 63,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 64,
+          "z": -203
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 65,
+          "z": -203
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:30:58.329Z",
+      "position": {
+        "x": -287.98,
+        "y": 69,
+        "z": -192.52
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -194
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 68,
+          "z": -192
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -194
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 69,
+          "z": -194
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 68,
+          "z": -192
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -194
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 69,
+          "z": -194
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 69,
+          "z": -193
+        },
+        {
+          "name": "sand",
+          "x": -287,
+          "y": 68,
+          "z": -192
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:03.329Z",
+      "position": {
+        "x": -288.98,
+        "y": 72,
+        "z": -174.48
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -290,
+          "y": 71,
+          "z": -176
+        },
+        {
+          "name": "sand",
+          "x": -290,
+          "y": 71,
+          "z": -175
+        },
+        {
+          "name": "sand",
+          "x": -290,
+          "y": 71,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 71,
+          "z": -176
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 72,
+          "z": -176
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 71,
+          "z": -175
+        },
+        {
+          "name": "sand",
+          "x": -289,
+          "y": 71,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 71,
+          "z": -176
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 72,
+          "z": -176
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 71,
+          "z": -175
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 72,
+          "z": -175
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 71,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -288,
+          "y": 72,
+          "z": -174
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:08.329Z",
+      "position": {
+        "x": -300.91,
+        "y": 71,
+        "z": -167.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": -302,
+          "y": 70,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -302,
+          "y": 70,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -302,
+          "y": 70,
+          "z": -167
+        },
+        {
+          "name": "stone",
+          "x": -301,
+          "y": 70,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -301,
+          "y": 70,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -301,
+          "y": 70,
+          "z": -167
+        },
+        {
+          "name": "stone",
+          "x": -300,
+          "y": 70,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -300,
+          "y": 70,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -300,
+          "y": 70,
+          "z": -167
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:13.330Z",
+      "position": {
+        "x": -327.42,
+        "y": 70,
+        "z": -167.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "stone",
+          "x": -329,
+          "y": 69,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -329,
+          "y": 69,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -329,
+          "y": 69,
+          "z": -167
+        },
+        {
+          "name": "stone",
+          "x": -328,
+          "y": 69,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -328,
+          "y": 69,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -328,
+          "y": 69,
+          "z": -167
+        },
+        {
+          "name": "stone",
+          "x": -327,
+          "y": 69,
+          "z": -169
+        },
+        {
+          "name": "stone",
+          "x": -327,
+          "y": 69,
+          "z": -168
+        },
+        {
+          "name": "stone",
+          "x": -327,
+          "y": 69,
+          "z": -167
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:18.330Z",
+      "position": {
+        "x": -347.5,
+        "y": 70,
+        "z": -172.44
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -173
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -172
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -173
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -172
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -174
+        },
+        {
+          "name": "tall_dry_grass",
+          "x": -347,
+          "y": 70,
+          "z": -174
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -173
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -172
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:23.330Z",
+      "position": {
+        "x": -347.24,
+        "y": 71,
+        "z": -198.3
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -200
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -199
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -198
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -200
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -199
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -198
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -200
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -199
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -198
+        },
+        {
+          "name": "tall_dry_grass",
+          "x": -347,
+          "y": 71,
+          "z": -198
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:28.331Z",
+      "position": {
+        "x": -346.5,
+        "y": 71,
+        "z": -189.16
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -190
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -189
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -190
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 70,
+          "z": -189
+        },
+        {
+          "name": "sand",
+          "x": -346,
+          "y": 70,
+          "z": -191
+        },
+        {
+          "name": "sand",
+          "x": -346,
+          "y": 70,
+          "z": -190
+        },
+        {
+          "name": "sand",
+          "x": -346,
+          "y": 70,
+          "z": -189
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:33.330Z",
+      "position": {
+        "x": -347.45,
+        "y": 70,
+        "z": -165.66
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -166
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -165
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -167
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -166
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -165
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -167
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -166
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -165
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:38.331Z",
+      "position": {
+        "x": -347.5,
+        "y": 70,
+        "z": -162.76
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -164
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -163
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 69,
+          "z": -162
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -164
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -163
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 69,
+          "z": -162
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -164
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -163
+        },
+        {
+          "name": "sand",
+          "x": -347,
+          "y": 69,
+          "z": -162
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:31:43.330Z",
+      "position": {
+        "x": -348.55,
+        "y": 71,
+        "z": -185.58
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "sand",
+          "x": -350,
+          "y": 70,
+          "z": -187
+        },
+        {
+          "name": "sand",
+          "x": -350,
+          "y": 70,
+          "z": -186
+        },
+        {
+          "name": "sand",
+          "x": -350,
+          "y": 70,
+          "z": -185
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -187
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -186
+        },
+        {
+          "name": "sand",
+          "x": -349,
+          "y": 70,
+          "z": -185
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -187
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -186
+        },
+        {
+          "name": "sand",
+          "x": -348,
+          "y": 70,
+          "z": -185
+        }
+      ]
+    }
+  ],
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -287.5,
+      "y": 69,
+      "z": -191.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 73,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -280.63,
+          "y": 73,
+          "z": -180.63
+        },
+        "distance": 13.5
+      },
+      {
+        "id": 65,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -291.5,
+          "y": 58,
+          "z": -218.5
+        },
+        "distance": 29.4
+      },
+      {
+        "id": 56,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -276.34,
+          "y": 55.46,
+          "z": -217.37
+        },
+        "distance": 31.3
+      },
+      {
+        "id": 55,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -278.02,
+          "y": 55.03,
+          "z": -218.09
+        },
+        "distance": 31.5
+      },
+      {
+        "id": 54,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -275.82,
+          "y": 54.89,
+          "z": -218.19
+        },
+        "distance": 32.4
+      },
+      {
+        "id": 53,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -276.92,
+          "y": 54.71,
+          "z": -219.04
+        },
+        "distance": 32.8
+      },
+      {
+        "id": 67,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -289.5,
+          "y": 37,
+          "z": -175.5
+        },
+        "distance": 35.8
+      },
+      {
+        "id": 138,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -299.5,
+          "y": 55.01,
+          "z": -222.5
+        },
+        "distance": 36.1
+      },
+      {
+        "id": 130,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -286.6,
+          "y": 60.05,
+          "z": -151.48
+        },
+        "distance": 41
+      },
+      {
+        "id": 113,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -295.5,
+          "y": 57.01,
+          "z": -152.5
+        },
+        "distance": 41.6
+      },
+      {
+        "id": 126,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -286.5,
+          "y": 60.06,
+          "z": -150.5
+        },
+        "distance": 42
+      },
+      {
+        "id": 123,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -285.5,
+          "y": 60.06,
+          "z": -150.5
+        },
+        "distance": 42
+      },
+      {
+        "id": 129,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -288.51,
+          "y": 60.02,
+          "z": -149.5
+        },
+        "distance": 43
+      },
+      {
+        "id": 128,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -290.5,
+          "y": 60.02,
+          "z": -149.5
+        },
+        "distance": 43.1
+      },
+      {
+        "id": 104,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -283.51,
+          "y": 59.11,
+          "z": -149.49
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 124,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -285.5,
+          "y": 60.05,
+          "z": -148.63
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 73,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -290.5,
+          "y": 60.02,
+          "z": -148.5
+        },
+        "distance": 44
+      },
+      {
+        "id": 103,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -285.01,
+          "y": 59.09,
+          "z": -148.55
+        },
+        "distance": 44.2
+      },
+      {
+        "id": 76,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -291.49,
+          "y": 60.02,
+          "z": -147.51
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 74,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -288.51,
+          "y": 60.02,
+          "z": -146.51
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 121,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -291.5,
+          "y": 60.02,
+          "z": -146.5
+        },
+        "distance": 46.1
+      },
+      {
+        "id": 114,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -293.5,
+          "y": 57.01,
+          "z": -146.5
+        },
+        "distance": 47
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "0d864049-1631-412b-b97c-d3c1bbfa53ca"
+  },
+  "elapsedMs": 58938,
+  "job": {
+    "version": 1,
+    "id": "0d864049-1631-412b-b97c-d3c1bbfa53ca",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -287.5,
+        "y": 69,
+        "z": -191.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 8,
+    "scouts": 8,
+    "clearings": 0,
+    "excluded": {},
+    "history": [
+      {
+        "at": "2026-10-02T01:30:51.840Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 12,
+          "returnable": true,
+          "alternatives": [
+            "east",
+            "south",
+            "west"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "north",
+          "directions_tried": [
+            "north"
+          ],
+          "route_attempts": [
+            {
+              "direction": "north",
+              "status": "verified"
+            }
+          ],
+          "distance": 12.1,
+          "position": {
+            "x": -287.5,
+            "y": 64.23,
+            "z": -203.56
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:30:58.540Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 12,
+          "returnable": true,
+          "alternatives": [
+            "east",
+            "west",
+            "south"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "south",
+          "directions_tried": [
+            "north",
+            "east",
+            "west",
+            "south"
+          ],
+          "route_attempts": [
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "south",
+              "status": "verified"
+            }
+          ],
+          "distance": 11.9,
+          "position": {
+            "x": -287.43,
+            "y": 69,
+            "z": -191.64
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:04.871Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 24,
+          "returnable": true,
+          "alternatives": [
+            "east",
+            "west",
+            "north"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "south",
+          "directions_tried": [
+            "south"
+          ],
+          "route_attempts": [
+            {
+              "direction": "south",
+              "status": "verified"
+            }
+          ],
+          "distance": 24.1,
+          "position": {
+            "x": -287.5,
+            "y": 72,
+            "z": -167.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:10.136Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 24,
+          "returnable": true,
+          "alternatives": [
+            "west",
+            "east",
+            "north"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "west",
+          "directions_tried": [
+            "south",
+            "west"
+          ],
+          "route_attempts": [
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "west",
+              "status": "verified"
+            }
+          ],
+          "distance": 24,
+          "position": {
+            "x": -311.5,
+            "y": 71,
+            "z": -167.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:16.902Z",
+        "action": "explore",
+        "args": {
+          "direction": "west",
+          "distance": 36,
+          "returnable": true,
+          "alternatives": [
+            "south",
+            "north",
+            "east"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "west",
+          "directions_tried": [
+            "west"
+          ],
+          "route_attempts": [
+            {
+              "direction": "west",
+              "status": "verified"
+            }
+          ],
+          "distance": 35.8,
+          "position": {
+            "x": -347.34,
+            "y": 69,
+            "z": -167.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:24.491Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 36,
+          "returnable": true,
+          "alternatives": [
+            "south",
+            "east"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "north",
+          "directions_tried": [
+            "north"
+          ],
+          "route_attempts": [
+            {
+              "direction": "north",
+              "status": "verified"
+            }
+          ],
+          "distance": 35.9,
+          "position": {
+            "x": -347.5,
+            "y": 72,
+            "z": -203.36
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:35.318Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "south",
+            "east"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "south",
+          "directions_tried": [
+            "north",
+            "south"
+          ],
+          "route_attempts": [
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "south",
+              "status": "verified"
+            }
+          ],
+          "distance": 47.7,
+          "position": {
+            "x": -347.5,
+            "y": 69,
+            "z": -155.68
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-02T01:31:46.780Z",
+        "action": "explore",
+        "args": {
+          "direction": "east",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "north"
+          ]
+        },
+        "reason": "No supported tree logs are visible nearby.",
+        "result": {
+          "explored": true,
+          "direction": "north",
+          "directions_tried": [
+            "east",
+            "north"
+          ],
+          "route_attempts": [
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "north",
+              "status": "verified"
+            }
+          ],
+          "distance": 47.7,
+          "position": {
+            "x": -347.5,
+            "y": 72,
+            "z": -203.33
+          }
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-02T01:30:48.321Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+    "observedPositions": [
+      {
+        "x": -287.5,
+        "y": 69,
+        "z": -191.5
+      },
+      {
+        "x": -287.5,
+        "y": 64,
+        "z": -203.56
+      },
+      {
+        "x": -287.5,
+        "y": 72,
+        "z": -167.5
+      },
+      {
+        "x": -311.5,
+        "y": 71,
+        "z": -167.5
+      },
+      {
+        "x": -347.34,
+        "y": 69,
+        "z": -167.5
+      },
+      {
+        "x": -347.5,
+        "y": 72,
+        "z": -203.36
+      },
+      {
+        "x": -347.5,
+        "y": 69,
+        "z": -155.68
+      }
+    ],
+    "tables": [],
+    "scoutAttempts": [
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 69,
+          "z": -191.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 64,
+          "z": -203.56
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 64,
+          "z": -203.56
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 64,
+          "z": -203.56
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 64,
+          "z": -203.56
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -287.43,
+          "y": 69,
+          "z": -191.64
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 72,
+          "z": -167.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -287.5,
+          "y": 72,
+          "z": -167.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -311.5,
+          "y": 71,
+          "z": -167.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -347.34,
+          "y": 69,
+          "z": -167.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -347.5,
+          "y": 72,
+          "z": -203.36
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -347.5,
+          "y": 72,
+          "z": -203.36
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -347.5,
+          "y": 69,
+          "z": -155.68
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -347.5,
+          "y": 69,
+          "z": -155.68
+        },
+        "direction": "north"
+      }
+    ],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -347.5,
+      "y": 72,
+      "z": -203.33
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1253,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 97,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -353.99,
+          "y": 72.67,
+          "z": -210.71
+        },
+        "distance": 9.8
+      },
+      {
+        "id": 96,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -342.71,
+          "y": 71,
+          "z": -213.7
+        },
+        "distance": 11.5
+      },
+      {
+        "id": 111,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -355.48,
+          "y": 72.39,
+          "z": -195.06
+        },
+        "distance": 11.5
+      },
+      {
+        "id": 112,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -369.04,
+          "y": 71.2,
+          "z": -196.48
+        },
+        "distance": 22.6
+      },
+      {
+        "id": 101,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -328.82,
+          "y": 70,
+          "z": -184.82
+        },
+        "distance": 26.4
+      },
+      {
+        "id": 99,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -355.33,
+          "y": 70,
+          "z": -173.89
+        },
+        "distance": 30.5
+      },
+      {
+        "id": 98,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -337.19,
+          "y": 70,
+          "z": -173.81
+        },
+        "distance": 31.3
+      },
+      {
+        "id": 100,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -359.93,
+          "y": 70,
+          "z": -174.44
+        },
+        "distance": 31.5
+      },
+      {
+        "id": 629,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -355.57,
+          "y": 58.05,
+          "z": -232.57
+        },
+        "distance": 33.4
+      },
+      {
+        "id": 102,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -334.49,
+          "y": 70,
+          "z": -172.57
+        },
+        "distance": 33.5
+      },
+      {
+        "id": 583,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -356.44,
+          "y": 46,
+          "z": -182.21
+        },
+        "distance": 34.7
+      },
+      {
+        "id": 458,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -333.5,
+          "y": 38,
+          "z": -195.5
+        },
+        "distance": 37.6
+      },
+      {
+        "id": 510,
+        "name": "enderman",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -332.38,
+          "y": 37,
+          "z": -194.5
+        },
+        "distance": 39.1
+      },
+      {
+        "id": 474,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -349.31,
+          "y": 41.05,
+          "z": -177.22
+        },
+        "distance": 40.5
+      },
+      {
+        "id": 2,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -312.99,
+          "y": 70,
+          "z": -181.84
+        },
+        "distance": 40.7
+      },
+      {
+        "id": 561,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -338.5,
+          "y": 37,
+          "z": -183.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 467,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -360.96,
+          "y": 42,
+          "z": -174.02
+        },
+        "distance": 44
+      },
+      {
+        "id": 457,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -322.73,
+          "y": 34,
+          "z": -194.49
+        },
+        "distance": 46.2
+      },
+      {
+        "id": 432,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -358.5,
+          "y": 26,
+          "z": -207.5
+        },
+        "distance": 47.5
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "0d864049-1631-412b-b97c-d3c1bbfa53ca",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -287.5,
+          "y": 69,
+          "z": -191.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 8,
+      "scouts": 8,
+      "clearings": 0,
+      "excluded": {},
+      "history": [
+        {
+          "at": "2026-10-02T01:30:51.840Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 12,
+            "returnable": true,
+            "alternatives": [
+              "east",
+              "south",
+              "west"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "north",
+            "directions_tried": [
+              "north"
+            ],
+            "route_attempts": [
+              {
+                "direction": "north",
+                "status": "verified"
+              }
+            ],
+            "distance": 12.1,
+            "position": {
+              "x": -287.5,
+              "y": 64.23,
+              "z": -203.56
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:30:58.540Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 12,
+            "returnable": true,
+            "alternatives": [
+              "east",
+              "west",
+              "south"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "south",
+            "directions_tried": [
+              "north",
+              "east",
+              "west",
+              "south"
+            ],
+            "route_attempts": [
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "south",
+                "status": "verified"
+              }
+            ],
+            "distance": 11.9,
+            "position": {
+              "x": -287.43,
+              "y": 69,
+              "z": -191.64
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:04.871Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 24,
+            "returnable": true,
+            "alternatives": [
+              "east",
+              "west",
+              "north"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "south",
+            "directions_tried": [
+              "south"
+            ],
+            "route_attempts": [
+              {
+                "direction": "south",
+                "status": "verified"
+              }
+            ],
+            "distance": 24.1,
+            "position": {
+              "x": -287.5,
+              "y": 72,
+              "z": -167.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:10.136Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 24,
+            "returnable": true,
+            "alternatives": [
+              "west",
+              "east",
+              "north"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "west",
+            "directions_tried": [
+              "south",
+              "west"
+            ],
+            "route_attempts": [
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "west",
+                "status": "verified"
+              }
+            ],
+            "distance": 24,
+            "position": {
+              "x": -311.5,
+              "y": 71,
+              "z": -167.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:16.902Z",
+          "action": "explore",
+          "args": {
+            "direction": "west",
+            "distance": 36,
+            "returnable": true,
+            "alternatives": [
+              "south",
+              "north",
+              "east"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "west",
+            "directions_tried": [
+              "west"
+            ],
+            "route_attempts": [
+              {
+                "direction": "west",
+                "status": "verified"
+              }
+            ],
+            "distance": 35.8,
+            "position": {
+              "x": -347.34,
+              "y": 69,
+              "z": -167.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:24.491Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 36,
+            "returnable": true,
+            "alternatives": [
+              "south",
+              "east"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "north",
+            "directions_tried": [
+              "north"
+            ],
+            "route_attempts": [
+              {
+                "direction": "north",
+                "status": "verified"
+              }
+            ],
+            "distance": 35.9,
+            "position": {
+              "x": -347.5,
+              "y": 72,
+              "z": -203.36
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:35.318Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "south",
+              "east"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "south",
+            "directions_tried": [
+              "north",
+              "south"
+            ],
+            "route_attempts": [
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "south",
+                "status": "verified"
+              }
+            ],
+            "distance": 47.7,
+            "position": {
+              "x": -347.5,
+              "y": 69,
+              "z": -155.68
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-02T01:31:46.780Z",
+          "action": "explore",
+          "args": {
+            "direction": "east",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "north"
+            ]
+          },
+          "reason": "No supported tree logs are visible nearby.",
+          "result": {
+            "explored": true,
+            "direction": "north",
+            "directions_tried": [
+              "east",
+              "north"
+            ],
+            "route_attempts": [
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "north",
+                "status": "verified"
+              }
+            ],
+            "distance": 47.7,
+            "position": {
+              "x": -347.5,
+              "y": 72,
+              "z": -203.33
+            }
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-02T01:30:48.321Z",
+      "recoverDropIds": [],
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "observedPositions": [
+        {
+          "x": -287.5,
+          "y": 69,
+          "z": -191.5
+        },
+        {
+          "x": -287.5,
+          "y": 64,
+          "z": -203.56
+        },
+        {
+          "x": -287.5,
+          "y": 72,
+          "z": -167.5
+        },
+        {
+          "x": -311.5,
+          "y": 71,
+          "z": -167.5
+        },
+        {
+          "x": -347.34,
+          "y": 69,
+          "z": -167.5
+        },
+        {
+          "x": -347.5,
+          "y": 72,
+          "z": -203.36
+        },
+        {
+          "x": -347.5,
+          "y": 69,
+          "z": -155.68
+        }
+      ],
+      "tables": [],
+      "scoutAttempts": [
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 69,
+            "z": -191.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 64,
+            "z": -203.56
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 64,
+            "z": -203.56
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 64,
+            "z": -203.56
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 64,
+            "z": -203.56
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -287.43,
+            "y": 69,
+            "z": -191.64
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 72,
+            "z": -167.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -287.5,
+            "y": 72,
+            "z": -167.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -311.5,
+            "y": 71,
+            "z": -167.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -347.34,
+            "y": 69,
+            "z": -167.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -347.5,
+            "y": 72,
+            "z": -203.36
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -347.5,
+            "y": 72,
+            "z": -203.36
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -347.5,
+            "y": 69,
+            "z": -155.68
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -347.5,
+            "y": 69,
+            "z": -155.68
+          },
+          "direction": "north"
+        }
+      ],
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+  "finished": "2026-10-02T01:31:48.935Z"
+}
