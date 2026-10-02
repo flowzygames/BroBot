@@ -18,9 +18,9 @@
     "scheduled": 3,
     "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
   },
-  "multiWorldEvaluation": "Previous90-block275-check source completed12/20 known worlds. Current256-block287-check source has one selected passing development world; full20-world cohort not run. No stable1.0 claim.",
+  "multiWorldEvaluation": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials. Previous90-block275 candidate:12/20. No stable1.0 claim.",
   "readyForStable1_0": false,
-  "note": "Packaged application/harness/test/dashboard/launcher bytes match frozen tested application; 70 files verified. Current expanded full-world cohort is unmeasured.",
+  "note": "Packaged application bytes remain unchanged;70 source files verified. Current expanded evaluation:9/20 with one disclosed infrastructure recovery.",
   "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4,
@@ -49,9 +49,12 @@
     "sourceCommit": "6b26ad5f8f28e8eae6e3464d52ea687662aca96b"
   },
   "currentPairedEvaluation": {
-    "status": "not_run",
-    "passed": null,
-    "scheduled": null
+    "status": "completed_with_disclosed_infrastructure_recovery",
+    "passed": 9,
+    "scheduled": 20,
+    "originalCompleted": 19,
+    "originalInterrupted": 1,
+    "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
   },
   "selectedExpandedWorld": {
     "passed": 1,
