@@ -164,7 +164,18 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to 24 sc
 
 ## Measured, not guessed
 
-### Standing-cell recovery checkpoint · October 1, 2026
+### Expanded exploration checkpoint · October 2, 2026 UTC
+
+- **256-block search region**, up to **24 scouts** and **96 work steps**
+- Long returns use observed waypoint chains with forward-and-reverse route checks
+- **287 automated checks**, **17/17 prepared smoke phases**, **11/11 skills**, **20/20 local controls** passed
+- Selected world 1041160109 completed in 290.165s, reaching 193.26 blocks from home before returning with the kit and full health
+- The **full 20-world score for this expanded build is not yet measured**
+- The separate previous 90-block scouting candidate completed **12/20**, versus the older release's10/20; that is a different source
+
+[Current evidence and tested-code manifest](benchmarks/results/expanded-exploration-2026-10-02/) · [Previous scouting cohort](benchmarks/results/scout-routes-2026-10-02/)
+
+### Previous standing-cell recovery checkpoint · October 1, 2026
 
 - **254 automated checks**, **17/17 prepared live phases**, **11/11 prepared skill cases**, and **20/20 local controls** pass on frozen app `a3e2242`
 - **10/20 known worlds completed**, matching the previous published `682bf46` build on every seed; ten failures remain

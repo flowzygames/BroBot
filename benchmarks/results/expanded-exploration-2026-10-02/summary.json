@@ -1,0 +1,29 @@
+{
+  "testedCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
+  "automatedChecks": 287,
+  "preparedSmoke": {
+    "passed": 17,
+    "total": 17
+  },
+  "preparedSkills": {
+    "passed": 11,
+    "total": 11
+  },
+  "localControls": {
+    "passed": 20,
+    "total": 20
+  },
+  "selectedWorld": {
+    "seed": "1041160109",
+    "passed": true,
+    "elapsedMs": 290165,
+    "maximumRetainedInspectionDistance": 193.25637272804227,
+    "maximumTraceSampleDistance": 203.4832226499276
+  },
+  "same20WorldCohort": {
+    "status": "not_run",
+    "passed": null,
+    "total": null
+  },
+  "stable1_0Verified": false
+}

@@ -1,0 +1,4292 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-scout-routes-275",
+  "commit": "8cd5724408d7b37dbfd710795a907711f6512905",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1276821265",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-02T01:45:47.914Z",
+  "status": "failed",
+  "passed": false,
+  "trace": [
+    {
+      "at": "2026-10-02T01:46:13.763Z",
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -17,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -17,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -17,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "snow",
+          "x": -17,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 78,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_log",
+          "x": -15,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_log",
+          "x": -15,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 77,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:18.776Z",
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -17,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -17,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -17,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "snow",
+          "x": -17,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 78,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_log",
+          "x": -15,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_log",
+          "x": -15,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 77,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:24.456Z",
+      "position": {
+        "x": -14.5,
+        "y": 76,
+        "z": -46.47
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -15,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -46
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:29.476Z",
+      "position": {
+        "x": -14.5,
+        "y": 76,
+        "z": -46.47
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -15,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -46
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:34.493Z",
+      "position": {
+        "x": -14.5,
+        "y": 76,
+        "z": -46.47
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -15,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -46
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:39.503Z",
+      "position": {
+        "x": -14.5,
+        "y": 76,
+        "z": -46.47
+      },
+      "health": 20,
+      "food": 20,
+      "action": "pickup",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -46
+        },
+        {
+          "name": "snow",
+          "x": -15,
+          "y": 76,
+          "z": -46
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -47
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -46
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:44.503Z",
+      "position": {
+        "x": -12.49,
+        "y": 76,
+        "z": -48.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 78,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 76,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 75,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 78,
+          "z": -48
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 78,
+          "z": -48
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:49.503Z",
+      "position": {
+        "x": -12.5,
+        "y": 75,
+        "z": -51.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 75,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 75,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 77,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -12,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "spruce_log",
+          "x": -12,
+          "y": 75,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 77,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 77,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -12,
+          "y": 75,
+          "z": -51
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:54.526Z",
+      "position": {
+        "x": -12.5,
+        "y": 75,
+        "z": -51.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 75,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -14,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -14,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 75,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -13,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -13,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -12,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 77,
+          "z": -53
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 77,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -12,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -12,
+          "y": 75,
+          "z": -51
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:46:59.525Z",
+      "position": {
+        "x": -5.48,
+        "y": 75,
+        "z": -50.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -7,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 77,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:04.544Z",
+      "position": {
+        "x": -5.48,
+        "y": 75,
+        "z": -50.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -7,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 77,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:09.545Z",
+      "position": {
+        "x": -5.48,
+        "y": 75,
+        "z": -50.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -7,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 77,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:14.544Z",
+      "position": {
+        "x": -4.49,
+        "y": 75,
+        "z": -49.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -49
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:19.567Z",
+      "position": {
+        "x": -4.49,
+        "y": 75,
+        "z": -49.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -49
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:24.585Z",
+      "position": {
+        "x": -4.49,
+        "y": 75,
+        "z": -49.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -49
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -49
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -49
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:29.608Z",
+      "position": {
+        "x": -3.4,
+        "y": 73,
+        "z": -50.03
+      },
+      "health": 20,
+      "food": 20,
+      "action": "dig_at",
+      "inventory": [
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 2,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:34.608Z",
+      "position": {
+        "x": -3.4,
+        "y": 73,
+        "z": -50.03
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 6,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "crafting_table",
+          "x": -5,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:39.609Z",
+      "position": {
+        "x": -5.04,
+        "y": 75,
+        "z": -50.34
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_log",
+          "x": -7,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -7,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -7,
+          "y": 77,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -6,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -6,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:44.646Z",
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -50.51
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -17,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -17,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -16,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -16,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -15,
+          "y": 76,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 76,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -15,
+          "y": 78,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:49.947Z",
+      "position": {
+        "x": -3.44,
+        "y": 73,
+        "z": -50.52
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "crafting_table",
+          "x": -5,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:54.948Z",
+      "position": {
+        "x": -3.44,
+        "y": 73,
+        "z": -50.52
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "crafting_table",
+          "x": -5,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:47:59.951Z",
+      "position": {
+        "x": -3.44,
+        "y": 73,
+        "z": -50.52
+      },
+      "health": 20,
+      "food": 20,
+      "action": "explore",
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "crafting_table",
+          "x": -5,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:48:05.075Z",
+      "position": {
+        "x": -3.44,
+        "y": 73,
+        "z": -50.52
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "crafting_table",
+          "x": -5,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -5,
+          "y": 74,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -5,
+          "y": 75,
+          "z": -50
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 73,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -4,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -4,
+          "y": 73,
+          "z": -50
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 72,
+          "z": -52
+        },
+        {
+          "name": "spruce_log",
+          "x": -3,
+          "y": 75,
+          "z": -52
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 73,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 75,
+          "z": -51
+        },
+        {
+          "name": "spruce_leaves",
+          "x": -3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "name": "snow",
+          "x": -3,
+          "y": 73,
+          "z": -50
+        }
+      ]
+    }
+  ],
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 76,
+      "z": -47.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 74,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "a70cfbfb-14bb-4590-90b3-fa1a91f5b716"
+  },
+  "elapsedMs": 115289,
+  "job": {
+    "version": 1,
+    "id": "a70cfbfb-14bb-4590-90b3-fa1a91f5b716",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 37,
+    "scouts": 8,
+    "clearings": 0,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": -12,
+          "y": 77,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 73,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 74,
+          "z": -53
+        },
+        {
+          "x": -21,
+          "y": 75,
+          "z": -58
+        },
+        {
+          "x": 7,
+          "y": 74,
+          "z": -52
+        },
+        {
+          "x": 3,
+          "y": 72,
+          "z": -50
+        },
+        {
+          "x": 10,
+          "y": 76,
+          "z": -43
+        }
+      ],
+      "stone": []
+    },
+    "history": [
+      {
+        "at": "2026-10-02T01:48:02.019Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:02.599Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:04.491Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "north",
+            "west",
+            "east"
+          ]
+        },
+        "error": "No verified scout route: Return-path planning budget exhausted",
+        "result": {
+          "directions_tried": [
+            "south",
+            "north",
+            "west",
+            "east"
+          ],
+          "route_attempts": [
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            }
+          ]
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:05.073Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:05.683Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:07.571Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "north",
+            "west",
+            "east"
+          ]
+        },
+        "error": "No verified scout route: Return-path planning budget exhausted",
+        "result": {
+          "directions_tried": [
+            "south",
+            "north",
+            "west",
+            "east"
+          ],
+          "route_attempts": [
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            }
+          ]
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:08.161Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:48:08.758Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      }
+    ],
+    "started": "2026-10-02T01:46:13.764Z",
+    "recoverDropIds": [
+      323
+    ],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      {
+        "x": -5.48,
+        "y": 75,
+        "z": -50.5
+      },
+      {
+        "x": -3.4,
+        "y": 73,
+        "z": -50.03
+      },
+      {
+        "x": -15.5,
+        "y": 76,
+        "z": -50.51
+      }
+    ],
+    "tables": [
+      {
+        "x": -5,
+        "y": 73,
+        "z": -51
+      }
+    ],
+    "clearanceDigs": 1,
+    "ignoredTables": [],
+    "scoutAttempts": [
+      {
+        "origin": {
+          "x": -3.4,
+          "y": 73,
+          "z": -50.03
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.4,
+          "y": 73,
+          "z": -50.03
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.4,
+          "y": 73,
+          "z": -50.03
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.4,
+          "y": 73,
+          "z": -50.03
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -15.5,
+          "y": 76,
+          "z": -50.51
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -15.5,
+          "y": 76,
+          "z": -50.51
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -15.5,
+          "y": 76,
+          "z": -50.51
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -15.5,
+          "y": 76,
+          "z": -50.51
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": -3.44,
+          "y": 73,
+          "z": -50.52
+        },
+        "direction": "east"
+      }
+    ],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -3.44,
+      "y": 73,
+      "z": -50.52
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 2374,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_log",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 323,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -9.62,
+          "y": 70,
+          "z": -46.33
+        },
+        "distance": 8
+      },
+      {
+        "id": 328,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.03,
+          "y": 74,
+          "z": -44.91
+        },
+        "distance": 10.3
+      },
+      {
+        "id": 293,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -11.89,
+          "y": 70,
+          "z": -44.8
+        },
+        "distance": 10.6
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "a70cfbfb-14bb-4590-90b3-fa1a91f5b716",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -15.5,
+          "y": 76,
+          "z": -47.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 37,
+      "scouts": 8,
+      "clearings": 0,
+      "excluded": {
+        "spruce_log": [
+          {
+            "x": -12,
+            "y": 77,
+            "z": -46
+          },
+          {
+            "x": -12,
+            "y": 73,
+            "z": -46
+          },
+          {
+            "x": -12,
+            "y": 74,
+            "z": -53
+          },
+          {
+            "x": -21,
+            "y": 75,
+            "z": -58
+          },
+          {
+            "x": 7,
+            "y": 74,
+            "z": -52
+          },
+          {
+            "x": 3,
+            "y": 72,
+            "z": -50
+          },
+          {
+            "x": 10,
+            "y": 76,
+            "z": -43
+          }
+        ],
+        "stone": []
+      },
+      "history": [
+        {
+          "at": "2026-10-02T01:48:02.019Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:02.599Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:04.491Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "north",
+              "west",
+              "east"
+            ]
+          },
+          "error": "No verified scout route: Return-path planning budget exhausted",
+          "result": {
+            "directions_tried": [
+              "south",
+              "north",
+              "west",
+              "east"
+            ],
+            "route_attempts": [
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:05.073Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:05.683Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:07.571Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "north",
+              "west",
+              "east"
+            ]
+          },
+          "error": "No verified scout route: Return-path planning budget exhausted",
+          "result": {
+            "directions_tried": [
+              "south",
+              "north",
+              "west",
+              "east"
+            ],
+            "route_attempts": [
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:08.161Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:48:08.758Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        }
+      ],
+      "started": "2026-10-02T01:46:13.764Z",
+      "recoverDropIds": [
+        323
+      ],
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "observedPositions": [
+        {
+          "x": -15.5,
+          "y": 76,
+          "z": -47.5
+        },
+        {
+          "x": -5.48,
+          "y": 75,
+          "z": -50.5
+        },
+        {
+          "x": -3.4,
+          "y": 73,
+          "z": -50.03
+        },
+        {
+          "x": -15.5,
+          "y": 76,
+          "z": -50.51
+        }
+      ],
+      "tables": [
+        {
+          "x": -5,
+          "y": 73,
+          "z": -51
+        }
+      ],
+      "clearanceDigs": 1,
+      "ignoredTables": [],
+      "scoutAttempts": [
+        {
+          "origin": {
+            "x": -3.4,
+            "y": 73,
+            "z": -50.03
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.4,
+            "y": 73,
+            "z": -50.03
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.4,
+            "y": 73,
+            "z": -50.03
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.4,
+            "y": 73,
+            "z": -50.03
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -15.5,
+            "y": 76,
+            "z": -50.51
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -15.5,
+            "y": 76,
+            "z": -50.51
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -15.5,
+            "y": 76,
+            "z": -50.51
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -15.5,
+            "y": 76,
+            "z": -50.51
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": -3.44,
+            "y": 73,
+            "z": -50.52
+          },
+          "direction": "east"
+        }
+      ],
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-02T01:48:10.740Z"
+}

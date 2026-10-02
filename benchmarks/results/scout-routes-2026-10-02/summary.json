@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "8cd5724408d7b37dbfd710795a907711f6512905",
+  "passed": 12,
+  "total": 20,
+  "gained": [
+    "113919219",
+    "1244186709"
+  ],
+  "lost": [],
+  "caveat": "Known same-seed fresh worlds, not identical-state replay:1587439118 starts atY70 instead of66; both passed. Single cohort does not establish causality or unseen-world reliability."
+}

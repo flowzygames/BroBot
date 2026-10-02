@@ -1,0 +1,7350 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "paired-scout-routes-275",
+  "commit": "8cd5724408d7b37dbfd710795a907711f6512905",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "924242050",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-02T01:08:06.554Z",
+  "status": "failed",
+  "passed": false,
+  "trace": [
+    {
+      "at": "2026-10-02T01:08:33.592Z",
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 223,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:08:38.679Z",
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "dig_at",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 223,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:08:44.497Z",
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 223,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:08:50.589Z",
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 223,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:08:55.589Z",
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 223,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:01.041Z",
+      "position": {
+        "x": 225.31,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:06.041Z",
+      "position": {
+        "x": 225.31,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:11.041Z",
+      "position": {
+        "x": 225.31,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:16.042Z",
+      "position": {
+        "x": 225.31,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:21.041Z",
+      "position": {
+        "x": 225.31,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "collect",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:26.042Z",
+      "position": {
+        "x": 225.44,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "dig_at",
+      "inventory": [
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 224,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:31.041Z",
+      "position": {
+        "x": 226.43,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "action": "craft",
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 6,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 4,
+          "durability_used": null
+        },
+        {
+          "name": "crafting_table",
+          "count": 1,
+          "durability_used": null
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_log",
+          "x": 227,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:38.136Z",
+      "position": {
+        "x": 226.43,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "crafting_table",
+          "x": 225,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_log",
+          "x": 227,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:43.136Z",
+      "position": {
+        "x": 226.43,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "crafting_table",
+          "x": 225,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_log",
+          "x": 227,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:48.303Z",
+      "position": {
+        "x": 226.43,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "crafting_table",
+          "x": 225,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_log",
+          "x": 227,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -31
+        }
+      ]
+    },
+    {
+      "at": "2026-10-02T01:09:53.665Z",
+      "position": {
+        "x": 226.43,
+        "y": 85,
+        "z": -31.5
+      },
+      "health": 20,
+      "food": 20,
+      "inventory": [
+        {
+          "name": "spruce_planks",
+          "count": 3,
+          "durability_used": null
+        },
+        {
+          "name": "stick",
+          "count": 2,
+          "durability_used": null
+        },
+        {
+          "name": "wooden_pickaxe",
+          "count": 1,
+          "durability_used": 0
+        },
+        {
+          "name": "spruce_log",
+          "count": 1,
+          "durability_used": null
+        }
+      ],
+      "nearby": [
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "crafting_table",
+          "x": 225,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 225,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 85,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 226,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_log",
+          "x": 227,
+          "y": 84,
+          "z": -33
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -32
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 84,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 85,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 86,
+          "z": -31
+        },
+        {
+          "name": "spruce_leaves",
+          "x": 227,
+          "y": 87,
+          "z": -31
+        }
+      ]
+    }
+  ],
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 224.5,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 74,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 27,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 196.5,
+          "y": 60.02,
+          "z": -15.49
+        },
+        "distance": 40.8
+      },
+      {
+        "id": 29,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 195.5,
+          "y": 60.02,
+          "z": -11.5
+        },
+        "distance": 43.2
+      },
+      {
+        "id": 26,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 194.5,
+          "y": 60.02,
+          "z": -11.5
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 28,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 197.5,
+          "y": 60.02,
+          "z": -5.5
+        },
+        "distance": 45
+      },
+      {
+        "id": 64,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 197.5,
+          "y": 53,
+          "z": -52.5
+        },
+        "distance": 46.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "a1e76045-25d6-496c-8c39-a2727a815b9d"
+  },
+  "elapsedMs": 82293,
+  "job": {
+    "version": 1,
+    "id": "a1e76045-25d6-496c-8c39-a2727a815b9d",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 44,
+    "scouts": 8,
+    "clearings": 3,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": 228,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 228,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 227,
+          "y": 83,
+          "z": -14
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 247,
+          "y": 85,
+          "z": -22
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 91,
+          "z": -26
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 217,
+          "y": 87,
+          "z": -52
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 228,
+          "y": 78,
+          "z": -38
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 237,
+          "y": 79,
+          "z": -35
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 224,
+          "y": 78,
+          "z": -41
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -11
+        },
+        {
+          "x": 233,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 253,
+          "y": 86,
+          "z": -12
+        }
+      ],
+      "stone": [
+        {
+          "x": 246,
+          "y": 68,
+          "z": -45
+        },
+        {
+          "x": 247,
+          "y": 68,
+          "z": -44
+        },
+        {
+          "x": 246,
+          "y": 68,
+          "z": -46
+        },
+        {
+          "x": 221,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 245,
+          "y": 67,
+          "z": -48
+        },
+        {
+          "x": 209,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 215,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 238,
+          "y": 67,
+          "z": -55
+        },
+        {
+          "x": 212,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 211,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 239,
+          "y": 66,
+          "z": -53
+        },
+        {
+          "x": 210,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -44
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -47
+        },
+        {
+          "x": 216,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -48
+        },
+        {
+          "x": 215,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 212,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 238,
+          "y": 68,
+          "z": -56
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 211,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 210,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 239,
+          "y": 67,
+          "z": -53
+        },
+        {
+          "x": 216,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 214,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -44
+        },
+        {
+          "x": 218,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 215,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -42
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -40
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -43
+        },
+        {
+          "x": 228,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 230,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 231,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 232,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 233,
+          "y": 63,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 234,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 231,
+          "y": 63,
+          "z": -10
+        }
+      ]
+    },
+    "history": [
+      {
+        "at": "2026-10-02T01:09:52.310Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:52.808Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:53.149Z",
+        "action": "explore",
+        "args": {
+          "direction": "south",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "north",
+            "west",
+            "east"
+          ]
+        },
+        "error": "No verified scout route: No verified returnable walking route (noPath)",
+        "result": {
+          "directions_tried": [
+            "south",
+            "north",
+            "west",
+            "east"
+          ],
+          "route_attempts": [
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            }
+          ]
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:53.661Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:54.181Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:54.526Z",
+        "action": "explore",
+        "args": {
+          "direction": "north",
+          "distance": 48,
+          "returnable": true,
+          "alternatives": [
+            "south",
+            "west",
+            "east"
+          ]
+        },
+        "error": "No verified scout route: No verified returnable walking route (noPath)",
+        "result": {
+          "directions_tried": [
+            "north",
+            "south",
+            "west",
+            "east"
+          ],
+          "route_attempts": [
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            },
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "No verified returnable walking route (noPath)"
+            }
+          ]
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:55.026Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-02T01:09:55.538Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32,
+          "skip_positions": [
+            {
+              "x": 246,
+              "y": 68,
+              "z": -45
+            },
+            {
+              "x": 247,
+              "y": 68,
+              "z": -44
+            },
+            {
+              "x": 246,
+              "y": 68,
+              "z": -46
+            },
+            {
+              "x": 221,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 245,
+              "y": 67,
+              "z": -48
+            },
+            {
+              "x": 209,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 215,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 238,
+              "y": 67,
+              "z": -55
+            },
+            {
+              "x": 212,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 211,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 230,
+              "y": 66,
+              "z": -7
+            },
+            {
+              "x": 239,
+              "y": 66,
+              "z": -53
+            },
+            {
+              "x": 210,
+              "y": 65,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -44
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -47
+            },
+            {
+              "x": 216,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 245,
+              "y": 68,
+              "z": -48
+            },
+            {
+              "x": 215,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 212,
+              "y": 66,
+              "z": -41
+            },
+            {
+              "x": 238,
+              "y": 68,
+              "z": -56
+            },
+            {
+              "x": 213,
+              "y": 66,
+              "z": -44
+            },
+            {
+              "x": 211,
+              "y": 66,
+              "z": -42
+            },
+            {
+              "x": 210,
+              "y": 66,
+              "z": -43
+            },
+            {
+              "x": 239,
+              "y": 67,
+              "z": -53
+            },
+            {
+              "x": 216,
+              "y": 65,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 65,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -41
+            },
+            {
+              "x": 213,
+              "y": 65,
+              "z": -44
+            },
+            {
+              "x": 218,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 215,
+              "y": 64,
+              "z": -39
+            },
+            {
+              "x": 216,
+              "y": 64,
+              "z": -42
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -40
+            },
+            {
+              "x": 213,
+              "y": 64,
+              "z": -41
+            },
+            {
+              "x": 214,
+              "y": 64,
+              "z": -43
+            },
+            {
+              "x": 228,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 229,
+              "y": 65,
+              "z": -8
+            },
+            {
+              "x": 230,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 231,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 232,
+              "y": 64,
+              "z": -9
+            },
+            {
+              "x": 233,
+              "y": 63,
+              "z": -12
+            },
+            {
+              "x": 232,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 234,
+              "y": 63,
+              "z": -11
+            },
+            {
+              "x": 231,
+              "y": 63,
+              "z": -10
+            }
+          ]
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      }
+    ],
+    "started": "2026-10-02T01:08:33.593Z",
+    "recoverDropIds": [
+      234,
+      247
+    ],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 225,
+        "y": 85,
+        "z": -32
+      }
+    ],
+    "ignoredTables": [],
+    "clearanceDigs": 1,
+    "scoutAttempts": [
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "north"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "south"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "west"
+      },
+      {
+        "origin": {
+          "x": 226.43,
+          "y": 85,
+          "z": -31.5
+        },
+        "direction": "east"
+      }
+    ],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 226.43,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1714,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_log",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 234,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 227.13,
+          "y": 86,
+          "z": -33.23
+        },
+        "distance": 2.1
+      },
+      {
+        "id": 247,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 228.71,
+          "y": 85,
+          "z": -32.63
+        },
+        "distance": 2.5
+      },
+      {
+        "id": 308,
+        "name": "wolf",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 259.01,
+          "y": 76,
+          "z": -34.3
+        },
+        "distance": 33.9
+      },
+      {
+        "id": 315,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 258.28,
+          "y": 66.23,
+          "z": -8.02
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 217,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 196.8,
+          "y": 56,
+          "z": -13.65
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 299,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 200.74,
+          "y": 56.8,
+          "z": -55.74
+        },
+        "distance": 45.2
+      },
+      {
+        "id": 238,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.68,
+          "y": 54.26,
+          "z": -51.58
+        },
+        "distance": 46
+      },
+      {
+        "id": 300,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.51,
+          "y": 53.9,
+          "z": -52.71
+        },
+        "distance": 46.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "a1e76045-25d6-496c-8c39-a2727a815b9d",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": 224.5,
+          "y": 85,
+          "z": -31.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 44,
+      "scouts": 8,
+      "clearings": 3,
+      "excluded": {
+        "spruce_log": [
+          {
+            "x": 228,
+            "y": 89,
+            "z": -26
+          },
+          {
+            "x": 229,
+            "y": 89,
+            "z": -26
+          },
+          {
+            "x": 228,
+            "y": 89,
+            "z": -25
+          },
+          {
+            "x": 229,
+            "y": 89,
+            "z": -25
+          },
+          {
+            "x": 208,
+            "y": 86,
+            "z": -43
+          },
+          {
+            "x": 218,
+            "y": 84,
+            "z": -51
+          },
+          {
+            "x": 208,
+            "y": 86,
+            "z": -44
+          },
+          {
+            "x": 227,
+            "y": 83,
+            "z": -14
+          },
+          {
+            "x": 217,
+            "y": 84,
+            "z": -51
+          },
+          {
+            "x": 207,
+            "y": 86,
+            "z": -43
+          },
+          {
+            "x": 247,
+            "y": 85,
+            "z": -22
+          },
+          {
+            "x": 207,
+            "y": 86,
+            "z": -44
+          },
+          {
+            "x": 218,
+            "y": 84,
+            "z": -52
+          },
+          {
+            "x": 217,
+            "y": 84,
+            "z": -52
+          },
+          {
+            "x": 202,
+            "y": 85,
+            "z": -17
+          },
+          {
+            "x": 228,
+            "y": 91,
+            "z": -26
+          },
+          {
+            "x": 202,
+            "y": 85,
+            "z": -16
+          },
+          {
+            "x": 201,
+            "y": 85,
+            "z": -17
+          },
+          {
+            "x": 217,
+            "y": 87,
+            "z": -52
+          },
+          {
+            "x": 201,
+            "y": 85,
+            "z": -16
+          },
+          {
+            "x": 227,
+            "y": 81,
+            "z": -14
+          },
+          {
+            "x": 228,
+            "y": 81,
+            "z": -14
+          },
+          {
+            "x": 227,
+            "y": 81,
+            "z": -13
+          },
+          {
+            "x": 228,
+            "y": 78,
+            "z": -38
+          },
+          {
+            "x": 228,
+            "y": 81,
+            "z": -13
+          },
+          {
+            "x": 237,
+            "y": 79,
+            "z": -35
+          },
+          {
+            "x": 227,
+            "y": 93,
+            "z": -33
+          },
+          {
+            "x": 227,
+            "y": 93,
+            "z": -34
+          },
+          {
+            "x": 224,
+            "y": 78,
+            "z": -41
+          },
+          {
+            "x": 202,
+            "y": 87,
+            "z": -17
+          },
+          {
+            "x": 228,
+            "y": 93,
+            "z": -33
+          },
+          {
+            "x": 228,
+            "y": 93,
+            "z": -34
+          },
+          {
+            "x": 254,
+            "y": 85,
+            "z": -47
+          },
+          {
+            "x": 202,
+            "y": 87,
+            "z": -16
+          },
+          {
+            "x": 247,
+            "y": 82,
+            "z": -22
+          },
+          {
+            "x": 201,
+            "y": 87,
+            "z": -17
+          },
+          {
+            "x": 254,
+            "y": 85,
+            "z": -48
+          },
+          {
+            "x": 247,
+            "y": 82,
+            "z": -21
+          },
+          {
+            "x": 255,
+            "y": 85,
+            "z": -47
+          },
+          {
+            "x": 201,
+            "y": 87,
+            "z": -16
+          },
+          {
+            "x": 248,
+            "y": 82,
+            "z": -22
+          },
+          {
+            "x": 255,
+            "y": 85,
+            "z": -48
+          },
+          {
+            "x": 248,
+            "y": 82,
+            "z": -21
+          },
+          {
+            "x": 252,
+            "y": 86,
+            "z": -12
+          },
+          {
+            "x": 232,
+            "y": 91,
+            "z": -15
+          },
+          {
+            "x": 252,
+            "y": 86,
+            "z": -11
+          },
+          {
+            "x": 233,
+            "y": 91,
+            "z": -15
+          },
+          {
+            "x": 253,
+            "y": 86,
+            "z": -12
+          }
+        ],
+        "stone": [
+          {
+            "x": 246,
+            "y": 68,
+            "z": -45
+          },
+          {
+            "x": 247,
+            "y": 68,
+            "z": -44
+          },
+          {
+            "x": 246,
+            "y": 68,
+            "z": -46
+          },
+          {
+            "x": 221,
+            "y": 65,
+            "z": -40
+          },
+          {
+            "x": 245,
+            "y": 67,
+            "z": -48
+          },
+          {
+            "x": 209,
+            "y": 66,
+            "z": -44
+          },
+          {
+            "x": 215,
+            "y": 65,
+            "z": -43
+          },
+          {
+            "x": 238,
+            "y": 67,
+            "z": -55
+          },
+          {
+            "x": 212,
+            "y": 65,
+            "z": -41
+          },
+          {
+            "x": 229,
+            "y": 66,
+            "z": -8
+          },
+          {
+            "x": 211,
+            "y": 65,
+            "z": -42
+          },
+          {
+            "x": 230,
+            "y": 66,
+            "z": -8
+          },
+          {
+            "x": 229,
+            "y": 66,
+            "z": -7
+          },
+          {
+            "x": 230,
+            "y": 66,
+            "z": -7
+          },
+          {
+            "x": 239,
+            "y": 66,
+            "z": -53
+          },
+          {
+            "x": 210,
+            "y": 65,
+            "z": -43
+          },
+          {
+            "x": 213,
+            "y": 64,
+            "z": -44
+          },
+          {
+            "x": 245,
+            "y": 68,
+            "z": -47
+          },
+          {
+            "x": 216,
+            "y": 66,
+            "z": -42
+          },
+          {
+            "x": 245,
+            "y": 68,
+            "z": -48
+          },
+          {
+            "x": 215,
+            "y": 66,
+            "z": -43
+          },
+          {
+            "x": 213,
+            "y": 66,
+            "z": -41
+          },
+          {
+            "x": 212,
+            "y": 66,
+            "z": -41
+          },
+          {
+            "x": 238,
+            "y": 68,
+            "z": -56
+          },
+          {
+            "x": 213,
+            "y": 66,
+            "z": -44
+          },
+          {
+            "x": 211,
+            "y": 66,
+            "z": -42
+          },
+          {
+            "x": 210,
+            "y": 66,
+            "z": -43
+          },
+          {
+            "x": 239,
+            "y": 67,
+            "z": -53
+          },
+          {
+            "x": 216,
+            "y": 65,
+            "z": -42
+          },
+          {
+            "x": 214,
+            "y": 65,
+            "z": -40
+          },
+          {
+            "x": 213,
+            "y": 65,
+            "z": -41
+          },
+          {
+            "x": 213,
+            "y": 65,
+            "z": -44
+          },
+          {
+            "x": 218,
+            "y": 64,
+            "z": -41
+          },
+          {
+            "x": 216,
+            "y": 64,
+            "z": -39
+          },
+          {
+            "x": 215,
+            "y": 64,
+            "z": -39
+          },
+          {
+            "x": 216,
+            "y": 64,
+            "z": -42
+          },
+          {
+            "x": 214,
+            "y": 64,
+            "z": -40
+          },
+          {
+            "x": 213,
+            "y": 64,
+            "z": -41
+          },
+          {
+            "x": 214,
+            "y": 64,
+            "z": -43
+          },
+          {
+            "x": 228,
+            "y": 65,
+            "z": -8
+          },
+          {
+            "x": 229,
+            "y": 65,
+            "z": -8
+          },
+          {
+            "x": 230,
+            "y": 64,
+            "z": -9
+          },
+          {
+            "x": 231,
+            "y": 64,
+            "z": -9
+          },
+          {
+            "x": 232,
+            "y": 64,
+            "z": -9
+          },
+          {
+            "x": 233,
+            "y": 63,
+            "z": -12
+          },
+          {
+            "x": 232,
+            "y": 63,
+            "z": -11
+          },
+          {
+            "x": 234,
+            "y": 63,
+            "z": -11
+          },
+          {
+            "x": 231,
+            "y": 63,
+            "z": -10
+          }
+        ]
+      },
+      "history": [
+        {
+          "at": "2026-10-02T01:09:52.310Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:52.808Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:53.149Z",
+          "action": "explore",
+          "args": {
+            "direction": "south",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "north",
+              "west",
+              "east"
+            ]
+          },
+          "error": "No verified scout route: No verified returnable walking route (noPath)",
+          "result": {
+            "directions_tried": [
+              "south",
+              "north",
+              "west",
+              "east"
+            ],
+            "route_attempts": [
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:53.661Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:54.181Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:54.526Z",
+          "action": "explore",
+          "args": {
+            "direction": "north",
+            "distance": 48,
+            "returnable": true,
+            "alternatives": [
+              "south",
+              "west",
+              "east"
+            ]
+          },
+          "error": "No verified scout route: No verified returnable walking route (noPath)",
+          "result": {
+            "directions_tried": [
+              "north",
+              "south",
+              "west",
+              "east"
+            ],
+            "route_attempts": [
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              },
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "No verified returnable walking route (noPath)"
+              }
+            ]
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:55.026Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-02T01:09:55.538Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32,
+            "skip_positions": [
+              {
+                "x": 246,
+                "y": 68,
+                "z": -45
+              },
+              {
+                "x": 247,
+                "y": 68,
+                "z": -44
+              },
+              {
+                "x": 246,
+                "y": 68,
+                "z": -46
+              },
+              {
+                "x": 221,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 245,
+                "y": 67,
+                "z": -48
+              },
+              {
+                "x": 209,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 215,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 238,
+                "y": 67,
+                "z": -55
+              },
+              {
+                "x": 212,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 211,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 230,
+                "y": 66,
+                "z": -7
+              },
+              {
+                "x": 239,
+                "y": 66,
+                "z": -53
+              },
+              {
+                "x": 210,
+                "y": 65,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -44
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -47
+              },
+              {
+                "x": 216,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 245,
+                "y": 68,
+                "z": -48
+              },
+              {
+                "x": 215,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 212,
+                "y": 66,
+                "z": -41
+              },
+              {
+                "x": 238,
+                "y": 68,
+                "z": -56
+              },
+              {
+                "x": 213,
+                "y": 66,
+                "z": -44
+              },
+              {
+                "x": 211,
+                "y": 66,
+                "z": -42
+              },
+              {
+                "x": 210,
+                "y": 66,
+                "z": -43
+              },
+              {
+                "x": 239,
+                "y": 67,
+                "z": -53
+              },
+              {
+                "x": 216,
+                "y": 65,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 65,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -41
+              },
+              {
+                "x": 213,
+                "y": 65,
+                "z": -44
+              },
+              {
+                "x": 218,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 215,
+                "y": 64,
+                "z": -39
+              },
+              {
+                "x": 216,
+                "y": 64,
+                "z": -42
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -40
+              },
+              {
+                "x": 213,
+                "y": 64,
+                "z": -41
+              },
+              {
+                "x": 214,
+                "y": 64,
+                "z": -43
+              },
+              {
+                "x": 228,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 229,
+                "y": 65,
+                "z": -8
+              },
+              {
+                "x": 230,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 231,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 232,
+                "y": 64,
+                "z": -9
+              },
+              {
+                "x": 233,
+                "y": 63,
+                "z": -12
+              },
+              {
+                "x": 232,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 234,
+                "y": 63,
+                "z": -11
+              },
+              {
+                "x": 231,
+                "y": 63,
+                "z": -10
+              }
+            ]
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        }
+      ],
+      "started": "2026-10-02T01:08:33.593Z",
+      "recoverDropIds": [
+        234,
+        247
+      ],
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "observedPositions": [
+        {
+          "x": 224.5,
+          "y": 85,
+          "z": -31.5
+        }
+      ],
+      "tables": [
+        {
+          "x": 225,
+          "y": 85,
+          "z": -32
+        }
+      ],
+      "ignoredTables": [],
+      "clearanceDigs": 1,
+      "scoutAttempts": [
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "north"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "south"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "west"
+        },
+        {
+          "origin": {
+            "x": 226.43,
+            "y": 85,
+            "z": -31.5
+          },
+          "direction": "east"
+        }
+      ],
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-02T01:09:57.568Z"
+}
