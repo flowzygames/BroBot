@@ -1,12 +1,12 @@
 {
   "channel": "development",
-  "sourceCommit": "c81e2b29097ce02241906d3ee649c0048f6399a1",
-  "sourceTree": "3b4d1adf7ee3df3387caf9d247327d94afe3a181",
-  "packagedCommit": "0cd73dd2e0537cb6483abb40314cdf9435df1880",
-  "testedApplicationCommit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
-  "sha256": "cb8a116a285cb8d05de2cf6a79130fd306d3ea3c1fb0a447611958951a67c544",
-  "bytes": 759506,
-  "automatedChecks": 254,
+  "sourceCommit": "8ffc6e1125a85e09e11221d6a39a840528e2b267",
+  "sourceTree": "e155b1ea8e68902833eb8d675ac266e9292887a4",
+  "packagedCommit": "b23b4e6e04b818e42eb188688f7a9307f17caf8b",
+  "testedApplicationCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
+  "sha256": "a79bd220fe5bb2304fb1e19a525bcddecd559eed62a8e889d4cffc4d02e10892",
+  "bytes": 884612,
+  "automatedChecks": 287,
   "liveRegressionPhases": 17,
   "originalDevelopmentWorlds": {
     "passed": 3,
@@ -18,9 +18,9 @@
     "scheduled": 3,
     "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
   },
-  "multiWorldEvaluation": "Previous published 219-check and current 254-check applications both completed 10/20 on the same known seeds, with identical per-seed outcomes. Intermediate 245-check experiment 8/20 is retained. No broad reliability or stable 1.0 claim.",
+  "multiWorldEvaluation": "Previous90-block275-check source completed12/20 known worlds. Current256-block287-check source has one selected passing development world; full20-world cohort not run. No stable1.0 claim.",
   "readyForStable1_0": false,
-  "note": "Packaged and published application, harness, fixture, dashboard and launcher bytes match the frozen tested application; 67 files verified against the included SHA-256 manifest.",
+  "note": "Packaged application/harness/test/dashboard/launcher bytes match frozen tested application; 70 files verified. Current expanded full-world cohort is unmeasured.",
   "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4,
@@ -32,9 +32,10 @@
     "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
   },
   "pairedKnownWorlds": {
-    "passed": 10,
+    "passed": 12,
     "scheduled": 20,
-    "sourceCommit": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae"
+    "sourceCommit": "8cd5724408d7b37dbfd710795a907711f6512905",
+    "note": "Previous90-block candidate, not current256-block application"
   },
   "packageScope": "Application source, tests, documentation and retained evidence; excludes showcase, installed dependencies, server worlds and secrets.",
   "previousPublishedKnownWorlds": {
@@ -46,5 +47,16 @@
     "passed": 8,
     "scheduled": 20,
     "sourceCommit": "6b26ad5f8f28e8eae6e3464d52ea687662aca96b"
+  },
+  "currentPairedEvaluation": {
+    "status": "not_run",
+    "passed": null,
+    "scheduled": null
+  },
+  "selectedExpandedWorld": {
+    "passed": 1,
+    "scheduled": 1,
+    "seed": "1041160109",
+    "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782"
   }
 }
