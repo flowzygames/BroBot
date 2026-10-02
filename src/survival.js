@@ -47,6 +47,7 @@ export function nextStarterStep(state, job, observation = {}) {
   if (!state.connected || !state.position) return { blocked: 'Minecraft is disconnected.' };
   if (dimension(state.dimension) !== dimension(job.home.dimension)) return { blocked: 'The world dimension changed. Start a new job in the intended world.' };
   if (Number.isFinite(state.oxygen) && state.oxygen <= 10) return { blocked: LOW_AIR_MESSAGE };
+  if (observation.powderSnowContact === true) return { blocked: 'Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.' };
   if (state.health <= 8) return { blocked: 'Health is too low to continue gathering safely.' };
   if (distance(state.position, job.home.position) > STARTER_STOP_RADIUS) return { blocked: `The starter job reached its ${STARTER_STOP_RADIUS}-block travel boundary.` };
   if (state.food != null && state.food <= 10) {

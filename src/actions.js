@@ -5,7 +5,7 @@ import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
 import { planLeafNotch } from './canopy-descent.js'
 import { retainedLeafAnchor } from './construction-guards.js'
-import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES } from './navigation-guards.js'
+import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES, STARTER_AVOID_BLOCK_NAMES } from './navigation-guards.js'
 
 const { Movements, goals } = pathfinderPackage
 const AIR = new Set(['air', 'cave_air', 'void_air'])
@@ -169,8 +169,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       movements.exclusionAreasStep.push(block => movementBoundary() && block.isWaterlogged ? 1000 : 0)
     }
     // Starter gathering is a dry-land objective. The library otherwise allows
-    // water as a costly walking destination, even for a returnable pickup route.
-    for (const name of WATER_BEARING_BLOCK_NAMES) {
+    // water and freezing powder snow as costly walking destinations, even for
+    // a returnable pickup route. Starter jobs have no certified cold protection.
+    for (const name of STARTER_AVOID_BLOCK_NAMES) {
       const id = bot.registry?.blocksByName?.[name]?.id
       if (id != null) {
         if (movementBoundary()) movements.blocksToAvoid.add(id)

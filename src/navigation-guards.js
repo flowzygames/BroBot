@@ -2,6 +2,8 @@ import { Vec3 } from 'vec3'
 
 // Aquatic plants and bubble columns carry water even when isWaterlogged is false.
 export const WATER_BEARING_BLOCK_NAMES = Object.freeze(['water', 'flowing_water', 'bubble_column', 'kelp', 'kelp_plant', 'seagrass', 'tall_seagrass'])
+// Powder snow can freeze an unequipped starter even though it is not a fluid.
+export const STARTER_AVOID_BLOCK_NAMES = Object.freeze([...WATER_BEARING_BLOCK_NAMES, 'powder_snow'])
 const FLUID_BEARING_BLOCKS = new Set([...WATER_BEARING_BLOCK_NAMES, 'lava', 'flowing_lava'])
 export const isFluidBearingBlock = block => Boolean(block && (block.isWaterlogged || FLUID_BEARING_BLOCKS.has(block.name)))
 
