@@ -1,12 +1,12 @@
 {
   "channel": "development",
-  "sourceCommit": "8ffc6e1125a85e09e11221d6a39a840528e2b267",
-  "sourceTree": "e155b1ea8e68902833eb8d675ac266e9292887a4",
-  "packagedCommit": "b23b4e6e04b818e42eb188688f7a9307f17caf8b",
-  "testedApplicationCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
-  "sha256": "a79bd220fe5bb2304fb1e19a525bcddecd559eed62a8e889d4cffc4d02e10892",
-  "bytes": 884612,
-  "automatedChecks": 287,
+  "sourceCommit": "f01a533809ea42650d769f4f42eec0f26eff868a",
+  "sourceTree": "3e22c06ed8018e49840ae77cfc367fa6ff876c21",
+  "packagedCommit": "eef8da55a502839ea631d15276b3420c57956151",
+  "testedApplicationCommit": "9633598deccfa718421775d9ef602785ba8abb6d",
+  "sha256": "17743663bd5cfbd0c9f0d7b66e776ffcc9a35355019948b9d3bb80b7e91cb64c",
+  "bytes": 1063408,
+  "automatedChecks": 293,
   "liveRegressionPhases": 17,
   "originalDevelopmentWorlds": {
     "passed": 3,
@@ -18,9 +18,9 @@
     "scheduled": 3,
     "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
   },
-  "multiWorldEvaluation": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials. Previous90-block275 candidate:12/20. No stable1.0 claim.",
+  "multiWorldEvaluation": "Current293 selected trials:1/2; full20-world cohort not run. Previous287:9/20 with disclosed infrastructure recovery. Previous275:12/20. These are different sources and samples.",
   "readyForStable1_0": false,
-  "note": "Packaged application bytes remain unchanged;70 source files verified. Current expanded evaluation:9/20 with one disclosed infrastructure recovery.",
+  "note": "70 packaged application/harness/test/dashboard files match frozen293 source. Prepared smoke17/17,skills11/11,localcontrols20/20. Development preview; no stable1.0 claim.",
   "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4,
@@ -49,17 +49,30 @@
     "sourceCommit": "6b26ad5f8f28e8eae6e3464d52ea687662aca96b"
   },
   "currentPairedEvaluation": {
-    "status": "completed_with_disclosed_infrastructure_recovery",
-    "passed": 9,
+    "status": "not_run",
+    "passed": null,
     "scheduled": 20,
-    "originalCompleted": 19,
-    "originalInterrupted": 1,
-    "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
+    "note": "No full20-world evaluation on293 source. Selected two-case run is1/2."
   },
   "selectedExpandedWorld": {
     "passed": 1,
     "scheduled": 1,
     "seed": "1041160109",
     "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782"
+  },
+  "previousExpandedEvaluation": {
+    "status": "completed_with_disclosed_infrastructure_recovery",
+    "passed": 9,
+    "scheduled": 20,
+    "originalCompleted": 19,
+    "originalInterrupted": 1,
+    "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials.",
+    "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782"
+  },
+  "currentSelectedEvaluation": {
+    "passed": 1,
+    "scheduled": 2,
+    "sourceCommit": "9633598deccfa718421775d9ef602785ba8abb6d",
+    "note": "Selected cases only, not a full cohort. Passing104 took a different scouting route and never exercised the changed partial-wood branch; no causal improvement claim. One pre-gameplay download error was repaired and restarted unchanged, retained separately."
   }
 }

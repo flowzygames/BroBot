@@ -1,10 +1,10 @@
 {
-  "name": "Prepared checks and selected293 development replays",
+  "name": "Prepared checks and expanded known-world evaluation",
   "date": "2026-10-02 UTC",
-  "protocol": "Prepared fixtures and offline controls. Current293 selected known worlds1/2; no current full20 score. Previous2879/20 remains historical with one disclosed infrastructure recovery.",
+  "protocol": "Prepared checks use controlled fixtures. Expanded known-world evaluation completed9/20 with one disclosed infrastructure recovery; original3-world cohort was not rerun on expanded287. Same known seeds and300seconds, not held-out reliability.",
   "commits": {
     "baseline": "a3e22428c7dbb873518a7720ccf58a1f3f54a3ae",
-    "candidate": "9633598deccfa718421775d9ef602785ba8abb6d"
+    "candidate": "a8b739ae5f3064aec1d74ef9205e7a179341d782"
   },
   "metrics": {
     "MineLine": {
@@ -148,7 +148,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 16552
+            "elapsedMs": 16550
           },
           {
             "group": "MineLine",
@@ -186,7 +186,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 9046
+            "elapsedMs": 9200
           },
           {
             "group": "MineLine",
@@ -224,7 +224,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 17451
+            "elapsedMs": 17248
           }
         ]
       }
@@ -454,7 +454,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 1748
+            "elapsedMs": 1753
           },
           {
             "group": "Workbench",
@@ -481,7 +481,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 2372
+            "elapsedMs": 2366
           },
           {
             "group": "Workbench",
@@ -508,7 +508,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 1936
+            "elapsedMs": 1947
           },
           {
             "group": "Workbench",
@@ -545,7 +545,7 @@
                 "durability_used": 0
               }
             ],
-            "elapsedMs": 3099
+            "elapsedMs": 3089
           },
           {
             "group": "Workbench",
@@ -582,7 +582,7 @@
                 "durability_used": 0
               }
             ],
-            "elapsedMs": 2845
+            "elapsedMs": 2950
           },
           {
             "group": "Workbench",
@@ -614,7 +614,7 @@
                 "durability_used": null
               }
             ],
-            "elapsedMs": 3855
+            "elapsedMs": 3994
           }
         ]
       }
@@ -696,7 +696,7 @@
               "radius": 0
             },
             "finalInventory": [],
-            "elapsedMs": 2375
+            "elapsedMs": 2390
           },
           {
             "group": "Pathfinder",
@@ -718,7 +718,7 @@
               "radius": 0
             },
             "finalInventory": [],
-            "elapsedMs": 3763
+            "elapsedMs": 3716
           }
         ]
       }
@@ -968,7 +968,7 @@
         "passed": null,
         "total": null,
         "status": "not_run",
-        "note": "Not measured on293 source; selected replays do not fill this denominator."
+        "note": "Not measured on expanded287 source"
       }
     },
     "Trailhead-20": {
@@ -1384,7 +1384,7 @@
         "passed": null,
         "total": null,
         "status": "not_run",
-        "note": "Not measured on293 source; selected replays do not fill this denominator."
+        "note": "Not measured on expanded287 source"
       }
     },
     "GoalSense-LLM": {
@@ -1400,7 +1400,7 @@
         "passed": null,
         "total": null,
         "status": "not_run",
-        "note": "Not measured on293 source; selected replays do not fill this denominator."
+        "note": "Not measured on expanded287 source"
       }
     }
   },
@@ -1580,12 +1580,177 @@
     "selection": "Python Random seeded with the first8 SHA256 bytes of 'BroBot Trailhead Wide 2026-10-01', sampled before inspecting any of these worlds; excludes ten already known worlds."
   },
   "pairedWorlds": {
-    "status": "not_run",
-    "note": "Current293 full20 not run; historical expandedWorlds is287."
+    "label": "Current 256-block run with disclosed infrastructure recovery",
+    "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
+    "passed": 9,
+    "scheduled": 20,
+    "cases": [
+      {
+        "seed": "454806089",
+        "status": "failed",
+        "elapsedMs": 103387,
+        "reason": "A hostile mob is too close for unarmored starter gathering.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1542908414",
+        "status": "failed",
+        "elapsedMs": 300026,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "761598570",
+        "status": "passed",
+        "elapsedMs": 77502,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1587439118",
+        "status": "passed",
+        "elapsedMs": 107126,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "924242050",
+        "status": "failed",
+        "elapsedMs": 81879,
+        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "113919219",
+        "status": "passed",
+        "elapsedMs": 287566,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "474859294",
+        "status": "passed",
+        "elapsedMs": 59784,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1576696577",
+        "status": "passed",
+        "elapsedMs": 88037,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1382194916",
+        "status": "passed",
+        "elapsedMs": 163033,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "386690312",
+        "status": "failed",
+        "elapsedMs": 300005,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1744809425",
+        "status": "failed",
+        "elapsedMs": 300013,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1041160109",
+        "status": "failed",
+        "elapsedMs": 300004,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1888406977",
+        "status": "failed",
+        "elapsedMs": 37648,
+        "reason": "Health is too low to continue gathering safely.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1547703085",
+        "status": "failed",
+        "elapsedMs": 300006,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1146093953",
+        "status": "passed",
+        "elapsedMs": 118641,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1014875191",
+        "status": "failed",
+        "elapsedMs": 300003,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "355620996",
+        "status": "passed",
+        "elapsedMs": 110643,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1276821265",
+        "status": "failed",
+        "elapsedMs": 300004,
+        "reason": "Starter job time budget reached.",
+        "passed": false,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "1244186709",
+        "status": "passed",
+        "elapsedMs": 192410,
+        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+        "passed": true,
+        "infrastructureRecovery": false
+      },
+      {
+        "seed": "61544722",
+        "status": "failed",
+        "elapsedMs": 292867,
+        "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+        "passed": false,
+        "infrastructureRecovery": true
+      }
+    ],
+    "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
   },
-  "source": "benchmarks/results/wood-deficit-2026-10-02/",
+  "source": "benchmarks/results/expanded-exploration-2026-10-02/",
   "transitions": {
-    "note": "No current full-cohort delta. Selected104pass is not causal proof of the wood change."
+    "note": "Matched19 uninterrupted cases:275 had12passes,expanded287had9;3lost,0gained. One infrastructure recovery is separately disclosed."
   },
   "historicalTransitWorlds": {
     "schemaVersion": 1,
@@ -1768,7 +1933,7 @@
     "note": "Published254 known-world cohort, retained at benchmarks/results/pocket-standing-2026-10-01/"
   },
   "expandedWorlds": {
-    "label": "Previous287 expanded run with disclosed infrastructure recovery",
+    "label": "Current 256-block run with disclosed infrastructure recovery",
     "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782",
     "passed": 9,
     "scheduled": 20,
@@ -1935,28 +2100,5 @@
       }
     ],
     "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials."
-  },
-  "selectedWorlds": {
-    "label": "Current293 selected known-world replays",
-    "sourceCommit": "9633598deccfa718421775d9ef602785ba8abb6d",
-    "passed": 1,
-    "scheduled": 2,
-    "cases": [
-      {
-        "seed": "1041160109",
-        "status": "passed",
-        "passed": true,
-        "elapsedMs": 184464,
-        "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
-      },
-      {
-        "seed": "1276821265",
-        "status": "failed",
-        "passed": false,
-        "elapsedMs": 128868,
-        "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach."
-      }
-    ],
-    "note": "Selected cases only, not a full cohort. Passing104 took a different scouting route and never exercised the changed partial-wood branch; no causal improvement claim. One pre-gameplay download error was repaired and restarted unchanged, retained separately."
   }
 }
