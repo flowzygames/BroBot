@@ -1,0 +1,898 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1542908414",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T17:34:25.485Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 112.5,
+      "y": 68,
+      "z": 96.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 86,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 93,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 95.5,
+          "y": 59,
+          "z": 129.5
+        },
+        "distance": 38.2
+      },
+      {
+        "id": 121,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 86.5,
+          "y": 61,
+          "z": 129.5
+        },
+        "distance": 42.6
+      },
+      {
+        "id": 122,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 85.5,
+          "y": 61,
+          "z": 129.5
+        },
+        "distance": 43.2
+      },
+      {
+        "id": 123,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 89.5,
+          "y": 61,
+          "z": 132.5
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 120,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 81.5,
+          "y": 61,
+          "z": 129.5
+        },
+        "distance": 45.8
+      },
+      {
+        "id": 126,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 91.5,
+          "y": 60,
+          "z": 136.5
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 125,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 92.5,
+          "y": 60,
+          "z": 137.5
+        },
+        "distance": 46.3
+      },
+      {
+        "id": 82,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 93.5,
+          "y": 54,
+          "z": 137.5
+        },
+        "distance": 47.3
+      },
+      {
+        "id": 119,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 80.5,
+          "y": 61,
+          "z": 131.5
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "88b226f1-be69-4758-b0cd-d9635319adc9"
+  },
+  "elapsedMs": 300014,
+  "job": {
+    "version": 1,
+    "id": "88b226f1-be69-4758-b0cd-d9635319adc9",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 112.5,
+        "y": 68,
+        "z": 96.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 47,
+    "scouts": 12,
+    "clearings": 1,
+    "excluded": {
+      "spruce_log": [],
+      "stone": [
+        {
+          "x": 136,
+          "y": 40,
+          "z": 59
+        },
+        {
+          "x": 127,
+          "y": 63,
+          "z": 99
+        },
+        {
+          "x": 133,
+          "y": 41,
+          "z": 87
+        },
+        {
+          "x": 134,
+          "y": 41,
+          "z": 88
+        },
+        {
+          "x": 130,
+          "y": 39,
+          "z": 79
+        },
+        {
+          "x": 132,
+          "y": 40,
+          "z": 84
+        },
+        {
+          "x": 132,
+          "y": 40,
+          "z": 85
+        },
+        {
+          "x": 133,
+          "y": 40,
+          "z": 86
+        },
+        {
+          "x": 137,
+          "y": 39,
+          "z": 59
+        },
+        {
+          "x": 134,
+          "y": 37,
+          "z": 63
+        },
+        {
+          "x": 131,
+          "y": 36,
+          "z": 58
+        },
+        {
+          "x": 130,
+          "y": 36,
+          "z": 59
+        },
+        {
+          "x": 140,
+          "y": 35,
+          "z": 63
+        },
+        {
+          "x": 141,
+          "y": 35,
+          "z": 61
+        },
+        {
+          "x": 141,
+          "y": 35,
+          "z": 63
+        },
+        {
+          "x": 142,
+          "y": 35,
+          "z": 62
+        },
+        {
+          "x": 135,
+          "y": 33,
+          "z": 32
+        },
+        {
+          "x": 135,
+          "y": 33,
+          "z": 28
+        },
+        {
+          "x": 135,
+          "y": 33,
+          "z": 27
+        },
+        {
+          "x": 136,
+          "y": 33,
+          "z": 28
+        },
+        {
+          "x": 137,
+          "y": 33,
+          "z": 28
+        },
+        {
+          "x": 138,
+          "y": 33,
+          "z": 28
+        },
+        {
+          "x": 135,
+          "y": 32,
+          "z": 31
+        },
+        {
+          "x": 135,
+          "y": 32,
+          "z": 29
+        },
+        {
+          "x": 77,
+          "y": 34,
+          "z": -4
+        },
+        {
+          "x": 77,
+          "y": 34,
+          "z": -5
+        },
+        {
+          "x": 78,
+          "y": 34,
+          "z": -5
+        },
+        {
+          "x": 79,
+          "y": 34,
+          "z": -5
+        },
+        {
+          "x": 79,
+          "y": 34,
+          "z": -6
+        },
+        {
+          "x": 77,
+          "y": 33,
+          "z": -3
+        },
+        {
+          "x": 78,
+          "y": 33,
+          "z": -4
+        },
+        {
+          "x": 79,
+          "y": 33,
+          "z": -4
+        },
+        {
+          "x": 76,
+          "y": 46,
+          "z": -50
+        },
+        {
+          "x": 76,
+          "y": 46,
+          "z": -49
+        },
+        {
+          "x": 76,
+          "y": 46,
+          "z": -48
+        },
+        {
+          "x": 77,
+          "y": 46,
+          "z": -50
+        },
+        {
+          "x": 77,
+          "y": 46,
+          "z": -49
+        },
+        {
+          "x": 77,
+          "y": 46,
+          "z": -48
+        },
+        {
+          "x": 78,
+          "y": 46,
+          "z": -51
+        },
+        {
+          "x": 78,
+          "y": 46,
+          "z": -50
+        },
+        {
+          "x": 80,
+          "y": 33,
+          "z": -5
+        },
+        {
+          "x": 76,
+          "y": 32,
+          "z": -3
+        },
+        {
+          "x": 67,
+          "y": 34,
+          "z": 190
+        },
+        {
+          "x": 66,
+          "y": 34,
+          "z": 191
+        },
+        {
+          "x": 65,
+          "y": 34,
+          "z": 192
+        },
+        {
+          "x": 68,
+          "y": 37,
+          "z": 190
+        },
+        {
+          "x": 67,
+          "y": 37,
+          "z": 191
+        },
+        {
+          "x": 67,
+          "y": 36,
+          "z": 190
+        },
+        {
+          "x": 70,
+          "y": 36,
+          "z": 191
+        },
+        {
+          "x": 69,
+          "y": 36,
+          "z": 191
+        }
+      ]
+    },
+    "started": "2026-10-03T17:34:59.517Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Starter job time budget reached.",
+    "observedPositions": [
+      {
+        "x": 112.5,
+        "y": 68,
+        "z": 96.5
+      },
+      {
+        "x": 128.62,
+        "y": 63,
+        "z": 80.59
+      },
+      {
+        "x": 129.5,
+        "y": 63,
+        "z": 68.5
+      },
+      {
+        "x": 129.5,
+        "y": 63,
+        "z": 56.67
+      },
+      {
+        "x": 129.5,
+        "y": 63,
+        "z": 32.69
+      },
+      {
+        "x": 105.5,
+        "y": 63,
+        "z": 32.5
+      },
+      {
+        "x": 69.58,
+        "y": 66,
+        "z": 32.49
+      },
+      {
+        "x": 69.5,
+        "y": 63,
+        "z": -3.5
+      },
+      {
+        "x": 69.5,
+        "y": 63,
+        "z": -51.5
+      },
+      {
+        "x": 69.58,
+        "y": 63,
+        "z": 56.34
+      },
+      {
+        "x": 69.5,
+        "y": 63,
+        "z": 116.5
+      },
+      {
+        "x": 69.51,
+        "y": 63,
+        "z": 180.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 128,
+        "y": 63,
+        "z": 67
+      }
+    ],
+    "ignoredTables": [],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": 69.51,
+        "y": 63,
+        "z": 180.5
+      },
+      "distance": 64,
+      "novel": true
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 97.59,
+      "y": 63,
+      "z": 184.52
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 6086,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 131,
+        "name": "polar_bear",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 97.4,
+          "y": 63,
+          "z": 193.56
+        },
+        "distance": 9
+      },
+      {
+        "id": 132,
+        "name": "polar_bear",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 97.4,
+          "y": 63,
+          "z": 195.45
+        },
+        "distance": 10.9
+      },
+      {
+        "id": 1167,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 82.85,
+          "y": 61.4,
+          "z": 174.67
+        },
+        "distance": 17.8
+      },
+      {
+        "id": 1169,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 82.49,
+          "y": 60.04,
+          "z": 174.49
+        },
+        "distance": 18.4
+      },
+      {
+        "id": 1168,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 82.42,
+          "y": 61.47,
+          "z": 173.51
+        },
+        "distance": 18.8
+      },
+      {
+        "id": 1111,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 88.86,
+          "y": 55.28,
+          "z": 165.57
+        },
+        "distance": 22.3
+      },
+      {
+        "id": 1213,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 88.18,
+          "y": 56.96,
+          "z": 164.15
+        },
+        "distance": 23.2
+      },
+      {
+        "id": 1112,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 88.78,
+          "y": 54.93,
+          "z": 164.09
+        },
+        "distance": 23.7
+      },
+      {
+        "id": 1141,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 87.61,
+          "y": 55.08,
+          "z": 164.57
+        },
+        "distance": 23.7
+      },
+      {
+        "id": 1196,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 88.86,
+          "y": 55.67,
+          "z": 163.68
+        },
+        "distance": 23.8
+      },
+      {
+        "id": 1136,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 87.16,
+          "y": 56.07,
+          "z": 163.75
+        },
+        "distance": 24.3
+      },
+      {
+        "id": 1082,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 86.7,
+          "y": 55.02,
+          "z": 164.01
+        },
+        "distance": 24.6
+      },
+      {
+        "id": 1179,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 91.74,
+          "y": 54.67,
+          "z": 161.13
+        },
+        "distance": 25.5
+      },
+      {
+        "id": 1314,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 109.56,
+          "y": 58.02,
+          "z": 160.32
+        },
+        "distance": 27.5
+      },
+      {
+        "id": 1292,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 86.56,
+          "y": 54,
+          "z": 154.56
+        },
+        "distance": 33.2
+      },
+      {
+        "id": 1300,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 80.64,
+          "y": 57.01,
+          "z": 155.11
+        },
+        "distance": 34.5
+      },
+      {
+        "id": 1186,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 72.59,
+          "y": 61.66,
+          "z": 159.27
+        },
+        "distance": 35.6
+      },
+      {
+        "id": 1309,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 64.91,
+          "y": 56.85,
+          "z": 198.91
+        },
+        "distance": 36.2
+      },
+      {
+        "id": 1232,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 71.92,
+          "y": 45.72,
+          "z": 205.44
+        },
+        "distance": 37.4
+      },
+      {
+        "id": 1143,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 104.87,
+          "y": 58,
+          "z": 147.97
+        },
+        "distance": 37.6
+      },
+      {
+        "id": 1233,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 105.59,
+          "y": 58.5,
+          "z": 147.7
+        },
+        "distance": 37.9
+      },
+      {
+        "id": 1144,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 104.38,
+          "y": 58,
+          "z": 147.4
+        },
+        "distance": 38.1
+      },
+      {
+        "id": 1251,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 52.67,
+          "y": 52.09,
+          "z": 187.54
+        },
+        "distance": 46.3
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Starter job time budget reached.",
+  "finished": "2026-10-03T17:40:02.456Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}

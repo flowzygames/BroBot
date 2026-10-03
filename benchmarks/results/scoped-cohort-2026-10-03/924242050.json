@@ -1,0 +1,1167 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "924242050",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T17:43:51.420Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 224.5,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 94,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 60,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 199.5,
+          "y": 58.01,
+          "z": -42.5
+        },
+        "distance": 38.4
+      },
+      {
+        "id": 59,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 196.5,
+          "y": 58.01,
+          "z": -39.5
+        },
+        "distance": 39.7
+      },
+      {
+        "id": 56,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 197.5,
+          "y": 60,
+          "z": -13.5
+        },
+        "distance": 41
+      },
+      {
+        "id": 58,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 196.5,
+          "y": 60,
+          "z": -14.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 57,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 195.5,
+          "y": 60,
+          "z": -13.5
+        },
+        "distance": 42.3
+      },
+      {
+        "id": 61,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 195.5,
+          "y": 58.01,
+          "z": -46.5
+        },
+        "distance": 42.4
+      },
+      {
+        "id": 55,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 197.5,
+          "y": 60,
+          "z": -9.5
+        },
+        "distance": 42.9
+      },
+      {
+        "id": 52,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 193.5,
+          "y": 54,
+          "z": -16.5
+        },
+        "distance": 46.3
+      },
+      {
+        "id": 27,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 207.5,
+          "y": 61,
+          "z": 4.5
+        },
+        "distance": 46.5
+      },
+      {
+        "id": 28,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 205.5,
+          "y": 61,
+          "z": 3.5
+        },
+        "distance": 46.5
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "bdf23cf5-b3ac-40f6-828d-7b42b6e58777"
+  },
+  "elapsedMs": 187137,
+  "job": {
+    "version": 1,
+    "id": "bdf23cf5-b3ac-40f6-828d-7b42b6e58777",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 91,
+    "scouts": 24,
+    "clearings": 3,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": 228,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 228,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 227,
+          "y": 83,
+          "z": -14
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 247,
+          "y": 85,
+          "z": -22
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 91,
+          "z": -26
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 217,
+          "y": 87,
+          "z": -52
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 228,
+          "y": 78,
+          "z": -38
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 237,
+          "y": 79,
+          "z": -35
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 224,
+          "y": 78,
+          "z": -41
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -11
+        },
+        {
+          "x": 233,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 253,
+          "y": 86,
+          "z": -12
+        }
+      ],
+      "stone": [
+        {
+          "x": 246,
+          "y": 68,
+          "z": -45
+        },
+        {
+          "x": 247,
+          "y": 68,
+          "z": -44
+        },
+        {
+          "x": 246,
+          "y": 68,
+          "z": -46
+        },
+        {
+          "x": 221,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 209,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 215,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 212,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 245,
+          "y": 67,
+          "z": -48
+        },
+        {
+          "x": 211,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 210,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -44
+        },
+        {
+          "x": 216,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 255,
+          "y": 71,
+          "z": -20
+        },
+        {
+          "x": 254,
+          "y": 70,
+          "z": -19
+        },
+        {
+          "x": 255,
+          "y": 70,
+          "z": -19
+        },
+        {
+          "x": 254,
+          "y": 69,
+          "z": -36
+        },
+        {
+          "x": 256,
+          "y": 70,
+          "z": -19
+        },
+        {
+          "x": 236,
+          "y": 71,
+          "z": -59
+        },
+        {
+          "x": 237,
+          "y": 71,
+          "z": -59
+        },
+        {
+          "x": 255,
+          "y": 69,
+          "z": -36
+        },
+        {
+          "x": 238,
+          "y": 71,
+          "z": -59
+        },
+        {
+          "x": 254,
+          "y": 69,
+          "z": -40
+        },
+        {
+          "x": 236,
+          "y": 71,
+          "z": -60
+        },
+        {
+          "x": 237,
+          "y": 71,
+          "z": -60
+        },
+        {
+          "x": 257,
+          "y": 70,
+          "z": -18
+        },
+        {
+          "x": 238,
+          "y": 71,
+          "z": -60
+        },
+        {
+          "x": 239,
+          "y": 71,
+          "z": -60
+        },
+        {
+          "x": 257,
+          "y": 70,
+          "z": -17
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 215,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 212,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -47
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -48
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 211,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 210,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 214,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 216,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 239,
+          "y": 67,
+          "z": -53
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -44
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 218,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 215,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -40
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -42
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -43
+        },
+        {
+          "x": 228,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 230,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 231,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 233,
+          "y": 63,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 231,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "x": 254,
+          "y": 69,
+          "z": -18
+        },
+        {
+          "x": 254,
+          "y": 69,
+          "z": -17
+        },
+        {
+          "x": 255,
+          "y": 69,
+          "z": -18
+        },
+        {
+          "x": 255,
+          "y": 69,
+          "z": -17
+        },
+        {
+          "x": 256,
+          "y": 69,
+          "z": -18
+        },
+        {
+          "x": 256,
+          "y": 69,
+          "z": -17
+        },
+        {
+          "x": 254,
+          "y": 68,
+          "z": -16
+        },
+        {
+          "x": 253,
+          "y": 68,
+          "z": -14
+        },
+        {
+          "x": 254,
+          "y": 68,
+          "z": -15
+        },
+        {
+          "x": 255,
+          "y": 68,
+          "z": -16
+        },
+        {
+          "x": 253,
+          "y": 68,
+          "z": -13
+        },
+        {
+          "x": 237,
+          "y": 68,
+          "z": -57
+        },
+        {
+          "x": 253,
+          "y": 68,
+          "z": -12
+        },
+        {
+          "x": 253,
+          "y": 68,
+          "z": -11
+        },
+        {
+          "x": 238,
+          "y": 67,
+          "z": -55
+        },
+        {
+          "x": 254,
+          "y": 67,
+          "z": -14
+        },
+        {
+          "x": 255,
+          "y": 67,
+          "z": -15
+        },
+        {
+          "x": 254,
+          "y": 67,
+          "z": -13
+        },
+        {
+          "x": 255,
+          "y": 67,
+          "z": -14
+        },
+        {
+          "x": 234,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "x": 233,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "x": 232,
+          "y": 67,
+          "z": -6
+        },
+        {
+          "x": 239,
+          "y": 66,
+          "z": -53
+        },
+        {
+          "x": 238,
+          "y": 65,
+          "z": -56
+        },
+        {
+          "x": 255,
+          "y": 71,
+          "z": -36
+        },
+        {
+          "x": 254,
+          "y": 70,
+          "z": -36
+        },
+        {
+          "x": 256,
+          "y": 71,
+          "z": -19
+        },
+        {
+          "x": 255,
+          "y": 70,
+          "z": -36
+        },
+        {
+          "x": 257,
+          "y": 71,
+          "z": -18
+        },
+        {
+          "x": 238,
+          "y": 68,
+          "z": -56
+        },
+        {
+          "x": 237,
+          "y": 68,
+          "z": -58
+        },
+        {
+          "x": 237,
+          "y": 68,
+          "z": -59
+        },
+        {
+          "x": 238,
+          "y": 67,
+          "z": -56
+        },
+        {
+          "x": 237,
+          "y": 67,
+          "z": -58
+        },
+        {
+          "x": 238,
+          "y": 66,
+          "z": -56
+        },
+        {
+          "x": 236,
+          "y": 64,
+          "z": -10
+        },
+        {
+          "x": 236,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 237,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 238,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 239,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 240,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 232,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 236,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": 237,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": 238,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": 243,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 236,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 234,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 237,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "x": 235,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "x": 238,
+          "y": 63,
+          "z": -10
+        },
+        {
+          "x": 239,
+          "y": 63,
+          "z": -10
+        }
+      ]
+    },
+    "started": "2026-10-03T17:44:28.114Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      {
+        "x": 236.49,
+        "y": 85,
+        "z": -31.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 225,
+        "y": 85,
+        "z": -32
+      }
+    ],
+    "ignoredTables": [],
+    "clearanceDigs": 1,
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": true,
+      "endpoint": {
+        "x": 236.49,
+        "y": 85,
+        "z": -31.5
+      },
+      "distance": 12,
+      "novel": false
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 236.49,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 3834,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 472,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 236.51,
+          "y": 65,
+          "z": -63.72
+        },
+        "distance": 37.9
+      },
+      {
+        "id": 455,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 257.7,
+          "y": 64.16,
+          "z": -4.2
+        },
+        "distance": 40.4
+      },
+      {
+        "id": 518,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 199.5,
+          "y": 58.15,
+          "z": -41.5
+        },
+        "distance": 46.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-03T17:47:37.549Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}

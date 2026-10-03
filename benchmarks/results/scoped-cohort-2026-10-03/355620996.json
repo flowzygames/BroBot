@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "355620996",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T18:39:21.930Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 114,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 158,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 5.89,
+          "y": 115,
+          "z": 9.49
+        },
+        "distance": 10.5
+      },
+      {
+        "id": 139,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -9.5,
+          "y": 87,
+          "z": 27.5
+        },
+        "distance": 39.5
+      },
+      {
+        "id": 59,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -9.42,
+          "y": 87.07,
+          "z": 28.72
+        },
+        "distance": 40.3
+      },
+      {
+        "id": 58,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -8.25,
+          "y": 87.02,
+          "z": 32.04
+        },
+        "distance": 42.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "2aad67bc-d6a3-4f68-87e6-e491fc250bba"
+  },
+  "elapsedMs": 300005,
+  "job": {
+    "version": 1,
+    "id": "2aad67bc-d6a3-4f68-87e6-e491fc250bba",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 114,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 17,
+    "scouts": 1,
+    "clearings": 0,
+    "excluded": {
+      "oak_log": [],
+      "stone": []
+    },
+    "started": "2026-10-03T18:40:07.727Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Starter job time budget reached.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 114,
+        "z": 0.5
+      },
+      {
+        "x": 25.58,
+        "y": 117,
+        "z": 19.5
+      },
+      {
+        "x": 6.3,
+        "y": 112,
+        "z": 25.94
+      },
+      {
+        "x": 5.5,
+        "y": 110.17,
+        "z": 29.7
+      },
+      {
+        "x": 4.3,
+        "y": 113.25,
+        "z": 31.21
+      },
+      {
+        "x": 4.56,
+        "y": 118,
+        "z": 43.31
+      },
+      {
+        "x": 23.39,
+        "y": 117,
+        "z": 21.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 24,
+        "y": 117,
+        "z": 20
+      }
+    ],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": 4.56,
+        "y": 118,
+        "z": 43.31
+      },
+      "distance": 12,
+      "novel": true
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 23.39,
+      "y": 117,
+      "z": 21.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 6158,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 16
+      },
+      {
+        "name": "cobblestone",
+        "count": 3,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 363,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 4.46,
+          "y": 112,
+          "z": 25.13
+        },
+        "distance": 19.9
+      },
+      {
+        "id": 468,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 3.88,
+          "y": 113,
+          "z": 27.13
+        },
+        "distance": 20.7
+      },
+      {
+        "id": 401,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 3.88,
+          "y": 113,
+          "z": 28.14
+        },
+        "distance": 21
+      },
+      {
+        "id": 605,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 2.29,
+          "y": 113,
+          "z": 29.54
+        },
+        "distance": 22.9
+      },
+      {
+        "id": 2,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 31.21,
+          "y": 114,
+          "z": -2.2
+        },
+        "distance": 25.1
+      },
+      {
+        "id": 535,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 4.88,
+          "y": 113,
+          "z": 39.73
+        },
+        "distance": 26.3
+      },
+      {
+        "id": 4,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 31.15,
+          "y": 116,
+          "z": 58.15
+        },
+        "distance": 37.5
+      },
+      {
+        "id": 700,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -5.82,
+          "y": 91,
+          "z": 28.51
+        },
+        "distance": 39.7
+      },
+      {
+        "id": 59,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -9.5,
+          "y": 90.1,
+          "z": 23.75
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 366,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -10.61,
+          "y": 90,
+          "z": 15.47
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 104,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -13.49,
+          "y": 112,
+          "z": 45.49
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 674,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 31.5,
+          "y": 74,
+          "z": 29.5
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 671,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -11.5,
+          "y": 89,
+          "z": 18.5
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 495,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 28.31,
+          "y": 74,
+          "z": 2.98
+        },
+        "distance": 47.1
+      },
+      {
+        "id": 706,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 30.7,
+          "y": 72.42,
+          "z": 5.7
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Starter job time budget reached.",
+  "finished": "2026-10-03T18:45:09.648Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}
