@@ -968,3 +968,44 @@ test('a single explicit returnable scout reports failed probe evidence without m
   });
   assert.equal(moves,0);
 });
+
+test('collection yields partial progress and remaining drops when pickup time is spent', async t => {
+  const bot=fakeBot();let now=0,digs=0,pursuits=0;
+  t.mock.method(performance,'now',()=>now);
+  for(let x=0;x<8;x++)for(let z=-1;z<=1;z++)bot.putBlock('dirt',new Vec3(x,63,z));
+  bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));
+  bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('oak_log');bot.entities[99]={id:99,name:'item',position:new Vec3(4.5,64,.5)}};
+  bot.pathfinder.goto=async()=>{pursuits++;now+=8100};
+  const actions=createActions(bot);
+  const result=await actions.execute('collect',{block:'oak_log',count:2,radius:8});
+  assert.equal(digs,1);assert.equal(pursuits,1);assert.equal(result.completed,false);
+  assert.equal(result.pickup_limited,true);assert.equal(result.inventory_changes.oak_log,1);
+  assert.deepEqual(result.remaining_drops.map(x=>x.id),[99]);
+  assert.equal(bot.pathfinder.goal,null);
+  bot.pathfinder.goto=async()=>{pursuits++;now+=100;delete bot.entities[99];bot.addItem('oak_log')};
+  const next=await actions.execute('pickup',{radius:8,entity_ids:[99]});
+  assert.equal(pursuits,2);assert.equal(next.pickup_limited,false);assert.equal(next.remaining_drops.length,0);
+});
+
+test('pickup allowance accumulates across multiple mining passes in one collection', async t => {
+  const bot=fakeBot();let now=0,digs=0,pursuits=0;
+  t.mock.method(performance,'now',()=>now);
+  for(let x=0;x<8;x++)for(let z=-1;z<=1;z++)bot.putBlock('dirt',new Vec3(x,63,z));
+  for(let x=2;x<=4;x++)bot.putBlock('oak_log',new Vec3(x,64,0));
+  bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.entities[99]={id:99,name:'item',position:new Vec3(5.5,64,.5)}};
+  bot.pathfinder.goto=async goal=>{pursuits++;bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5);now+=4500;if(pursuits===1){delete bot.entities[99];bot.addItem('oak_log')}};
+  const result=await createActions(bot).execute('collect',{block:'oak_log',count:3,radius:8});
+  assert.equal(digs,2);assert.equal(pursuits,2);assert.equal(result.mined,2);
+  assert.equal(result.completed,false);assert.equal(result.pickup_limited,true);
+  assert.equal(result.inventory_changes.oak_log,1);assert.equal(result.remaining_drops[0].id,99);
+});
+test('cancelling pickup still rejects collection and cleans navigation rather than reporting success', async () => {
+  const bot=fakeBot(),controller=new AbortController();let digs=0;
+  for(let x=0;x<8;x++)for(let z=-1;z<=1;z++)bot.putBlock('dirt',new Vec3(x,63,z));
+  bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));
+  bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.entities[99]={id:99,name:'item',position:new Vec3(5.5,64,.5)}};
+  bot.pathfinder.goto=async()=>{controller.abort()};
+  await assert.rejects(createActions(bot).execute('collect',{block:'oak_log',count:2,radius:8},controller.signal));
+  assert.equal(digs,1);assert.equal(bot.pathfinder.goal,null);
+  for(const event of ['entityGone','playerCollect','goal_reached','goal_updated','path_update'])assert.equal(bot.listenerCount(event),0,event);
+});
