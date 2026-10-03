@@ -1,0 +1,839 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1547703085",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T18:22:46.480Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 80.5,
+      "y": 75,
+      "z": -63.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 114,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 4,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 79.32,
+          "y": 73.19,
+          "z": -51.57
+        },
+        "distance": 12.1
+      },
+      {
+        "id": 3,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 79.24,
+          "y": 72,
+          "z": -49.5
+        },
+        "distance": 14.4
+      },
+      {
+        "id": 88,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 52.47,
+          "y": 55.8,
+          "z": -48.49
+        },
+        "distance": 37.1
+      },
+      {
+        "id": 47,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 58.5,
+          "y": 52,
+          "z": -42.5
+        },
+        "distance": 38.1
+      },
+      {
+        "id": 69,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 55.5,
+          "y": 54,
+          "z": -42.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 46,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 58.5,
+          "y": 52,
+          "z": -37.5
+        },
+        "distance": 41.1
+      },
+      {
+        "id": 76,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 112.5,
+          "y": 53,
+          "z": -78.5
+        },
+        "distance": 41.6
+      },
+      {
+        "id": 66,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 51.5,
+          "y": 53,
+          "z": -40.5
+        },
+        "distance": 43.1
+      },
+      {
+        "id": 60,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 49.5,
+          "y": 53,
+          "z": -42.5
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 62,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 52.5,
+          "y": 53,
+          "z": -37.5
+        },
+        "distance": 44.1
+      },
+      {
+        "id": 55,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 58.5,
+          "y": 58,
+          "z": -28.5
+        },
+        "distance": 44.7
+      },
+      {
+        "id": 75,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 117.5,
+          "y": 53,
+          "z": -77.5
+        },
+        "distance": 45.3
+      },
+      {
+        "id": 74,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 119.5,
+          "y": 53,
+          "z": -71.5
+        },
+        "distance": 45.5
+      },
+      {
+        "id": 61,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 49.5,
+          "y": 53,
+          "z": -38.5
+        },
+        "distance": 45.5
+      },
+      {
+        "id": 73,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 118.5,
+          "y": 53,
+          "z": -76.5
+        },
+        "distance": 45.8
+      },
+      {
+        "id": 95,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 59.5,
+          "y": 51,
+          "z": -30.5
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 103,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 67.5,
+          "y": 61,
+          "z": -21.5
+        },
+        "distance": 46.1
+      },
+      {
+        "id": 49,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 50.5,
+          "y": 58,
+          "z": -31.5
+        },
+        "distance": 47
+      },
+      {
+        "id": 54,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 56.5,
+          "y": 58,
+          "z": -26.5
+        },
+        "distance": 47.3
+      },
+      {
+        "id": 100,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 54.5,
+          "y": 51,
+          "z": -31.5
+        },
+        "distance": 47.7
+      },
+      {
+        "id": 48,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 50.5,
+          "y": 58,
+          "z": -30.5
+        },
+        "distance": 47.7
+      },
+      {
+        "id": 99,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 58.5,
+          "y": 51,
+          "z": -28.5
+        },
+        "distance": 47.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "0136669d-e820-4e09-987d-45bb1f3e237b"
+  },
+  "elapsedMs": 252698,
+  "job": {
+    "version": 1,
+    "id": "0136669d-e820-4e09-987d-45bb1f3e237b",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 80.5,
+        "y": 75,
+        "z": -63.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 24,
+    "scouts": 24,
+    "clearings": 0,
+    "excluded": {},
+    "started": "2026-10-03T18:23:23.829Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+    "observedPositions": [
+      {
+        "x": 80.5,
+        "y": 75,
+        "z": -63.5
+      },
+      {
+        "x": 80.5,
+        "y": 76,
+        "z": -75.5
+      },
+      {
+        "x": 80.5,
+        "y": 78,
+        "z": -87.41
+      },
+      {
+        "x": 80.48,
+        "y": 68,
+        "z": -111.5
+      },
+      {
+        "x": 104.4,
+        "y": 72,
+        "z": -111.43
+      },
+      {
+        "x": 140.5,
+        "y": 64,
+        "z": -111.59
+      },
+      {
+        "x": 176.5,
+        "y": 64,
+        "z": -111.53
+      },
+      {
+        "x": 176.5,
+        "y": 65,
+        "z": -135.5
+      },
+      {
+        "x": 204.43,
+        "y": 64,
+        "z": -135.51
+      },
+      {
+        "x": 204.5,
+        "y": 68,
+        "z": -167.42
+      },
+      {
+        "x": 204.43,
+        "y": 63,
+        "z": -131.64
+      },
+      {
+        "x": 168.5,
+        "y": 64,
+        "z": -131.5
+      },
+      {
+        "x": 128.69,
+        "y": 68,
+        "z": -131.5
+      },
+      {
+        "x": 128.5,
+        "y": 71,
+        "z": -87.5
+      },
+      {
+        "x": 128.43,
+        "y": 68,
+        "z": -39.63
+      },
+      {
+        "x": 128.5,
+        "y": 64,
+        "z": 12.34
+      },
+      {
+        "x": 128.5,
+        "y": 70,
+        "z": -43.5
+      },
+      {
+        "x": 68.66,
+        "y": 65.23,
+        "z": -43.63
+      },
+      {
+        "x": 68.57,
+        "y": 70.54,
+        "z": -107.57
+      },
+      {
+        "x": 132.5,
+        "y": 68,
+        "z": -107.5
+      },
+      {
+        "x": 132.46,
+        "y": 68,
+        "z": -43.5
+      },
+      {
+        "x": 132.52,
+        "y": 64,
+        "z": 20.39
+      }
+    ],
+    "tables": [],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": 68.57,
+        "y": 65.92,
+        "z": -43.55
+      },
+      "distance": 64,
+      "novel": false
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 68.57,
+      "y": 65.23,
+      "z": -43.55
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 5154,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 1823,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 56.32,
+          "y": 57.79,
+          "z": -48.67
+        },
+        "distance": 15.2
+      },
+      {
+        "id": 2039,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 62.83,
+          "y": 56.05,
+          "z": -29.16
+        },
+        "distance": 18
+      },
+      {
+        "id": 2025,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 59.3,
+          "y": 57.08,
+          "z": -29.69
+        },
+        "distance": 18.6
+      },
+      {
+        "id": 7,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 80.16,
+          "y": 70,
+          "z": -28.91
+        },
+        "distance": 19.3
+      },
+      {
+        "id": 3,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 87.7,
+          "y": 73,
+          "z": -56.29
+        },
+        "distance": 24.3
+      },
+      {
+        "id": 4,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 83.9,
+          "y": 75.7,
+          "z": -60.29
+        },
+        "distance": 25
+      },
+      {
+        "id": 2056,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 47.5,
+          "y": 53.92,
+          "z": -35.5
+        },
+        "distance": 25.2
+      },
+      {
+        "id": 2057,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 43.82,
+          "y": 56.16,
+          "z": -51.14
+        },
+        "distance": 27.4
+      },
+      {
+        "id": 2038,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 57.08,
+          "y": 52.72,
+          "z": -20.08
+        },
+        "distance": 29
+      },
+      {
+        "id": 2034,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 66.18,
+          "y": 56.01,
+          "z": -15.49
+        },
+        "distance": 29.6
+      },
+      {
+        "id": 2037,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 59.46,
+          "y": 59.39,
+          "z": -15.55
+        },
+        "distance": 30
+      },
+      {
+        "id": 2043,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 57.45,
+          "y": 55.57,
+          "z": -16.4
+        },
+        "distance": 30.9
+      },
+      {
+        "id": 2042,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 57.11,
+          "y": 55.04,
+          "z": -15.46
+        },
+        "distance": 32
+      },
+      {
+        "id": 2023,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 64.3,
+          "y": 56.23,
+          "z": -12.98
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 2046,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 63.49,
+          "y": 56.44,
+          "z": -12.41
+        },
+        "distance": 32.8
+      },
+      {
+        "id": 2045,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 63.25,
+          "y": 55.24,
+          "z": -12.26
+        },
+        "distance": 33.3
+      },
+      {
+        "id": 2044,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 63.08,
+          "y": 56.6,
+          "z": -11.08
+        },
+        "distance": 34
+      },
+      {
+        "id": 2026,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 64.03,
+          "y": 55.23,
+          "z": -11.05
+        },
+        "distance": 34.3
+      },
+      {
+        "id": 2033,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 75.37,
+          "y": 61.21,
+          "z": -9.13
+        },
+        "distance": 35.3
+      },
+      {
+        "id": 2022,
+        "name": "pufferfish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 71.2,
+          "y": 52,
+          "z": -5.47
+        },
+        "distance": 40.4
+      },
+      {
+        "id": 2027,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 68.22,
+          "y": 55.76,
+          "z": -3.62
+        },
+        "distance": 41
+      },
+      {
+        "id": 2066,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 47.57,
+          "y": 59.84,
+          "z": -8.48
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 2028,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 67.56,
+          "y": 55.21,
+          "z": -3.5
+        },
+        "distance": 41.3
+      },
+      {
+        "id": 2067,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 50.97,
+          "y": 59.23,
+          "z": -2.27
+        },
+        "distance": 45.3
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+  "finished": "2026-10-03T18:27:39.350Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}

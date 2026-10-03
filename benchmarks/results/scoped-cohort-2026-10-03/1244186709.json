@@ -1,0 +1,1471 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1244186709",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T18:50:15.074Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 71,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 100,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 18,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -4,
+          "y": 69,
+          "z": 6
+        },
+        "distance": 7.4
+      },
+      {
+        "id": 17,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -1.38,
+          "y": 67.54,
+          "z": 8.58
+        },
+        "distance": 9
+      },
+      {
+        "id": 10,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -2.49,
+          "y": 67,
+          "z": 13
+        },
+        "distance": 13.5
+      },
+      {
+        "id": 12,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -4.59,
+          "y": 67,
+          "z": 13
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 16,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -11.03,
+          "y": 68,
+          "z": 8.03
+        },
+        "distance": 14.1
+      },
+      {
+        "id": 11,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -6,
+          "y": 67,
+          "z": 13
+        },
+        "distance": 14.6
+      },
+      {
+        "id": 14,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -13.1,
+          "y": 68,
+          "z": 6.9
+        },
+        "distance": 15.3
+      },
+      {
+        "id": 15,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -14.6,
+          "y": 68,
+          "z": 5.41
+        },
+        "distance": 16.2
+      },
+      {
+        "id": 13,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -17.02,
+          "y": 68,
+          "z": 8.98
+        },
+        "distance": 19.7
+      },
+      {
+        "id": 22,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 20,
+          "y": 70,
+          "z": -25
+        },
+        "distance": 32.1
+      },
+      {
+        "id": 21,
+        "name": "horse",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 21,
+          "y": 70,
+          "z": -25
+        },
+        "distance": 32.7
+      },
+      {
+        "id": 109,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -22.5,
+          "y": 41,
+          "z": -5.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 81,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 41,
+          "z": -4.5
+        },
+        "distance": 38.7
+      },
+      {
+        "id": 168,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -24.5,
+          "y": 53,
+          "z": -24.5
+        },
+        "distance": 39.7
+      },
+      {
+        "id": 181,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 8.5,
+          "y": 29,
+          "z": -5.5
+        },
+        "distance": 43.2
+      },
+      {
+        "id": 180,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 4.5,
+          "y": 29,
+          "z": -9.5
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 89,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -22.5,
+          "y": 51,
+          "z": -30.5
+        },
+        "distance": 43.5
+      },
+      {
+        "id": 185,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.5,
+          "y": 28,
+          "z": 5.5
+        },
+        "distance": 45.2
+      },
+      {
+        "id": 177,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -13.5,
+          "y": 28,
+          "z": 5.5
+        },
+        "distance": 45.5
+      },
+      {
+        "id": 183,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -11.5,
+          "y": 27,
+          "z": 5.5
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 176,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.5,
+          "y": 27,
+          "z": 5.5
+        },
+        "distance": 46.2
+      },
+      {
+        "id": 184,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.5,
+          "y": 27,
+          "z": 6.5
+        },
+        "distance": 46.3
+      },
+      {
+        "id": 165,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -13.5,
+          "y": 27,
+          "z": 4.5
+        },
+        "distance": 46.3
+      },
+      {
+        "id": 167,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -13.5,
+          "y": 27,
+          "z": 5.5
+        },
+        "distance": 46.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "82d528da-0f19-4042-bba8-fb5098ef8564"
+  },
+  "elapsedMs": 287039,
+  "job": {
+    "version": 1,
+    "id": "82d528da-0f19-4042-bba8-fb5098ef8564",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 71,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 61,
+    "scouts": 24,
+    "clearings": 0,
+    "excluded": {
+      "oak_log": [],
+      "stone": [
+        {
+          "x": 68,
+          "y": 66,
+          "z": -116
+        },
+        {
+          "x": 62,
+          "y": 62,
+          "z": -129
+        },
+        {
+          "x": 63,
+          "y": 62,
+          "z": -129
+        },
+        {
+          "x": 72,
+          "y": 66,
+          "z": -117
+        },
+        {
+          "x": 76,
+          "y": 64,
+          "z": -130
+        },
+        {
+          "x": 67,
+          "y": 65,
+          "z": -118
+        },
+        {
+          "x": 71,
+          "y": 66,
+          "z": -116
+        },
+        {
+          "x": 69,
+          "y": 66,
+          "z": -115
+        },
+        {
+          "x": 56,
+          "y": 67,
+          "z": -131
+        },
+        {
+          "x": 57,
+          "y": 67,
+          "z": -130
+        },
+        {
+          "x": 70,
+          "y": 66,
+          "z": -115
+        },
+        {
+          "x": 69,
+          "y": 62,
+          "z": -126
+        },
+        {
+          "x": 67,
+          "y": 65,
+          "z": -117
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -123
+        },
+        {
+          "x": 58,
+          "y": 61,
+          "z": -131
+        },
+        {
+          "x": 48,
+          "y": 64,
+          "z": -123
+        },
+        {
+          "x": 56,
+          "y": 66,
+          "z": -131
+        },
+        {
+          "x": 57,
+          "y": 66,
+          "z": -130
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -131
+        },
+        {
+          "x": 59,
+          "y": 65,
+          "z": -130
+        },
+        {
+          "x": 62,
+          "y": 64,
+          "z": -142
+        },
+        {
+          "x": 63,
+          "y": 64,
+          "z": -142
+        },
+        {
+          "x": 58,
+          "y": 67,
+          "z": -120
+        },
+        {
+          "x": 58,
+          "y": 63,
+          "z": -139
+        },
+        {
+          "x": 59,
+          "y": 63,
+          "z": -140
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -138
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -137
+        },
+        {
+          "x": 61,
+          "y": 63,
+          "z": -141
+        },
+        {
+          "x": 58,
+          "y": 66,
+          "z": -119
+        },
+        {
+          "x": 60,
+          "y": 62,
+          "z": -140
+        },
+        {
+          "x": 57,
+          "y": 62,
+          "z": -136
+        },
+        {
+          "x": 57,
+          "y": 62,
+          "z": -135
+        },
+        {
+          "x": 57,
+          "y": 62,
+          "z": -134
+        },
+        {
+          "x": 57,
+          "y": 62,
+          "z": -133
+        },
+        {
+          "x": 70,
+          "y": 65,
+          "z": -123
+        },
+        {
+          "x": 70,
+          "y": 65,
+          "z": -122
+        },
+        {
+          "x": 71,
+          "y": 65,
+          "z": -122
+        },
+        {
+          "x": 73,
+          "y": 66,
+          "z": -119
+        },
+        {
+          "x": 80,
+          "y": 65,
+          "z": -131
+        },
+        {
+          "x": 57,
+          "y": 61,
+          "z": -132
+        },
+        {
+          "x": 69,
+          "y": 64,
+          "z": -121
+        },
+        {
+          "x": 68,
+          "y": 64,
+          "z": -120
+        },
+        {
+          "x": 70,
+          "y": 64,
+          "z": -121
+        },
+        {
+          "x": 71,
+          "y": 64,
+          "z": -121
+        },
+        {
+          "x": 72,
+          "y": 64,
+          "z": -120
+        },
+        {
+          "x": 72,
+          "y": 64,
+          "z": -119
+        },
+        {
+          "x": 59,
+          "y": 62,
+          "z": -122
+        },
+        {
+          "x": 58,
+          "y": 62,
+          "z": -122
+        },
+        {
+          "x": 57,
+          "y": 62,
+          "z": -122
+        },
+        {
+          "x": 54,
+          "y": 62,
+          "z": -122
+        },
+        {
+          "x": 53,
+          "y": 62,
+          "z": -121
+        },
+        {
+          "x": 60,
+          "y": 61,
+          "z": -123
+        },
+        {
+          "x": 65,
+          "y": 59,
+          "z": -139
+        },
+        {
+          "x": 56,
+          "y": 61,
+          "z": -123
+        },
+        {
+          "x": 51,
+          "y": 62,
+          "z": -121
+        },
+        {
+          "x": 55,
+          "y": 61,
+          "z": -123
+        },
+        {
+          "x": 66,
+          "y": 59,
+          "z": -140
+        },
+        {
+          "x": 47,
+          "y": 61,
+          "z": -128
+        },
+        {
+          "x": 49,
+          "y": 62,
+          "z": -121
+        },
+        {
+          "x": 44,
+          "y": 62,
+          "z": -125
+        },
+        {
+          "x": 61,
+          "y": 60,
+          "z": -124
+        },
+        {
+          "x": 62,
+          "y": 60,
+          "z": -124
+        },
+        {
+          "x": 46,
+          "y": 61,
+          "z": -127
+        },
+        {
+          "x": 63,
+          "y": 60,
+          "z": -124
+        },
+        {
+          "x": 48,
+          "y": 62,
+          "z": -120
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": -138
+        },
+        {
+          "x": 43,
+          "y": 62,
+          "z": -124
+        },
+        {
+          "x": 47,
+          "y": 62,
+          "z": -120
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": -138
+        },
+        {
+          "x": 40,
+          "y": 63,
+          "z": -122
+        },
+        {
+          "x": 75,
+          "y": 60,
+          "z": -142
+        },
+        {
+          "x": 46,
+          "y": 62,
+          "z": -120
+        },
+        {
+          "x": 45,
+          "y": 61,
+          "z": -126
+        },
+        {
+          "x": 76,
+          "y": 60,
+          "z": -141
+        },
+        {
+          "x": 42,
+          "y": 62,
+          "z": -123
+        },
+        {
+          "x": 39,
+          "y": 63,
+          "z": -121
+        },
+        {
+          "x": 57,
+          "y": 66,
+          "z": -136
+        },
+        {
+          "x": 77,
+          "y": 60,
+          "z": -140
+        },
+        {
+          "x": 51,
+          "y": 63,
+          "z": -125
+        },
+        {
+          "x": 45,
+          "y": 65,
+          "z": -121
+        },
+        {
+          "x": 45,
+          "y": 62,
+          "z": -119
+        },
+        {
+          "x": 57,
+          "y": 66,
+          "z": -135
+        },
+        {
+          "x": 57,
+          "y": 66,
+          "z": -134
+        },
+        {
+          "x": 38,
+          "y": 63,
+          "z": -120
+        },
+        {
+          "x": 49,
+          "y": 59,
+          "z": -129
+        },
+        {
+          "x": 44,
+          "y": 62,
+          "z": -118
+        },
+        {
+          "x": 43,
+          "y": 62,
+          "z": -118
+        },
+        {
+          "x": 59,
+          "y": 65,
+          "z": -139
+        },
+        {
+          "x": 37,
+          "y": 63,
+          "z": -119
+        },
+        {
+          "x": 48,
+          "y": 59,
+          "z": -128
+        },
+        {
+          "x": 58,
+          "y": 65,
+          "z": -138
+        },
+        {
+          "x": 60,
+          "y": 65,
+          "z": -140
+        },
+        {
+          "x": 51,
+          "y": 58,
+          "z": -131
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -137
+        },
+        {
+          "x": 61,
+          "y": 65,
+          "z": -141
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -136
+        },
+        {
+          "x": 62,
+          "y": 65,
+          "z": -141
+        },
+        {
+          "x": 77,
+          "y": 59,
+          "z": -139
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -135
+        },
+        {
+          "x": 50,
+          "y": 58,
+          "z": -130
+        },
+        {
+          "x": 41,
+          "y": 61,
+          "z": -122
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -134
+        },
+        {
+          "x": 63,
+          "y": 65,
+          "z": -142
+        },
+        {
+          "x": 57,
+          "y": 65,
+          "z": -133
+        },
+        {
+          "x": 52,
+          "y": 57,
+          "z": -132
+        },
+        {
+          "x": 60,
+          "y": 64,
+          "z": -140
+        },
+        {
+          "x": 58,
+          "y": 64,
+          "z": -139
+        },
+        {
+          "x": 59,
+          "y": 64,
+          "z": -140
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -138
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -137
+        },
+        {
+          "x": 61,
+          "y": 64,
+          "z": -141
+        },
+        {
+          "x": 36,
+          "y": 62,
+          "z": -118
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -136
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -135
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -134
+        },
+        {
+          "x": 40,
+          "y": 61,
+          "z": -117
+        },
+        {
+          "x": 57,
+          "y": 64,
+          "z": -133
+        },
+        {
+          "x": 39,
+          "y": 61,
+          "z": -116
+        },
+        {
+          "x": 58,
+          "y": 64,
+          "z": -131
+        },
+        {
+          "x": 60,
+          "y": 63,
+          "z": -140
+        },
+        {
+          "x": 58,
+          "y": 67,
+          "z": -119
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -136
+        },
+        {
+          "x": 62,
+          "y": 64,
+          "z": -129
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -135
+        },
+        {
+          "x": 78,
+          "y": 57,
+          "z": -138
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -134
+        },
+        {
+          "x": 57,
+          "y": 67,
+          "z": -118
+        },
+        {
+          "x": 57,
+          "y": 63,
+          "z": -133
+        }
+      ]
+    },
+    "started": "2026-10-03T18:50:54.683Z",
+    "recoverDropIds": [
+      776
+    ],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 71,
+        "z": 0.5
+      },
+      {
+        "x": 0.5,
+        "y": 77,
+        "z": -11.5
+      },
+      {
+        "x": 0.57,
+        "y": 74.23,
+        "z": -23.58
+      },
+      {
+        "x": 0.48,
+        "y": 77,
+        "z": -47.42
+      },
+      {
+        "x": 0.5,
+        "y": 77,
+        "z": -71.5
+      },
+      {
+        "x": 0.5,
+        "y": 75,
+        "z": -107.36
+      },
+      {
+        "x": 16.5,
+        "y": 71,
+        "z": -126.86
+      },
+      {
+        "x": 52.44,
+        "y": 72.94,
+        "z": -126.67
+      },
+      {
+        "x": 60.29,
+        "y": 68.94,
+        "z": -137.7
+      }
+    ],
+    "tables": [
+      {
+        "x": 15,
+        "y": 71,
+        "z": -128
+      }
+    ],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": 52.44,
+        "y": 72.94,
+        "z": -126.67
+      },
+      "distance": 36,
+      "novel": true
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 60.29,
+      "y": 68.94,
+      "z": -137.7
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 5840,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 2
+      },
+      {
+        "name": "cobblestone",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 776,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 57.13,
+          "y": 66,
+          "z": -130.74
+        },
+        "distance": 8.2
+      },
+      {
+        "id": 375,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 54.55,
+          "y": 73,
+          "z": -130.87
+        },
+        "distance": 9.8
+      },
+      {
+        "id": 404,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 45.7,
+          "y": 72,
+          "z": -136.23
+        },
+        "distance": 15
+      },
+      {
+        "id": 360,
+        "name": "cat",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 76.03,
+          "y": 69,
+          "z": -122.87
+        },
+        "distance": 21.6
+      },
+      {
+        "id": 314,
+        "name": "villager",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 89.48,
+          "y": 65,
+          "z": -143.55
+        },
+        "distance": 30
+      },
+      {
+        "id": 362,
+        "name": "cat",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 32.25,
+          "y": 71,
+          "z": -125.73
+        },
+        "distance": 30.6
+      },
+      {
+        "id": 229,
+        "name": "villager",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 67.45,
+          "y": 72,
+          "z": -107.05
+        },
+        "distance": 31.6
+      },
+      {
+        "id": 374,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 64.88,
+          "y": 72,
+          "z": -169.11
+        },
+        "distance": 31.9
+      },
+      {
+        "id": 405,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 49.79,
+          "y": 72,
+          "z": -168.47
+        },
+        "distance": 32.7
+      },
+      {
+        "id": 411,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 65.77,
+          "y": 72,
+          "z": -170.5
+        },
+        "distance": 33.4
+      },
+      {
+        "id": 403,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 44,
+          "y": 72,
+          "z": -168
+        },
+        "distance": 34.5
+      },
+      {
+        "id": 414,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 28.81,
+          "y": 71,
+          "z": -152.75
+        },
+        "distance": 35
+      },
+      {
+        "id": 412,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 73.94,
+          "y": 70,
+          "z": -170.34
+        },
+        "distance": 35.4
+      },
+      {
+        "id": 981,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 68.5,
+          "y": 35,
+          "z": -129.5
+        },
+        "distance": 35.9
+      },
+      {
+        "id": 273,
+        "name": "iron_golem",
+        "type": "mob",
+        "username": null,
+        "position": {
+          "x": 25.12,
+          "y": 72,
+          "z": -145.12
+        },
+        "distance": 36.1
+      },
+      {
+        "id": 821,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 65.5,
+          "y": 39,
+          "z": -113.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 406,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 47.28,
+          "y": 72,
+          "z": -174.24
+        },
+        "distance": 38.9
+      },
+      {
+        "id": 413,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 76.49,
+          "y": 70,
+          "z": -174.23
+        },
+        "distance": 40
+      },
+      {
+        "id": 274,
+        "name": "villager",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 19.47,
+          "y": 71,
+          "z": -134.27
+        },
+        "distance": 41
+      },
+      {
+        "id": 372,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 86.8,
+          "y": 64,
+          "z": -170.16
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 288,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 80.24,
+          "y": 69,
+          "z": -100
+        },
+        "distance": 42.7
+      },
+      {
+        "id": 422,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 81.79,
+          "y": 65,
+          "z": -174.51
+        },
+        "distance": 42.8
+      },
+      {
+        "id": 289,
+        "name": "pig",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 81.54,
+          "y": 69,
+          "z": -99.8
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 452,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 77,
+          "y": 70,
+          "z": -178
+        },
+        "distance": 43.6
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-03T18:55:44.639Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}

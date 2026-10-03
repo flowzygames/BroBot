@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1888406977",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T18:22:01.923Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 94,
+      "z": 112.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 146,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 88,
+          "z": 80.9
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 64,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -27.26,
+          "y": 62.56,
+          "z": 98.25
+        },
+        "distance": 34.8
+      },
+      {
+        "id": 62,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -22.63,
+          "y": 61.75,
+          "z": 102.08
+        },
+        "distance": 35
+      },
+      {
+        "id": 61,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -23.7,
+          "y": 61,
+          "z": 102.7
+        },
+        "distance": 35.3
+      },
+      {
+        "id": 38,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -53.5,
+          "y": 65,
+          "z": 107.5
+        },
+        "distance": 36.7
+      },
+      {
+        "id": 45,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.5,
+          "y": 87,
+          "z": 137.5
+        },
+        "distance": 40.4
+      },
+      {
+        "id": 37,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -60.5,
+          "y": 65,
+          "z": 108.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 63,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 5.5,
+          "y": 87,
+          "z": 131.5
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 44,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -1.5,
+          "y": 87,
+          "z": 142.5
+        },
+        "distance": 43
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "9969ffeb-ae0b-4b79-ad5c-6ef73a4904e1"
+  },
+  "elapsedMs": 283,
+  "job": {
+    "version": 1,
+    "id": "9969ffeb-ae0b-4b79-ad5c-6ef73a4904e1",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -31.5,
+        "y": 94,
+        "z": 112.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 0,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {},
+    "started": "2026-10-03T18:22:43.254Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.",
+    "observedPositions": [
+      {
+        "x": -31.5,
+        "y": 94,
+        "z": 112.5
+      }
+    ],
+    "tables": [],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 94,
+      "z": 112.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 146,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 2,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 88,
+          "z": 80.9
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 64,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -27.26,
+          "y": 62.56,
+          "z": 98.25
+        },
+        "distance": 34.8
+      },
+      {
+        "id": 62,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -22.63,
+          "y": 61.75,
+          "z": 102.08
+        },
+        "distance": 35
+      },
+      {
+        "id": 61,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -23.7,
+          "y": 61,
+          "z": 102.7
+        },
+        "distance": 35.3
+      },
+      {
+        "id": 38,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -53.5,
+          "y": 65,
+          "z": 107.5
+        },
+        "distance": 36.7
+      },
+      {
+        "id": 45,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.5,
+          "y": 87,
+          "z": 137.5
+        },
+        "distance": 40.4
+      },
+      {
+        "id": 37,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -60.5,
+          "y": 65,
+          "z": 108.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 63,
+        "name": "spider",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 5.5,
+          "y": 87,
+          "z": 131.5
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 44,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -1.5,
+          "y": 87,
+          "z": 142.5
+        },
+        "distance": 43
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.",
+  "finished": "2026-10-03T18:22:45.756Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}
