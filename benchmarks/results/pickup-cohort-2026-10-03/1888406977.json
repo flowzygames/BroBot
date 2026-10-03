@@ -1,0 +1,507 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-308-full-known-cohort",
+  "commit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1888406977",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T20:24:13.945Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 94,
+      "z": 112.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 166,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 34,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -38.5,
+          "y": 75,
+          "z": 132.5
+        },
+        "distance": 28.5
+      },
+      {
+        "id": 79,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -11.5,
+          "y": 87,
+          "z": 136.5
+        },
+        "distance": 32
+      },
+      {
+        "id": 2,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 88,
+          "z": 80.9
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 78,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -13.5,
+          "y": 87,
+          "z": 138.5
+        },
+        "distance": 32.4
+      },
+      {
+        "id": 64,
+        "name": "zombie_villager",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -42.27,
+          "y": 64,
+          "z": 105.78
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 42,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.5,
+          "y": 87,
+          "z": 130.5
+        },
+        "distance": 36.5
+      },
+      {
+        "id": 41,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.82,
+          "y": 87,
+          "z": 131.82
+        },
+        "distance": 36.9
+      },
+      {
+        "id": 50,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -42.75,
+          "y": 61.81,
+          "z": 127.52
+        },
+        "distance": 37.3
+      },
+      {
+        "id": 39,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -1.5,
+          "y": 87,
+          "z": 133.5
+        },
+        "distance": 37.3
+      },
+      {
+        "id": 40,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -2.3,
+          "y": 87,
+          "z": 136.73
+        },
+        "distance": 38.6
+      },
+      {
+        "id": 37,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -11.2,
+          "y": 86.03,
+          "z": 144.34
+        },
+        "distance": 38.6
+      },
+      {
+        "id": 38,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -10.5,
+          "y": 86,
+          "z": 144.5
+        },
+        "distance": 39.1
+      },
+      {
+        "id": 48,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.95,
+          "y": 87,
+          "z": 139.08
+        },
+        "distance": 41.1
+      },
+      {
+        "id": 60,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -12.33,
+          "y": 53,
+          "z": 103.49
+        },
+        "distance": 46.1
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "92a7ada1-ad51-4730-bc3a-db48a3427abb"
+  },
+  "elapsedMs": 180,
+  "job": {
+    "version": 1,
+    "id": "92a7ada1-ad51-4730-bc3a-db48a3427abb",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -31.5,
+        "y": 94,
+        "z": 112.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 0,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {},
+    "started": "2026-10-03T20:24:55.640Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.",
+    "observedPositions": [
+      {
+        "x": -31.5,
+        "y": 94,
+        "z": 112.5
+      }
+    ],
+    "tables": [],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 94,
+      "z": 112.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 166,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 34,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -38.5,
+          "y": 75,
+          "z": 132.5
+        },
+        "distance": 28.5
+      },
+      {
+        "id": 79,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -11.5,
+          "y": 87,
+          "z": 136.5
+        },
+        "distance": 32
+      },
+      {
+        "id": 2,
+        "name": "sheep",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 88,
+          "z": 80.9
+        },
+        "distance": 32.2
+      },
+      {
+        "id": 78,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -13.5,
+          "y": 87,
+          "z": 138.5
+        },
+        "distance": 32.4
+      },
+      {
+        "id": 64,
+        "name": "zombie_villager",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -42.27,
+          "y": 64,
+          "z": 105.78
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 42,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.5,
+          "y": 87,
+          "z": 130.5
+        },
+        "distance": 36.5
+      },
+      {
+        "id": 41,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.82,
+          "y": 87,
+          "z": 131.82
+        },
+        "distance": 36.9
+      },
+      {
+        "id": 50,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -42.75,
+          "y": 61.81,
+          "z": 127.52
+        },
+        "distance": 37.3
+      },
+      {
+        "id": 39,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -1.5,
+          "y": 87,
+          "z": 133.5
+        },
+        "distance": 37.3
+      },
+      {
+        "id": 40,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -2.3,
+          "y": 87,
+          "z": 136.73
+        },
+        "distance": 38.6
+      },
+      {
+        "id": 37,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -11.2,
+          "y": 86.03,
+          "z": 144.34
+        },
+        "distance": 38.6
+      },
+      {
+        "id": 38,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -10.5,
+          "y": 86,
+          "z": 144.5
+        },
+        "distance": 39.1
+      },
+      {
+        "id": 48,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -0.95,
+          "y": 87,
+          "z": 139.08
+        },
+        "distance": 41.1
+      },
+      {
+        "id": 60,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -12.33,
+          "y": 53,
+          "z": 103.49
+        },
+        "distance": 46.1
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.",
+  "finished": "2026-10-03T20:24:58.053Z",
+  "recordNote": "Summary omits duplicate diagnostic trace and action history. Full original retained locally; no failed trial omitted or replaced."
+}

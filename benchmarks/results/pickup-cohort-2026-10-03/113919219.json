@@ -1,0 +1,653 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-308-full-known-cohort",
+  "commit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "113919219",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T19:50:07.388Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 32.5,
+      "y": 67,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 137,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 5,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 7,
+          "y": 68,
+          "z": -31.6
+        },
+        "distance": 25.5
+      },
+      {
+        "id": 6,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 4,
+          "y": 68,
+          "z": -31.6
+        },
+        "distance": 28.5
+      },
+      {
+        "id": 56,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 30.61,
+          "y": 33.04,
+          "z": -10.56
+        },
+        "distance": 39.9
+      },
+      {
+        "id": 66,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 29.31,
+          "y": 32.4,
+          "z": -8.77
+        },
+        "distance": 41.5
+      },
+      {
+        "id": 98,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 17.5,
+          "y": 31,
+          "z": -10.5
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 99,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 17.5,
+          "y": 31,
+          "z": -9.5
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 47,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 33.71,
+          "y": 30.29,
+          "z": -2.53
+        },
+        "distance": 46.8
+      },
+      {
+        "id": 65,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 36.25,
+          "y": 30.07,
+          "z": -1.4
+        },
+        "distance": 47.8
+      },
+      {
+        "id": 46,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 18.95,
+          "y": 30.42,
+          "z": -3.69
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "eb968907-fde8-472c-a57c-366ade07c153"
+  },
+  "elapsedMs": 300006,
+  "job": {
+    "version": 1,
+    "id": "eb968907-fde8-472c-a57c-366ade07c153",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 32.5,
+        "y": 67,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 36,
+    "scouts": 6,
+    "clearings": 0,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": 57,
+          "y": 69,
+          "z": -9
+        },
+        {
+          "x": 40,
+          "y": 67,
+          "z": -74
+        },
+        {
+          "x": 40,
+          "y": 68,
+          "z": -74
+        }
+      ],
+      "stone": [
+        {
+          "x": 45,
+          "y": 39,
+          "z": -77
+        },
+        {
+          "x": 46,
+          "y": 38,
+          "z": -75
+        },
+        {
+          "x": 46,
+          "y": 38,
+          "z": -76
+        },
+        {
+          "x": 45,
+          "y": 38,
+          "z": -78
+        },
+        {
+          "x": 46,
+          "y": 42,
+          "z": -82
+        },
+        {
+          "x": 47,
+          "y": 42,
+          "z": -82
+        },
+        {
+          "x": 46,
+          "y": 42,
+          "z": -83
+        },
+        {
+          "x": 47,
+          "y": 42,
+          "z": -83
+        },
+        {
+          "x": 41,
+          "y": 64,
+          "z": -112
+        },
+        {
+          "x": 42,
+          "y": 64,
+          "z": -112
+        },
+        {
+          "x": 43,
+          "y": 63,
+          "z": -112
+        },
+        {
+          "x": 41,
+          "y": 63,
+          "z": -113
+        },
+        {
+          "x": 42,
+          "y": 63,
+          "z": -113
+        },
+        {
+          "x": 44,
+          "y": 63,
+          "z": -113
+        },
+        {
+          "x": 41,
+          "y": 63,
+          "z": -114
+        },
+        {
+          "x": 44,
+          "y": 63,
+          "z": -114
+        },
+        {
+          "x": 42,
+          "y": 63,
+          "z": -115
+        },
+        {
+          "x": 43,
+          "y": 63,
+          "z": -115
+        },
+        {
+          "x": 43,
+          "y": 40,
+          "z": -87
+        },
+        {
+          "x": 44,
+          "y": 39,
+          "z": -88
+        },
+        {
+          "x": 43,
+          "y": 39,
+          "z": -86
+        },
+        {
+          "x": 43,
+          "y": 39,
+          "z": -85
+        },
+        {
+          "x": 45,
+          "y": 38,
+          "z": -88
+        },
+        {
+          "x": 47,
+          "y": 42,
+          "z": -89
+        },
+        {
+          "x": 45,
+          "y": 41,
+          "z": -103
+        },
+        {
+          "x": 45,
+          "y": 41,
+          "z": -102
+        },
+        {
+          "x": 47,
+          "y": 41,
+          "z": -102
+        },
+        {
+          "x": 45,
+          "y": 41,
+          "z": -101
+        },
+        {
+          "x": 39,
+          "y": 40,
+          "z": -104
+        },
+        {
+          "x": 40,
+          "y": 40,
+          "z": -104
+        },
+        {
+          "x": 38,
+          "y": 40,
+          "z": -104
+        },
+        {
+          "x": 41,
+          "y": 40,
+          "z": -104
+        },
+        {
+          "x": 31,
+          "y": 44,
+          "z": -168
+        },
+        {
+          "x": 30,
+          "y": 44,
+          "z": -169
+        },
+        {
+          "x": 35,
+          "y": 43,
+          "z": -166
+        },
+        {
+          "x": 37,
+          "y": 43,
+          "z": -167
+        },
+        {
+          "x": 33,
+          "y": 43,
+          "z": -167
+        },
+        {
+          "x": 38,
+          "y": 43,
+          "z": -168
+        },
+        {
+          "x": 32,
+          "y": 43,
+          "z": -168
+        },
+        {
+          "x": 36,
+          "y": 42,
+          "z": -167
+        },
+        {
+          "x": 34,
+          "y": 44,
+          "z": -173
+        },
+        {
+          "x": 32,
+          "y": 44,
+          "z": -174
+        },
+        {
+          "x": 33,
+          "y": 43,
+          "z": -173
+        },
+        {
+          "x": 31,
+          "y": 44,
+          "z": -174
+        },
+        {
+          "x": 30,
+          "y": 44,
+          "z": -175
+        },
+        {
+          "x": 30,
+          "y": 44,
+          "z": -173
+        },
+        {
+          "x": 29,
+          "y": 44,
+          "z": -174
+        },
+        {
+          "x": 32,
+          "y": 43,
+          "z": -173
+        }
+      ]
+    },
+    "started": "2026-10-03T19:50:49.638Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Starter job time budget reached.",
+    "observedPositions": [
+      {
+        "x": 32.5,
+        "y": 67,
+        "z": -31.5
+      },
+      {
+        "x": 39.64,
+        "y": 69,
+        "z": -72.32
+      },
+      {
+        "x": 39.5,
+        "y": 68,
+        "z": -84.5
+      },
+      {
+        "x": 39.5,
+        "y": 68,
+        "z": -96.5
+      },
+      {
+        "x": 39.5,
+        "y": 65,
+        "z": -120.53
+      },
+      {
+        "x": 39.5,
+        "y": 63,
+        "z": -144.5
+      },
+      {
+        "x": 39.5,
+        "y": 63,
+        "z": -180.37
+      },
+      {
+        "x": 39.5,
+        "y": 63,
+        "z": -216.5
+      },
+      {
+        "x": 47.51,
+        "y": 60,
+        "z": -219.5
+      },
+      {
+        "x": 47.5,
+        "y": 59,
+        "z": -217.43
+      }
+    ],
+    "tables": [
+      {
+        "x": 40,
+        "y": 69,
+        "z": -74
+      }
+    ],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": 39.5,
+        "y": 63,
+        "z": -216.5
+      },
+      "distance": 36,
+      "novel": true
+    },
+    "clearanceDigs": 3,
+    "ignoredTables": [],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 36.04,
+      "y": 68,
+      "z": -52.96
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 6137,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 11
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "dirt",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 6,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 12.24,
+          "y": 70,
+          "z": -40.19
+        },
+        "distance": 27.1
+      },
+      {
+        "id": 5,
+        "name": "rabbit",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 14.23,
+          "y": 69,
+          "z": -23.85
+        },
+        "distance": 36.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Starter job time budget reached.",
+  "finished": "2026-10-03T19:55:52.024Z",
+  "recordNote": "Summary omits duplicate diagnostic trace and action history. Full original retained locally; no failed trial omitted or replaced."
+}

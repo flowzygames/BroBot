@@ -1,0 +1,460 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-308-full-known-cohort",
+  "commit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "474859294",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T19:56:06.360Z",
+  "status": "passed",
+  "passed": true,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 48.5,
+      "y": 73,
+      "z": 32.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 118,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 23,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 26.5,
+          "y": 59,
+          "z": 1.5
+        },
+        "distance": 40.5
+      },
+      {
+        "id": 22,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 25.5,
+          "y": 59,
+          "z": 1.5
+        },
+        "distance": 41.1
+      },
+      {
+        "id": 25,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 20.5,
+          "y": 59,
+          "z": 2.5
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 26,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 21.5,
+          "y": 59,
+          "z": 1.5
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 24,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 17.5,
+          "y": 59,
+          "z": 1.5
+        },
+        "distance": 46
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "27a5b7b2-5e95-47d5-b04a-55f477933d69"
+  },
+  "elapsedMs": 60660,
+  "job": {
+    "version": 1,
+    "id": "27a5b7b2-5e95-47d5-b04a-55f477933d69",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 48.5,
+        "y": 73,
+        "z": 32.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 13,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {
+      "spruce_log": [],
+      "stone": [
+        {
+          "x": 38,
+          "y": 72,
+          "z": 32
+        }
+      ]
+    },
+    "started": "2026-10-03T19:56:50.230Z",
+    "recoverDropIds": [],
+    "status": "complete",
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "observedPositions": [
+      {
+        "x": 48.5,
+        "y": 73,
+        "z": 32.5
+      },
+      {
+        "x": 51.7,
+        "y": 72,
+        "z": 34.81
+      },
+      {
+        "x": 39.5,
+        "y": 72,
+        "z": 33.5
+      },
+      {
+        "x": 39.51,
+        "y": 72,
+        "z": 30.5
+      },
+      {
+        "x": 38.5,
+        "y": 72,
+        "z": 28.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 50,
+        "y": 72,
+        "z": 33
+      }
+    ],
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 1.4427751037497143
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 48.5,
+      "y": 72,
+      "z": 33.54
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1338,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 11
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 81,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 37.48,
+          "y": 58.26,
+          "z": 12.57
+        },
+        "distance": 27.4
+      },
+      {
+        "id": 92,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 12.6,
+          "y": 57.14,
+          "z": 44.15
+        },
+        "distance": 40.3
+      },
+      {
+        "id": 25,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 16.61,
+          "y": 60.43,
+          "z": 9.39
+        },
+        "distance": 41.6
+      },
+      {
+        "id": 267,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 52.09,
+          "y": 54.78,
+          "z": -4.5
+        },
+        "distance": 41.9
+      },
+      {
+        "id": 312,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 40.08,
+          "y": 58.79,
+          "z": -5.92
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 23,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 16.21,
+          "y": 56.96,
+          "z": 8.19
+        },
+        "distance": 43.7
+      },
+      {
+        "id": 24,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 15.7,
+          "y": 56.86,
+          "z": 8.54
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 94,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 5.74,
+          "y": 62.53,
+          "z": 29.51
+        },
+        "distance": 44
+      },
+      {
+        "id": 22,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 15.42,
+          "y": 57.22,
+          "z": 7.67
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 91,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 4.49,
+          "y": 59.66,
+          "z": 31.8
+        },
+        "distance": 45.7
+      },
+      {
+        "id": 44,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 71.78,
+          "y": 39.19,
+          "z": 58.73
+        },
+        "distance": 47.5
+      },
+      {
+        "id": 270,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 7.44,
+          "y": 62.58,
+          "z": 11.55
+        },
+        "distance": 47.5
+      },
+      {
+        "id": 97,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 62.6,
+          "y": 62.65,
+          "z": -11.13
+        },
+        "distance": 47.8
+      },
+      {
+        "id": 273,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 61.73,
+          "y": 48.85,
+          "z": -6.27
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "finished": "2026-10-03T19:57:53.610Z",
+  "recordNote": "Summary omits duplicate diagnostic trace and action history. Full original retained locally; no failed trial omitted or replaced."
+}

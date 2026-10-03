@@ -1,3 +1,11 @@
+# Pickup-budget cohort — October 3, 2026
+
+Current308 application completed **10/20** known worlds on clean source69d36c2. All20 ran once without interrupted/replaced cases. Prior305 completed8/20; prior2879/20; older90-block27512/20. Gains versus305:1587439118,355620996,1244186709. Loss:113919219 timed out. Same seeds are not identical paths or mob timing; no isolated causality claim.
+
+[All outcomes and conditions](results/pickup-cohort-2026-10-03/README.md). Prepared17/17 and automated308 checks remain separate. Half the worlds still failed; this is development evidence, not stable1.0.
+
+---
+
 # Scoped scouting cohort — October 3, 2026
 
 Application `ac551e43273920728a761878fb8aeac342171351`: 305 automated checks, 17 prepared live phases, and a separate 3/3 original-world regression suite. The full twenty known-world evaluation completed **8/20** with no interrupted or replaced cases. This is below the previous expanded cohort’s 9/20 and the older 90-block cohort’s 12/20.

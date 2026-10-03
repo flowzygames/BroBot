@@ -1,0 +1,1059 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-308-full-known-cohort",
+  "commit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "386690312",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T20:04:08.239Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -111.5,
+      "y": 66,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 102,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 51,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -83.97,
+          "y": 55.14,
+          "z": -30.27
+        },
+        "distance": 29.6
+      },
+      {
+        "id": 86,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -137.5,
+          "y": 52,
+          "z": -15.5
+        },
+        "distance": 33.6
+      },
+      {
+        "id": 67,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -133.8,
+          "y": 40.52,
+          "z": -19.45
+        },
+        "distance": 35.9
+      },
+      {
+        "id": 90,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -128.01,
+          "y": 43.86,
+          "z": -7.48
+        },
+        "distance": 36.6
+      },
+      {
+        "id": 70,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -77.16,
+          "y": 53.08,
+          "z": -22.46
+        },
+        "distance": 37.8
+      },
+      {
+        "id": 77,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -128.5,
+          "y": 37,
+          "z": -11.5
+        },
+        "distance": 39.1
+      },
+      {
+        "id": 107,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -141.5,
+          "y": 52,
+          "z": -8.5
+        },
+        "distance": 40.3
+      },
+      {
+        "id": 69,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -72.51,
+          "y": 53.09,
+          "z": -20.5
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 64,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -75.5,
+          "y": 56,
+          "z": -53.5
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 44,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -68.37,
+          "y": 60.09,
+          "z": -33.83
+        },
+        "distance": 43.6
+      },
+      {
+        "id": 68,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -127.71,
+          "y": 39.4,
+          "z": 0.02
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 62,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -75.5,
+          "y": 56,
+          "z": -55.5
+        },
+        "distance": 44.4
+      },
+      {
+        "id": 58,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -75.5,
+          "y": 53,
+          "z": -54.5
+        },
+        "distance": 44.7
+      },
+      {
+        "id": 46,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -67.23,
+          "y": 60,
+          "z": -33.25
+        },
+        "distance": 44.7
+      },
+      {
+        "id": 134,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -140.5,
+          "y": 32,
+          "z": -28.5
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 63,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -72.5,
+          "y": 56,
+          "z": -51.5
+        },
+        "distance": 45
+      },
+      {
+        "id": 79,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -142.5,
+          "y": 35,
+          "z": -20.5
+        },
+        "distance": 45.2
+      },
+      {
+        "id": 139,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -143.5,
+          "y": 36,
+          "z": -17.5
+        },
+        "distance": 46
+      },
+      {
+        "id": 72,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -68.29,
+          "y": 53.08,
+          "z": -21.29
+        },
+        "distance": 46.2
+      },
+      {
+        "id": 55,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -77.5,
+          "y": 53,
+          "z": -60.5
+        },
+        "distance": 46.5
+      },
+      {
+        "id": 45,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -65.1,
+          "y": 59.86,
+          "z": -33.45
+        },
+        "distance": 46.8
+      },
+      {
+        "id": 11,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -129,
+          "y": 65,
+          "z": 12
+        },
+        "distance": 46.9
+      },
+      {
+        "id": 73,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -67.46,
+          "y": 53.07,
+          "z": -21.16
+        },
+        "distance": 47
+      },
+      {
+        "id": 54,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -74.5,
+          "y": 53,
+          "z": -57.5
+        },
+        "distance": 47.1
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "26b12ed8-29c2-457b-9824-9e59fa448959"
+  },
+  "elapsedMs": 300010,
+  "job": {
+    "version": 1,
+    "id": "26b12ed8-29c2-457b-9824-9e59fa448959",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -111.5,
+        "y": 66,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 34,
+    "scouts": 7,
+    "clearings": 0,
+    "excluded": {
+      "acacia_log": [],
+      "stone": [
+        {
+          "x": -113,
+          "y": 60,
+          "z": -35
+        },
+        {
+          "x": -114,
+          "y": 60,
+          "z": -34
+        },
+        {
+          "x": -116,
+          "y": 60,
+          "z": -33
+        },
+        {
+          "x": -115,
+          "y": 60,
+          "z": -33
+        },
+        {
+          "x": -117,
+          "y": 60,
+          "z": -32
+        },
+        {
+          "x": -118,
+          "y": 60,
+          "z": -31
+        },
+        {
+          "x": -119,
+          "y": 60,
+          "z": -31
+        },
+        {
+          "x": -120,
+          "y": 60,
+          "z": -30
+        },
+        {
+          "x": -121,
+          "y": 59,
+          "z": -29
+        },
+        {
+          "x": -122,
+          "y": 59,
+          "z": -28
+        },
+        {
+          "x": -123,
+          "y": 59,
+          "z": -28
+        },
+        {
+          "x": -124,
+          "y": 58,
+          "z": -27
+        },
+        {
+          "x": -125,
+          "y": 58,
+          "z": -27
+        },
+        {
+          "x": -126,
+          "y": 57,
+          "z": -26
+        },
+        {
+          "x": -117,
+          "y": 57,
+          "z": -24
+        },
+        {
+          "x": -127,
+          "y": 57,
+          "z": -26
+        },
+        {
+          "x": -114,
+          "y": 61,
+          "z": -34
+        },
+        {
+          "x": -113,
+          "y": 61,
+          "z": -34
+        },
+        {
+          "x": -115,
+          "y": 32,
+          "z": -70
+        },
+        {
+          "x": -114,
+          "y": 39,
+          "z": -71
+        },
+        {
+          "x": -113,
+          "y": 38,
+          "z": -69
+        },
+        {
+          "x": -114,
+          "y": 38,
+          "z": -70
+        },
+        {
+          "x": -115,
+          "y": 38,
+          "z": -71
+        },
+        {
+          "x": -115,
+          "y": 38,
+          "z": -72
+        },
+        {
+          "x": -112,
+          "y": 59,
+          "z": -35
+        },
+        {
+          "x": -111,
+          "y": 58,
+          "z": -33
+        },
+        {
+          "x": -106,
+          "y": 56,
+          "z": -33
+        },
+        {
+          "x": -108,
+          "y": 55,
+          "z": -34
+        },
+        {
+          "x": -107,
+          "y": 55,
+          "z": -33
+        },
+        {
+          "x": -116,
+          "y": 56,
+          "z": -24
+        },
+        {
+          "x": -115,
+          "y": 56,
+          "z": -24
+        },
+        {
+          "x": -118,
+          "y": 56,
+          "z": -24
+        },
+        {
+          "x": -140,
+          "y": 56,
+          "z": -27
+        },
+        {
+          "x": -141,
+          "y": 56,
+          "z": -27
+        },
+        {
+          "x": -139,
+          "y": 56,
+          "z": -26
+        },
+        {
+          "x": -144,
+          "y": 55,
+          "z": -27
+        },
+        {
+          "x": -142,
+          "y": 55,
+          "z": -26
+        },
+        {
+          "x": -143,
+          "y": 55,
+          "z": -26
+        },
+        {
+          "x": -145,
+          "y": 55,
+          "z": -26
+        },
+        {
+          "x": -146,
+          "y": 55,
+          "z": -25
+        },
+        {
+          "x": -165,
+          "y": 36,
+          "z": -38
+        },
+        {
+          "x": -166,
+          "y": 36,
+          "z": -35
+        },
+        {
+          "x": -165,
+          "y": 36,
+          "z": -37
+        },
+        {
+          "x": -165,
+          "y": 36,
+          "z": -36
+        },
+        {
+          "x": -164,
+          "y": 36,
+          "z": -38
+        },
+        {
+          "x": -164,
+          "y": 36,
+          "z": -37
+        },
+        {
+          "x": -164,
+          "y": 36,
+          "z": -36
+        },
+        {
+          "x": -161,
+          "y": 36,
+          "z": -36
+        },
+        {
+          "x": -204,
+          "y": 63,
+          "z": 5
+        },
+        {
+          "x": -206,
+          "y": 62,
+          "z": 8
+        },
+        {
+          "x": -206,
+          "y": 62,
+          "z": 9
+        },
+        {
+          "x": -210,
+          "y": 63,
+          "z": 11
+        },
+        {
+          "x": -207,
+          "y": 62,
+          "z": 10
+        },
+        {
+          "x": -210,
+          "y": 62,
+          "z": 10
+        },
+        {
+          "x": -211,
+          "y": 64,
+          "z": 59
+        },
+        {
+          "x": -208,
+          "y": 64,
+          "z": 61
+        },
+        {
+          "x": -199,
+          "y": 64,
+          "z": 58
+        },
+        {
+          "x": -199,
+          "y": 63,
+          "z": 57
+        },
+        {
+          "x": -200,
+          "y": 63,
+          "z": 58
+        },
+        {
+          "x": -196,
+          "y": 60,
+          "z": 50
+        },
+        {
+          "x": -195,
+          "y": 59,
+          "z": 50
+        },
+        {
+          "x": -197,
+          "y": 59,
+          "z": 50
+        },
+        {
+          "x": -198,
+          "y": 59,
+          "z": 52
+        },
+        {
+          "x": -197,
+          "y": 59,
+          "z": 52
+        },
+        {
+          "x": -196,
+          "y": 59,
+          "z": 51
+        },
+        {
+          "x": -199,
+          "y": 58,
+          "z": 53
+        }
+      ]
+    },
+    "started": "2026-10-03T20:04:50.606Z",
+    "recoverDropIds": [
+      959,
+      1006,
+      1011
+    ],
+    "status": "paused",
+    "reason": "Starter job time budget reached.",
+    "observedPositions": [
+      {
+        "x": -111.5,
+        "y": 66,
+        "z": -31.5
+      },
+      {
+        "x": -116.5,
+        "y": 65,
+        "z": -40.33
+      },
+      {
+        "x": -116.5,
+        "y": 64,
+        "z": -52.4
+      },
+      {
+        "x": -116.5,
+        "y": 63,
+        "z": -64.4
+      },
+      {
+        "x": -140.32,
+        "y": 64,
+        "z": -40.5
+      },
+      {
+        "x": -176.5,
+        "y": 63,
+        "z": -40.54
+      },
+      {
+        "x": -176.54,
+        "y": 65,
+        "z": -4.5
+      },
+      {
+        "x": -214.67,
+        "y": 63,
+        "z": 8.31
+      },
+      {
+        "x": -209.63,
+        "y": 63,
+        "z": 0.3
+      },
+      {
+        "x": -214.5,
+        "y": 64,
+        "z": 4.68
+      },
+      {
+        "x": -214.49,
+        "y": 64,
+        "z": 52.5
+      },
+      {
+        "x": -199.5,
+        "y": 58,
+        "z": 51.53
+      }
+    ],
+    "tables": [
+      {
+        "x": -118,
+        "y": 65,
+        "z": -42
+      }
+    ],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": -214.49,
+        "y": 64,
+        "z": 52.5
+      },
+      "distance": 48,
+      "novel": true
+    },
+    "clearanceDigs": 1,
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -198.64,
+      "y": 59,
+      "z": 50.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 6102,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "acacia_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 16
+      },
+      {
+        "name": "cobblestone",
+        "count": 9,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 1019,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -198.31,
+          "y": 59.75,
+          "z": 51.53
+        },
+        "distance": 1.3
+      },
+      {
+        "id": 1011,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -197.71,
+          "y": 58,
+          "z": 51.13
+        },
+        "distance": 1.5
+      },
+      {
+        "id": 1006,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -197.12,
+          "y": 58,
+          "z": 52.23
+        },
+        "distance": 2.5
+      },
+      {
+        "id": 959,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -198.12,
+          "y": 64,
+          "z": 56.72
+        },
+        "distance": 8
+      },
+      {
+        "id": 766,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -206.34,
+          "y": 46.1,
+          "z": 50.8
+        },
+        "distance": 15
+      },
+      {
+        "id": 211,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -211.23,
+          "y": 66,
+          "z": 66.17
+        },
+        "distance": 21.3
+      },
+      {
+        "id": 212,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -207.13,
+          "y": 67,
+          "z": 75.03
+        },
+        "distance": 27.2
+      },
+      {
+        "id": 210,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -231.18,
+          "y": 64,
+          "z": 58.82
+        },
+        "distance": 34
+      },
+      {
+        "id": 213,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -203.52,
+          "y": 68,
+          "z": 90.17
+        },
+        "distance": 41
+      },
+      {
+        "id": 1004,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -172.3,
+          "y": 26,
+          "z": 42.49
+        },
+        "distance": 43
+      },
+      {
+        "id": 124,
+        "name": "armadillo",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -196,
+          "y": 67,
+          "z": 8
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 988,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -227.5,
+          "y": 24,
+          "z": 53.19
+        },
+        "distance": 45.4
+      },
+      {
+        "id": 1018,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -184.5,
+          "y": 38,
+          "z": 12.5
+        },
+        "distance": 45.7
+      },
+      {
+        "id": 152,
+        "name": "armadillo",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -162.89,
+          "y": 66,
+          "z": 22.58
+        },
+        "distance": 45.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Starter job time budget reached.",
+  "finished": "2026-10-03T20:09:52.856Z",
+  "recordNote": "Summary omits duplicate diagnostic trace and action history. Full original retained locally; no failed trial omitted or replaced."
+}
