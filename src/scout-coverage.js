@@ -13,9 +13,19 @@ export function recordScoutObservation(history, position) {
 
 export function rankScouts({ position, home, index, observations = [], attempts = [], radius = STARTER_MOVEMENT_RADIUS, maxScouts = STARTER_SCOUT_LIMIT }) {
   if (!valid(position) || !valid(home) || !Number.isSafeInteger(index) || index < 0 || index >= maxScouts || !Number.isFinite(radius) || radius <= 0 || radius > STARTER_MOVEMENT_RADIUS || !Number.isSafeInteger(maxScouts) || maxScouts < 1 || maxScouts > STARTER_SCOUT_LIMIT) return [];
-  const travel = Math.min(64, 12 * (1 + Math.floor(index / 2)));
+  const plannedTravel = Math.min(64, 12 * (1 + Math.floor(index / 2)));
   const points = recordScoutObservation(observations, position);
   const tried = (Array.isArray(attempts) ? attempts : []).filter(a => a && directions.includes(a.direction) && valid(a.origin)).slice(-STARTER_SCOUT_LIMIT * 4);
+  // An exhausted local sweep is evidence that this leg was not certified,
+  // not evidence that every shorter route is blocked. Try a smaller leg on
+  // the next scout, within the same attempt/time and return-path budgets.
+  // Old attempts without explicit outcome evidence retain their old behavior.
+  const exhausted = tried.filter(a => a.exhausted === true && a.status === 'unverified'
+    && Number.isInteger(a.distance) && a.distance >= 4 && a.distance <= 64
+    && distance(a.origin, position) <= 2);
+  const travel = exhausted.length
+    ? Math.min(plannedTravel, Math.max(4, Math.floor(Math.min(...exhausted.map(a => a.distance)) / 2)))
+    : plannedTravel;
   const candidates = directions.map((direction, order) => {
     const [dx, dz] = offsets[direction];
     const target = { x: position.x + dx * travel, y: position.y, z: position.z + dz * travel };

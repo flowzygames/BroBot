@@ -1000,7 +1000,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       }
       configureMovement()
       let direction = args.direction, tried = [direction], routeAttempts = [], goal
-      if (alternatives.length) {
+      if (args.returnable === true && args.direction != null) {
         const selected = await planRankedRoutes([direction, ...alternatives], async (candidate, budget) => {
           checked(ctx)
           return returnableGoal(ctx, targetFor(candidate), null, budget)

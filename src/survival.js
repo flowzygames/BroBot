@@ -228,8 +228,12 @@ export class SurvivalJob {
         scoutRecorded = true;
         const allowed = [decision.args.direction, ...(decision.args.alternatives ?? [])];
         const tried = Array.isArray(result?.directions_tried) ? result.directions_tried.filter(d => allowed.includes(d)).slice(0, 4) : [decision.args.direction];
+        const outcomes = Array.isArray(result?.route_attempts) ? result.route_attempts.filter(a => a && typeof a === 'object') : [];
+        const exhausted = allowed.every(direction => outcomes.some(a => a.direction === direction && a.status === 'unverified'))
+          && !outcomes.some(a => a.status === 'verified' || a.status === 'cancelled');
         this.job.scoutAttempts = [...(Array.isArray(this.job.scoutAttempts) ? this.job.scoutAttempts : []),
-          ...tried.map(direction => ({ origin: { ...(decision.scoutOrigin ?? before.position) }, direction }))].slice(-STARTER_SCOUT_LIMIT * 4);
+          ...tried.map(direction => ({ origin: { ...(decision.scoutOrigin ?? before.position) }, direction,
+            distance: decision.args.distance, status: outcomes.find(a => a.direction === direction)?.status ?? 'unknown', exhausted }))].slice(-STARTER_SCOUT_LIMIT * 4);
       };
       this.job.steps++; this.save();
       try {

@@ -547,3 +547,41 @@ test('starter wood deficit retains missing table and stick requirements', () => 
   assert.equal(step.name,'collect');assert.equal(step.args.count,2);
   assert.equal(nextStarterStep({...state,inventory:[]},job,{wood:'spruce'}).args.count,3);
 });
+
+test('unverified whole scout sweeps back off locally and a shorter successful move resets distance', async () => {
+  const f=fixture({maxSteps:4}),distances=[];f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    assert.equal(name,'explore');assert.equal(args.returnable,true);distances.push(args.distance);
+    const directions_tried=[args.direction,...args.alternatives];
+    if(args.distance>6)throw Object.assign(Error('Routes unverified'),{result:{directions_tried,route_attempts:directions_tried.map(direction=>({direction,status:'unverified'}))}});
+    f.state.position.x+=6;
+    return {explored:true,distance:6,directions_tried:[args.direction],route_attempts:[{direction:args.direction,status:'verified'}]};
+  };
+  f.job.start();await f.job.promise;
+  assert.deepEqual(distances,[12,6,24,12]);
+  assert.equal(f.job.state().scouts,4);assert.equal(f.job.state().status,'blocked');
+});
+test('incomplete or cancelled planning sweeps never shrink subsequent scout legs', async () => {
+  for(const status of ['unverified','cancelled','verified']){
+    const f=fixture({maxSteps:3}),distances=[];f.job.observe=async()=>({});
+    f.job.execute=async(name,args)=>{
+      distances.push(args.distance);
+      throw Object.assign(Error('Incomplete probe'),{result:{directions_tried:[args.direction],route_attempts:[{direction:args.direction,status}]}});
+    };
+    f.job.start();await f.job.promise;
+    assert.deepEqual(distances,[12,12,24]);assert.ok(f.job.state().scoutAttempts.every(a=>!a.exhausted));
+  }
+});
+
+test('a boundary-constrained single-direction sweep can trigger local backoff', async () => {
+  const f=fixture({maxSteps:2}),distances=[];f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    distances.push(args.distance);const directions_tried=[args.direction,...args.alternatives];
+    if(distances.length===1)assert.deepEqual(directions_tried,['west']);
+    throw Object.assign(Error('No route'),{result:{directions_tried,route_attempts:[null,...directions_tried.map(direction=>({direction,status:'unverified'}))]}});
+  };
+  // The controller's first observation occurs after home is established.
+  f.job.observe=async()=>{f.state.position.x=256.4;return {}};
+  f.job.start();await f.job.promise;
+  assert.deepEqual(distances,[12,6]);
+});
