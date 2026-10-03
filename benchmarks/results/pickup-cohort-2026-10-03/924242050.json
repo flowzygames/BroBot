@@ -1,0 +1,1028 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-308-full-known-cohort",
+  "commit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "924242050",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T19:47:41.671Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 224.5,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 94,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 67,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 259.5,
+          "y": 66,
+          "z": -37.5
+        },
+        "distance": 40.3
+      },
+      {
+        "id": 51,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.5,
+          "y": 60,
+          "z": -55.5
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 48,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.5,
+          "y": 60,
+          "z": -56.5
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 49,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 199.5,
+          "y": 60,
+          "z": -57.5
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 54,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 197.5,
+          "y": 55,
+          "z": -49.5
+        },
+        "distance": 44.2
+      },
+      {
+        "id": 57,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 212.5,
+          "y": 53,
+          "z": -60.5
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 41,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 207.5,
+          "y": 61,
+          "z": 2.5
+        },
+        "distance": 45
+      },
+      {
+        "id": 34,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 207.5,
+          "y": 57,
+          "z": -63.5
+        },
+        "distance": 45.8
+      },
+      {
+        "id": 55,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 196.5,
+          "y": 55,
+          "z": -52.5
+        },
+        "distance": 46.1
+      },
+      {
+        "id": 35,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 203.5,
+          "y": 57,
+          "z": -62.5
+        },
+        "distance": 46.8
+      },
+      {
+        "id": 45,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 196.5,
+          "y": 60,
+          "z": -59.5
+        },
+        "distance": 46.8
+      },
+      {
+        "id": 53,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 195.5,
+          "y": 55,
+          "z": -53.5
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 50,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 195.5,
+          "y": 60,
+          "z": -59.5
+        },
+        "distance": 47.4
+      },
+      {
+        "id": 102,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 256.5,
+          "y": 63,
+          "z": -3.5
+        },
+        "distance": 47.9
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "8f2c4d77-e1ff-4902-890d-af44d585fed2"
+  },
+  "elapsedMs": 106329,
+  "job": {
+    "version": 1,
+    "id": "8f2c4d77-e1ff-4902-890d-af44d585fed2",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 73,
+    "scouts": 24,
+    "clearings": 3,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": 228,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -26
+        },
+        {
+          "x": 228,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 229,
+          "y": 89,
+          "z": -25
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 208,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 227,
+          "y": 83,
+          "z": -14
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -51
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -43
+        },
+        {
+          "x": 247,
+          "y": 85,
+          "z": -22
+        },
+        {
+          "x": 207,
+          "y": 86,
+          "z": -44
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 217,
+          "y": 84,
+          "z": -52
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 91,
+          "z": -26
+        },
+        {
+          "x": 202,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -17
+        },
+        {
+          "x": 217,
+          "y": 87,
+          "z": -52
+        },
+        {
+          "x": 201,
+          "y": 85,
+          "z": -16
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -14
+        },
+        {
+          "x": 227,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 228,
+          "y": 78,
+          "z": -38
+        },
+        {
+          "x": 228,
+          "y": 81,
+          "z": -13
+        },
+        {
+          "x": 237,
+          "y": 79,
+          "z": -35
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 227,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 224,
+          "y": 78,
+          "z": -41
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -33
+        },
+        {
+          "x": 228,
+          "y": 93,
+          "z": -34
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 202,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -17
+        },
+        {
+          "x": 254,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 247,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -47
+        },
+        {
+          "x": 201,
+          "y": 87,
+          "z": -16
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -22
+        },
+        {
+          "x": 255,
+          "y": 85,
+          "z": -48
+        },
+        {
+          "x": 248,
+          "y": 82,
+          "z": -21
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 252,
+          "y": 86,
+          "z": -11
+        },
+        {
+          "x": 233,
+          "y": 91,
+          "z": -15
+        },
+        {
+          "x": 253,
+          "y": 86,
+          "z": -12
+        }
+      ],
+      "stone": [
+        {
+          "x": 246,
+          "y": 68,
+          "z": -45
+        },
+        {
+          "x": 247,
+          "y": 68,
+          "z": -44
+        },
+        {
+          "x": 246,
+          "y": 68,
+          "z": -46
+        },
+        {
+          "x": 221,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 245,
+          "y": 67,
+          "z": -48
+        },
+        {
+          "x": 209,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 238,
+          "y": 67,
+          "z": -55
+        },
+        {
+          "x": 215,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 212,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 211,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 230,
+          "y": 66,
+          "z": -7
+        },
+        {
+          "x": 239,
+          "y": 66,
+          "z": -53
+        },
+        {
+          "x": 210,
+          "y": 65,
+          "z": -43
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -44
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -47
+        },
+        {
+          "x": 245,
+          "y": 68,
+          "z": -48
+        },
+        {
+          "x": 216,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 215,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 212,
+          "y": 66,
+          "z": -41
+        },
+        {
+          "x": 238,
+          "y": 68,
+          "z": -56
+        },
+        {
+          "x": 213,
+          "y": 66,
+          "z": -44
+        },
+        {
+          "x": 211,
+          "y": 66,
+          "z": -42
+        },
+        {
+          "x": 210,
+          "y": 66,
+          "z": -43
+        },
+        {
+          "x": 239,
+          "y": 67,
+          "z": -53
+        },
+        {
+          "x": 216,
+          "y": 65,
+          "z": -42
+        },
+        {
+          "x": 214,
+          "y": 65,
+          "z": -40
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -41
+        },
+        {
+          "x": 213,
+          "y": 65,
+          "z": -44
+        },
+        {
+          "x": 218,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 215,
+          "y": 64,
+          "z": -39
+        },
+        {
+          "x": 216,
+          "y": 64,
+          "z": -42
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -40
+        },
+        {
+          "x": 213,
+          "y": 64,
+          "z": -41
+        },
+        {
+          "x": 214,
+          "y": 64,
+          "z": -43
+        },
+        {
+          "x": 228,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 229,
+          "y": 65,
+          "z": -8
+        },
+        {
+          "x": 230,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 231,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 232,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": 233,
+          "y": 63,
+          "z": -12
+        },
+        {
+          "x": 232,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 234,
+          "y": 63,
+          "z": -11
+        },
+        {
+          "x": 231,
+          "y": 63,
+          "z": -10
+        }
+      ]
+    },
+    "started": "2026-10-03T19:48:17.643Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": 224.5,
+        "y": 85,
+        "z": -31.5
+      }
+    ],
+    "tables": [
+      {
+        "x": 225,
+        "y": 85,
+        "z": -32
+      }
+    ],
+    "ignoredTables": [],
+    "clearanceDigs": 1,
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 226.5,
+      "y": 85,
+      "z": -31.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 2214,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 221,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 197.16,
+          "y": 59.12,
+          "z": -42.15
+        },
+        "distance": 40.5
+      },
+      {
+        "id": 278,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 194.29,
+          "y": 57.16,
+          "z": -28.3
+        },
+        "distance": 42.7
+      },
+      {
+        "id": 267,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 192.64,
+          "y": 58.5,
+          "z": -35.34
+        },
+        "distance": 43.2
+      },
+      {
+        "id": 251,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 265.74,
+          "y": 67,
+          "z": -38.59
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 226,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 197.81,
+          "y": 62.65,
+          "z": -6.65
+        },
+        "distance": 44
+      },
+      {
+        "id": 340,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 201,
+          "y": 54.6,
+          "z": -11.51
+        },
+        "distance": 44.4
+      },
+      {
+        "id": 34,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.6,
+          "y": 58.87,
+          "z": -55.14
+        },
+        "distance": 44.9
+      },
+      {
+        "id": 47,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.93,
+          "y": 59,
+          "z": -55.78
+        },
+        "distance": 45
+      },
+      {
+        "id": 310,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 197.46,
+          "y": 61.94,
+          "z": -5.47
+        },
+        "distance": 45.3
+      },
+      {
+        "id": 273,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 212.5,
+          "y": 61.78,
+          "z": 5.55
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 266,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 189.57,
+          "y": 58.12,
+          "z": -39.57
+        },
+        "distance": 46.4
+      },
+      {
+        "id": 342,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 198.8,
+          "y": 59.29,
+          "z": -4.16
+        },
+        "distance": 46.6
+      },
+      {
+        "id": 102,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 255.49,
+          "y": 63.52,
+          "z": -1.59
+        },
+        "distance": 46.9
+      },
+      {
+        "id": 297,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 212.35,
+          "y": 60.52,
+          "z": 6.34
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 215,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 193.94,
+          "y": 50.59,
+          "z": -33.66
+        },
+        "distance": 47.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-03T19:50:06.186Z",
+  "recordNote": "Summary omits duplicate diagnostic trace and action history. Full original retained locally; no failed trial omitted or replaced."
+}

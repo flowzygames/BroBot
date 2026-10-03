@@ -1,4 +1,4 @@
-> Latest source checkpoint: 308 automated checks and 17 prepared live phases; 4/5 selected natural-world trials, including one hostile-stop failure. [Pickup evidence](benchmarks/results/pickup-budget-2026-10-03/README.md). The latest full cohort belongs to the prior 305 source: **8/20**. Website download remains the previous 293-check package.
+> Latest source checkpoint: 308 automated checks, 17 prepared live phases and **10/20** known natural worlds. Prior305 scored8/20; older90-block275 scored12/20. [Complete evidence and limitations](benchmarks/results/pickup-cohort-2026-10-03/README.md).
 
 # BroBot
 
@@ -10,7 +10,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the current source completed 8 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the current source completed 10 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
 ## Meet your second pair of hands
 
