@@ -956,3 +956,15 @@ test('starter neighbor generation refuses powder snow and restores direct moveme
   bounded=false;await actions.execute('go_to',{x:0,y:64,z:0,radius:0})
   assert.equal(forward(),true,'ordinary direct commands retain their existing policy')
 })
+
+test('a single explicit returnable scout reports failed probe evidence without moving', async () => {
+  const bot=fakeBot();let moves=0;
+  bot.pathfinder.goto=async()=>{moves++};
+  bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}}};
+  await assert.rejects(createActions(bot).execute('explore',{direction:'west',distance:64,returnable:true}),error=>{
+    assert.deepEqual(error.result.directions_tried,['west']);
+    assert.equal(error.result.route_attempts.length,1);
+    assert.equal(error.result.route_attempts[0].status,'unverified');return true;
+  });
+  assert.equal(moves,0);
+});

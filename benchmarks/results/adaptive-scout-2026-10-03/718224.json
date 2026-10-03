@@ -1,0 +1,1083 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "adaptive-scout-300-regression",
+  "commit": "bf4c3e5267ed4df3f0e42be3959539918bfca612",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "718224",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T16:58:43.229Z",
+  "status": "passed",
+  "passed": true,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 68,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 109,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 76,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 18.5,
+          "y": 59,
+          "z": -26.5
+        },
+        "distance": 33.7
+      },
+      {
+        "id": 56,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 22.5,
+          "y": 58,
+          "z": -23.5
+        },
+        "distance": 34.1
+      },
+      {
+        "id": 57,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 58,
+          "z": -23.5
+        },
+        "distance": 34.7
+      },
+      {
+        "id": 55,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 19.5,
+          "y": 58,
+          "z": -27.5
+        },
+        "distance": 35.3
+      },
+      {
+        "id": 82,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 21.5,
+          "y": 52,
+          "z": -23.5
+        },
+        "distance": 35.7
+      },
+      {
+        "id": 77,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 19.5,
+          "y": 52,
+          "z": -25.5
+        },
+        "distance": 36
+      },
+      {
+        "id": 54,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 58,
+          "z": -26.5
+        },
+        "distance": 36.9
+      },
+      {
+        "id": 65,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 55,
+          "z": -25.5
+        },
+        "distance": 37.1
+      },
+      {
+        "id": 7,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 72,
+          "z": 22
+        },
+        "distance": 37.5
+      },
+      {
+        "id": 78,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 18.5,
+          "y": 52,
+          "z": -28.5
+        },
+        "distance": 37.7
+      },
+      {
+        "id": 85,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 16.5,
+          "y": 56,
+          "z": -31.5
+        },
+        "distance": 37.7
+      },
+      {
+        "id": 81,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 52,
+          "z": -25.5
+        },
+        "distance": 38.2
+      },
+      {
+        "id": 66,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 24.5,
+          "y": 55,
+          "z": -26.5
+        },
+        "distance": 38.4
+      },
+      {
+        "id": 58,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 27.5,
+          "y": 58,
+          "z": -25.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 59,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 28.5,
+          "y": 58,
+          "z": -24.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 84,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 21.5,
+          "y": 56,
+          "z": -30.5
+        },
+        "distance": 39.3
+      },
+      {
+        "id": 112,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 28.5,
+          "y": 53,
+          "z": -23.5
+        },
+        "distance": 39.8
+      },
+      {
+        "id": 93,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 24.5,
+          "y": 57,
+          "z": -29.5
+        },
+        "distance": 40
+      },
+      {
+        "id": 80,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 24.5,
+          "y": 52,
+          "z": -27.5
+        },
+        "distance": 40.2
+      },
+      {
+        "id": 92,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 27.5,
+          "y": 57,
+          "z": -27.5
+        },
+        "distance": 40.4
+      },
+      {
+        "id": 94,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 26.5,
+          "y": 57,
+          "z": -29.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 111,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 29.5,
+          "y": 53,
+          "z": -25.5
+        },
+        "distance": 41.7
+      },
+      {
+        "id": 91,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 28.5,
+          "y": 57,
+          "z": -29.5
+        },
+        "distance": 42.5
+      },
+      {
+        "id": 79,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 23.5,
+          "y": 52,
+          "z": -31.5
+        },
+        "distance": 42.5
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "ed0d2f32-aceb-465e-8f04-6c4b8ea2f3bc"
+  },
+  "elapsedMs": 100958,
+  "job": {
+    "version": 1,
+    "id": "ed0d2f32-aceb-465e-8f04-6c4b8ea2f3bc",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 14,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {
+      "oak_log": [],
+      "stone": []
+    },
+    "history": [
+      {
+        "at": "2026-10-03T16:59:50.286Z",
+        "action": "craft",
+        "args": {
+          "item": "wooden_pickaxe",
+          "count": 1
+        },
+        "reason": "Craft the first mining tool.",
+        "result": {
+          "item": "wooden_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:13.917Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 3,
+          "mined": 3,
+          "inventory_changes": {
+            "cobblestone": 3
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:23.569Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {
+            "cobblestone": 4
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:32.715Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "reason": "Collect a bounded batch of stone and verify its drops.",
+        "result": {
+          "completed": true,
+          "requested": 4,
+          "mined": 4,
+          "inventory_changes": {
+            "cobblestone": 4
+          },
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:45.685Z",
+        "action": "go_to",
+        "args": {
+          "x": -32,
+          "y": 72,
+          "z": 23,
+          "radius": 2,
+          "returnable": true
+        },
+        "reason": "Return to an observed crafting table instead of searching for more wood.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": -30.54,
+            "y": 72,
+            "z": 24.69
+          },
+          "target": {
+            "x": -32,
+            "y": 72,
+            "z": 23
+          },
+          "radius": 2
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:47.951Z",
+        "action": "craft",
+        "args": {
+          "item": "stone_pickaxe",
+          "count": 1
+        },
+        "reason": "Upgrade to a stone pickaxe.",
+        "result": {
+          "item": "stone_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:00:50.970Z",
+        "action": "craft",
+        "args": {
+          "item": "furnace",
+          "count": 1
+        },
+        "reason": "Craft a furnace from eight verified cobblestone.",
+        "result": {
+          "item": "furnace",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:01:00.392Z",
+        "action": "go_to",
+        "args": {
+          "x": 0,
+          "y": 68,
+          "z": 0,
+          "radius": 1,
+          "returnable": true
+        },
+        "reason": "Return to the job starting point with the starter kit.",
+        "result": {
+          "arrived": true,
+          "position": {
+            "x": 0.63,
+            "y": 68.92,
+            "z": 0.37
+          },
+          "target": {
+            "x": 0,
+            "y": 68,
+            "z": 0
+          },
+          "radius": 1
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-03T16:59:20.138Z",
+    "recoverDropIds": [],
+    "status": "complete",
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      {
+        "x": -31.34,
+        "y": 72,
+        "z": 24.48
+      },
+      {
+        "x": -6.63,
+        "y": 74,
+        "z": 32.74
+      },
+      {
+        "x": -5.05,
+        "y": 74,
+        "z": 34.7
+      }
+    ],
+    "tables": [
+      {
+        "x": -32,
+        "y": 72,
+        "z": 23
+      }
+    ],
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 0.5704384278780723
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.63,
+      "y": 68.54,
+      "z": 0.37
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 2109,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 11
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 7,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -4.57,
+          "y": 79,
+          "z": 36.35
+        },
+        "distance": 37.8
+      },
+      {
+        "id": 435,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.62,
+          "y": 62.06,
+          "z": -31.65
+        },
+        "distance": 40.1
+      },
+      {
+        "id": 332,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 7.16,
+          "y": 54.72,
+          "z": -36.86
+        },
+        "distance": 40.2
+      },
+      {
+        "id": 374,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 27.69,
+          "y": 56.42,
+          "z": -27.56
+        },
+        "distance": 40.7
+      },
+      {
+        "id": 450,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -19.43,
+          "y": 56,
+          "z": -34.61
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 448,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -19.41,
+          "y": 57.35,
+          "z": -35.71
+        },
+        "distance": 42.8
+      },
+      {
+        "id": 449,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -20.39,
+          "y": 56.14,
+          "z": -35.6
+        },
+        "distance": 43.5
+      },
+      {
+        "id": 446,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -26.28,
+          "y": 60.11,
+          "z": -37.59
+        },
+        "distance": 47.3
+      },
+      {
+        "id": 452,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -27.44,
+          "y": 58.65,
+          "z": -36.44
+        },
+        "distance": 47.3
+      },
+      {
+        "id": 459,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -15.14,
+          "y": 55.63,
+          "z": -42.5
+        },
+        "distance": 47.5
+      },
+      {
+        "id": 468,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -15.39,
+          "y": 55.28,
+          "z": -42.43
+        },
+        "distance": 47.6
+      },
+      {
+        "id": 444,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -26.49,
+          "y": 58.59,
+          "z": -37.48
+        },
+        "distance": 47.6
+      },
+      {
+        "id": 445,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -27.26,
+          "y": 59.74,
+          "z": -37.46
+        },
+        "distance": 47.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "ed0d2f32-aceb-465e-8f04-6c4b8ea2f3bc",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 68,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 14,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {
+        "oak_log": [],
+        "stone": []
+      },
+      "history": [
+        {
+          "at": "2026-10-03T16:59:50.286Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "reason": "Craft the first mining tool.",
+          "result": {
+            "item": "wooden_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:13.917Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 3,
+            "mined": 3,
+            "inventory_changes": {
+              "cobblestone": 3
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": true,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:23.569Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {
+              "cobblestone": 4
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:32.715Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "reason": "Collect a bounded batch of stone and verify its drops.",
+          "result": {
+            "completed": true,
+            "requested": 4,
+            "mined": 4,
+            "inventory_changes": {
+              "cobblestone": 4
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:45.685Z",
+          "action": "go_to",
+          "args": {
+            "x": -32,
+            "y": 72,
+            "z": 23,
+            "radius": 2,
+            "returnable": true
+          },
+          "reason": "Return to an observed crafting table instead of searching for more wood.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": -30.54,
+              "y": 72,
+              "z": 24.69
+            },
+            "target": {
+              "x": -32,
+              "y": 72,
+              "z": 23
+            },
+            "radius": 2
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:47.951Z",
+          "action": "craft",
+          "args": {
+            "item": "stone_pickaxe",
+            "count": 1
+          },
+          "reason": "Upgrade to a stone pickaxe.",
+          "result": {
+            "item": "stone_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:00:50.970Z",
+          "action": "craft",
+          "args": {
+            "item": "furnace",
+            "count": 1
+          },
+          "reason": "Craft a furnace from eight verified cobblestone.",
+          "result": {
+            "item": "furnace",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:01:00.392Z",
+          "action": "go_to",
+          "args": {
+            "x": 0,
+            "y": 68,
+            "z": 0,
+            "radius": 1,
+            "returnable": true
+          },
+          "reason": "Return to the job starting point with the starter kit.",
+          "result": {
+            "arrived": true,
+            "position": {
+              "x": 0.63,
+              "y": 68.92,
+              "z": 0.37
+            },
+            "target": {
+              "x": 0,
+              "y": 68,
+              "z": 0
+            },
+            "radius": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-03T16:59:20.138Z",
+      "recoverDropIds": [],
+      "status": "complete",
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 68,
+          "z": 0.5
+        },
+        {
+          "x": -31.34,
+          "y": 72,
+          "z": 24.48
+        },
+        {
+          "x": -6.63,
+          "y": 74,
+          "z": 32.74
+        },
+        {
+          "x": -5.05,
+          "y": 74,
+          "z": 34.7
+        }
+      ],
+      "tables": [
+        {
+          "x": -32,
+          "y": 72,
+          "z": 23
+        }
+      ],
+      "evidence": {
+        "stone_pickaxe": 1,
+        "furnace": 1,
+        "homeDistance": 0.5704384278780723
+      },
+      "stopping": false
+    }
+  },
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "finished": "2026-10-03T17:01:04.698Z"
+}

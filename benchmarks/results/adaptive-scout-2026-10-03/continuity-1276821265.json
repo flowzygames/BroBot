@@ -1,0 +1,2970 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "adaptive-continuity-303",
+  "commit": "7a8cd38781dbfc5dc7d736feac290056671b2650",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1276821265",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T17:03:08.474Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 76,
+      "z": -47.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 90,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "c1d509d8-35e0-4be6-b888-40e8e1b3d69c"
+  },
+  "elapsedMs": 231330,
+  "job": {
+    "version": 1,
+    "id": "c1d509d8-35e0-4be6-b888-40e8e1b3d69c",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 87,
+    "scouts": 24,
+    "clearings": 0,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": -12,
+          "y": 77,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 73,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 74,
+          "z": -53
+        }
+      ],
+      "stone": []
+    },
+    "history": [
+      {
+        "at": "2026-10-03T17:07:20.905Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-03T17:07:21.654Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: bounded search exhausted; try moving closer or a smaller radius",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-03T17:07:26.915Z",
+        "action": "explore",
+        "args": {
+          "direction": "east",
+          "distance": 12,
+          "returnable": true,
+          "alternatives": [
+            "south",
+            "north",
+            "west"
+          ]
+        },
+        "reason": "Repeated collect failure. Look for a different approach.",
+        "result": {
+          "explored": true,
+          "direction": "west",
+          "directions_tried": [
+            "east",
+            "south",
+            "north",
+            "west"
+          ],
+          "route_attempts": [
+            {
+              "direction": "east",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "west",
+              "status": "verified"
+            }
+          ],
+          "distance": 12.1,
+          "position": {
+            "x": -13.5,
+            "y": 76.02,
+            "z": -50.53
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:07:27.626Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-03T17:07:28.364Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 4,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-03T17:07:34.104Z",
+        "action": "explore",
+        "args": {
+          "direction": "west",
+          "distance": 12,
+          "returnable": true,
+          "alternatives": [
+            "north",
+            "south",
+            "east"
+          ]
+        },
+        "reason": "Repeated collect failure. Look for a different approach.",
+        "result": {
+          "explored": true,
+          "direction": "east",
+          "directions_tried": [
+            "west",
+            "north",
+            "south",
+            "east"
+          ],
+          "route_attempts": [
+            {
+              "direction": "west",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "north",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "south",
+              "status": "unverified",
+              "reason": "Return-path planning budget exhausted"
+            },
+            {
+              "direction": "east",
+              "status": "verified"
+            }
+          ],
+          "distance": 12.1,
+          "position": {
+            "x": -1.4,
+            "y": 73.92,
+            "z": -50.5
+          }
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-03T17:07:34.820Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      },
+      {
+        "at": "2026-10-03T17:07:35.572Z",
+        "action": "collect",
+        "args": {
+          "block": "stone",
+          "count": 3,
+          "radius": 32
+        },
+        "error": "Could not collect stone: no exposed loaded candidates found",
+        "result": {
+          "completed": false,
+          "requested": 3,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": false,
+          "planning_limited": false
+        }
+      }
+    ],
+    "started": "2026-10-03T17:03:44.578Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      {
+        "x": -5.47,
+        "y": 75,
+        "z": -50.5
+      },
+      {
+        "x": -1.37,
+        "y": 73,
+        "z": -50.5
+      },
+      {
+        "x": -13.5,
+        "y": 76,
+        "z": -50.53
+      }
+    ],
+    "tables": [
+      {
+        "x": -3,
+        "y": 73,
+        "z": -52
+      }
+    ],
+    "clearanceDigs": 3,
+    "ignoredTables": [],
+    "lastScoutSuccess": {
+      "completed": true,
+      "endpoint": {
+        "x": -1.4,
+        "y": 73.92,
+        "z": -50.5
+      },
+      "distance": 12,
+      "novel": false
+    },
+    "scoutAttempts": [
+      {
+        "origin": {
+          "x": -1.37,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.37,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.37,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.37,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.47,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -1.4,
+          "y": 73,
+          "z": -50.5
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "west",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "north",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "south",
+        "distance": 12,
+        "status": "unverified",
+        "exhausted": false
+      },
+      {
+        "origin": {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        },
+        "direction": "east",
+        "distance": 12,
+        "status": "verified",
+        "exhausted": false
+      }
+    ],
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -1.4,
+      "y": 73,
+      "z": -50.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 4710,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_log",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 259,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -11.02,
+          "y": 74,
+          "z": -45.25
+        },
+        "distance": 11
+      },
+      {
+        "id": 318,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.73,
+          "y": 73,
+          "z": -45.57
+        },
+        "distance": 12.4
+      },
+      {
+        "id": 4,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 43.11,
+          "y": 73,
+          "z": -47.89
+        },
+        "distance": 44.6
+      },
+      {
+        "id": 3,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 42.19,
+          "y": 69,
+          "z": -61.44
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 41,
+        "name": "chicken",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": 45.91,
+          "y": 74,
+          "z": -44.09
+        },
+        "distance": 47.8
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "c1d509d8-35e0-4be6-b888-40e8e1b3d69c",
+      "goal": "starter",
+      "context": "127.0.0.1:25577/BroBotBench",
+      "home": {
+        "position": {
+          "x": -15.5,
+          "y": 76,
+          "z": -47.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 87,
+      "scouts": 24,
+      "clearings": 0,
+      "excluded": {
+        "spruce_log": [
+          {
+            "x": -12,
+            "y": 77,
+            "z": -46
+          },
+          {
+            "x": -12,
+            "y": 73,
+            "z": -46
+          },
+          {
+            "x": -12,
+            "y": 74,
+            "z": -53
+          }
+        ],
+        "stone": []
+      },
+      "history": [
+        {
+          "at": "2026-10-03T17:07:20.905Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-03T17:07:21.654Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: bounded search exhausted; try moving closer or a smaller radius",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": true,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-03T17:07:26.915Z",
+          "action": "explore",
+          "args": {
+            "direction": "east",
+            "distance": 12,
+            "returnable": true,
+            "alternatives": [
+              "south",
+              "north",
+              "west"
+            ]
+          },
+          "reason": "Repeated collect failure. Look for a different approach.",
+          "result": {
+            "explored": true,
+            "direction": "west",
+            "directions_tried": [
+              "east",
+              "south",
+              "north",
+              "west"
+            ],
+            "route_attempts": [
+              {
+                "direction": "east",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "west",
+                "status": "verified"
+              }
+            ],
+            "distance": 12.1,
+            "position": {
+              "x": -13.5,
+              "y": 76.02,
+              "z": -50.53
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:07:27.626Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 4,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-03T17:07:28.364Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 4,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 4,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-03T17:07:34.104Z",
+          "action": "explore",
+          "args": {
+            "direction": "west",
+            "distance": 12,
+            "returnable": true,
+            "alternatives": [
+              "north",
+              "south",
+              "east"
+            ]
+          },
+          "reason": "Repeated collect failure. Look for a different approach.",
+          "result": {
+            "explored": true,
+            "direction": "east",
+            "directions_tried": [
+              "west",
+              "north",
+              "south",
+              "east"
+            ],
+            "route_attempts": [
+              {
+                "direction": "west",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "north",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "south",
+                "status": "unverified",
+                "reason": "Return-path planning budget exhausted"
+              },
+              {
+                "direction": "east",
+                "status": "verified"
+              }
+            ],
+            "distance": 12.1,
+            "position": {
+              "x": -1.4,
+              "y": 73.92,
+              "z": -50.5
+            }
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-03T17:07:34.820Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        },
+        {
+          "at": "2026-10-03T17:07:35.572Z",
+          "action": "collect",
+          "args": {
+            "block": "stone",
+            "count": 3,
+            "radius": 32
+          },
+          "error": "Could not collect stone: no exposed loaded candidates found",
+          "result": {
+            "completed": false,
+            "requested": 3,
+            "mined": 0,
+            "inventory_changes": {},
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "failures": [],
+            "search_limited": false,
+            "planning_limited": false
+          }
+        }
+      ],
+      "started": "2026-10-03T17:03:44.578Z",
+      "recoverDropIds": [],
+      "status": "blocked",
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "observedPositions": [
+        {
+          "x": -15.5,
+          "y": 76,
+          "z": -47.5
+        },
+        {
+          "x": -5.47,
+          "y": 75,
+          "z": -50.5
+        },
+        {
+          "x": -1.37,
+          "y": 73,
+          "z": -50.5
+        },
+        {
+          "x": -13.5,
+          "y": 76,
+          "z": -50.53
+        }
+      ],
+      "tables": [
+        {
+          "x": -3,
+          "y": 73,
+          "z": -52
+        }
+      ],
+      "clearanceDigs": 3,
+      "ignoredTables": [],
+      "lastScoutSuccess": {
+        "completed": true,
+        "endpoint": {
+          "x": -1.4,
+          "y": 73.92,
+          "z": -50.5
+        },
+        "distance": 12,
+        "novel": false
+      },
+      "scoutAttempts": [
+        {
+          "origin": {
+            "x": -1.37,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.37,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.37,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.37,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.47,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -1.4,
+            "y": 73,
+            "z": -50.5
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "west",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "north",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "south",
+          "distance": 12,
+          "status": "unverified",
+          "exhausted": false
+        },
+        {
+          "origin": {
+            "x": -13.5,
+            "y": 76,
+            "z": -50.53
+          },
+          "direction": "east",
+          "distance": 12,
+          "status": "verified",
+          "exhausted": false
+        }
+      ],
+      "stopping": false
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-03T17:07:38.047Z"
+}

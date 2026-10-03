@@ -90,3 +90,46 @@ test('expanded default scouts reach beyond90 with24 attempts and64-block maximum
   assert.ok(rankScouts({position:{x:192,y:64,z:0},home,index:12}).some(c=>c.direction==='east'));
   assert.ok(!rankScouts({position:{x:240,y:64,z:0},home,index:12}).some(c=>c.direction==='east'));
 });
+
+test('a fully unverified local sweep halves the next scout leg without enlarging its budget', () => {
+  const attempts=['north','east','south','west'].map(direction=>({origin:home,direction,distance:64,status:'unverified',exhausted:true}));
+  assert.equal(selectScout({position:home,home,index:12,attempts}).distance,32);
+  attempts.push({origin:home,direction:'north',distance:32,status:'unverified',exhausted:true});
+  assert.equal(selectScout({position:home,home,index:13,attempts}).distance,16);
+  for(const length of [16,8,4]) attempts.push({origin:home,direction:'north',distance:length,status:'unverified',exhausted:true});
+  assert.equal(selectScout({position:home,home,index:14,attempts}).distance,4);
+  assert.equal(selectScout({position:home,home,index:24,attempts}),null);
+});
+test('backoff requires explicit failed sweep evidence and expires after moving away', () => {
+  for(const extra of [{},{status:'cancelled',exhausted:true},{status:'verified',exhausted:true},{status:'unverified',exhausted:false},{status:'unverified',exhausted:true,distance:NaN}]){
+    const attempts=[{origin:home,direction:'north',distance:64,...extra}];
+    assert.equal(selectScout({position:home,home,index:12,attempts}).distance,64);
+  }
+  const attempts=[{origin:home,direction:'north',distance:64,status:'unverified',exhausted:true}];
+  assert.equal(selectScout({position:{...home,x:3},home,index:12,attempts}).distance,64);
+});
+test('shortened scouts retain floored endpoint boundary and returnable walking', async () => {
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const position={x:89.8,y:64,z:0.5},attempts=[{origin:position,direction:'west',distance:64,status:'unverified',exhausted:true}];
+  const vectors={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]};
+  for(const c of rankScouts({position,home,index:12,radius:90,attempts})){
+    assert.equal(c.distance,32);assert.equal(c.returnable,true);
+    const [dx,dz]=vectors[c.direction];assert.ok(Math.hypot(Math.floor(position.x+dx*c.distance),0,Math.floor(position.z+dz*c.distance))<=90);
+  }
+});
+
+test('successful reduced scouting carries forward only near the completed endpoint', () => {
+  const lastSuccess={completed:true,adaptive:true,endpoint:home,distance:8,novel:true};
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess}).distance,12);
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess:{...lastSuccess,novel:false}}).distance,8);
+  assert.equal(selectScout({position:{...home,x:3},home,index:20,lastSuccess}).distance,64);
+  for(const invalid of [{...lastSuccess,adaptive:false},{...lastSuccess,completed:false},{...lastSuccess,distance:NaN},{...lastSuccess,endpoint:{...home,z:Infinity}},{endpoint:home,status:'verified',distance:8}]){
+    assert.equal(selectScout({position:home,home,index:20,lastSuccess:invalid}).distance,64);
+  }
+});
+
+test('local failed sweep takes precedence over successful-distance continuity', () => {
+  const lastSuccess={completed:true,adaptive:true,endpoint:home,distance:8,novel:true};
+  const attempts=[{origin:home,direction:'north',distance:8,status:'unverified',exhausted:true}];
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess,attempts}).distance,4);
+});
