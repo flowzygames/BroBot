@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "scoped-305-full-known-cohort",
+  "commit": "ac551e43273920728a761878fb8aeac342171351",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "1276821265",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T18:45:28.750Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -15.5,
+      "y": 76,
+      "z": -47.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 94,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "b0285786-2b5c-41a3-b850-bc5a8c4b9613"
+  },
+  "elapsedMs": 245057,
+  "job": {
+    "version": 1,
+    "id": "b0285786-2b5c-41a3-b850-bc5a8c4b9613",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 85,
+    "scouts": 24,
+    "clearings": 0,
+    "excluded": {
+      "spruce_log": [
+        {
+          "x": -12,
+          "y": 77,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 73,
+          "z": -46
+        },
+        {
+          "x": -12,
+          "y": 74,
+          "z": -53
+        }
+      ],
+      "stone": []
+    },
+    "started": "2026-10-03T18:46:06.107Z",
+    "recoverDropIds": [],
+    "status": "blocked",
+    "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+    "observedPositions": [
+      {
+        "x": -15.5,
+        "y": 76,
+        "z": -47.5
+      },
+      {
+        "x": -5.47,
+        "y": 75,
+        "z": -50.5
+      },
+      {
+        "x": -1.24,
+        "y": 73,
+        "z": -50.7
+      },
+      {
+        "x": -13.5,
+        "y": 76,
+        "z": -50.52
+      }
+    ],
+    "tables": [
+      {
+        "x": -3,
+        "y": 73,
+        "z": -52
+      }
+    ],
+    "clearanceDigs": 1,
+    "ignoredTables": [],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": true,
+      "endpoint": {
+        "x": -13.5,
+        "y": 76.02,
+        "z": -50.52
+      },
+      "distance": 12,
+      "novel": false
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -13.5,
+      "y": 76,
+      "z": -50.52
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 4994,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "spruce_log",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 318,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.94,
+          "y": 73,
+          "z": -45.43
+        },
+        "distance": 5.9
+      },
+      {
+        "id": 314,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -11.72,
+          "y": 74,
+          "z": -45.02
+        },
+        "distance": 6.1
+      },
+      {
+        "id": 207,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -12.87,
+          "y": 70,
+          "z": -44.35
+        },
+        "distance": 8.6
+      },
+      {
+        "id": 366,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -53.29,
+          "y": 63,
+          "z": -60.36
+        },
+        "distance": 43
+      },
+      {
+        "id": 736,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -46.4,
+          "y": 61.2,
+          "z": -74.4
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 648,
+        "name": "salmon",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -50,
+          "y": 53.6,
+          "z": -57
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 365,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -53.89,
+          "y": 63,
+          "z": -63.19
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 695,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -31.5,
+          "y": 39,
+          "z": -67.5
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 612,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -55.85,
+          "y": 63,
+          "z": -57.7
+        },
+        "distance": 44.9
+      },
+      {
+        "id": 611,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -56.81,
+          "y": 63,
+          "z": -58.8
+        },
+        "distance": 46
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+  "finished": "2026-10-03T18:50:13.794Z",
+  "recordNote": "Summary omits duplicate diagnostic trace, action history and scout probe list; original full harness record retained locally. No failed trials omitted or replaced."
+}

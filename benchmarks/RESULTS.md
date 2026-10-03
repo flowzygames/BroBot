@@ -1,3 +1,13 @@
+# Scoped scouting cohort — October 3, 2026
+
+Application `ac551e43273920728a761878fb8aeac342171351`: 305 automated checks, 17 prepared live phases, and a separate 3/3 original-world regression suite. The full twenty known-world evaluation completed **8/20** with no interrupted or replaced cases. This is below the previous expanded cohort’s 9/20 and the older 90-block cohort’s 12/20.
+
+Two previous failures passed (454806089, 1041160109); three previous successes failed (1587439118, 355620996, 1244186709). Same seeds do not mean identical trajectories or mob timing; no isolated causal claim. The difficult 1276821265 world still exhausted exploration.
+
+[Every outcome, frozen source, conditions and limitations](results/scoped-cohort-2026-10-03/README.md). The website download remains 293; this is not stable 1.0.
+
+---
+
 # Wood prerequisite and powder safety checkpoint
 
 Frozen source9633598 has293 passing automated checks. The starter now requests only the remaining wooden prerequisites instead of always collecting another3 logs before its first pickaxe. The powder-snow warning from PR11 is included. This remains a development preview.
