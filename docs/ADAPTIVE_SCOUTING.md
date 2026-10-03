@@ -62,3 +62,25 @@ shorter than the original schedule for that scout. Uninterrupted open-terrain
 scouting therefore preserves the old 12,12,24,24,36,36 schedule. Additional
 regressions cover this scope and failed-sweep precedence. No claim is made
 that shorter legs solve the remaining canopy/resource-access limitation.
+
+## Scoped candidate verification
+
+Application source d13c245070d7d9fc9b5431bb8f8fddec43d3405a passes all
+305 automated checks and all 17 prepared live integration phases. Its original
+three known natural worlds completed the fixed 300-second protocol:
+
+| Seed | Outcome | Seconds |
+| --- | --- | ---: |
+| 718224 | Starter kit and return | 100.973 |
+| 42 | Starter kit and return | 133.938 |
+| 20260930 | Starter kit and return | 76.810 |
+
+All began with empty survival inventory in fresh worlds and ended alive, with
+both required items, within the completion distance of home. The consistency
+reporter accepted all three matching clean-source records. These are known
+regression cases, not proof of general reliability. The scoped candidate has
+not run the complete twenty-world cohort or the difficult canopy seed. The
+previous two failed canopy experiments remain above and in the evidence folder.
+GitHub CI passed remote 1cd20038d13102aebaaccf9440302941a24d8f18, whose tree
+matches this tested application source. Later evidence-only commits do not
+change that application source.
