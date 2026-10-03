@@ -11,7 +11,7 @@ export function recordScoutObservation(history, position) {
   return points.slice(-64);
 }
 
-export function rankScouts({ position, home, index, observations = [], attempts = [], radius = STARTER_MOVEMENT_RADIUS, maxScouts = STARTER_SCOUT_LIMIT }) {
+export function rankScouts({ position, home, index, observations = [], attempts = [], lastSuccess = null, radius = STARTER_MOVEMENT_RADIUS, maxScouts = STARTER_SCOUT_LIMIT }) {
   if (!valid(position) || !valid(home) || !Number.isSafeInteger(index) || index < 0 || index >= maxScouts || !Number.isFinite(radius) || radius <= 0 || radius > STARTER_MOVEMENT_RADIUS || !Number.isSafeInteger(maxScouts) || maxScouts < 1 || maxScouts > STARTER_SCOUT_LIMIT) return [];
   const plannedTravel = Math.min(64, 12 * (1 + Math.floor(index / 2)));
   const points = recordScoutObservation(observations, position);
@@ -23,9 +23,13 @@ export function rankScouts({ position, home, index, observations = [], attempts 
   const exhausted = tried.filter(a => a.exhausted === true && a.status === 'unverified'
     && Number.isInteger(a.distance) && a.distance >= 4 && a.distance <= 64
     && distance(a.origin, position) <= 2);
+  const continuity = lastSuccess && valid(lastSuccess.endpoint)
+    && Number.isInteger(lastSuccess.distance) && lastSuccess.distance >= 4 && lastSuccess.distance <= 64
+    && lastSuccess.completed === true && lastSuccess.adaptive === true && distance(lastSuccess.endpoint, position) <= 2
+    ? Math.min(64, lastSuccess.distance + (lastSuccess.novel === true ? 4 : 0)) : plannedTravel;
   const travel = exhausted.length
-    ? Math.min(plannedTravel, Math.max(4, Math.floor(Math.min(...exhausted.map(a => a.distance)) / 2)))
-    : plannedTravel;
+    ? Math.min(plannedTravel, continuity, Math.max(4, Math.floor(Math.min(...exhausted.map(a => a.distance)) / 2)))
+    : Math.min(plannedTravel, continuity);
   const candidates = directions.map((direction, order) => {
     const [dx, dz] = offsets[direction];
     const target = { x: position.x + dx * travel, y: position.y, z: position.z + dz * travel };

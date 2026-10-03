@@ -117,3 +117,19 @@ test('shortened scouts retain floored endpoint boundary and returnable walking',
     const [dx,dz]=vectors[c.direction];assert.ok(Math.hypot(Math.floor(position.x+dx*c.distance),0,Math.floor(position.z+dz*c.distance))<=90);
   }
 });
+
+test('successful reduced scouting carries forward only near the completed endpoint', () => {
+  const lastSuccess={completed:true,adaptive:true,endpoint:home,distance:8,novel:true};
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess}).distance,12);
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess:{...lastSuccess,novel:false}}).distance,8);
+  assert.equal(selectScout({position:{...home,x:3},home,index:20,lastSuccess}).distance,64);
+  for(const invalid of [{...lastSuccess,adaptive:false},{...lastSuccess,completed:false},{...lastSuccess,distance:NaN},{...lastSuccess,endpoint:{...home,z:Infinity}},{endpoint:home,status:'verified',distance:8}]){
+    assert.equal(selectScout({position:home,home,index:20,lastSuccess:invalid}).distance,64);
+  }
+});
+
+test('local failed sweep takes precedence over successful-distance continuity', () => {
+  const lastSuccess={completed:true,adaptive:true,endpoint:home,distance:8,novel:true};
+  const attempts=[{origin:home,direction:'north',distance:8,status:'unverified',exhausted:true}];
+  assert.equal(selectScout({position:home,home,index:20,lastSuccess,attempts}).distance,4);
+});

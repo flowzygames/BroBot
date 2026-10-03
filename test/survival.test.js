@@ -548,7 +548,7 @@ test('starter wood deficit retains missing table and stick requirements', () => 
   assert.equal(nextStarterStep({...state,inventory:[]},job,{wood:'spruce'}).args.count,3);
 });
 
-test('unverified whole scout sweeps back off locally and a shorter successful move resets distance', async () => {
+test('unverified whole scout sweeps back off locally and a shorter successful move grows distance gradually', async () => {
   const f=fixture({maxSteps:4}),distances=[];f.job.observe=async()=>({});
   f.job.execute=async(name,args)=>{
     assert.equal(name,'explore');assert.equal(args.returnable,true);distances.push(args.distance);
@@ -558,7 +558,7 @@ test('unverified whole scout sweeps back off locally and a shorter successful mo
     return {explored:true,distance:6,directions_tried:[args.direction],route_attempts:[{direction:args.direction,status:'verified'}]};
   };
   f.job.start();await f.job.promise;
-  assert.deepEqual(distances,[12,6,24,12]);
+  assert.deepEqual(distances,[12,6,10,5]);
   assert.equal(f.job.state().scouts,4);assert.equal(f.job.state().status,'blocked');
 });
 test('incomplete or cancelled planning sweeps never shrink subsequent scout legs', async () => {
@@ -584,4 +584,31 @@ test('a boundary-constrained single-direction sweep can trigger local backoff', 
   f.job.observe=async()=>{f.state.position.x=256.4;return {}};
   f.job.start();await f.job.promise;
   assert.deepEqual(distances,[12,6]);
+});
+
+test('scout continuity records actual completed endpoints and distinguishes revisits', async () => {
+  const f=fixture({maxSteps:2});f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    assert.equal(name,'explore');f.state.position.x=f.state.position.x===0.5?12.5:0.5;
+    return {explored:true,distance:12};
+  };
+  f.job.start();await f.job.promise;
+  assert.deepEqual(f.job.state().lastScoutSuccess.endpoint,{x:0.5,y:64,z:0.5});
+  assert.equal(f.job.state().lastScoutSuccess.novel,false);
+});
+test('a claimed scout or a verified route without actual displacement cannot establish continuity', async () => {
+  const f=fixture({maxSteps:1});f.job.observe=async()=>({});
+  f.job.execute=async()=>({explored:true,distance:12,route_attempts:[{direction:'north',status:'verified'}]});
+  f.job.start();await f.job.promise;assert.equal(f.job.state().lastScoutSuccess,undefined);
+});
+
+test('uninterrupted successful scouting preserves the original distance schedule', async () => {
+  const f=fixture({maxSteps:6}),distances=[];f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    distances.push(args.distance);f.state.position.x+=args.distance;
+    return {explored:true,distance:args.distance};
+  };
+  f.job.start();await f.job.promise;
+  assert.deepEqual(distances,[12,12,24,24,36,36]);
+  assert.equal(f.job.state().lastScoutSuccess.adaptive,false);
 });

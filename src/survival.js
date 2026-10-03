@@ -190,7 +190,7 @@ export class SurvivalJob {
         if (this.job.scouts >= STARTER_SCOUT_LIMIT) throw new Error(`Exploration budget exhausted: ${decision.scout}`);
         const origin = this.snapshot().position;
         const choices = rankScouts({ position: origin, home: this.job.home.position, index: this.job.scouts,
-          observations: this.job.observedPositions, attempts: this.job.scoutAttempts });
+          observations: this.job.observedPositions, attempts: this.job.scoutAttempts, lastSuccess: this.job.lastScoutSuccess });
         if (!choices.length) throw new Error('No bounded exploration target remains inside the job area.');
         this.job.scouts++;
         decision = { ...action('explore', { ...choices[0], alternatives: choices.slice(1).map(c => c.direction) }, decision.scout), scoutOrigin: { ...origin } };
@@ -228,6 +228,13 @@ export class SurvivalJob {
         scoutRecorded = true;
         const allowed = [decision.args.direction, ...(decision.args.alternatives ?? [])];
         const tried = Array.isArray(result?.directions_tried) ? result.directions_tried.filter(d => allowed.includes(d)).slice(0, 4) : [decision.args.direction];
+        if (result?.explored === true && Number.isFinite(result.distance) && result.distance >= decision.args.distance - 2) {
+          const endpoint = this.snapshot().position;
+          if (endpoint && ['x','y','z'].every(k => Number.isFinite(endpoint[k])) && distance(endpoint, decision.scoutOrigin ?? before.position) >= decision.args.distance - 2) {
+            this.job.lastScoutSuccess = { completed: true, adaptive: decision.args.distance < Math.min(64, 12 * (1 + Math.floor((this.job.scouts - 1) / 2))), endpoint: { ...endpoint }, distance: decision.args.distance,
+              novel: !(this.job.observedPositions ?? []).some(p => distance(p, endpoint) <= 4) };
+          }
+        }
         const outcomes = Array.isArray(result?.route_attempts) ? result.route_attempts.filter(a => a && typeof a === 'object') : [];
         const exhausted = allowed.every(direction => outcomes.some(a => a.direction === direction && a.status === 'unverified'))
           && !outcomes.some(a => a.status === 'verified' || a.status === 'cancelled');
