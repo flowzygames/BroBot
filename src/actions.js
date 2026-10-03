@@ -289,8 +289,15 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const attempts = new Map()
     const failures = []
     let planningLimited = (ctx.planningUsed ?? 0) >= 7000
+    let pickupLimited = false
+    // Shared soft allowance for all pickup passes in this physical action.
+    // Yield partial evidence before repeated local pursuits consume the runner timeout.
+    const started = performance.now()
+    const remaining = () => Math.max(0, 8000 - (ctx.pickupUsed ?? 0) - (performance.now() - started))
+    try {
     for (let n = 0; n < 24 && !planningLimited; n++) {
       checked(ctx)
+      if (remaining() <= 0) { pickupLimited = drops().length > 0; break }
       const target = drops().filter(e => (attempts.get(e.id) ?? 0) < 3).sort((a, b) => (attempts.get(a.id) ?? 0) - (attempts.get(b.id) ?? 0) || a.position.distanceTo(bot.entity.position) - b.position.distanceTo(bot.entity.position))[0]
       if (!target) break
       attempts.set(target.id, (attempts.get(target.id) ?? 0) + 1)
@@ -314,19 +321,22 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         // Give each drop one destination attempt before retrying a blocked
         // neighbor. One unreachable item must not monopolize the shared budget.
         const p = destinations[(attempts.get(target.id) - 1) % Math.min(3, destinations.length)]
-        const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p)
+        const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, remaining()))
         checked(ctx)
-        await pursueDroppedItem(bot, goal, target, { signal: ctx.signal })
+        if (remaining() <= 0) { pickupLimited = drops().length > 0; break }
+        await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, remaining()) })
         checked(ctx)
-        await pause(ctx, 200)
+        await pause(ctx, Math.min(200, remaining()))
       } catch (error) {
         checked(ctx)
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         failures.push({ id: target.id, error: error.message, code: error.code ?? null })
-        if (!planningLimited) await pause(ctx, 150)
+        if (!planningLimited && remaining() > 0) await pause(ctx, Math.min(150, remaining()))
       }
     }
-    return { inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: failures, planning_limited: planningLimited }
+    pickupLimited ||= remaining() <= 0 && drops().length > 0
+    return { inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: failures, planning_limited: planningLimited, pickup_limited: pickupLimited }
+    } finally { ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
   }
 
   async function collect (args, ctx) {
@@ -398,7 +408,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         consecutiveFailures = 0
         await pause(ctx, 300)
         pickup = await pickupInternal(ctx, 6)
-        if (pickup.planning_limited) { planningLimited = true; break }
+        if (pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; break }
       } catch (error) {
         checked(ctx)
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
@@ -407,8 +417,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (++consecutiveFailures >= 8) break
       }
     }
-    if (mined && !planningLimited) { await pause(ctx, 300); pickup = await pickupInternal(ctx, 12) }
-    const result = { completed: mined === count && !planningLimited && !pickup.planning_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited }
+    if (mined && !planningLimited && !pickup.pickup_limited) { await pause(ctx, 300); pickup = await pickupInternal(ctx, 12) }
+    const result = { completed: mined === count && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
   }

@@ -1,0 +1,737 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-budget-308-regression",
+  "commit": "ee5084117f8ca492549759b2ec78ef41a18a2b38",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "718224",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T19:17:56.560Z",
+  "status": "passed",
+  "passed": true,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 68,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 109,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 47,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 19.5,
+          "y": 58.02,
+          "z": -27.5
+        },
+        "distance": 35.3
+      },
+      {
+        "id": 7,
+        "name": "cow",
+        "type": "animal",
+        "username": null,
+        "position": {
+          "x": -30,
+          "y": 72,
+          "z": 22
+        },
+        "distance": 37.5
+      },
+      {
+        "id": 48,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 22.5,
+          "y": 58.02,
+          "z": -28.5
+        },
+        "distance": 37.7
+      },
+      {
+        "id": 53,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 61,
+          "z": -28.5
+        },
+        "distance": 38.3
+      },
+      {
+        "id": 49,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 21.5,
+          "y": 58.02,
+          "z": -30.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 72,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 25.5,
+          "y": 52.02,
+          "z": -24.5
+        },
+        "distance": 38.8
+      },
+      {
+        "id": 54,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.5,
+          "y": 61,
+          "z": -28.5
+        },
+        "distance": 38.9
+      },
+      {
+        "id": 56,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.5,
+          "y": 61,
+          "z": -30.5
+        },
+        "distance": 39.2
+      },
+      {
+        "id": 52,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.5,
+          "y": 61,
+          "z": -29.5
+        },
+        "distance": 39.7
+      },
+      {
+        "id": 55,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.5,
+          "y": 61,
+          "z": -31.5
+        },
+        "distance": 41.2
+      },
+      {
+        "id": 102,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 30.5,
+          "y": 55,
+          "z": -25.5
+        },
+        "distance": 41.8
+      },
+      {
+        "id": 74,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 24.5,
+          "y": 52.02,
+          "z": -30.5
+        },
+        "distance": 42.3
+      },
+      {
+        "id": 45,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 33.5,
+          "y": 60,
+          "z": -25.5
+        },
+        "distance": 42.8
+      },
+      {
+        "id": 31,
+        "name": "skeleton",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 32.5,
+          "y": 40,
+          "z": 8.5
+        },
+        "distance": 43.3
+      },
+      {
+        "id": 73,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 25.5,
+          "y": 52.02,
+          "z": -31.5
+        },
+        "distance": 43.6
+      },
+      {
+        "id": 101,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 31.5,
+          "y": 55,
+          "z": -27.5
+        },
+        "distance": 43.7
+      },
+      {
+        "id": 151,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 33.5,
+          "y": 40,
+          "z": 7.5
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 46,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 33.5,
+          "y": 60,
+          "z": -29.5
+        },
+        "distance": 45.3
+      },
+      {
+        "id": 44,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 38.5,
+          "y": 60,
+          "z": -23.5
+        },
+        "distance": 45.7
+      },
+      {
+        "id": 43,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 39.5,
+          "y": 60,
+          "z": -23.5
+        },
+        "distance": 46.5
+      },
+      {
+        "id": 75,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 36.5,
+          "y": 56,
+          "z": -27.5
+        },
+        "distance": 47.2
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "226f690f-704d-402b-aafe-7a220e7392e3"
+  },
+  "elapsedMs": 106281,
+  "job": {
+    "version": 1,
+    "id": "226f690f-704d-402b-aafe-7a220e7392e3",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 15,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {
+      "oak_log": [],
+      "stone": []
+    },
+    "started": "2026-10-03T19:18:32.222Z",
+    "recoverDropIds": [],
+    "status": "complete",
+    "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 68,
+        "z": 0.5
+      },
+      {
+        "x": -31.5,
+        "y": 72,
+        "z": 24.5
+      },
+      {
+        "x": -6.63,
+        "y": 74,
+        "z": 32.7
+      },
+      {
+        "x": -4.95,
+        "y": 74,
+        "z": 34.7
+      },
+      {
+        "x": -3.5,
+        "y": 74,
+        "z": 36.08
+      }
+    ],
+    "tables": [
+      {
+        "x": -32,
+        "y": 72,
+        "z": 23
+      }
+    ],
+    "clearanceDigs": 1,
+    "ignoredTables": [],
+    "evidence": {
+      "stone_pickaxe": 1,
+      "furnace": 1,
+      "homeDistance": 0.18384776310850237
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.63,
+      "y": 68,
+      "z": 0.37
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 2229,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "stone_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "furnace",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 12
+      },
+      {
+        "name": "cobblestone",
+        "count": 1,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 48,
+        "name": "dolphin",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 22.73,
+          "y": 55.89,
+          "z": -23.45
+        },
+        "distance": 34.7
+      },
+      {
+        "id": 460,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.5,
+          "y": 58.08,
+          "z": -32.5
+        },
+        "distance": 40.8
+      },
+      {
+        "id": 461,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.48,
+          "y": 57.54,
+          "z": -32.59
+        },
+        "distance": 41.6
+      },
+      {
+        "id": 453,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -20.35,
+          "y": 56.19,
+          "z": -34.29
+        },
+        "distance": 42.2
+      },
+      {
+        "id": 452,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.78,
+          "y": 57.21,
+          "z": -33.82
+        },
+        "distance": 42.3
+      },
+      {
+        "id": 450,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -19.08,
+          "y": 59.18,
+          "z": -36.92
+        },
+        "distance": 43.1
+      },
+      {
+        "id": 467,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -20.5,
+          "y": 61.17,
+          "z": -36.67
+        },
+        "distance": 43.2
+      },
+      {
+        "id": 466,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.53,
+          "y": 56.84,
+          "z": -34.54
+        },
+        "distance": 43.4
+      },
+      {
+        "id": 451,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -20.44,
+          "y": 58.61,
+          "z": -36.54
+        },
+        "distance": 43.5
+      },
+      {
+        "id": 464,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.53,
+          "y": 57.48,
+          "z": -35.23
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 454,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -21.15,
+          "y": 57.03,
+          "z": -36.04
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 465,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.08,
+          "y": 56.31,
+          "z": -35.27
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 449,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.49,
+          "y": 61.33,
+          "z": -38.6
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 448,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.47,
+          "y": 60.1,
+          "z": -38.66
+        },
+        "distance": 44.2
+      },
+      {
+        "id": 447,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.19,
+          "y": 61.72,
+          "z": -39.2
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 457,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -23.5,
+          "y": 62.18,
+          "z": -36.5
+        },
+        "distance": 44.4
+      },
+      {
+        "id": 360,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": -21.69,
+          "y": 62.47,
+          "z": -37.89
+        },
+        "distance": 44.6
+      },
+      {
+        "id": 458,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.5,
+          "y": 61.51,
+          "z": -36.5
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 462,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.99,
+          "y": 56.45,
+          "z": -36.27
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 494,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -36.5,
+          "y": 43,
+          "z": 11.5
+        },
+        "distance": 46.1
+      },
+      {
+        "id": 493,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -36.5,
+          "y": 43,
+          "z": 12.5
+        },
+        "distance": 46.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": true,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Secure food and shelter, mine and smelt iron, equip armor and a shield, and gather portal materials. Obsidian mining requires a diamond or netherite pickaxe; a found portal is another route.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+  "finished": "2026-10-03T19:20:20.765Z",
+  "recordNote": "Summary omits duplicate trace/action history. Full original retained in local isolated harness directory. This selected case is not a substituted cohort result."
+}

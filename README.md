@@ -1,4 +1,4 @@
-> Latest source checkpoint: 305 automated checks and 17 prepared live phases; full known-world cohort **8/20**, versus the prior 287-check cohort’s 9/20. This is not an overall reliability improvement. [All results and limits](benchmarks/results/scoped-cohort-2026-10-03/README.md). The website download remains the previous 293-check package.
+> Latest source checkpoint: 308 automated checks and 17 prepared live phases; 4/5 selected natural-world trials, including one hostile-stop failure. [Pickup evidence](benchmarks/results/pickup-budget-2026-10-03/README.md). The latest full cohort belongs to the prior 305 source: **8/20**. Website download remains the previous 293-check package.
 
 # BroBot
 

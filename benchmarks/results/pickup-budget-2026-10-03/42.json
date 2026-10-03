@@ -1,0 +1,856 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "protocol": "trailhead-v1",
+  "label": "pickup-budget-308-regression",
+  "commit": "ee5084117f8ca492549759b2ec78ef41a18a2b38",
+  "dirty": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "seed": "42",
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "started": "2026-10-03T19:20:29.434Z",
+  "status": "failed",
+  "passed": false,
+  "initial": {
+    "connected": true,
+    "position": {
+      "x": -31.5,
+      "y": 71,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 91,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 49,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -22.93,
+          "y": 60.41,
+          "z": -20.72
+        },
+        "distance": 25.2
+      },
+      {
+        "id": 129,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -52.5,
+          "y": 59,
+          "z": -13.5
+        },
+        "distance": 27.9
+      },
+      {
+        "id": 104,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -25.47,
+          "y": 43.13,
+          "z": -4.25
+        },
+        "distance": 28.9
+      },
+      {
+        "id": 105,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -24.78,
+          "y": 43.07,
+          "z": -3.36
+        },
+        "distance": 29
+      },
+      {
+        "id": 59,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -21.87,
+          "y": 62.01,
+          "z": -25.33
+        },
+        "distance": 29
+      },
+      {
+        "id": 106,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -23.3,
+          "y": 44.1,
+          "z": -6.75
+        },
+        "distance": 29
+      },
+      {
+        "id": 47,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.4,
+          "y": 63,
+          "z": -27.21
+        },
+        "distance": 31.7
+      },
+      {
+        "id": 62,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.48,
+          "y": 63.47,
+          "z": -26.32
+        },
+        "distance": 32.1
+      },
+      {
+        "id": 61,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.5,
+          "y": 62,
+          "z": -26.5
+        },
+        "distance": 32.6
+      },
+      {
+        "id": 51,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -16.83,
+          "y": 60.29,
+          "z": -26.65
+        },
+        "distance": 32.7
+      },
+      {
+        "id": 55,
+        "name": "falling_block",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -15.5,
+          "y": 61,
+          "z": -26.5
+        },
+        "distance": 32.9
+      },
+      {
+        "id": 90,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -12.81,
+          "y": 31.41,
+          "z": 1.81
+        },
+        "distance": 43.8
+      },
+      {
+        "id": 93,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -12.65,
+          "y": 31.21,
+          "z": 0.67
+        },
+        "distance": 44
+      },
+      {
+        "id": 92,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -12.03,
+          "y": 30.99,
+          "z": 2.13
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 91,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -11.93,
+          "y": 31,
+          "z": 1.45
+        },
+        "distance": 44.5
+      },
+      {
+        "id": 94,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -11.57,
+          "y": 31.03,
+          "z": -0.43
+        },
+        "distance": 44.7
+      },
+      {
+        "id": 95,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -11.02,
+          "y": 30.99,
+          "z": 1.34
+        },
+        "distance": 45
+      },
+      {
+        "id": 89,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -4.5,
+          "y": 34.42,
+          "z": 5.5
+        },
+        "distance": 45.7
+      },
+      {
+        "id": 107,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 9.59,
+          "y": 49.71,
+          "z": 5.91
+        },
+        "distance": 46.6
+      },
+      {
+        "id": 110,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 9.5,
+          "y": 51,
+          "z": 12.5
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 109,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 9.67,
+          "y": 50.41,
+          "z": 10.96
+        },
+        "distance": 47.2
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "command": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "312c9a25-b9e0-4bbd-a4cb-dcac3d483a8e"
+  },
+  "elapsedMs": 101310,
+  "job": {
+    "version": 1,
+    "id": "312c9a25-b9e0-4bbd-a4cb-dcac3d483a8e",
+    "goal": "starter",
+    "context": "127.0.0.1:25577/BroBotBench",
+    "home": {
+      "position": {
+        "x": -31.5,
+        "y": 71,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 11,
+    "scouts": 1,
+    "clearings": 0,
+    "excluded": {
+      "dark_oak_log": [],
+      "stone": [
+        {
+          "x": -34,
+          "y": 68,
+          "z": -15
+        },
+        {
+          "x": -35,
+          "y": 68,
+          "z": -16
+        },
+        {
+          "x": -34,
+          "y": 65,
+          "z": -9
+        },
+        {
+          "x": -36,
+          "y": 65,
+          "z": -9
+        },
+        {
+          "x": -34,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": -33,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": -35,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": -36,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": -32,
+          "y": 64,
+          "z": -8
+        },
+        {
+          "x": -31,
+          "y": 64,
+          "z": -9
+        },
+        {
+          "x": -37,
+          "y": 64,
+          "z": -10
+        },
+        {
+          "x": -41,
+          "y": 64,
+          "z": -6
+        },
+        {
+          "x": -34,
+          "y": 63,
+          "z": -7
+        },
+        {
+          "x": -35,
+          "y": 63,
+          "z": -8
+        },
+        {
+          "x": -33,
+          "y": 63,
+          "z": -7
+        },
+        {
+          "x": -34,
+          "y": 63,
+          "z": -6
+        },
+        {
+          "x": -35,
+          "y": 64,
+          "z": -17
+        },
+        {
+          "x": -35,
+          "y": 63,
+          "z": -17
+        }
+      ]
+    },
+    "started": "2026-10-03T19:21:10.388Z",
+    "recoverDropIds": [
+      702,
+      725
+    ],
+    "status": "blocked",
+    "reason": "A hostile mob is too close for unarmored starter gathering.",
+    "observedPositions": [
+      {
+        "x": -31.5,
+        "y": 71,
+        "z": 0.5
+      },
+      {
+        "x": -34.25,
+        "y": 73,
+        "z": -7.49
+      },
+      {
+        "x": -34.43,
+        "y": 73,
+        "z": -19.32
+      }
+    ],
+    "tables": [
+      {
+        "x": -36,
+        "y": 73,
+        "z": -9
+      }
+    ],
+    "lastScoutSuccess": {
+      "completed": true,
+      "adaptive": false,
+      "endpoint": {
+        "x": -34.43,
+        "y": 73,
+        "z": -19.32
+      },
+      "distance": 12,
+      "novel": true
+    },
+    "stopping": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": -34.5,
+      "y": 64,
+      "z": -17.49
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 2131,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "dark_oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      },
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 4
+      },
+      {
+        "name": "cobblestone",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_pickaxe",
+    "entities": [
+      {
+        "id": 227,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -35.76,
+          "y": 63,
+          "z": -18.48
+        },
+        "distance": 1.9
+      },
+      {
+        "id": 702,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -35.12,
+          "y": 63,
+          "z": -16.43
+        },
+        "distance": 1.6
+      },
+      {
+        "id": 725,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -36.6,
+          "y": 63,
+          "z": -16.12
+        },
+        "distance": 2.7
+      },
+      {
+        "id": 175,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -43.31,
+          "y": 59,
+          "z": -12.24
+        },
+        "distance": 11.4
+      },
+      {
+        "id": 49,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -22.44,
+          "y": 62.45,
+          "z": -19.53
+        },
+        "distance": 12.3
+      },
+      {
+        "id": 59,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -21.87,
+          "y": 62.5,
+          "z": -25.03
+        },
+        "distance": 14.8
+      },
+      {
+        "id": 174,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -50.51,
+          "y": 61.54,
+          "z": -15.41
+        },
+        "distance": 16.3
+      },
+      {
+        "id": 228,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -51.23,
+          "y": 62,
+          "z": -19.19
+        },
+        "distance": 16.9
+      },
+      {
+        "id": 176,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -51.2,
+          "y": 61,
+          "z": -15.7
+        },
+        "distance": 17.1
+      },
+      {
+        "id": 47,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -18.4,
+          "y": 63,
+          "z": -27.21
+        },
+        "distance": 18.8
+      },
+      {
+        "id": 62,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": -16.41,
+          "y": 62.32,
+          "z": -26.87
+        },
+        "distance": 20.4
+      },
+      {
+        "id": 240,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -54.59,
+          "y": 57.7,
+          "z": -14.7
+        },
+        "distance": 21.2
+      },
+      {
+        "id": 129,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -57.34,
+          "y": 56.2,
+          "z": -12.4
+        },
+        "distance": 24.7
+      },
+      {
+        "id": 106,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -25.41,
+          "y": 44.1,
+          "z": -4.35
+        },
+        "distance": 25.5
+      },
+      {
+        "id": 105,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -29.51,
+          "y": 43.1,
+          "z": -1.97
+        },
+        "distance": 26.5
+      },
+      {
+        "id": 104,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": -26.34,
+          "y": 43.03,
+          "z": -3.3
+        },
+        "distance": 26.6
+      },
+      {
+        "id": 614,
+        "name": "creeper",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": -50.52,
+          "y": 60,
+          "z": 11.18
+        },
+        "distance": 33.1
+      },
+      {
+        "id": 626,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -22.25,
+          "y": 40,
+          "z": 1.92
+        },
+        "distance": 33.2
+      },
+      {
+        "id": 680,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.51,
+          "y": 41.13,
+          "z": 5.01
+        },
+        "distance": 33.6
+      },
+      {
+        "id": 649,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.16,
+          "y": 40.92,
+          "z": 1.1
+        },
+        "distance": 33.8
+      },
+      {
+        "id": 612,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.18,
+          "y": 40.27,
+          "z": 0.45
+        },
+        "distance": 33.9
+      },
+      {
+        "id": 620,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -18.91,
+          "y": 40,
+          "z": 1.34
+        },
+        "distance": 34.3
+      },
+      {
+        "id": 552,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -24.48,
+          "y": 41.42,
+          "z": 6.41
+        },
+        "distance": 34.4
+      },
+      {
+        "id": 560,
+        "name": "tropical_fish",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": -19.54,
+          "y": 40.01,
+          "z": 2.09
+        },
+        "distance": 34.4
+      }
+    ],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    }
+  },
+  "reason": "A hostile mob is too close for unarmored starter gathering.",
+  "finished": "2026-10-03T19:22:54.190Z",
+  "recordNote": "Summary omits duplicate trace/action history. Full original retained in local isolated harness directory. This selected case is not a substituted cohort result."
+}
