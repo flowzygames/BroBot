@@ -27,31 +27,43 @@ export function rankScouts({ position, home, index, observations = [], attempts 
     && Number.isInteger(lastSuccess.distance) && lastSuccess.distance >= 4 && lastSuccess.distance <= 64
     && lastSuccess.completed === true && lastSuccess.adaptive === true && distance(lastSuccess.endpoint, position) <= 2
     ? Math.min(64, lastSuccess.distance + (lastSuccess.novel === true ? 4 : 0)) : plannedTravel;
-  const travel = exhausted.length
+  const preferredTravel = exhausted.length
     ? Math.min(plannedTravel, continuity, Math.max(4, Math.floor(Math.min(...exhausted.map(a => a.distance)) / 2)))
     : Math.min(plannedTravel, continuity);
-  const candidates = directions.map((direction, order) => {
-    const [dx, dz] = offsets[direction];
-    const target = { x: position.x + dx * travel, y: position.y, z: position.z + dz * travel };
-    const floored = Object.fromEntries(Object.entries(target).map(([k, v]) => [k, Math.floor(v)]));
-    if (distance(target, home) > radius || distance(floored, home) > radius) return null;
-    // Fixed 8-block lattice estimates newly searched horizontal area inside the
-    // existing job boundary. It reads no hidden terrain, resource or seed data.
-    // Elevation, loaded chunks and walkability remain execution-time checks.
-    let coverage = 0;
-    const edge = Math.floor(radius / 8) * 8;
-    for (let x = -edge; x <= edge; x += 8) for (let z = -edge; z <= edge; z += 8) {
-      if (x * x + z * z > radius * radius) continue;
-      const px = home.x + x, pz = home.z + z;
-      if (Math.hypot(px - target.x, pz - target.z) > 48) continue;
-      if (points.every(p => Math.hypot(px - p.x, pz - p.z) > 48)) coverage++;
-    }
-    // A failed or partial move is not a visited destination. Try another
-    // direction first when still near the same origin, even at a new distance.
-    const repeated = tried.filter(a => a.direction === direction && valid(a.origin) && distance(a.origin, position) <= 4).length;
-    return { direction, distance: travel, returnable: true, coverage, repeated, order: (order - index % 4 + 4) % 4 };
-  }).filter(Boolean);
-  candidates.sort((a, b) => a.repeated - b.repeated || b.coverage - a.coverage || a.order - b.order);
-  return candidates.map(c => ({ direction: c.direction, distance: c.distance, returnable: true }));
+  // Do not keep retrying an unchanged local target merely because the route
+  // selector eventually accepts it as a fallback. Try bounded unspent lengths.
+  const spent = (direction, length) => tried.some(a => a.direction === direction && a.distance === length
+    && distance(a.origin, position) <= 2 && (a.status === 'unverified'
+      || (a.status === 'verified' && a.completed === true && a.novel === false && valid(a.endpoint))));
+  const lengths = [...new Set([preferredTravel,
+    ...Array.from({length:Math.floor(plannedTravel/4)},(_,i)=>(i+1)*4).filter(n=>n>preferredTravel),
+    ...Array.from({length:Math.floor(plannedTravel/4)},(_,i)=>(i+1)*4).filter(n=>n<preferredTravel)])];
+  for (const travel of lengths) {
+    const candidates = directions.map((direction, order) => {
+      if (spent(direction, travel)) return null;
+      const [dx, dz] = offsets[direction];
+      const target = { x: position.x + dx * travel, y: position.y, z: position.z + dz * travel };
+      const floored = Object.fromEntries(Object.entries(target).map(([k, v]) => [k, Math.floor(v)]));
+      if (distance(target, home) > radius || distance(floored, home) > radius) return null;
+      // Fixed 8-block lattice estimates newly searched horizontal area inside the
+      // existing job boundary. It reads no hidden terrain, resource or seed data.
+      // Elevation, loaded chunks and walkability remain execution-time checks.
+      let coverage = 0;
+      const edge = Math.floor(radius / 8) * 8;
+      for (let x = -edge; x <= edge; x += 8) for (let z = -edge; z <= edge; z += 8) {
+        if (x * x + z * z > radius * radius) continue;
+        const px = home.x + x, pz = home.z + z;
+        if (Math.hypot(px - target.x, pz - target.z) > 48) continue;
+        if (points.every(p => Math.hypot(px - p.x, pz - p.z) > 48)) coverage++;
+      }
+      // A failed or partial move is not a visited destination. Try another
+      // direction first when still near the same origin, even at a new distance.
+      const repeated = tried.filter(a => a.direction === direction && valid(a.origin) && distance(a.origin, position) <= 4).length;
+      return { direction, distance: travel, returnable: true, coverage, repeated, order: (order - index % 4 + 4) % 4 };
+    }).filter(Boolean);
+    candidates.sort((a, b) => a.repeated - b.repeated || b.coverage - a.coverage || a.order - b.order);
+    if(candidates.length) return candidates.map(c => ({ direction: c.direction, distance: c.distance, returnable: true }));
+  }
+  return [];
 }
 export function selectScout(args) { return rankScouts(args)[0] ?? null; }

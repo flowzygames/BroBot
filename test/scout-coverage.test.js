@@ -133,3 +133,28 @@ test('local failed sweep takes precedence over successful-distance continuity', 
   const attempts=[{origin:home,direction:'north',distance:8,status:'unverified',exhausted:true}];
   assert.equal(selectScout({position:home,home,index:20,lastSuccess,attempts}).distance,4);
 });
+
+test('spent short non-novel fallback edges cannot sustain the recorded A/B loop',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const home={x:-15.5,y:76,z:-47.5},a={x:-11.5,y:73,z:-49.35},b={x:-11.5,y:74.02,z:-45.5};
+  const attempts=[a,b].flatMap((origin,i)=>['north','east','south','west'].map(direction=>({origin,direction,distance:i?8:6,status:'unverified',exhausted:true})));
+  for (const [origin,endpoint,safe] of [[a,b,'south'],[b,a,'north']]) {
+    for(const direction of ['north','east','south','west'])attempts.push({origin,direction,distance:4,status:direction===safe?'verified':'unverified',exhausted:false,
+      ...(direction===safe?{completed:true,novel:false,endpoint}:{})});
+    const choices=rankScouts({position:origin,home,index:10,observations:[home,a,b],attempts,lastSuccess:{completed:true,adaptive:true,endpoint:origin,distance:4,novel:false}});
+    assert.ok(choices.length);assert.ok(choices.every(c=>c.distance>4));assert.equal(new Set(choices.map(c=>c.distance)).size,1);
+  }
+});
+test('partial or undocumented successful scouting does not spend a target',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  for(const evidence of [{status:'verified'},{status:'cancelled',completed:false},{status:'cancelled',completed:true,novel:false,endpoint:home},{status:'unknown',completed:true,novel:false,endpoint:home},{status:'verified',completed:true,novel:false,endpoint:{x:NaN,y:64,z:0}}]){
+    const choices=rankScouts({position:home,home,index:0,attempts:[{origin:home,direction:'north',distance:12,...evidence}]});
+    assert.ok(choices.some(c=>c.direction==='north'&&c.distance===12));
+  }
+});
+test('exhausted local targets stop honestly without exceeding the normal scout length',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const attempts=[4,8,12].flatMap(distance=>['north','east','south','west'].map(direction=>({origin:home,direction,distance,status:'unverified'})));
+  assert.deepEqual(rankScouts({position:home,home,index:0,attempts}),[]);
+  assert.ok(rankScouts({position:home,home,index:2,attempts}).every(c=>c.distance<=24));
+});
