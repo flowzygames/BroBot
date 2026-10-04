@@ -1,13 +1,18 @@
-# Return-probe context
+# Return-probe context and observed arrival identity
 
-In the frozen 413-check evaluation, seed 1744809425 crafted both kit items but stopped at 245.583 seconds after eight inconclusive return-planning-budget failures. Health remained 20. Saved terrain showed that an earlier canopy waypoint had lost its support. These facts do not prove a surviving route home or that this correction would recover that world.
+## Evidence and limitations
 
-Three separate deterministic controller regressions failed on the old source:
+The frozen 413-check evaluation of seed 1744809425 crafted both kit items but stopped after inconclusive return-planning failures. Terminal health was 20, but its raw journal includes an earlier 20-to-18 loss. Saved terrain showed that an earlier canopy waypoint had lost support. These observations do not prove a surviving route home.
 
-1. A failed edge from a previous pose suppressed a distinct standing pose 1.9 blocks away because the edge exclusion used a two-block halo.
-2. Two failed go_to counts transferred to a newly observed pose before any attempt from that pose.
-3. Explicit resume rejected the old candidate graph before performing any new observation.
+The separate frozen 426-check run timed out at 300.004 seconds with the kit while repeatedly walking between two observed waypoint regions. Nominal points (4.31,71,0.47) and (10.48,72,24.34) were represented by actual radius-accepted arrivals (4.5,71,1.5) and (10.38,72,23.32). The earlier 0.1-block edge matcher failed to reconcile them, reopening spent routes. The final eight steps contained four cycles. This correction was not in that frozen run.
 
-The correction narrows endpoint matching to 0.1 block, associates failed travel counts with the actual action-start position, and clears candidate edge exclusions on explicit resume. Walking still requires the same bounded safety certification. No path is assumed, no completion is invented, and per-run step/time budgets remain unchanged. Unchanged failed poses still exhaust their attempts.
+## Correction
 
-421 automated checks pass. The three new regressions and existing alternative-shortcut tests pass, and read-only review found no blocker. Physical verification is pending. No natural-world success gain or new public release is claimed.
+- Match failed edge endpoints and repeated travel attempts by observed standing cell, absorbing sub-block jitter while preserving distinct cells
+- Use validated successful radius-1 arrival receipts as intermediate waypoint representatives, while still requesting the original nominal target
+- Persist at most 64 arrival aliases alongside retained observed waypoints; prune discarded waypoints and retain identity after the short action history expires
+- Reject malformed saved aliases and mismatched, unsuccessful, implausible, or wider-radius receipts
+- Check both representative distance and emitted integer target against the existing 96-block leg bound
+- Preserve actual home/table goals and explicit final-leg identity; resume clears failed edges for fresh verification
+
+435 automated checks pass on the revised source, including history expiry, pruning, malformed reload, radius mismatch, rounding, alternative routes and repeated-cycle regressions. Read-only review found no blocking defect. All actual walks still require the existing physical safety certification. No teleportation, assumed path, automatic completion, enlarged exploration budget, natural-world improvement or release is claimed. Physical verification is pending.
