@@ -43,12 +43,13 @@ test('standalone return corridor rejects waterlogged non-leaf stairs', async()=>
 
 import {createActions} from '../src/actions.js';
 function actionFixture(){
- const {bot,cells}=fixture();bot.health=20;bot.food=20;bot.setControlState=()=>{};bot.stopDigging=()=>{};bot.deactivateItem=()=>{};
+ const {bot,cells}=fixture();bot.health=20;bot.food=20;bot.setControlState=()=>{};bot.stopDigging=()=>{};bot.deactivateItem=()=>{};bot.lookAt=async()=>{};
  const item={name:'shears',type:bot.registry.itemsByName.shears.id,count:1};bot.inventory.items=()=>[item];bot.equip=async i=>{bot.heldItem=i;};bot.canDigBlock=()=>true;
  return{bot,cells};
 }
+// Drift away from the leaf so the stage guard is exercised independently of the footprint guard.
 test('descent rechecks stage after equipping and never digs from a drifting pose',async()=>{
- const {bot}=actionFixture(),listeners=bot.listenerCount('blockUpdate');let digs=0;bot.dig=async()=>{digs++;};bot.equip=async i=>{bot.heldItem=i;bot.entity.position=bot.entity.position.offset(.3,0,0);};
+ const {bot}=actionFixture(),listeners=bot.listenerCount('blockUpdate');let digs=0;bot.dig=async()=>{digs++;};bot.equip=async i=>{bot.heldItem=i;bot.entity.position=bot.entity.position.offset(-.3,0,0);};
  await assert.rejects(createActions(bot).execute('descend_notch',{}),/certified descent stage/);
  assert.equal(digs,0);assert.equal(bot.listenerCount('blockUpdate'),listeners);
 });
