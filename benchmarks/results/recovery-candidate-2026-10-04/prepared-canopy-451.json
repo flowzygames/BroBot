@@ -1,0 +1,2615 @@
+{
+  "kind": "prepared-automatic-canopy-recovery",
+  "started": "2026-10-04T16:11:58.458Z",
+  "minecraft": "1.21.8",
+  "fixture": "Fresh isolated peaceful world with persistent leaves and disabled random ticks. Console supplies a two-leaf ledge, retained log anchor, lower stone walkway, roof, crafting table, six planks and four sticks. The normal starter controller chooses any recovery and crafts a wooden pickaxe. The harness then stops it and separately requests a certified return. This is not natural-world reliability, complete treetop escape or an autonomous finished starter kit.",
+  "sourceHashes": {
+    "src/actions.js": "75c99eeda18d6a97c2afd4e5123c8a6470827ebfa77fb724b077cb8e8f8f6c12",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "253463abd3b593ec025c9ebb3e0f87a9e8f880ef07a632482bac98a122417657",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "48f029964394a6c2705ced87dcc11154461f58288320bd23a4facbbc6da2f0ab",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "40a88f5d2496cdacf0d6cad09fab1df4887880a55d87d7765c2abe003b676846",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "60cb46ece587e12e19fac6886b75d887156de8ff745e10420a685057d2f5d2b7",
+    "src/runner.js": "acc0da55a868220e6ac0f50367615cbafd3f4290f28ff0f6e3b61ff080a80a5a",
+    "src/runtime.js": "f579f9de5c274b566d5c6879cf383c4e43dd429e51644349135032b71473f20b",
+    "src/scout-coverage.js": "13c4047e2756ab280a1140ba45355032b06ff5a3db79477b60293e07ecb07a66",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "f768b191d44acdfceee68a60c80fba8620535d8fe2027efcfef5fe3fcca29e73",
+    "src/web.js": "4db1b46a35586d2725e599b7d1773a3c141a5b419676ef71c55f306ea40d8559",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-canopy-recovery.js": "de6b4974ae95708fadbf126ac7ffe50b2122034c186121a70025543a4905e2b1"
+  },
+  "passed": true,
+  "frames": [
+    {
+      "at": "2026-10-04T16:12:18.898Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:18.999Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:19.899Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:19.998Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:20.681Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "descend_notch"
+    },
+    {
+      "at": "2026-10-04T16:12:20.782Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "descend_notch"
+    },
+    {
+      "at": "2026-10-04T16:12:20.882Z",
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "descend_notch"
+    },
+    {
+      "at": "2026-10-04T16:12:20.988Z",
+      "position": {
+        "x": 1.0593009983112611,
+        "y": 66,
+        "z": 0.4999999999998879
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "descend_notch"
+    },
+    {
+      "at": "2026-10-04T16:12:21.088Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:21.187Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": null
+    },
+    {
+      "at": "2026-10-04T16:12:22.140Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.241Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.341Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.441Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.541Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.642Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.742Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.842Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:22.941Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.042Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.142Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.243Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.343Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.443Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.543Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.642Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.742Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.843Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:23.943Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:24.043Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:24.143Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:24.242Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "craft"
+    },
+    {
+      "at": "2026-10-04T16:12:24.343Z",
+      "position": {
+        "x": 1.5819785362760581,
+        "y": 65,
+        "z": 0.4999999999998132
+      },
+      "onGround": true,
+      "health": 20,
+      "action": "go_to"
+    },
+    {
+      "at": "2026-10-04T16:12:24.443Z",
+      "position": {
+        "x": 1.30000003,
+        "y": 65.7531999805212,
+        "z": 0.49999999999984773
+      },
+      "onGround": false,
+      "health": 20,
+      "action": "go_to"
+    },
+    {
+      "at": "2026-10-04T16:12:24.543Z",
+      "position": {
+        "x": 1.2258532300000002,
+        "y": 66.16610926093821,
+        "z": 0.49999999999985273
+      },
+      "onGround": false,
+      "health": 20,
+      "action": "go_to"
+    },
+    {
+      "at": "2026-10-04T16:12:24.643Z",
+      "position": {
+        "x": 1.0671186649200002,
+        "y": 66.12159981847412,
+        "z": 0.4999999999998577
+      },
+      "onGround": false,
+      "health": 20,
+      "action": "go_to"
+    }
+  ],
+  "actions": [
+    {
+      "name": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 1,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T16:12:18.337Z",
+      "error": {
+        "message": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit",
+        "code": "WORKSTATION_EGRESS_UNVERIFIED",
+        "workstation": "crafting_table"
+      },
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 1,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "onGround": true,
+      "finished": "2026-10-04T16:12:18.890Z"
+    },
+    {
+      "name": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 2,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T16:12:19.359Z",
+      "error": {
+        "message": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit",
+        "code": "WORKSTATION_EGRESS_UNVERIFIED",
+        "workstation": "crafting_table"
+      },
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 2,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "onGround": true,
+      "finished": "2026-10-04T16:12:19.897Z"
+    },
+    {
+      "name": "descend_notch",
+      "args": {},
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 3,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:19.897Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "canopyDescentAttempts": [
+            {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            }
+          ],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T16:12:20.670Z",
+      "result": {
+        "completed": true,
+        "mined": 1,
+        "descended_blocks": 1,
+        "position": {
+          "x": 1.58,
+          "y": 65,
+          "z": 0.5
+        },
+        "return_home": {
+          "x": 0,
+          "y": 66,
+          "z": 0
+        },
+        "experimental": true
+      },
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 1.58,
+          "y": 65,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 3,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:19.897Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "canopyDescentAttempts": [
+            {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            }
+          ],
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "onGround": true,
+      "finished": "2026-10-04T16:12:21.087Z"
+    },
+    {
+      "name": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 1.58,
+          "y": 65,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "crafting_table",
+            "count": 1,
+            "durability_used": null
+          },
+          {
+            "name": "oak_planks",
+            "count": 6,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 4,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "crafting_table",
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 4,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:19.897Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:21.088Z",
+              "action": "descend_notch",
+              "args": {},
+              "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+              "result": {
+                "completed": true,
+                "mined": 1,
+                "descended_blocks": 1,
+                "position": {
+                  "x": 1.58,
+                  "y": 65,
+                  "z": 0.5
+                },
+                "return_home": {
+                  "x": 0,
+                  "y": 66,
+                  "z": 0
+                },
+                "experimental": true
+              },
+              "progress": true
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "canopyDescentAttempts": [
+            {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            }
+          ],
+          "ignoredTables": [],
+          "scoutAttempts": [],
+          "lastScoutSuccess": null,
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T16:12:21.548Z",
+      "result": {
+        "item": "wooden_pickaxe",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 1.58,
+          "y": 65,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_pickaxe",
+            "count": 1,
+            "durability_used": 0
+          },
+          {
+            "name": "oak_planks",
+            "count": 3,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 2,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": null,
+        "entities": [],
+        "players": [],
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": {
+          "version": 1,
+          "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+          "goal": "starter",
+          "context": "127.0.0.1:25639/BroBotCanopy",
+          "home": {
+            "position": {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            },
+            "dimension": "overworld"
+          },
+          "steps": 4,
+          "scouts": 0,
+          "clearings": 0,
+          "excluded": {},
+          "history": [
+            {
+              "at": "2026-10-04T16:12:18.891Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:19.897Z",
+              "action": "craft",
+              "args": {
+                "item": "wooden_pickaxe",
+                "count": 1
+              },
+              "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+            },
+            {
+              "at": "2026-10-04T16:12:21.088Z",
+              "action": "descend_notch",
+              "args": {},
+              "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+              "result": {
+                "completed": true,
+                "mined": 1,
+                "descended_blocks": 1,
+                "position": {
+                  "x": 1.58,
+                  "y": 65,
+                  "z": 0.5
+                },
+                "return_home": {
+                  "x": 0,
+                  "y": 66,
+                  "z": 0
+                },
+                "experimental": true
+              },
+              "progress": true
+            }
+          ],
+          "started": "2026-10-04T16:12:17.948Z",
+          "recoverDropIds": [],
+          "status": "running",
+          "reason": null,
+          "observedPositions": [
+            {
+              "x": 0.5,
+              "y": 66,
+              "z": 0.5
+            }
+          ],
+          "tables": [],
+          "canopyDescentAttempts": [
+            {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            }
+          ],
+          "ignoredTables": [],
+          "scoutAttempts": [],
+          "lastScoutSuccess": null,
+          "stopping": false
+        },
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 64,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 0,
+          "y": 65,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": true,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 65,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 64,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "onGround": true,
+      "finished": "2026-10-04T16:12:24.257Z"
+    }
+  ],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "before": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 66,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "crafting_table",
+        "count": 1,
+        "durability_used": null
+      },
+      {
+        "name": "oak_planks",
+        "count": 6,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 4,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "crafting_table",
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "geometryBefore": [
+    {
+      "x": 0,
+      "y": 64,
+      "z": 0,
+      "name": "oak_log",
+      "properties": {
+        "axis": "y"
+      }
+    },
+    {
+      "x": 0,
+      "y": 65,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": true,
+        "distance": "1"
+      }
+    },
+    {
+      "x": 1,
+      "y": 65,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": true,
+        "distance": "2"
+      }
+    },
+    {
+      "x": 1,
+      "y": 64,
+      "z": 0,
+      "name": "stone",
+      "properties": {}
+    },
+    {
+      "x": 1,
+      "y": 68,
+      "z": 0,
+      "name": "stone",
+      "properties": {}
+    }
+  ],
+  "history": [
+    {
+      "at": "2026-10-04T16:12:18.891Z",
+      "action": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+    },
+    {
+      "at": "2026-10-04T16:12:19.897Z",
+      "action": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+    },
+    {
+      "at": "2026-10-04T16:12:21.088Z",
+      "action": "descend_notch",
+      "args": {},
+      "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+      "result": {
+        "completed": true,
+        "mined": 1,
+        "descended_blocks": 1,
+        "position": {
+          "x": 1.58,
+          "y": 65,
+          "z": 0.5
+        },
+        "return_home": {
+          "x": 0,
+          "y": 66,
+          "z": 0
+        },
+        "experimental": true
+      },
+      "progress": true
+    },
+    {
+      "at": "2026-10-04T16:12:24.257Z",
+      "action": "craft",
+      "args": {
+        "item": "wooden_pickaxe",
+        "count": 1
+      },
+      "reason": "Craft the first mining tool.",
+      "result": {
+        "item": "wooden_pickaxe",
+        "requested": 1,
+        "crafted": 1,
+        "inventory_count": 1,
+        "recipe_batches": 1
+      },
+      "progress": true
+    }
+  ],
+  "afterCraft": {
+    "connected": true,
+    "position": {
+      "x": 1.58,
+      "y": 65,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+      "goal": "starter",
+      "context": "127.0.0.1:25639/BroBotCanopy",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 4,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {},
+      "history": [
+        {
+          "at": "2026-10-04T16:12:18.891Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:19.897Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:21.088Z",
+          "action": "descend_notch",
+          "args": {},
+          "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+          "result": {
+            "completed": true,
+            "mined": 1,
+            "descended_blocks": 1,
+            "position": {
+              "x": 1.58,
+              "y": 65,
+              "z": 0.5
+            },
+            "return_home": {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            },
+            "experimental": true
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-04T16:12:24.257Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "reason": "Craft the first mining tool.",
+          "result": {
+            "item": "wooden_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-04T16:12:17.948Z",
+      "recoverDropIds": [],
+      "status": "paused",
+      "reason": "Prepared canopy fixture reached the wooden-pickaxe checkpoint",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        }
+      ],
+      "tables": [],
+      "canopyDescentAttempts": [
+        {
+          "x": 0,
+          "y": 66,
+          "z": 0
+        }
+      ],
+      "ignoredTables": [],
+      "scoutAttempts": [],
+      "lastScoutSuccess": null,
+      "stopping": false
+    },
+    "recentInjuries": []
+  },
+  "explicitReturn": {
+    "arrived": true,
+    "position": {
+      "x": 0.5,
+      "y": 66,
+      "z": 0.5
+    },
+    "target": {
+      "x": 0,
+      "y": 66,
+      "z": 0
+    },
+    "radius": 0
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 66,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+      "goal": "starter",
+      "context": "127.0.0.1:25639/BroBotCanopy",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 4,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {},
+      "history": [
+        {
+          "at": "2026-10-04T16:12:18.891Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:19.897Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:21.088Z",
+          "action": "descend_notch",
+          "args": {},
+          "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+          "result": {
+            "completed": true,
+            "mined": 1,
+            "descended_blocks": 1,
+            "position": {
+              "x": 1.58,
+              "y": 65,
+              "z": 0.5
+            },
+            "return_home": {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            },
+            "experimental": true
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-04T16:12:24.257Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "reason": "Craft the first mining tool.",
+          "result": {
+            "item": "wooden_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-04T16:12:17.948Z",
+      "recoverDropIds": [],
+      "status": "paused",
+      "reason": "Prepared canopy fixture reached the wooden-pickaxe checkpoint",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        }
+      ],
+      "tables": [],
+      "canopyDescentAttempts": [
+        {
+          "x": 0,
+          "y": 66,
+          "z": 0
+        }
+      ],
+      "ignoredTables": [],
+      "scoutAttempts": [],
+      "lastScoutSuccess": null,
+      "stopping": false
+    },
+    "recentInjuries": []
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 66,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "oak_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+      "goal": "starter",
+      "context": "127.0.0.1:25639/BroBotCanopy",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 4,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {},
+      "history": [
+        {
+          "at": "2026-10-04T16:12:18.891Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:19.897Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+        },
+        {
+          "at": "2026-10-04T16:12:21.088Z",
+          "action": "descend_notch",
+          "args": {},
+          "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+          "result": {
+            "completed": true,
+            "mined": 1,
+            "descended_blocks": 1,
+            "position": {
+              "x": 1.58,
+              "y": 65,
+              "z": 0.5
+            },
+            "return_home": {
+              "x": 0,
+              "y": 66,
+              "z": 0
+            },
+            "experimental": true
+          },
+          "progress": true
+        },
+        {
+          "at": "2026-10-04T16:12:24.257Z",
+          "action": "craft",
+          "args": {
+            "item": "wooden_pickaxe",
+            "count": 1
+          },
+          "reason": "Craft the first mining tool.",
+          "result": {
+            "item": "wooden_pickaxe",
+            "requested": 1,
+            "crafted": 1,
+            "inventory_count": 1,
+            "recipe_batches": 1
+          },
+          "progress": true
+        }
+      ],
+      "started": "2026-10-04T16:12:17.948Z",
+      "recoverDropIds": [],
+      "status": "paused",
+      "reason": "Prepared canopy fixture reached the wooden-pickaxe checkpoint",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 66,
+          "z": 0.5
+        }
+      ],
+      "tables": [],
+      "canopyDescentAttempts": [
+        {
+          "x": 0,
+          "y": 66,
+          "z": 0
+        }
+      ],
+      "ignoredTables": [],
+      "scoutAttempts": [],
+      "lastScoutSuccess": null,
+      "stopping": false
+    },
+    "recentInjuries": []
+  },
+  "lastJob": {
+    "version": 1,
+    "id": "f3a054eb-ff28-4a5f-84c8-74a3a3ba09ef",
+    "goal": "starter",
+    "context": "127.0.0.1:25639/BroBotCanopy",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 4,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {},
+    "history": [
+      {
+        "at": "2026-10-04T16:12:18.891Z",
+        "action": "craft",
+        "args": {
+          "item": "wooden_pickaxe",
+          "count": 1
+        },
+        "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+      },
+      {
+        "at": "2026-10-04T16:12:19.897Z",
+        "action": "craft",
+        "args": {
+          "item": "wooden_pickaxe",
+          "count": 1
+        },
+        "error": "No verified local exit for automatic crafting_table placement: Placing crafting_table here would not preserve a verified local walking exit"
+      },
+      {
+        "at": "2026-10-04T16:12:21.088Z",
+        "action": "descend_notch",
+        "args": {},
+        "reason": "Try one certified leaf step after repeated blocked workstation crafting.",
+        "result": {
+          "completed": true,
+          "mined": 1,
+          "descended_blocks": 1,
+          "position": {
+            "x": 1.58,
+            "y": 65,
+            "z": 0.5
+          },
+          "return_home": {
+            "x": 0,
+            "y": 66,
+            "z": 0
+          },
+          "experimental": true
+        },
+        "progress": true
+      },
+      {
+        "at": "2026-10-04T16:12:24.257Z",
+        "action": "craft",
+        "args": {
+          "item": "wooden_pickaxe",
+          "count": 1
+        },
+        "reason": "Craft the first mining tool.",
+        "result": {
+          "item": "wooden_pickaxe",
+          "requested": 1,
+          "crafted": 1,
+          "inventory_count": 1,
+          "recipe_batches": 1
+        },
+        "progress": true
+      }
+    ],
+    "started": "2026-10-04T16:12:17.948Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Prepared canopy fixture reached the wooden-pickaxe checkpoint",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 66,
+        "z": 0.5
+      }
+    ],
+    "tables": [],
+    "canopyDescentAttempts": [
+      {
+        "x": 0,
+        "y": 66,
+        "z": 0
+      }
+    ],
+    "ignoredTables": [],
+    "scoutAttempts": [],
+    "lastScoutSuccess": null,
+    "stopping": false
+  },
+  "finished": "2026-10-04T16:12:26.142Z"
+}

@@ -32,9 +32,19 @@ export function rankScouts({ position, home, index, observations = [], attempts 
     : Math.min(plannedTravel, continuity);
   // Do not keep retrying an unchanged local target merely because the route
   // selector eventually accepts it as a fallback. Try bounded unspent lengths.
-  const spent = (direction, length) => tried.some(a => a.direction === direction && a.distance === length
-    && distance(a.origin, position) <= 2 && (a.status === 'unverified'
-      || (a.status === 'verified' && a.completed === true && a.novel === false && valid(a.endpoint))));
+  const spent = (direction, length) => tried.some(a => {
+    if (a.direction !== direction || distance(a.origin, position) > 2) return false;
+    // A failed long probe says nothing about a shorter route's feasibility.
+    if (a.status === 'unverified') return a.distance === length;
+    if (a.status !== 'verified' || a.completed !== true || a.novel !== false || !valid(a.endpoint)
+      || !Number.isInteger(a.distance) || a.distance < 4 || a.distance > 64) return false;
+    const [dx,dz] = offsets[direction];
+    // Reject malformed claimed endpoints before they can suppress a target.
+    if (Math.hypot(a.endpoint.x-a.origin.x-dx*a.distance,a.endpoint.z-a.origin.z-dz*a.distance) > 2) return false;
+    // The executor targets X/Z; terrain determines actual Y. A nearby length
+    // variant must not reopen a destination already confirmed non-novel.
+    return Math.hypot(position.x+dx*length-a.endpoint.x,position.z+dz*length-a.endpoint.z) <= 4;
+  });
   const lengths = [...new Set([preferredTravel,
     ...Array.from({length:Math.floor(plannedTravel/4)},(_,i)=>(i+1)*4).filter(n=>n>preferredTravel),
     ...Array.from({length:Math.floor(plannedTravel/4)},(_,i)=>(i+1)*4).filter(n=>n<preferredTravel)])];

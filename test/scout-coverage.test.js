@@ -158,3 +158,44 @@ test('exhausted local targets stop honestly without exceeding the normal scout l
   assert.deepEqual(rankScouts({position:home,home,index:0,attempts}),[]);
   assert.ok(rankScouts({position:home,home,index:2,attempts}).every(c=>c.distance<=24));
 });
+
+test('a spent non-novel endpoint stays spent across nearby scout-length variants',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const position={x:24,y:64,z:0},endpoint={x:2,y:64,z:0};
+  const attempts=['north','east','south','west'].map(direction=>({origin:position,direction,distance:22,status:direction==='west'?'verified':'unverified',exhausted:false,...(direction==='west'?{completed:true,novel:false,endpoint}:{})}));
+  const choices=rankScouts({position,home,index:22,observations:[position,endpoint],attempts,lastSuccess:{completed:true,adaptive:true,endpoint:position,distance:22,novel:false}});
+  assert.ok(choices.every(c=>c.distance===24));assert.ok(choices.length>0);assert.ok(!choices.some(c=>c.direction==='west'));
+});
+
+test('equivalent-endpoint spending preserves distinct destinations and unverified shorter probes',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const position={x:24,y:64,z:0},endpoint={x:2,y:64,z:0};
+  const lastSuccess={completed:true,adaptive:true,endpoint:position,distance:28,novel:false};
+  const attempt={origin:position,direction:'west',distance:22,status:'verified',completed:true,novel:false,endpoint};
+  assert.ok(rankScouts({position,home,index:22,attempts:[attempt],lastSuccess}).some(c=>c.direction==='west'&&c.distance===28));
+  assert.ok(rankScouts({position,home,index:22,attempts:[{...attempt,status:'unverified',distance:32,exhausted:true}]}).some(c=>c.direction==='west'&&c.distance===16));
+  assert.ok(rankScouts({position:{...position,x:27},home,index:22,attempts:[attempt],lastSuccess:{...lastSuccess,endpoint:{...position,x:27},distance:24}}).some(c=>c.direction==='west'));
+});
+
+test('partial, novel and malformed completed endpoints cannot spend a nearby length variant',async()=>{
+  const {rankScouts}=await import('../src/scout-coverage.js');
+  const position={x:24,y:64,z:0},endpoint={x:2,y:64,z:0},lastSuccess={completed:true,adaptive:true,endpoint:position,distance:24,novel:false};
+  const attempt={origin:position,direction:'west',distance:22,status:'verified',completed:true,novel:false,endpoint};
+  for(const change of [{completed:false},{novel:true},{status:'cancelled'},{distance:NaN},{distance:100},{endpoint:{x:2,y:NaN,z:0}},{endpoint:{x:0,y:64,z:3}}]) {
+    assert.ok(rankScouts({position,home,index:22,attempts:[{...attempt,...change}],lastSuccess}).some(c=>c.direction==='west'),JSON.stringify(change));
+  }
+});
+
+test('endpoint equivalence handles recorded height variation and exact heuristic thresholds',async()=>{
+ const {rankScouts}=await import('../src/scout-coverage.js');
+ const check=(position,origin,endpoint,oldLength,newLength)=>rankScouts({position,home,index:22,attempts:[{origin,direction:'west',distance:oldLength,status:'verified',completed:true,novel:false,endpoint}],lastSuccess:{completed:true,adaptive:true,endpoint:position,distance:newLength,novel:false}}).some(c=>c.direction==='west');
+ const a={x:24.64,y:73,z:-8.5},b={x:2.5,y:76.02,z:-8.5};
+ assert.equal(check(a,a,b,22,24),false);
+ const origin={x:24,y:64,z:0},endpoint={x:2,y:64,z:0};
+ assert.equal(check({...origin,x:26},origin,endpoint,22,24),false);
+ assert.equal(check({...origin,x:26.001},origin,endpoint,22,24),true);
+ assert.equal(check(origin,origin,{...endpoint,x:4},20,24),false);
+ assert.equal(check(origin,origin,{...endpoint,x:4.001},20,24),true);
+ assert.equal(check(origin,origin,{...endpoint,x:4},22,22),false);
+ assert.equal(check(origin,origin,{...endpoint,x:4.001},22,22),true);
+});

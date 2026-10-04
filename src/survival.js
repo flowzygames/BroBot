@@ -10,33 +10,64 @@ const FOODS = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicke
 const countItems = state => Object.fromEntries((state.inventory ?? []).map(i => [i.name, (state.inventory ?? []).filter(j => j.name === i.name).reduce((n, j) => n + j.count, 0)]));
 const inventoryKey = state => JSON.stringify(Object.entries(countItems(state)).sort(([a],[b])=>a.localeCompare(b)));
 const distance = (a, b) => a && b ? Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) : Infinity;
+const sameTravelCell = (a,b) => a && b && ['x','y','z'].every(k=>Number.isFinite(a[k]) && Number.isFinite(b[k]) && Math.floor(a[k])===Math.floor(b[k]));
 const dimension = d => String(d).replace(/^minecraft:/, '');
 const action = (name, args, reason) => ({ name, args, reason });
+
+const travelCellKey = p => ['x','y','z'].map(k=>Math.floor(p[k])).join(',');
+const validTravelPoint = p => p && ['x','y','z'].every(k=>Number.isFinite(p[k]));
+const validTravelArrival = (arrival, home) => validTravelPoint(arrival?.target) && validTravelPoint(arrival?.position)
+  && ['x','y','z'].every(k=>Number.isInteger(arrival.target[k])) && [1,2].includes(arrival.radius)
+  && distance(arrival.position,{x:arrival.target.x+.5,y:arrival.target.y,z:arrival.target.z+.5})<=arrival.radius+1.2
+  && distance(arrival.position,home)<=STARTER_MOVEMENT_RADIUS;
+function retainedTravelArrivals(job) {
+  const waypointCells = new Set((Array.isArray(job.observedPositions)?job.observedPositions:[]).filter(validTravelPoint).slice(-64).map(travelCellKey));
+  // Intermediate return requests use radius 1. A wider table arrival is not
+  // evidence for the tighter request, even when the nominal cell matches.
+  const arrivals = new Map();
+  const retain = arrival => { if(arrival?.radius===1 && validTravelArrival(arrival,job.home.position) && waypointCells.has(travelCellKey(arrival.target))) arrivals.set(travelCellKey(arrival.target),{target:{...arrival.target},position:{...arrival.position},radius:arrival.radius}); };
+  for(const arrival of (Array.isArray(job.travelArrivals)?job.travelArrivals:[]).slice(-64))retain(arrival);
+  for(const entry of (Array.isArray(job.history)?job.history:[]).slice(-32)) {
+    const args=entry?.args,result=entry?.result;
+    if(entry?.action!=='go_to' || args?.returnable!==true || result?.arrived!==true || !validTravelPoint(args) || !validTravelPoint(result.target))continue;
+    if(!['x','y','z'].every(k=>Number.isInteger(args[k]) && result.target[k]===args[k]) || result.radius!==(args.radius??1))continue;
+    retain({target:result.target,position:result.position,radius:result.radius});
+  }
+  return [...arrivals.values()];
+}
 
 // Long returns use actually observed intermediate positions, not invented
 // straight-line points in potentially unloaded terrain. Each leg is certified.
 function starterTravel(state, job, target, reason, waypointKind) {
   const valid = p => p && ['x', 'y', 'z'].every(k => Number.isFinite(p[k]));
-  const nodes = [{ ...state.position }, { ...target }];
+  const arrivals = new Map(retainedTravelArrivals(job).map(a=>[travelCellKey(a.target),a.position]));
+  const observedArrival = waypoint => arrivals.get(travelCellKey(waypoint)) ?? waypoint;
+  // Graph representatives use observed successful arrivals. Execution still
+  // targets the original waypoint region; home/table goals are never moved.
+  const nodes = [{ ...state.position }, { ...target }], waypoints = [{...state.position},{...target}];
   for (const p of (Array.isArray(job.observedPositions) ? job.observedPositions : []).slice(-64)) {
-    if (valid(p) && distance(p, job.home.position) <= STARTER_MOVEMENT_RADIUS && !nodes.some(q => distance(p,q) <= 2)) nodes.push({ ...p });
+    if(!valid(p) || distance(p,job.home.position)>STARTER_MOVEMENT_RADIUS)continue;
+    const arrival=observedArrival(p);
+    if (!nodes.some(q => distance(arrival,q) <= 2)) {nodes.push({...arrival});waypoints.push({...p});}
   }
   const excluded = (Array.isArray(job.ignoredTravelEdges) ? job.ignoredTravelEdges : []).filter(e => valid(e?.from) && valid(e?.to)).slice(-128);
-  const rejected = (a,b) => excluded.some(e => (distance(a,e.from)<=2 && distance(b,e.to)<=2) || (distance(a,e.to)<=2 && distance(b,e.from)<=2));
+  // A standing cell absorbs arrival jitter without treating distinct nearby
+  // cells as one failed region.
+  const rejected = (a,b) => excluded.some(e => (sameTravelCell(a,e.from) && sameTravelCell(b,e.to)) || (sameTravelCell(a,e.to) && sameTravelCell(b,e.from)));
   // This bounded graph chooses a candidate chain, not a terrain safety proof.
   // The action executor certifies each actual leg. BFS can retrace U-shaped
   // walks that must temporarily move farther from home.
   const queue = [0], parents = new Map([[0,null]]);
   for (let cursor=0; cursor<queue.length && !parents.has(1); cursor++) {
     const current=queue[cursor];
-    const neighbors=nodes.map((p,i)=>i).filter(i=>!parents.has(i) && distance(nodes[current],nodes[i])<=STARTER_LEG_RADIUS && !rejected(nodes[current],nodes[i]))
+    const neighbors=nodes.map((p,i)=>i).filter(i=>!parents.has(i) && distance(nodes[current],nodes[i])<=STARTER_LEG_RADIUS && distance(nodes[current],Object.fromEntries(Object.entries(waypoints[i]).map(([k,v])=>[k,Math.floor(v)])))<=STARTER_LEG_RADIUS && !rejected(nodes[current],nodes[i]))
       .sort((a,b)=>distance(nodes[a],target)-distance(nodes[b],target));
     for(const i of neighbors){parents.set(i,current);queue.push(i);}
   }
-  if (!parents.has(1)) return { blocked: 'No observed intermediate waypoint can verify a bounded return. Review the route before resuming.' };
+  if (!parents.has(1)) return { blocked: 'No unspent observed waypoint chain remains for a bounded return. Review the route before resuming.' };
   let first=1;while(parents.get(first)!==0)first=parents.get(first);
-  const next=nodes[first];
-  return { ...action('go_to', { x: Math.floor(next.x), y: Math.floor(next.y), z: Math.floor(next.z), radius: first===1 && waypointKind==='table' ? 2 : 1, returnable: true }, reason), travelOrigin:{...state.position}, travelTarget:{...next}, ...(waypointKind ? { waypointKind, waypointTarget:{...target} } : {}) };
+  const next=nodes[first], requested=waypoints[first];
+  return { ...action('go_to', { x: Math.floor(requested.x), y: Math.floor(requested.y), z: Math.floor(requested.z), radius: first===1 && waypointKind==='table' ? 2 : 1, returnable: true }, reason), travelOrigin:{...state.position}, travelTarget:{...next}, finalTravelLeg:first===1, ...(waypointKind ? { waypointKind, waypointTarget:{...target} } : {}) };
 }
 
 // An explicit offline controller, not a substitute label for an untested LLM.
@@ -112,9 +143,18 @@ export class SurvivalJob {
     this.dropRecoverySession = null;
     this.job = memory.get('survivalJob', null);
     if (this.job && (this.job.version !== 1 || typeof this.job.context !== 'string' || !Array.isArray(this.job.history) || !Number.isSafeInteger(this.job.steps) || this.job.steps < 0 || !Number.isSafeInteger(this.job.scouts) || this.job.scouts < 0 || !this.job.home?.position || !['x', 'y', 'z'].every(k => Number.isFinite(this.job.home.position[k])) || !['running', 'paused', 'blocked', 'complete'].includes(this.job.status))) throw new Error('Saved starter job is invalid. Restore its record before resuming.');
+    if (Object.hasOwn(this.job ?? {}, 'canopyDescentAttempts') && (!Array.isArray(this.job.canopyDescentAttempts)
+      || this.job.canopyDescentAttempts.length > 4 || this.job.canopyDescentAttempts.some(p=>!p || !['x','y','z'].every(k=>Number.isSafeInteger(p[k]))))) throw new Error('Saved canopy recovery history is invalid.');
+    if (Object.hasOwn(this.job ?? {},'travelArrivals') && (!Array.isArray(this.job.travelArrivals) || this.job.travelArrivals.length>64 || this.job.travelArrivals.some(a=>!validTravelArrival(a,this.job.home.position)))) throw new Error('Saved travel arrival evidence is invalid.');
     if (this.job?.status === 'running') { this.job.status = 'paused'; this.job.reason = 'Process restarted. Resume explicitly after checking the world.'; this.save(); }
   }
-  save() { this.memory.set('survivalJob', this.job); }
+  save() {
+    if (this.job) {
+      const arrivals = retainedTravelArrivals(this.job);
+      if (arrivals.length || this.job.travelArrivals) this.job.travelArrivals = arrivals;
+    }
+    this.memory.set('survivalJob', this.job);
+  }
   state() { return this.job ? structuredClone({ ...this.job, history: this.job.history.slice(-8), stopping: Boolean(this.active?.signal.aborted) }) : null; }
   stop(reason = 'Paused by player') { this.active?.abort(new Error(reason)); this.stopActions(reason); }
   checkAir() {
@@ -131,6 +171,9 @@ export class SurvivalJob {
     } else {
       this.job = { version: 1, id: randomUUID(), goal: 'starter', context: this.context, home: { position: { ...state.position }, dimension: state.dimension }, steps: 0, scouts: 0, clearings: 0, excluded: {}, history: [], started: new Date().toISOString() };
     }
+    // Resume is explicit: re-inspect and certify the route instead of treating
+    // earlier unverified graph edges as permanent world geometry.
+    if (resume) this.job.ignoredTravelEdges = [];
     if (!resume || this.dropRecoverySession !== this.session()) this.job.recoverDropIds = [];
     this.job.status = 'running'; this.job.reason = null; this.save();
     this.log('survival', `${resume ? 'Resuming' : 'Starting'} offline starter kit: stone pickaxe, furnace, then return to start.`);
@@ -144,7 +187,7 @@ export class SurvivalJob {
   }
   async loop(signal) {
     const deadline = Date.now() + this.maxDurationMs;
-    const failures = new Map(), craftFailureContexts = new Map();
+    const failures = new Map(), craftFailureContexts = new Map(), travelFailurePositions = new Map(), blockedWorkstations = new Map();
     const observationKey = (observation, retryKind) => JSON.stringify(retryKind === 'craft'
       ? { tableInReach: observation.tableInReach, tables: (observation.tables ?? []).map(p=>[p.x,p.y,p.z]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]), craftGeometry: observation.craftGeometry ?? observation.localTerrain ?? [], powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
       : observation);
@@ -164,6 +207,8 @@ export class SurvivalJob {
     while (this.job.steps - firstStep < this.maxSteps) {
       signal.throwIfAborted();
       if (Date.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
+      const arrivals = retainedTravelArrivals(this.job);
+      if(arrivals.length || this.job.travelArrivals)this.job.travelArrivals=arrivals;
       const before = this.snapshot();
       // Check lifecycle/health before any further inspection or movement.
       let decision = nextStarterStep(before, this.job, {});
@@ -187,12 +232,18 @@ export class SurvivalJob {
           position_changed: distance(current.position, previous.position) > 0.1,
           workstation_observation_changed: observationKey(observation, 'craft') !== previous.observationKey
         });
-        failures.delete(intendedAction);craftFailureContexts.delete(intendedAction);
+        failures.delete(intendedAction);craftFailureContexts.delete(intendedAction);blockedWorkstations.delete(intendedAction);
+      }
+      if (decision.name === 'go_to' && travelFailurePositions.has(intendedAction)
+        && !sameTravelCell(travelFailurePositions.get(intendedAction), this.snapshot().position)) {
+        failures.delete(intendedAction); travelFailurePositions.delete(intendedAction);
       }
       if (recovery?.scout && Object.hasOwn(recovery,'sourceIntent')) {
         const current=this.snapshot();
         if(!(decision.scout || ['collect','craft'].includes(decision.name)) || intendedAction!==recovery.sourceIntent || !sameContext(recovery,current,observation)) recovery=null;
       }
+      if (recovery?.name === 'descend_notch' && (observation.canopyGrounded !== true
+        || intendedAction !== recovery.sourceIntent || !sameContext(recovery,this.snapshot(),observation))) recovery = null;
       if (recovery?.name === 'pickup') {
         // A clearance action may already collect the tracked materials. Never
         // turn its stale continuation into an unscoped trip after other litter.
@@ -228,7 +279,7 @@ export class SurvivalJob {
             this.job.ignoredTravelEdges = [...(Array.isArray(this.job.ignoredTravelEdges) ? this.job.ignoredTravelEdges : []), {from:decision.travelOrigin,to:decision.travelTarget}].slice(-128);
             // Keep other observed ways home available; never blacklist a table
             // merely because one intermediate shortcut could not be verified.
-            if (decision.waypointKind==='table' && distance(decision.travelTarget,decision.waypointTarget)<=2) {
+            if (decision.waypointKind==='table' && decision.finalTravelLeg===true) {
               this.job.ignoredTables ??=[];this.job.ignoredTables.push(decision.waypointTarget);
             }
             failures.delete(signature);this.save();continue;
@@ -238,7 +289,13 @@ export class SurvivalJob {
           this.job.ignoredTables.push(decision.waypointTarget ?? { x: decision.args.x, y: decision.args.y, z: decision.args.z });
           failures.delete(signature); continue;
         }
-        if (decision.name === 'collect' && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
+        const canopyPosition = this.snapshot().position;
+        const canopyCell = {x:Math.floor(canopyPosition.x),y:Math.floor(canopyPosition.y),z:Math.floor(canopyPosition.z)};
+        const canopyAttempts = Array.isArray(this.job.canopyDescentAttempts) ? this.job.canopyDescentAttempts : [];
+        if (decision.name === 'craft' && (blockedWorkstations.get(signature) ?? 0) >= 2 && observation.tableInReach !== true && observation.canopyGrounded === true && this.snapshot().health >= 12 && this.snapshot().food >= 10
+          && canopyAttempts.length < 4 && !canopyAttempts.some(p=>distance(p,canopyCell)<.1)) {
+          recovery = {...action('descend_notch', {}, 'Try one certified leaf step after repeated blocked workstation crafting.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,'craft')};
+        } else if (decision.name === 'collect' && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
           this.job.clearings = (this.job.clearings ?? 0) + 1;
           recovery = action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.');
         } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation,decision.name) };
@@ -271,6 +328,13 @@ export class SurvivalJob {
             distance: decision.args.distance, status: outcomes.find(a => a.direction === direction)?.status ?? 'unknown', exhausted,
             ...(completedEndpoint && direction === (result.direction ?? decision.args.direction) ? {completed:true,novel:completedNovel,endpoint:completedEndpoint} : {}) }))].slice(-STARTER_SCOUT_LIMIT * 4);
       };
+      if (decision.name === 'descend_notch') {
+        const p = this.snapshot().position;
+        const cell = {x:Math.floor(p.x),y:Math.floor(p.y),z:Math.floor(p.z)};
+        const attempts = this.job.canopyDescentAttempts ?? [];
+        if (attempts.length >= 4 || attempts.some(previous=>distance(previous,cell)<.1)) throw new Error('Canopy recovery attempt budget reached at this position.');
+        this.job.canopyDescentAttempts = [...attempts,cell];
+      }
       this.job.steps++; this.save();
       const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
       try {
@@ -281,14 +345,14 @@ export class SurvivalJob {
         excludeFailures(decision, result);
         const initialItems = countItems(before), finalItems = countItems(after);
         const gained = Object.entries(finalItems).some(([name, count]) => count > (initialItems[name] ?? 0));
-        const terrainCleared = decision.name === 'dig_at' && result.mined === 1;
+        const terrainCleared = (decision.name === 'dig_at' && result.mined === 1) || (decision.name === 'descend_notch' && result.completed === true && result.mined === 1 && result.descended_blocks === 1 && Math.abs(before.position.y-after.position.y-1)<=.1);
         if (terrainCleared) {
           // A verified local terrain change can invalidate an earlier blocked
           // approach. Retry nearby resources while retaining distant failures.
           for (const [block, positions] of Object.entries(this.job.excluded ?? {})) {
-            this.job.excluded[block] = positions.filter(p => distance(p, decision.args) > 6);
+            this.job.excluded[block] = positions.filter(p => distance(p, decision.name === 'descend_notch' ? after.position : decision.args) > 6);
           }
-          this.job.ignoredTables = (this.job.ignoredTables ?? []).filter(p => distance(p, decision.args) > 6);
+          this.job.ignoredTables = (this.job.ignoredTables ?? []).filter(p => distance(p, decision.name === 'descend_notch' ? after.position : decision.args) > 6);
         }
         const progress = gained || terrainCleared || (decision.name === 'explore' && distance(before.position, after.position) > 1) || (decision.name === 'go_to' && distance(after.position, decision.args) < distance(before.position, decision.args) - 1) || (after.food ?? 0) > (before.food ?? 0);
         remember({ action: decision.name, args: decision.args, reason: decision.reason, result, progress });
@@ -298,8 +362,8 @@ export class SurvivalJob {
           this.job.scoutAttempts = [];
           this.job.lastScoutSuccess = null;
         }
-        if (progress) { failures.clear();craftFailureContexts.clear(); }
-        else { failures.set(signature, (failures.get(signature) ?? 0) + 1);if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext); }
+        if (progress) { failures.clear();craftFailureContexts.clear();travelFailurePositions.clear();blockedWorkstations.clear(); }
+        else { failures.set(signature, (failures.get(signature) ?? 0) + 1);if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext);if(decision.name==='go_to')travelFailurePositions.set(signature,actionStartContext.position); }
         if (Array.isArray(result.remaining_drops)) {
           this.job.recoverDropIds = result.remaining_drops.map(d => d.id).filter(Number.isSafeInteger).slice(0, 24);
           this.dropRecoverySession = this.session();
@@ -312,7 +376,11 @@ export class SurvivalJob {
         remember({ action: decision.name, args: decision.args, error: error.message, result: error.result });
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') throw error;
         const after=this.snapshot(), routes=error.result?.route_attempts;
-        if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext);
+        if(decision.name==='craft'){
+          craftFailureContexts.set(signature,actionStartContext);
+          if(error.code==='WORKSTATION_EGRESS_UNVERIFIED' && error.workstation==='crafting_table')blockedWorkstations.set(signature,(blockedWorkstations.get(signature) ?? 0)+1);else blockedWorkstations.delete(signature);
+        }
+        if(decision.name==='go_to')travelFailurePositions.set(signature,actionStartContext.position);
         if(decision.name==='explore' && Array.isArray(routes) && routes.length && routes.every(r=>r?.status==='unverified')
           && distance(before.position,after.position)<=0.1 && inventoryKey(before)===inventoryKey(after)) {
           // The failed probe changed no material or position. Try an unspent
