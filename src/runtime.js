@@ -1,3 +1,4 @@
+import { observeOwnInjuries } from './injury-observer.js';
 import { sectionSearchDistance } from './block-search.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import mineflayer from 'mineflayer';
@@ -105,12 +106,14 @@ export class Runtime {
     let progression = {};
     try { progression = observeProgression(world); } catch { /* no spawned world yet */ }
     const players = this.bot ? Object.values(this.bot.players).filter(p => p.entity && p.username !== this.bot.username).map(p => p.username) : [];
-    return { ...world, players, connected: this.connection === 'connected', connection: this.connection, owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression, survival: this.survival?.state() ?? null };
+    return { ...world, players, connected: this.connection === 'connected', connection: this.connection, owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression, survival: this.survival?.state() ?? null, recentInjuries: this.injuryObserver?.recent() ?? [] };
   }
   state() { return { ...this.snapshot(), config: publicConfig(this.config), ai: this.brain.state(), events: this.events, tools: this.definitions() }; }
   connect() {
     if (this.closed || this.bot) return;
     clearTimeout(this.reconnectTimer);
+    this.injuryObserver?.dispose();
+    this.injuryObserver = null;
     this.connection = 'connecting';
     const { owner, ...connection } = this.config.minecraft;
     let bot;
@@ -155,7 +158,11 @@ export class Runtime {
       }).catch(error => this.say(error.message));
     });
     bot.on('breath', () => { if (this.bot === bot) this.survival.checkAir(); });
-    bot.on('health', () => { if (this.bot === bot) this.checkHealth(); });
+    this.injuryObserver = observeOwnInjuries(bot, {
+      isCurrent: () => this.bot === bot && !this.closed,
+      log: this.log.bind(this), action: () => this.runner.active?.name ?? null,
+      onHealth: () => this.checkHealth()
+    });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
       this.survival.stop('Died; inspect the respawn state before resuming.');
@@ -278,6 +285,7 @@ export class Runtime {
   }
   async close() {
     this.closed = true;
+    this.injuryObserver?.dispose();
     clearTimeout(this.reconnectTimer);
     clearInterval(this.reflexTimer);
     this.stop('Shutting down');

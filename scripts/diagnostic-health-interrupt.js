@@ -12,7 +12,7 @@ import { pingTcp } from './doctor.js';
 const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
 const directory=join(SERVER_DIR,'smoke',`health-${new Date().toISOString().replace(/[:.]/g,'-')}-${randomUUID().slice(0,8)}`);
 const result={kind:'prepared-health-interruption',started:new Date().toISOString(),minecraft:VERSION,fixture:'Fresh isolated prepared flat world, supplied log blocks, normal survival with empty inventory. Natural regeneration and mobs disabled. Console applies13 generic damage during real log digging; the ordinary one-second reflex timer is disabled to isolate the health event. Not natural-world reliability or proof of injury prevention.',sourceHashes:{},passed:false};
-for(const f of ['src/runtime.js','src/survival.js','src/starter-limits.js','scripts/diagnostic-health-interrupt.js'])result.sourceHashes[f]=createHash('sha256').update(await readFile(new URL('../'+f,import.meta.url))).digest('hex');
+for(const f of ['src/injury-observer.js','src/runtime.js','src/survival.js','src/starter-limits.js','scripts/diagnostic-health-interrupt.js'])result.sourceHashes[f]=createHash('sha256').update(await readFile(new URL('../'+f,import.meta.url))).digest('hex');
 await requireEula(SERVER_DIR,{interactive:false});
 const {java}=await setupServer({log:console.log});
 const port=25637,bedrockPort=19147;
@@ -42,6 +42,8 @@ try{
  await waitFor(()=>active.controller.signal.aborted,1500,'event-driven action interruption');
  await waitFor(()=>!runtime.survival.active&&!runtime.runner.active,5000,'cancelled action settling');
  result.after={health:runtime.bot.health,abortReason:active.controller.signal.reason?.message,jobStatus:runtime.survival.state()?.status,jobReason:runtime.survival.state()?.reason,elapsedMs:Date.now()-began,digging:!!runtime.bot.targetDigBlock};
+ result.after.injuries = runtime.snapshot().recentInjuries;
+ assert.ok(result.after.injuries.some(e => e.kind === 'health_loss' && e.before === 20 && e.after === 7 && e.cause === 'unattributed'), 'retain the health loss without inventing its cause');
  assert.ok(runtime.bot.health>6&&runtime.bot.health<=8,'test must exercise the gap above old runtime threshold');
  assert.equal(result.after.jobStatus,'paused');assert.match(result.after.abortReason,/Low health/);assert.equal(result.after.digging,false);result.passed=true;
  console.log('PASS event-driven starter interruption above the old six-health threshold');
