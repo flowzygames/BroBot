@@ -2,7 +2,7 @@ const panel = document.querySelector('#worldEvidence');
 if (panel) {
   const list = panel.querySelector('#worldCases'), status = panel.querySelector('#worldStatus');
   const filter = panel.querySelector('#worldFilter'), query = panel.querySelector('#worldSearch'), shown = panel.querySelector('#worldShown');
-  let data, selected = 'pickup308';
+  let data, selected = panel.dataset?.defaultCohort || 'pickup308';
   const render = () => {
     if (!data) return;
     const group = data.groups[selected];
