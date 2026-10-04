@@ -1,3 +1,4 @@
+import { sectionSearchDistance } from './block-search.js'
 import pathfinderPackage from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import { configureCollisionMargin } from './collision-margin.js'
@@ -117,7 +118,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       }
       return closest
     }
-    const positions = bot.findBlocks({ matching: id, maxDistance: Math.ceil(radius * Math.sqrt(3) + 24), count: 256 }).filter(p => p.distanceTo(origin) <= radius && accept(bot.blockAt(p))).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
+    const positions = bot.findBlocks({ matching: id, maxDistance: sectionSearchDistance(radius), count: 256 }).filter(p => p.distanceTo(origin) <= radius && accept(bot.blockAt(p))).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
     return positions.length ? bot.blockAt(positions[0]) : null
   }
   const checked = ctx => { if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
@@ -370,7 +371,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const deadline = performance.now() + 500
       let inspected = 0
       try {
-        bot.findBlocks({ matching: definition.id, maxDistance: radius, count: 512, useExtraInfo: block => {
+        bot.findBlocks({ matching: definition.id, maxDistance: sectionSearchDistance(radius), count: 512, useExtraInfo: block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
           const p = block.position
