@@ -1,0 +1,10 @@
+{
+  "testedCommit": "2f74d081f2e908e06d5918cdcfdad31a757499f5",
+  "sha256": {
+    "src/runtime.js": "ba6cedbd43791c439a1377b304cecc44363c742bdd9c0338f29490123a6923b7",
+    "src/injury-observer.js": "2a2114ff9b51c580f330048391c0301725891576a539bf7e769be415b6613606",
+    "test/runtime-health.test.js": "87281e2bc784828fc123ca0bf4c0802be83b45231af3a6eb7462908f2465942f",
+    "test/injury-observer.test.js": "9ec7a8c59c98a34d6fef2f2d3f9fcd4b0a739a55447e983291e47844319748f4",
+    "scripts/diagnostic-hostile-interruption.js": "1a0b39b6c187060c8c7f968fea5700e206e9f546b633dd76f9f80e28a22de75e"
+  }
+}

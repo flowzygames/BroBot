@@ -1,0 +1,543 @@
+{
+  "kind": "prepared-hostile-melee-interruption",
+  "started": "2026-10-04T21:54:50.468Z",
+  "minecraft": "1.21.8",
+  "fixture": "Flat console-prepared dry arena at night. An actual offline starter job begins collecting distant logs; the harness prepares one ordinary zombie ahead of the route before starting. Observe real melee and runtime interruption before any dig. The harness removes the zombie only after a recorded hostile stop. This proves interruption, not defense, retreat, protection from later attacks or natural-world completion.",
+  "sourceHashes": {
+    "src/actions.js": "102f80debed8cf4277566ec7eec1a6990abe2461a7edec9d247447f48b5d758f",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "253463abd3b593ec025c9ebb3e0f87a9e8f880ef07a632482bac98a122417657",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "2a2114ff9b51c580f330048391c0301725891576a539bf7e769be415b6613606",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "40a88f5d2496cdacf0d6cad09fab1df4887880a55d87d7765c2abe003b676846",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "src/runner.js": "acc0da55a868220e6ac0f50367615cbafd3f4290f28ff0f6e3b61ff080a80a5a",
+    "src/runtime.js": "ba6cedbd43791c439a1377b304cecc44363c742bdd9c0338f29490123a6923b7",
+    "src/scout-coverage.js": "13c4047e2756ab280a1140ba45355032b06ff5a3db79477b60293e07ecb07a66",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "3f157245153ceeead7caf1aa8561d6fe1d478fcace59c6dd8acdbc8da0642c2a",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "3f8e5c423f93d49a451985fa4f678548252ceb9505f4a65b07e24b984ed2d18f",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-hostile-interruption.js": "1a0b39b6c187060c8c7f968fea5700e206e9f546b633dd76f9f80e28a22de75e"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [],
+  "healthEvents": [
+    {
+      "at": "2026-10-04T21:55:14.392Z",
+      "before": 20,
+      "after": 17
+    },
+    {
+      "at": "2026-10-04T21:55:14.828Z",
+      "before": 17,
+      "after": 17.83333396911621
+    },
+    {
+      "at": "2026-10-04T21:55:15.328Z",
+      "before": 17.83333396911621,
+      "after": 18.5
+    }
+  ],
+  "cleanupErrors": [],
+  "commit": "2f74d081f2e908e06d5918cdcfdad31a757499f5",
+  "dirty": false,
+  "stops": [
+    {
+      "at": "2026-10-04T21:55:14.391Z",
+      "reason": "Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.",
+      "action": "collect",
+      "aborted": true,
+      "goalCleared": true,
+      "controls": {
+        "forward": false,
+        "back": false,
+        "left": false,
+        "right": false,
+        "jump": false,
+        "sprint": false,
+        "sneak": false
+      }
+    },
+    {
+      "at": "2026-10-04T21:55:15.444Z",
+      "reason": "Shutting down",
+      "action": null,
+      "aborted": null,
+      "goalCleared": true,
+      "controls": {
+        "forward": false,
+        "back": false,
+        "left": false,
+        "right": false,
+        "jump": false,
+        "sprint": false,
+        "sneak": false
+      }
+    }
+  ],
+  "hurts": [
+    {
+      "at": "2026-10-04T21:55:14.390Z",
+      "source": {
+        "id": 22,
+        "name": "zombie",
+        "type": "hostile"
+      },
+      "active": "collect",
+      "aborted": false,
+      "digsSoFar": 0,
+      "position": {
+        "x": 0.8954855286304338,
+        "y": 64,
+        "z": 0.8954855286301632
+      },
+      "healthObserved": 20
+    }
+  ],
+  "digs": [],
+  "summon": {
+    "x": 12.5,
+    "y": 64,
+    "z": 0.5
+  },
+  "before": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 18000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 22,
+        "name": "zombie",
+        "type": "hostile",
+        "username": null,
+        "position": {
+          "x": 12.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "distance": 12
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "start": {
+    "started": true,
+    "mode": "offline-observation-driven",
+    "goal": "stone pickaxe and furnace, then return to start",
+    "id": "85625377-346f-436b-91b2-d39b2b21b858"
+  },
+  "probeZombies": [
+    {
+      "id": 22,
+      "name": "zombie"
+    }
+  ],
+  "zombieRemovalAfterStop": "2026-10-04T21:55:14.402Z",
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.09,
+      "y": 64,
+      "z": 1.08
+    },
+    "dimension": "overworld",
+    "health": 18.5,
+    "food": 20,
+    "oxygen": null,
+    "time": 18000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 23,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 2.41,
+          "y": 64,
+          "z": 1.13
+        },
+        "distance": 2.3
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "85625377-346f-436b-91b2-d39b2b21b858",
+      "goal": "starter",
+      "context": "127.0.0.1:25641/BroBotHome",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 1,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {},
+      "history": [],
+      "started": "2026-10-04T21:55:08.715Z",
+      "recoverDropIds": [],
+      "status": "paused",
+      "reason": "Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 64,
+          "z": 0.5
+        }
+      ],
+      "tables": [],
+      "stopping": false
+    },
+    "recentInjuries": [
+      {
+        "at": "2026-10-04T21:55:14.391Z",
+        "kind": "hurt_observation",
+        "entityId": 21,
+        "source": {
+          "id": 22,
+          "name": "zombie",
+          "type": "hostile"
+        },
+        "sourceStatus": "observed_entity",
+        "health_observed": 20,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "collect",
+        "position": {
+          "x": 0.8954855286304338,
+          "y": 64,
+          "z": 0.8954855286301632
+        },
+        "dimension": "overworld"
+      },
+      {
+        "at": "2026-10-04T21:55:14.391Z",
+        "kind": "health_loss",
+        "before": 20,
+        "after": 17,
+        "loss": 3,
+        "cause": "unattributed",
+        "action": "collect",
+        "position": {
+          "x": 0.8954855286304338,
+          "y": 64,
+          "z": 0.8954855286301632
+        },
+        "dimension": "overworld"
+      }
+    ]
+  },
+  "finalJob": {
+    "version": 1,
+    "id": "85625377-346f-436b-91b2-d39b2b21b858",
+    "goal": "starter",
+    "context": "127.0.0.1:25641/BroBotHome",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 64,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 1,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {},
+    "history": [],
+    "started": "2026-10-04T21:55:08.715Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 64,
+        "z": 0.5
+      }
+    ],
+    "tables": [],
+    "stopping": false
+  },
+  "finalControls": {
+    "forward": false,
+    "back": false,
+    "left": false,
+    "right": false,
+    "jump": false,
+    "sprint": false,
+    "sneak": false
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.09,
+      "y": 64,
+      "z": 1.08
+    },
+    "dimension": "overworld",
+    "health": 18.5,
+    "food": 20,
+    "oxygen": null,
+    "time": 18000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 23,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 2.41,
+          "y": 64,
+          "z": 1.13
+        },
+        "distance": 2.3
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": {
+      "version": 1,
+      "id": "85625377-346f-436b-91b2-d39b2b21b858",
+      "goal": "starter",
+      "context": "127.0.0.1:25641/BroBotHome",
+      "home": {
+        "position": {
+          "x": 0.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld"
+      },
+      "steps": 1,
+      "scouts": 0,
+      "clearings": 0,
+      "excluded": {},
+      "history": [],
+      "started": "2026-10-04T21:55:08.715Z",
+      "recoverDropIds": [],
+      "status": "paused",
+      "reason": "Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.",
+      "observedPositions": [
+        {
+          "x": 0.5,
+          "y": 64,
+          "z": 0.5
+        }
+      ],
+      "tables": [],
+      "stopping": false
+    },
+    "recentInjuries": [
+      {
+        "at": "2026-10-04T21:55:14.391Z",
+        "kind": "hurt_observation",
+        "entityId": 21,
+        "source": {
+          "id": 22,
+          "name": "zombie",
+          "type": "hostile"
+        },
+        "sourceStatus": "observed_entity",
+        "health_observed": 20,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "collect",
+        "position": {
+          "x": 0.8954855286304338,
+          "y": 64,
+          "z": 0.8954855286301632
+        },
+        "dimension": "overworld"
+      },
+      {
+        "at": "2026-10-04T21:55:14.391Z",
+        "kind": "health_loss",
+        "before": 20,
+        "after": 17,
+        "loss": 3,
+        "cause": "unattributed",
+        "action": "collect",
+        "position": {
+          "x": 0.8954855286304338,
+          "y": 64,
+          "z": 0.8954855286301632
+        },
+        "dimension": "overworld"
+      }
+    ]
+  },
+  "lastJob": {
+    "version": 1,
+    "id": "85625377-346f-436b-91b2-d39b2b21b858",
+    "goal": "starter",
+    "context": "127.0.0.1:25641/BroBotHome",
+    "home": {
+      "position": {
+        "x": 0.5,
+        "y": 64,
+        "z": 0.5
+      },
+      "dimension": "overworld"
+    },
+    "steps": 1,
+    "scouts": 0,
+    "clearings": 0,
+    "excluded": {},
+    "history": [],
+    "started": "2026-10-04T21:55:08.715Z",
+    "recoverDropIds": [],
+    "status": "paused",
+    "reason": "Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.",
+    "observedPositions": [
+      {
+        "x": 0.5,
+        "y": 64,
+        "z": 0.5
+      }
+    ],
+    "tables": [],
+    "stopping": false
+  },
+  "finished": "2026-10-04T21:55:16.763Z"
+}
