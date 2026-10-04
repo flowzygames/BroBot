@@ -1,0 +1,10 @@
+{
+  "testedCommit": "d646e93d31ed08fa81709ab8d5f452824d3dd2df",
+  "sha256": {
+    "src/actions.js": "befff7af985bd4056f627a7c1dcdd96a85e4a960bff0aeabf80c1de0fca16798",
+    "src/item-identity.js": "abf2eb18ee259391f14dfe6f08c0b3f531e8bae5fd7a4fdec01ae425b6abdafc",
+    "test/actions.test.js": "03a4638716984fd48cd07d9b9a8c7eebc5e12663d6ff8db569d5f1d397160851",
+    "test/item-identity.test.js": "efc662a02ac852efda2a47449a30ba4c4d75ec7a3fc6a866a22a33df2085be29",
+    "scripts/diagnostic-component-stacks.js": "055affdeab01a32b2912bf00783ca7896d95b142dd36b97592e4d4e58e8e66e6"
+  }
+}
