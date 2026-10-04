@@ -10,6 +10,11 @@ if (panel) {
     list.replaceChildren();
     status.textContent = `${group.passed}/${group.scheduled} completed the full starter objective · ${group.label}${group.note ? ' · ' + group.note : ''}`;
     panel.querySelectorAll('[data-cohort]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cohort === selected)));
+    const archive = panel.querySelector('#earlierCohorts');
+    if (archive) {
+      const legacySelected = Array.from(archive.querySelectorAll('[data-cohort]')).some(button => button.dataset.cohort === selected);
+      archive.querySelector('summary').textContent = legacySelected ? `Earlier checkpoints · selected: ${group.label}` : `Earlier checkpoints (${archive.querySelectorAll('[data-cohort]').length})`;
+    }
     const needle = query.value.trim();
     const visible = group.cases.filter(run => (!needle || run.seed.includes(needle)) && (filter.value === 'all' || (filter.value === 'passed' ? run.passed : !run.passed)));
     shown.textContent = `Showing ${visible.length} of ${group.scheduled} recorded runs. Filters do not change the score above.`;
