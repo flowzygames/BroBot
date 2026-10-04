@@ -1,4 +1,4 @@
-> Source follow-up: **365 automated checks**; starter health interruption, mining safeguards and honest injury reporting. [Health evidence](benchmarks/results/health-interrupt-2026-10-04/README.md) · [Mining evidence](benchmarks/results/mining-preflight-2026-10-04/README.md) · [Pre-dig checks](benchmarks/results/pre-dig-recheck-2026-10-04/README.md) · [Injury reporting](benchmarks/results/injury-reporting-2026-10-04/README.md). The downloadable Core0.2 build and its frozen scores below are unchanged.
+> Latest verified source: **454 automated checks**, **17/17 prepared Minecraft phases**, **13/20 known worlds** and **3/3 separate original worlds** on frozen source `5b66f11`. [Complete evidence and limits](benchmarks/results/recovery-full454-2026-10-04/README.md). The downloadable Core 0.2 package and its frozen scores below are unchanged.
 
 > **BroBot Core 0.2:** 346 automated checks and **11/20** known natural worlds, versus Core 0.1’s 10/20. One additional completion; nine worlds still failed. Separate original-world regression: **1/3**, down from Core 0.1’s 2/3. [Full records and limitations](benchmarks/results/core02-2026-10-04/README.md).
 
@@ -24,7 +24,17 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 - Skips redundant collection retries only when fresh terrain, inventory and position checks still match
 - Switches promptly to eating or returning home when the observed state calls for it
 
-Core names identify the software agent release, not a newly trained foundation model. These changes are covered by 346 automated checks. Natural-world success remains limited: 11/20 on the same known development seeds, with no failed run replaced. The automatic canopy-recovery experiment did not demonstrate improvement and is excluded.
+Core names identify the software agent release, not a newly trained foundation model. These changes are covered by 346 automated checks. Natural-world success remains limited: 11/20 on the same known development seeds, with no failed run replaced. The earlier automatic canopy-recovery experiment is excluded from the public Core 0.2 package; the newer development hook below is a separate, narrowly bounded implementation.
+
+## New in the development source
+
+- Reuses unchanged collection candidates without repeating the same search after unrelated distant block updates
+- Keeps failed pickup retries bounded while rechecking changed terrain, movement and item identity
+- Retains actual verified waypoint arrivals so nominal coordinates cannot reopen spent return loops
+- Recognizes equivalent completed scouting destinations across slightly different trip lengths
+- Can attempt the existing certified one-leaf descent after two explicitly identified crafting-table exit failures, with fresh healthy grounded evidence and at most four distinct-cell attempts
+
+A controlled Minecraft setup demonstrated the canopy step, pickaxe crafting and a separately requested return. None of the 23 natural-world attempts activated that hook, so general tree escape is not established. Hostile protection is also incomplete: the latest cohort includes a successful run with skeleton damage. [Candidate mechanisms and prepared proof](benchmarks/results/recovery-candidate-2026-10-04/README.md).
 
 ## Meet your second pair of hands
 
@@ -62,13 +72,13 @@ playing; Ctrl+C saves and closes the world.
 ```sh
 git clone https://github.com/flowzygames/BroBot.git
 cd BroBot
-git checkout feat/starter-recovery-and-readme
+git checkout main
 npm ci
 npm run setup
 npm run play
 ```
 
-This README describes the development branch `feat/starter-recovery-and-readme`. Until its draft pull request is merged, a default-branch checkout may not contain these features.
+GitHub `main` is the development source and includes newer fixes than the downloadable Core 0.2 package. The release download keeps its own frozen version and evidence.
 
 1. Enter your exact player name during setup. Leave the API key blank to use direct controls and the offline starter.
 2. Review and accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula) when the launcher asks.
@@ -180,14 +190,24 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to 24 sc
 
 ## Measured, not guessed
 
-### Current wood and safety checkpoint · October 2, 2026 UTC
+### Latest complete source evaluation · October 4, 2026 UTC
+
+- **13/20 known worlds** completed the starter kit and returned home, versus **11/20** in the prior full 426-check run and public Core 0.2 snapshot
+- **3/3 separate original worlds** and **17/17 prepared phases** passed
+- Two paired known-world gains and no lost passes in this run; variable routes and mob timing prevent attributing each result to one change
+- Every raw result and full event journal is retained, including failures and the skeleton-damage run
+- These are repeated development worlds, not an unseen holdout or stable 1.0 readiness result
+
+[Full source identity, archive and limitations](benchmarks/results/recovery-full454-2026-10-04/README.md)
+
+### Historical wood and safety checkpoint · October 2, 2026 UTC
 
 - **293 automated checks**, **17/17 prepared smoke phases**, **11/11 skills**, and **20/20 local controls** passed
 - Reduced redundant wood collection after partial crafting; immediate powder-snow contact warning
 - **1/2 selected known-world replays** completed; no full 20-world score on this source
 - The passing replay changed route before gathering and did not exercise the changed partial-wood branch, so it is not causal proof of improvement
 
-[Current evidence and tested-code manifest](benchmarks/results/wood-deficit-2026-10-02/)
+[Historical evidence and tested-code manifest](benchmarks/results/wood-deficit-2026-10-02/)
 
 ### Previous expanded exploration checkpoint · October 2, 2026 UTC
 
@@ -209,7 +229,7 @@ Starter jobs have health, hunger, dimension, travel and work limits: up to 24 sc
 - A bounded pickup probe can now certify one visible removal that creates safe standing space near a tracked drop, while checking both walking directions
 - `action descend_notch {}` is a separately invoked experimental one-leaf descent; it does not automatically descend a whole canopy
 
-[Complete current evidence and tested-file manifest](benchmarks/results/pocket-standing-2026-10-01/) · [Recovery mechanism and limits](docs/FOLIAGE_RECOVERY.md)
+[Complete historical evidence and tested-file manifest](benchmarks/results/pocket-standing-2026-10-01/) · [Recovery mechanism and limits](docs/FOLIAGE_RECOVERY.md)
 
 These are known-case single-run outcomes. Variable mob and item timing means the paired successes do not isolate the fix's effect. One server startup stopped before world creation and was restarted unchanged; no completed gameplay result was replaced. Stable 1.0, rendered Windows/Mac or actual Bedrock-client gameplay, and paid-planner behavior remain unverified.
 
