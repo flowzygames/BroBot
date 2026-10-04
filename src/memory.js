@@ -13,12 +13,15 @@ export class Memory {
     }
     if (!this.data || Array.isArray(this.data) || typeof this.data !== 'object') throw new Error('Invalid memory file.');
   }
+  has(key) { return Object.hasOwn(this.data, key); }
   get(key, fallback) { return structuredClone(this.data[key] ?? fallback); }
   set(key, value) {
     if (['__proto__', 'constructor', 'prototype'].includes(key)) throw new Error('Invalid memory key.');
-    this.data[key] = structuredClone(value);
-    writeFileSync(`${this.file}.tmp`, JSON.stringify(this.data, null, 2), { mode: 0o600 });
+    const next = { ...this.data, [key]: structuredClone(value) };
+    writeFileSync(`${this.file}.tmp`, JSON.stringify(next, null, 2), { mode: 0o600 });
     renameSync(`${this.file}.tmp`, this.file);
+    // Readers must not observe a state transition that failed to persist.
+    this.data = next;
   }
   getWaypoint(name) { return this.get('waypoints', {})[name]; }
   setWaypoint(name, position, dimension) {
