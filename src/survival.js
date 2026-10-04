@@ -145,8 +145,11 @@ export class SurvivalJob {
   async loop(signal) {
     const deadline = Date.now() + this.maxDurationMs;
     const failures = new Map(), craftFailureContexts = new Map();
-    const retryContext = (state, observation) => ({inventoryKey:inventoryKey(state),observationKey:JSON.stringify(observation),position:{...state.position}});
-    const sameContext = (saved, state, observation) => saved && inventoryKey(state)===saved.inventoryKey && JSON.stringify(observation)===saved.observationKey && distance(state.position,saved.position)<=0.1;
+    const observationKey = (observation, retryKind) => JSON.stringify(retryKind === 'craft'
+      ? { tableInReach: observation.tableInReach, tables: (observation.tables ?? []).map(p=>[p.x,p.y,p.z]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]), craftGeometry: observation.craftGeometry ?? observation.localTerrain ?? [], powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
+      : observation);
+    const retryContext = (state, observation, retryKind = null) => ({retryKind,inventoryKey:inventoryKey(state),observationKey:observationKey(observation,retryKind),position:{...state.position}});
+    const sameContext = (saved, state, observation) => saved && inventoryKey(state)===saved.inventoryKey && observationKey(observation,saved.retryKind)===saved.observationKey && distance(state.position,saved.position)<=0.1;
     const firstStep = this.job.steps;
     let recovery = this.job.recoverDropIds?.length ? action('pickup', { radius: 16, entity_ids: [...this.job.recoverDropIds] }, 'Recover still-observed drops from this play session after resuming.') : null;
     const excludeFailures = (decision, result) => {
@@ -178,6 +181,12 @@ export class SurvivalJob {
       if (decision.waypointKind === 'home' || decision.name === 'eat') recovery = null;
       const intendedAction = decision.name ? JSON.stringify([decision.name,decision.args]) : null;
       if (decision.name==='craft' && craftFailureContexts.has(intendedAction) && !sameContext(craftFailureContexts.get(intendedAction),this.snapshot(),observation)) {
+        const previous = craftFailureContexts.get(intendedAction), current = this.snapshot();
+        this.log('survival', 'Craft retry evidence changed', {
+          inventory_changed: inventoryKey(current) !== previous.inventoryKey,
+          position_changed: distance(current.position, previous.position) > 0.1,
+          workstation_observation_changed: observationKey(observation, 'craft') !== previous.observationKey
+        });
         failures.delete(intendedAction);craftFailureContexts.delete(intendedAction);
       }
       if (recovery?.scout && Object.hasOwn(recovery,'sourceIntent')) {
@@ -209,7 +218,7 @@ export class SurvivalJob {
           observations: this.job.observedPositions, attempts: this.job.scoutAttempts, lastSuccess: this.job.lastScoutSuccess });
         if (!choices.length) throw new Error('No bounded exploration target remains inside the job area.');
         this.job.scouts++;
-        decision = { ...action('explore', { ...choices[0], alternatives: choices.slice(1).map(c => c.direction) }, decision.scout), scoutOrigin: { ...origin }, sourceIntent:Object.hasOwn(decision,'sourceIntent')?decision.sourceIntent:intendedAction };
+        decision = { ...action('explore', { ...choices[0], alternatives: choices.slice(1).map(c => c.direction) }, decision.scout), scoutOrigin: { ...origin }, retryKind: decision.retryKind ?? null, sourceIntent:Object.hasOwn(decision,'sourceIntent')?decision.sourceIntent:intendedAction };
       }
       const signature = JSON.stringify([decision.name, decision.args]);
       if (decision.name === 'collect' && this.job.excluded?.[decision.args.block]?.length) decision.args.skip_positions = this.job.excluded[decision.args.block];
@@ -232,7 +241,7 @@ export class SurvivalJob {
         if (decision.name === 'collect' && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
           this.job.clearings = (this.job.clearings ?? 0) + 1;
           recovery = action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.');
-        } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation) };
+        } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation,decision.name) };
         // Scout decisions are resolved on the next pass; keep a bounded retry cap
         // even when environment changes, instead of silently clearing failures.
         failures.delete(signature);
@@ -263,7 +272,7 @@ export class SurvivalJob {
             ...(completedEndpoint && direction === (result.direction ?? decision.args.direction) ? {completed:true,novel:completedNovel,endpoint:completedEndpoint} : {}) }))].slice(-STARTER_SCOUT_LIMIT * 4);
       };
       this.job.steps++; this.save();
-      const actionStartContext = retryContext(this.snapshot(),observation);
+      const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
       try {
         const result = await this.execute(decision.name, decision.args, signal);
         rememberScout(result);
@@ -310,7 +319,7 @@ export class SurvivalJob {
           // scout instead of paying for identical failed mining/crafting attempts.
           // Fresh resources, tables, inventory or movement invalidate this hint.
           recovery={scout:'The last route probe left gathering conditions unchanged. Try another bounded approach.',afterFailedScout:true,
-            sourceIntent:decision.sourceIntent??null,...retryContext(after,observation)};
+            sourceIntent:decision.sourceIntent??null,...retryContext(after,observation,decision.retryKind)};
         }
       }
       await sleep(this.intervalMs, undefined, { signal });

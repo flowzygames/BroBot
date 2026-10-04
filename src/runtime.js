@@ -1,3 +1,4 @@
+import { craftGeometryKey } from './craft-retry-evidence.js';
 import { observeOwnInjuries } from './injury-observer.js';
 import { sectionSearchDistance } from './block-search.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
@@ -71,7 +72,8 @@ export class Runtime {
         // Once carried materials determine the next action, scanning forest
         // sections again adds latency without changing that decision. Keep
         // checking workstation, drop and safety observations below.
-        const needsWood = !this.survival.job?.home || Boolean(nextStarterStep(seen, {...this.survival.job,tables}, {tableInReach,powderSnowContact,lavaContact}).scout);
+        const nextStep = this.survival.job?.home ? nextStarterStep(seen, {...this.survival.job,tables}, {tableInReach,powderSnowContact,lavaContact}) : null;
+        const needsWood = !nextStep || Boolean(nextStep.scout);
         const positions = needsWood ? this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) }) : [];
         // findBlocks may fill a small cap in one chunk section before examining a
         // closer tree across its boundary. Sort a larger bounded sample, then
@@ -79,7 +81,7 @@ export class Runtime {
         const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
         const wood = observedLogs[0];
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
-        return { terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
+        return { ...(nextStep?.name === 'craft' ? {craftGeometry:craftGeometryKey(this.bot)} : {}), terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
       execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
