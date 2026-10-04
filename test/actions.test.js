@@ -1061,3 +1061,56 @@ test('automatic workstation rechecks terrain changed during its final look', asy
   await assert.rejects(createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1}),/No verified local exit/);
   assert.equal(placed,0);
 });
+
+function collectionPathFixture(bot) {
+  bot.pathfinder.getPathFromTo = function * (movement,start,goal) {
+    const p=goal.target ? goal.target.offset(-1,0,0) : new Vec3(goal.x,goal.y,goal.z)
+    yield {result:{status:'success',path:[p]}}
+  }
+}
+test('stationary mining vetoes do not starve a farther safe collection candidate',async()=>{
+  const bot=fakeBot();collectionPathFixture(bot)
+  for(const x of [2,3])for(const z of [-2,-1,0,1]){const p=new Vec3(x,64,z);bot.putBlock('stone',p);bot.putBlock('water',p.offset(0,1,0))}
+  const safe=new Vec3(14,64,0);bot.putBlock('stone',safe)
+  bot.dig=async block=>{assert.ok(block.position.equals(safe));bot.removeBlock(safe);bot.addItem('cobblestone')}
+  const result=await createActions(bot).execute('collect',{block:'stone',count:1,radius:24})
+  assert.equal(result.mined,1);assert.equal(result.failures.length,0)
+})
+test('collection rejects static hazards before walking and retries after their removal',async()=>{
+  for(const hazard of ['waterlogged','liquid','falling','unloaded']){
+    const bot=fakeBot(),p=new Vec3(12,64,0);collectionPathFixture(bot)
+    bot.putBlock('stone',p,{isWaterlogged:hazard==='waterlogged'})
+    if(hazard==='liquid')bot.putBlock('water',p.offset(0,1,0))
+    if(hazard==='falling')bot.putBlock('gravel',p.offset(0,1,0))
+    const original=bot.blockAt;let unloaded=hazard==='unloaded'
+    bot.blockAt=q=>unloaded&&q.equals(p.offset(0,1,0))?null:original(q)
+    let walks=0;const old=bot.pathfinder.getPathFromTo;bot.pathfinder.getPathFromTo=function*(...a){walks++;yield*old(...a)}
+    const actions=createActions(bot);await assert.rejects(actions.execute('collect',{block:'stone',count:1,radius:24}),/Could not collect/)
+    assert.equal(walks,0,`do not plan a route to ${hazard}`)
+    unloaded=false;bot.putBlock('stone',p);bot.removeBlock(p.offset(0,1,0))
+    bot.dig=async block=>{bot.removeBlock(block.position);bot.addItem('cobblestone')}
+    assert.equal((await actions.execute('collect',{block:'stone',count:1,radius:24})).mined,1)
+  }
+})
+test('fresh mining checks reject liquid appearing while equipping a tool',async()=>{
+  const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('stone',p)
+  const tool=bot.addItem('wooden_pickaxe');bot.pathfinder.bestHarvestTool=()=>tool
+  bot.equip=async item=>{bot.heldItem=item;bot.putBlock('water',p.offset(0,1,0))}
+  let dug=false;bot.dig=async()=>{dug=true;bot.removeBlock(p)}
+  await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0}),/adjacent liquid/)
+  assert.equal(dug,false)
+})
+test('real Mineflayer search filters unsafe resources before the 512-candidate cap',async()=>{
+  const {realSectionSearch}=await import('./helpers/section-search.js')
+  const bot=fakeBot();collectionPathFixture(bot);const stones=[]
+  for(let x=2;x<=15;x++)for(let z=0;z<=15;z++)for(const y of [64,66,68]){
+    const p=new Vec3(x,y,z);stones.push(bot.putBlock('stone',p));bot.putBlock('water',p.offset(0,1,0))
+  }
+  const safe=new Vec3(40,64,0);stones.push(bot.putBlock('stone',safe))
+  bot.findBlocks=realSectionSearch(bot,stones)
+  const unfiltered=bot.findBlocks({matching:registry.blocksByName.stone.id,maxDistance:64,count:512})
+  assert.equal(unfiltered.length,512);assert.equal(unfiltered.some(p=>p.equals(safe)),false)
+  bot.dig=async block=>{assert.ok(block.position.equals(safe));bot.removeBlock(safe);bot.addItem('cobblestone')}
+  const result=await createActions(bot).execute('collect',{block:'stone',count:1,radius:64})
+  assert.equal(result.mined,1);assert.equal(result.failures.length,0);assert.equal(result.search_limited,false)
+})

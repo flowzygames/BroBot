@@ -378,6 +378,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
           const p = block.position
           if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || !insideBoundary(p) || skipped.has(p.toString())) return false
           if (!DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d))))) return false
+          // Pose-independent vetoes belong before the candidate cap and any
+          // route planning. Recompute every search; terrain may change later.
+          if (miningEnvironmentIssue(block)) return false
           candidates.push(p)
           return true
         } })
@@ -425,6 +428,17 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return result
   }
 
+  function miningEnvironmentIssue (block) {
+    if (!block?.position) return 'Mining target is unloaded'
+    if (block.isWaterlogged) return 'Mining would release water from a waterlogged block'
+    const p = block.position
+    const neighbors = DIRECTIONS.filter(d => d.y >= 0).map(d => bot.blockAt(p.plus(d)))
+    if (!neighbors.every(b => b && !isFluidBearingBlock(b))) return 'Mining would expose adjacent liquid or an unloaded block'
+    const above = bot.blockAt(p.offset(0, 1, 0))
+    if (/^(sand|red_sand|gravel|anvil|chipped_anvil|damaged_anvil|pointed_dripstone)$|_concrete_powder$/.test(above.name)) return `Mining would release overhead falling block ${above.name}`
+    return null
+  }
+
   async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
     else await approachBlock(ctx, p)
@@ -436,12 +450,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const touchesFootprint = position.x + 0.31 > p.x && position.x - 0.31 < p.x + 1 && position.z + 0.31 > p.z && position.z - 0.31 < p.z + 1
     const supportsFootprint = touchesFootprint && p.y < position.y && p.y + 1 >= position.y - 0.1
     assert(!(p.x === feet.x && p.z === feet.z && p.y < feet.y) && !supportsFootprint, 'Will not dig the block supporting the bot')
-    assert(!block.isWaterlogged, 'Mining would release water from a waterlogged block')
     assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
-    const neighbors = DIRECTIONS.filter(d => d.y >= 0).map(d => bot.blockAt(p.plus(d)))
-    assert(neighbors.every(b => b && !isFluidBearingBlock(b)), 'Mining would expose adjacent liquid or an unloaded block')
-    const above = loaded(p.offset(0, 1, 0))
-    assert(!/^(sand|red_sand|gravel|anvil|chipped_anvil|damaged_anvil|pointed_dripstone)$|_concrete_powder$/.test(above.name), `Mining would release overhead falling block ${above.name}`)
+    const issue = miningEnvironmentIssue(block)
+    assert(!issue, issue)
     let tool = bot.pathfinder?.bestHarvestTool(block)
     if (!tool || (block.canHarvest && !block.canHarvest(tool.type))) {
       tool = items().filter(item => !block.canHarvest || block.canHarvest(item.type)).sort((a, b) => (block.digTime?.(a.type, false, false, false, [], bot.entity.effects) ?? 0) - (block.digTime?.(b.type, false, false, false, [], bot.entity.effects) ?? 0))[0]
@@ -449,7 +460,12 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (tool) await step(ctx, () => bot.equip(tool, 'hand'))
     assert(!block.canHarvest || block.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${block.name}; refusing to destroy it without drops`)
     assert(expectedBlock == null || loaded(p).name === expectedBlock, 'Target block changed before mining')
-    await step(ctx, () => { beforeDig?.(); return bot.dig(block, true) })
+    await step(ctx, () => {
+      // Equipping can yield to a block update. Do not mine using a stale dry-world check.
+      const issue = miningEnvironmentIssue(loaded(p))
+      assert(!issue, issue)
+      beforeDig?.(); return bot.dig(block, true)
+    })
     assert(loaded(p).name !== block.name, `Server did not confirm mining ${block.name}`)
     return block.name
   }
