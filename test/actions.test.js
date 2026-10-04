@@ -5,12 +5,15 @@ import minecraftData from 'minecraft-data'
 import { Vec3 } from 'vec3'
 import { createActions, definitions } from '../src/actions.js'
 
-const registry = minecraftData('1.21.11')
+const registry = minecraftData('1.21.8')
 
 function fakeBot () {
   const bot = new EventEmitter()
   const blocks = new Map()
   const stacks = []
+  bot.version = '1.21.8'
+  bot._client = new EventEmitter()
+  bot.digTime = () => 0
   bot.registry = registry
   bot.entity = { id: 1, position: new Vec3(0.5, 64, 0.5), yaw: 0, pitch: 0, height: 1.62, onGround: true, effects: {} }
   bot.health = 20
@@ -47,7 +50,7 @@ function fakeBot () {
   bot.addItem = (name, count = 1) => { const item = { name, count, type: registry.itemsByName[name].id, metadata: 0 }; stacks.push(item); return item }
   function putBlock (name, p, extra = {}) { const b = { name, type: registry.blocksByName[name].id, position: p, boundingBox: name === 'air' ? 'empty' : 'block', stateId: registry.blocksByName[name].defaultState, diggable: true, canHarvest: () => true, ...extra }; blocks.set(p.toString(), b); return b }
   bot.putBlock = putBlock
-  bot.removeBlock = p => blocks.delete(p.toString())
+  bot.removeBlock = p => { bot._client.emit('packet', { location: p, type: 0 }, { name: 'block_change' }); blocks.delete(p.toString()) }
   return bot
 }
 
@@ -823,7 +826,7 @@ test('starter movement avoids water while ordinary direct movement keeps its ori
 
 test('actual starter neighbor generation rejects water, aquatic plants and waterlogged standing cells', async () => {
   const {default:loadBlock}=await import('prismarine-block'),{default:Move}=await import('mineflayer-pathfinder/lib/move.js')
-  const Block=loadBlock('1.21.11')
+  const Block=loadBlock('1.21.8')
   for(const name of ['water','bubble_column','kelp','kelp_plant','seagrass','tall_seagrass','oak_sign']) {
     const bot=fakeBot();let bounded=true,movement
     bot.blockAt=p=>{const q=p.floored(),column=q.x===1&&q.z===0&&(q.y===64||q.y===65);const b=Block.fromStateId(registry.blocksByName[q.y===63?'stone':column?name:'air'].defaultState,0);b.position=q;if(column&&name==='oak_sign')b.isWaterlogged=true;return b}
@@ -947,7 +950,7 @@ test('verified long return leg remains bounded but is not cut off by the old15-s
 
 test('starter neighbor generation refuses powder snow and restores direct movement policy', async () => {
   const {default:loadBlock}=await import('prismarine-block'),{default:Move}=await import('mineflayer-pathfinder/lib/move.js')
-  const Block=loadBlock('1.21.11'),bot=fakeBot();let bounded=true,movement
+  const Block=loadBlock('1.21.8'),bot=fakeBot();let bounded=true,movement
   bot.blockAt=p=>{const q=p.floored(),column=q.x===1&&q.z===0&&(q.y===64||q.y===65);const b=Block.fromStateId(registry.blocksByName[q.y===63?'stone':column?'powder_snow':'air'].defaultState,0);b.position=q;return b}
   bot.pathfinder.setMovements=value=>{movement=value}
   const actions=createActions(bot,{movementBoundary:()=>bounded?{center:{x:0,y:64,z:0},radius:20}:null})
@@ -1443,4 +1446,36 @@ test('aborting pickup during grace removes the target collection listener',async
  bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);setTimeout(()=>controller.abort(),10)};
  await assert.rejects(createActions(bot).execute('pickup',{radius:8},controller.signal,{starterScope:'job/1'}),{name:'AbortError'});
  assert.equal(bot.listenerCount('playerCollect'),0);
+});
+
+test('unconfirmed local mining halts collection before another candidate or pickup and blocks reuse', async () => {
+  const bot = fakeBot(); let digs=0, movesAfterDig=0;
+  for (let x=0;x<7;x++) for(let z=-1;z<=1;z++) bot.putBlock('stone',new Vec3(x,63,z));
+  bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));
+  const move=bot.pathfinder.goto;
+  bot.pathfinder.goto=async goal=>{if(digs)movesAfterDig++;return move(goal);};
+  bot.dig=async block=>{digs++;bot.putBlock('air',block.position);bot.entities[99]={id:99,name:'item',position:new Vec3(4.5,64,.5)};};
+  const actions=createActions(bot);
+  await assert.rejects(actions.execute('collect',{block:'oak_log',count:2,radius:8}),{code:'TERRAIN_UNTRUSTED'});
+  assert.equal(digs,1);assert.equal(movesAfterDig,0);
+  await assert.rejects(actions.execute('inspect',{radius:1}),{code:'TERRAIN_UNTRUSTED'});
+  await assert.rejects(createActions(bot).execute('go_to',{x:1,y:64,z:0,radius:0}),{code:'TERRAIN_UNTRUSTED'});
+  assert.throws(()=>actions.snapshot(),{code:'TERRAIN_UNTRUSTED'});
+});
+
+test('mining waits for delayed raw server confirmation before reporting the mined block', async () => {
+  const bot=fakeBot(),p=new Vec3(2,64,0);let confirmed=false;
+  bot.putBlock('oak_log',p);
+  bot.dig=async()=>{bot.putBlock('air',p);setTimeout(()=>{confirmed=true;bot._client.emit('packet',{location:p,type:0},{name:'block_change'});},30);};
+  const result=await createActions(bot).execute('dig_at',{x:2,y:64,z:0});
+  assert.equal(confirmed,true);assert.equal(result.mined,1);
+  assert.deepEqual(result.inventory_changes,{});
+});
+
+test('unsupported mining protocol never sends a dig or poisons otherwise usable actions', async () => {
+  const bot=fakeBot();bot.version='1.21.11';let digs=0;
+  bot.putBlock('oak_log',new Vec3(2,64,0));bot.dig=async()=>{digs++;};
+  const actions=createActions(bot);
+  await assert.rejects(actions.execute('dig_at',{x:2,y:64,z:0}),/1.21.8 only/);
+  assert.equal(digs,0);assert.equal((await actions.execute('inspect',{radius:1})).connected,true);
 });
