@@ -1,0 +1,1278 @@
+{
+  "kind": "prepared-starter-retained-leaf-support",
+  "started": "2026-10-04T20:04:10.435Z",
+  "minecraft": "1.21.8",
+  "fixture": "Fresh isolated peaceful world with console-prepared leaf supports, log anchors, stone footing, supplied wooden axe and disabled random ticks. The retained waypoint height includes 0.02-block arrival jitter; saved home is a separate stone position. The harness supplies starter scope, home boundary and a retained actual waypoint position. It verifies waypoint guard refusal, permitted removal with an alternate anchor, refusal of the last anchor, a separately requested return and a direct current-footprint guard check using real loaded terrain. It does not run the autonomous starter controller or measure leaf decay timing.",
+  "sourceHashes": {
+    "src/actions.js": "881b56ef20d2ee9eccdbf0d0219cc09005c8d9a08051904bd7f51828eee179be",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "253463abd3b593ec025c9ebb3e0f87a9e8f880ef07a632482bac98a122417657",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "48f029964394a6c2705ced87dcc11154461f58288320bd23a4facbbc6da2f0ab",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "40a88f5d2496cdacf0d6cad09fab1df4887880a55d87d7765c2abe003b676846",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "src/runner.js": "acc0da55a868220e6ac0f50367615cbafd3f4290f28ff0f6e3b61ff080a80a5a",
+    "src/runtime.js": "fd6a100a008d22a2413ce0dde7ecfb3cb7e3001233c43dfb6dcf481e3512d46f",
+    "src/scout-coverage.js": "13c4047e2756ab280a1140ba45355032b06ff5a3db79477b60293e07ecb07a66",
+    "src/starter-leaf-support.js": "1479716ccfdfee0dfef67e9a96c9ca8a670d3a31509a48d4f4832e4e1e1b7a69",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "3f157245153ceeead7caf1aa8561d6fe1d478fcace59c6dd8acdbc8da0642c2a",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "4db1b46a35586d2725e599b7d1773a3c141a5b419676ef71c55f306ea40d8559",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-retained-leaf-support.js": "1744c152e38acbb721b736a636180b7ea6032d7e9b84e0ff61518b6333666bb2"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [
+    {
+      "name": "collect",
+      "args": {
+        "block": "oak_log",
+        "count": 1,
+        "radius": 4
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 0
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T20:04:28.096Z",
+      "error": "Could not collect oak_log: Cannot remove a retained leaf anchor beneath protected starter support (0,63,0)",
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 0
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "stone",
+          "properties": {}
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "finished": "2026-10-04T20:04:28.623Z"
+    },
+    {
+      "name": "dig_at",
+      "args": {
+        "x": 2,
+        "y": 63,
+        "z": 0
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 0
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T20:04:28.704Z",
+      "result": {
+        "deferred_drops": [
+          {
+            "id": 23,
+            "reason": "Reached a grounded pickup position but the item remains without inventory progress",
+            "failures": 3,
+            "retry_after_ms": 29999
+          }
+        ],
+        "passive_settlement": false,
+        "completed": false,
+        "pickup_landing_verified": true,
+        "mined": 1,
+        "block": "oak_log",
+        "position": {
+          "x": 2,
+          "y": 63,
+          "z": 0
+        },
+        "inventory_changes": {},
+        "remaining_drops": [
+          {
+            "id": 23,
+            "position": {
+              "x": 2.51,
+              "y": 63,
+              "z": 0.13
+            }
+          }
+        ],
+        "pickup_failures": [
+          {
+            "id": 23,
+            "error": "Reached a grounded pickup position but the item remains without inventory progress",
+            "code": "PICKUP_NO_COLLECTION_PROGRESS"
+          },
+          {
+            "id": 23,
+            "error": "Reached a grounded pickup position but the item remains without inventory progress",
+            "code": "PICKUP_NO_COLLECTION_PROGRESS"
+          },
+          {
+            "id": 23,
+            "error": "Reached a grounded pickup position but the item remains without inventory progress",
+            "code": "PICKUP_NO_COLLECTION_PROGRESS"
+          }
+        ]
+      },
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 1
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [
+          {
+            "id": 23,
+            "name": "item",
+            "type": "other",
+            "username": null,
+            "position": {
+              "x": 2.51,
+              "y": 63,
+              "z": 0.13
+            },
+            "distance": 1.5
+          }
+        ],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "3"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "finished": "2026-10-04T20:04:31.798Z"
+    },
+    {
+      "name": "dig_at",
+      "args": {
+        "x": 2,
+        "y": 63,
+        "z": 1
+      },
+      "before": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 1
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [
+          {
+            "id": 23,
+            "name": "item",
+            "type": "other",
+            "username": null,
+            "position": {
+              "x": 2.51,
+              "y": 63,
+              "z": 0.13
+            },
+            "distance": 1.5
+          }
+        ],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryBefore": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "3"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "started": "2026-10-04T20:04:31.799Z",
+      "error": "Cannot remove a retained leaf anchor beneath protected starter support (0,63,0)",
+      "after": {
+        "connected": true,
+        "position": {
+          "x": 3.5,
+          "y": 64,
+          "z": 0.5
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 1000,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "wooden_axe",
+            "count": 1,
+            "durability_used": 1
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_axe",
+        "entities": [
+          {
+            "id": 23,
+            "name": "item",
+            "type": "other",
+            "username": null,
+            "position": {
+              "x": 2.51,
+              "y": 63,
+              "z": 0.13
+            },
+            "distance": 1.5
+          }
+        ],
+        "players": [],
+        "terrainTrust": {
+          "trusted": true
+        },
+        "connection": "connected",
+        "owner": "",
+        "action": null,
+        "memory": {
+          "waypoints": {},
+          "notes": []
+        },
+        "progression": {
+          "dimension": "overworld",
+          "tools": false,
+          "armorPiecesCarriedOrObserved": 0,
+          "obsidian": 0,
+          "canBuildFullNetherPortal": false,
+          "blazeRods": 0,
+          "enderPearls": 0,
+          "eyes": 0,
+          "potentialEyes": 0,
+          "hasBowAndArrows": false,
+          "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+          "completion": "unverified",
+          "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+        },
+        "survival": null,
+        "recentInjuries": []
+      },
+      "geometryAfter": [
+        {
+          "x": 0,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "3"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 0,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "2"
+          }
+        },
+        {
+          "x": 1,
+          "y": 63,
+          "z": 1,
+          "name": "oak_leaves",
+          "properties": {
+            "waterlogged": false,
+            "persistent": false,
+            "distance": "1"
+          }
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 0,
+          "name": "air",
+          "properties": {}
+        },
+        {
+          "x": 2,
+          "y": 63,
+          "z": 1,
+          "name": "oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        },
+        {
+          "x": 3,
+          "y": 63,
+          "z": 0,
+          "name": "stone",
+          "properties": {}
+        }
+      ],
+      "finished": "2026-10-04T20:04:31.799Z"
+    }
+  ],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "commit": "c7b84f16c0c323bddd8b7eac1af2036f326c0c51",
+  "dirty": false,
+  "before": {
+    "connected": true,
+    "position": {
+      "x": 3.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_axe",
+        "count": 1,
+        "durability_used": 0
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_axe",
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "geometryBefore": [
+    {
+      "x": 0,
+      "y": 63,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "2"
+      }
+    },
+    {
+      "x": 1,
+      "y": 63,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "1"
+      }
+    },
+    {
+      "x": 1,
+      "y": 63,
+      "z": 1,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "2"
+      }
+    },
+    {
+      "x": 2,
+      "y": 63,
+      "z": 0,
+      "name": "oak_log",
+      "properties": {
+        "axis": "y"
+      }
+    },
+    {
+      "x": 2,
+      "y": 63,
+      "z": 1,
+      "name": "stone",
+      "properties": {}
+    },
+    {
+      "x": 3,
+      "y": 63,
+      "z": 0,
+      "name": "stone",
+      "properties": {}
+    }
+  ],
+  "initialAnchor": {
+    "leaves": [
+      [
+        0,
+        63,
+        0
+      ],
+      [
+        1,
+        63,
+        0
+      ]
+    ],
+    "anchor": [
+      2,
+      63,
+      0
+    ],
+    "distance": 2
+  },
+  "digCalls": [
+    {
+      "position": {
+        "x": 2,
+        "y": 63,
+        "z": 0
+      },
+      "name": "oak_log",
+      "at": "2026-10-04T20:04:28.706Z"
+    }
+  ],
+  "retainedAnchor": {
+    "leaves": [
+      [
+        0,
+        63,
+        0
+      ],
+      [
+        1,
+        63,
+        0
+      ],
+      [
+        1,
+        63,
+        1
+      ]
+    ],
+    "anchor": [
+      2,
+      63,
+      1
+    ],
+    "distance": 3
+  },
+  "explicitStoneReposition": {
+    "arrived": true,
+    "position": {
+      "x": 3.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "target": {
+      "x": 3,
+      "y": 64,
+      "z": 0
+    },
+    "radius": 0
+  },
+  "explicitReturn": {
+    "arrived": true,
+    "position": {
+      "x": 0.67,
+      "y": 64,
+      "z": 0.5
+    },
+    "target": {
+      "x": 0,
+      "y": 64,
+      "z": 0
+    },
+    "radius": 0
+  },
+  "currentFootprintGuardVerified": true,
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.67,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_axe",
+        "count": 1,
+        "durability_used": 1
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_axe",
+    "entities": [
+      {
+        "id": 23,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 2.51,
+          "y": 63,
+          "z": 0.13
+        },
+        "distance": 2.1
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "geometryFinal": [
+    {
+      "x": 0,
+      "y": 63,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "3"
+      }
+    },
+    {
+      "x": 1,
+      "y": 63,
+      "z": 0,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "2"
+      }
+    },
+    {
+      "x": 1,
+      "y": 63,
+      "z": 1,
+      "name": "oak_leaves",
+      "properties": {
+        "waterlogged": false,
+        "persistent": false,
+        "distance": "1"
+      }
+    },
+    {
+      "x": 2,
+      "y": 63,
+      "z": 0,
+      "name": "air",
+      "properties": {}
+    },
+    {
+      "x": 2,
+      "y": 63,
+      "z": 1,
+      "name": "oak_log",
+      "properties": {
+        "axis": "y"
+      }
+    },
+    {
+      "x": 3,
+      "y": 63,
+      "z": 0,
+      "name": "stone",
+      "properties": {}
+    }
+  ],
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.67,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_axe",
+        "count": 1,
+        "durability_used": 1
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": "wooden_axe",
+    "entities": [
+      {
+        "id": 23,
+        "name": "item",
+        "type": "other",
+        "username": null,
+        "position": {
+          "x": 2.51,
+          "y": 63,
+          "z": 0.13
+        },
+        "distance": 2.1
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastJob": null,
+  "finished": "2026-10-04T20:04:33.879Z"
+}

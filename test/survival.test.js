@@ -980,3 +980,32 @@ test('malformed persistent return aliases fail closed when loading a job',async(
   assert.throws(()=>new SurvivalJob({memory:f.memory,snapshot:()=>f.state,context:'test'}),/Saved travel arrival evidence is invalid/);
  }
 });
+
+test('typed support refusals exclude collection targets and choose scouting instead of foliage clearing',async()=>{
+ const f=fixture({maxSteps:5}),position={x:2,y:64,z:0};let scouts=0,digs=0,collects=0;
+ f.job.observe=async()=>({wood:'oak',foliage:{x:1,y:65,z:0,expected_block:'oak_leaves'}});
+ f.job.execute=async(name,args,signal)=>{
+  if(name==='collect'){
+   collects++;if(collects>1)assert.ok(args.skip_positions.some(p=>p.x===2&&p.y===64&&p.z===0));
+   throw Object.assign(Error('Protected support blocks collection'),{result:{failures:[{position,error:'Retained leaf anchor required',code:'STARTER_SUPPORT_PROTECTED'}]}});
+  }
+  if(name==='dig_at'){digs++;throw Error('Must not turn anchor refusal into leaf clearance');}
+  if(name==='explore')scouts++;
+  return f.execute(name,args,signal);
+ };
+ f.job.start();await f.job.promise;
+ assert.equal(digs,0);assert.ok(scouts>0);assert.deepEqual(f.job.state().excluded.oak_log,[position]);
+});
+
+test('protected pickup-clearance connector ends the job after one refused dig',async()=>{
+ const f=fixture({maxSteps:10});let collects=0,digs=0;
+ f.job.observe=async()=>({wood:'oak',pickupClearance:collects?{x:1,y:64,z:0,expected_block:'oak_leaves'}:null});
+ f.job.execute=async(name,args,signal)=>{
+  if(name==='collect'){collects++;return{completed:false,remaining_drops:[{id:7}]};}
+  if(name==='dig_at'){digs++;throw Object.assign(Error('Retained leaf anchor required'),{code:'STARTER_SUPPORT_PROTECTED'});}
+  return f.execute(name,args,signal);
+ };
+ f.job.start();await f.job.promise;
+ assert.equal(collects,1);assert.equal(digs,1);assert.equal(f.job.state().status,'blocked');
+ assert.equal(f.job.state().history.at(-1).code,'STARTER_SUPPORT_PROTECTED');
+});

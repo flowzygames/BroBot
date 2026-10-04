@@ -1,3 +1,4 @@
+import { assertStarterLeafSupport } from './starter-leaf-support.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -93,7 +94,7 @@ function matchesPlacedBlock (actual, item) {
 }
 
 /** One serialized physical action at a time. In-flight inventory operations drain before reuse. */
-export function createActions (bot, { memory, log = () => {}, movementBoundary = () => null } = {}) {
+export function createActions (bot, { memory, log = () => {}, movementBoundary = () => null, starterProtectedPositions = () => [] } = {}) {
   configureCollisionMargin(bot)
   configureCollisionContact(bot)
   let active = null
@@ -555,6 +556,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
       const issue = miningEnvironmentIssue(block)
       assert(!issue, issue)
+      if (ctx.starterScope) assertStarterLeafSupport(bot, block, {home:movementBoundary()?.center,positions:starterProtectedPositions()})
       if (requireCurrentReach) assert(visibleHere(block), 'Mining target is no longer visible from the certified stage')
       return block
     }
