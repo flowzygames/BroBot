@@ -22,7 +22,8 @@ function starterTravel(state, job, target, reason, waypointKind) {
     if (valid(p) && distance(p, job.home.position) <= STARTER_MOVEMENT_RADIUS && !nodes.some(q => distance(p,q) <= 2)) nodes.push({ ...p });
   }
   const excluded = (Array.isArray(job.ignoredTravelEdges) ? job.ignoredTravelEdges : []).filter(e => valid(e?.from) && valid(e?.to)).slice(-128);
-  const rejected = (a,b) => excluded.some(e => (distance(a,e.from)<=2 && distance(b,e.to)<=2) || (distance(a,e.to)<=2 && distance(b,e.from)<=2));
+  // Failed probes describe these observed endpoints, not a two-block region.
+  const rejected = (a,b) => excluded.some(e => (distance(a,e.from)<=0.1 && distance(b,e.to)<=0.1) || (distance(a,e.to)<=0.1 && distance(b,e.from)<=0.1));
   // This bounded graph chooses a candidate chain, not a terrain safety proof.
   // The action executor certifies each actual leg. BFS can retrace U-shaped
   // walks that must temporarily move farther from home.
@@ -131,6 +132,9 @@ export class SurvivalJob {
     } else {
       this.job = { version: 1, id: randomUUID(), goal: 'starter', context: this.context, home: { position: { ...state.position }, dimension: state.dimension }, steps: 0, scouts: 0, clearings: 0, excluded: {}, history: [], started: new Date().toISOString() };
     }
+    // Resume is explicit: re-inspect and certify the route instead of treating
+    // earlier unverified graph edges as permanent world geometry.
+    if (resume) this.job.ignoredTravelEdges = [];
     if (!resume || this.dropRecoverySession !== this.session()) this.job.recoverDropIds = [];
     this.job.status = 'running'; this.job.reason = null; this.save();
     this.log('survival', `${resume ? 'Resuming' : 'Starting'} offline starter kit: stone pickaxe, furnace, then return to start.`);
@@ -144,7 +148,7 @@ export class SurvivalJob {
   }
   async loop(signal) {
     const deadline = Date.now() + this.maxDurationMs;
-    const failures = new Map(), craftFailureContexts = new Map();
+    const failures = new Map(), craftFailureContexts = new Map(), travelFailurePositions = new Map();
     const retryContext = (state, observation) => ({inventoryKey:inventoryKey(state),observationKey:JSON.stringify(observation),position:{...state.position}});
     const sameContext = (saved, state, observation) => saved && inventoryKey(state)===saved.inventoryKey && JSON.stringify(observation)===saved.observationKey && distance(state.position,saved.position)<=0.1;
     const firstStep = this.job.steps;
@@ -179,6 +183,10 @@ export class SurvivalJob {
       const intendedAction = decision.name ? JSON.stringify([decision.name,decision.args]) : null;
       if (decision.name==='craft' && craftFailureContexts.has(intendedAction) && !sameContext(craftFailureContexts.get(intendedAction),this.snapshot(),observation)) {
         failures.delete(intendedAction);craftFailureContexts.delete(intendedAction);
+      }
+      if (decision.name === 'go_to' && travelFailurePositions.has(intendedAction)
+        && distance(travelFailurePositions.get(intendedAction), this.snapshot().position) > 0.1) {
+        failures.delete(intendedAction); travelFailurePositions.delete(intendedAction);
       }
       if (recovery?.scout && Object.hasOwn(recovery,'sourceIntent')) {
         const current=this.snapshot();
@@ -289,8 +297,8 @@ export class SurvivalJob {
           this.job.scoutAttempts = [];
           this.job.lastScoutSuccess = null;
         }
-        if (progress) { failures.clear();craftFailureContexts.clear(); }
-        else { failures.set(signature, (failures.get(signature) ?? 0) + 1);if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext); }
+        if (progress) { failures.clear();craftFailureContexts.clear();travelFailurePositions.clear(); }
+        else { failures.set(signature, (failures.get(signature) ?? 0) + 1);if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext);if(decision.name==='go_to')travelFailurePositions.set(signature,actionStartContext.position); }
         if (Array.isArray(result.remaining_drops)) {
           this.job.recoverDropIds = result.remaining_drops.map(d => d.id).filter(Number.isSafeInteger).slice(0, 24);
           this.dropRecoverySession = this.session();
@@ -304,6 +312,7 @@ export class SurvivalJob {
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') throw error;
         const after=this.snapshot(), routes=error.result?.route_attempts;
         if(decision.name==='craft')craftFailureContexts.set(signature,actionStartContext);
+        if(decision.name==='go_to')travelFailurePositions.set(signature,actionStartContext.position);
         if(decision.name==='explore' && Array.isArray(routes) && routes.length && routes.every(r=>r?.status==='unverified')
           && distance(before.position,after.position)<=0.1 && inventoryKey(before)===inventoryKey(after)) {
           // The failed probe changed no material or position. Try an unspent

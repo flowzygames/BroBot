@@ -761,3 +761,34 @@ test('a craft failure that moves the bot cannot transfer older retry counts to t
  f.job.execute=async(name,args)=>{if(name==='craft'&&first){first=false;f.state.position.x+=1}return execute(name,args)};
  f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
 });
+
+test('a failed return edge does not suppress a distinct nearby standing pose', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);
+  const home={x:.5,y:64,z:.5};f.state.position={x:8.4,y:64,z:.5};
+  const step=nextStarterStep(f.state,{home:{position:home,dimension:'overworld'},ignoredTravelEdges:[{from:{x:6.5,y:64,z:.5},to:home}]},{});
+  assert.equal(step.name,'go_to');assert.equal(step.args.returnable,true);
+});
+
+test('return failure counts belong to the attempted pose rather than a fresh nearby pose', async () => {
+  const f=fixture({maxSteps:8});f.add('stone_pickaxe',1);f.add('furnace',1);
+  let calls=0;
+  f.job.observe=async()=>{if(calls===2)f.state.position={x:8.4,y:64,z:.5};return{}};
+  f.job.execute=async(name,args,signal)=>{
+    if(name==='go_to'&&++calls<=2)throw Error('Return-path planning budget exhausted');
+    return f.execute(name,args,signal);
+  };
+  f.job.start();f.state.position={x:6.5,y:64,z:.5};await f.job.promise;
+  assert.equal(calls,3);assert.equal(f.job.state().status,'complete');
+  assert.equal(f.job.state().ignoredTravelEdges?.length??0,0);
+});
+
+test('explicit resume gives previously excluded return edges a fresh bounded verification', async () => {
+  const f=fixture({maxSteps:8});f.add('stone_pickaxe',1);f.add('furnace',1);
+  f.job.start();await f.job.promise;
+  f.state.position={x:6.5,y:64,z:.5};f.job.job.status='blocked';
+  f.job.job.ignoredTravelEdges=[{from:{...f.state.position},to:{...f.job.job.home.position}}];
+  let inspections=0;f.job.observe=async()=>{inspections++;return{}};
+  f.job.start({resume:true});await f.job.promise;
+  assert.ok(inspections>0);assert.equal(f.job.state().status,'complete');
+  assert.ok(f.calls.some(c=>c.name==='go_to'&&c.args.returnable));
+});
