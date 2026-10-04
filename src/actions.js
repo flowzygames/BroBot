@@ -1,5 +1,6 @@
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
+import { PickupProbeLedger } from './pickup-probe-ledger.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -311,13 +312,13 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const started = performance.now()
     const remaining = () => Math.max(0, 8000 - (ctx.pickupUsed ?? 0) - (performance.now() - started))
     const navigationRemaining = () => Math.max(0, remaining() - 500)
+    const probes = new PickupProbeLedger(bot)
     try {
     for (let n = 0; n < 24 && !planningLimited; n++) {
       checked(ctx)
       if (navigationRemaining() <= 0) { pickupLimited = drops().length > 0; break }
-      const target = drops().filter(e => !dropRetryCache.deferred(e,ctx.starterScope) && (attempts.get(e.id) ?? 0) < 3).sort((a, b) => (attempts.get(a.id) ?? 0) - (attempts.get(b.id) ?? 0) || a.position.distanceTo(bot.entity.position) - b.position.distanceTo(bot.entity.position))[0]
+      const target = drops().filter(e => !probes.spent(e) && !dropRetryCache.deferred(e,ctx.starterScope) && (attempts.get(e.id) ?? 0) < 3).sort((a, b) => (attempts.get(a.id) ?? 0) - (attempts.get(b.id) ?? 0) || a.position.distanceTo(bot.entity.position) - b.position.distanceTo(bot.entity.position))[0]
       if (!target) break
-      attempts.set(target.id, (attempts.get(target.id) ?? 0) + 1)
       // Drops from upper logs/ores are often still falling. Walking to their
       // airborne Y creates an impossible path; project onto loaded ground.
       const dropPosition = target.position.floored()
@@ -333,6 +334,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // A cell close to the bot can still be outside item-pickup reach,
       // especially diagonally. Aim at the drop rather than the nearest cell.
       destinations.sort((a, b) => a.offset(0.5, 0, 0.5).distanceTo(target.position) - b.offset(0.5, 0, 0.5).distanceTo(target.position))
+      const probeContext = probes.context(target)
+      const count = Math.min(3,destinations.length), rotation = (attempts.get(target.id) ?? 0) % (count || 1)
+      const next = Array.from({length:count},(_,i)=>destinations[(rotation+i)%count]).find(p=>!probes.tried(target,probeContext,p))
+      if(count && !next){probes.exhaust(target,probeContext);continue}
+      attempts.set(target.id, (attempts.get(target.id) ?? 0) + 1)
       let destination = null, pursuitStarted = false
       const pursuitInventory = inventoryMap()
       let collectedByBot = false
@@ -342,9 +348,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         assert(destinations.length, 'No validated standing space near dropped item')
         // Give each drop one destination attempt before retrying a blocked
         // neighbor. One unreachable item must not monopolize the shared budget.
-        const p = destinations[(attempts.get(target.id) - 1) % Math.min(3, destinations.length)]
+        const p = next
         destination = p
-        const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, navigationRemaining()))
+        let goal
+        try { goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, navigationRemaining())) }
+        catch(error){
+          if(error.name!=='AbortError' && /^(No verified returnable walking route|Return-path planning budget exhausted|Collection return-path planning budget exhausted)/.test(error.message))probes.failed(target,probeContext,p)
+          throw error
+        }
         checked(ctx)
         assert(safeDestination(p), 'Pickup leaf landing lost its retained log anchor')
         if (navigationRemaining() <= 0) { pickupLimited = drops().length > 0; break }
@@ -390,7 +401,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     pickupLimited ||= remaining() <= 0 && drops().length > 0
     if (!safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
     return { deferred_drops:drops().map(e=>dropRetryCache.deferred(e,ctx.starterScope)).filter(Boolean), passive_settlement:Boolean(ctx.pickupSettledFailure), pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
-    } finally { ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
+    } finally { probes.dispose();ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
   }
 
   async function collect (args, ctx) {
