@@ -81,5 +81,9 @@
     "scheduled": 3,
     "sourceCommit": "ee5084117f8ca492549759b2ec78ef41a18a2b38"
   },
-  "testedFileManifest": "benchmarks/results/pickup-budget-2026-10-03/tested-files.json"
+  "testedFileManifest": "benchmarks/results/pickup-budget-2026-10-03/tested-files.json",
+  "agentName": "BroBot Core",
+  "agentVersion": "0.1",
+  "agentDisplayName": "BroBot Core 0.1",
+  "versionNote": "First named agent release; existing tested application and ZIP unchanged. Automated check count is not a version number."
 }

@@ -935,7 +935,7 @@
       "note": "Selected cases only, not a full cohort. Passing104 took a different scouting route and never exercised the changed partial-wood branch; no causal improvement claim. One pre-gameplay download error was repaired and restarted unchanged, retained separately."
     },
     "pickup308": {
-      "label": "Current308 complete known-world cohort",
+      "label": "BroBot Core 0.1 \u00b7 complete 20-world cohort",
       "sourceCommit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
       "passed": 10,
       "scheduled": 20,
@@ -1084,7 +1084,7 @@
       "note": "All20 scheduled cases completed once. Three gains and one lost pass versus305. Known development worlds, not held-out reliability."
     },
     "scoped305": {
-      "label": "Previous305 complete cohort",
+      "label": "Legacy 305-check snapshot \u00b7 complete 20-world cohort",
       "sourceCommit": "ac551e43273920728a761878fb8aeac342171351",
       "passed": 8,
       "scheduled": 20,
@@ -1233,7 +1233,7 @@
       "note": "Previous source; every failed case retained."
     },
     "original308": {
-      "label": "Current308 original regression worlds",
+      "label": "BroBot Core 0.1 \u00b7 separate original three-world regression",
       "sourceCommit": "ee5084117f8ca492549759b2ec78ef41a18a2b38",
       "passed": 2,
       "scheduled": 3,
@@ -1263,5 +1263,6 @@
       "note": "42 stopped near a hostile. Separate three-case regression, not a full20 score."
     }
   },
-  "pairedEvaluationPending": false
+  "pairedEvaluationPending": false,
+  "agentDisplayName": "BroBot Core 0.1"
 }
