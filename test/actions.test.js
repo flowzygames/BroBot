@@ -1384,3 +1384,63 @@ test('ordinary placement uses one explicit aim and refuses an emptied held stack
   assert.equal(aims,1);
  }
 });
+
+test('grounded arrival without collecting a lingering drop does not reset starter retry history',async()=>{
+ const bot=fakeBot();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ const item={id:91,name:'item',position:new Vec3(2.5,64,.5)};bot.entities[91]=item;let walks=0;
+ bot.pathfinder.goto=async goal=>{walks++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5)};
+ const actions=createActions(bot),context={starterScope:'job/1'};
+ const first=await actions.execute('pickup',{radius:8},undefined,context);
+ assert.equal(first.remaining_drops.length,1);assert.equal(first.landing_verified,true);assert.equal(walks,3);
+ const second=await actions.execute('pickup',{radius:8},undefined,context);
+ assert.equal(walks,3);assert.equal(second.deferred_drops[0].id,91);
+ assert.deepEqual(second.inventory_changes,{});
+ await actions.execute('pickup',{radius:8});assert.equal(walks,6);
+});
+
+test('unrelated inventory gains preserve a lingering target retry record without clearing it',async()=>{
+ const bot=fakeBot();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ const item={id:91,name:'item',position:new Vec3(2.5,64,.5)};bot.entities[91]=item;let probes=0,walks=0;
+ bot.pathfinder.getPathFromTo=function*(movement,start,goal){if(++probes<=2)yield{result:{status:'noPath',path:[]}};else yield{result:{status:'success',path:[{x:goal.x,y:goal.y,z:goal.z}]}}};
+ bot.pathfinder.goto=async goal=>{walks++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);if(walks===1)bot.addItem('dirt')};
+ const actions=createActions(bot),context={starterScope:'job/1'};
+ await actions.execute('pickup',{radius:8},undefined,context);assert.equal(walks,1);
+ const second=await actions.execute('pickup',{radius:8},undefined,context);
+ assert.equal(walks,2);assert.equal(second.deferred_drops[0].id,91);assert.equal(bot.listenerCount('playerCollect'),0);
+});
+
+test('target collection during the bounded grace period is not counted as no progress',async()=>{
+ const bot=fakeBot();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ const item={id:91,name:'item',position:new Vec3(2.5,64,.5)};bot.entities[91]=item;
+ bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);setTimeout(()=>bot.emit('playerCollect',bot.entity,item),10)};
+ const result=await createActions(bot).execute('pickup',{radius:8},undefined,{starterScope:'job/1'});
+ assert.deepEqual(result.deferred_drops,[]);assert.ok(!result.unreachable.some(f=>f.code==='PICKUP_NO_COLLECTION_PROGRESS'));assert.equal(bot.listenerCount('playerCollect'),0);
+});
+
+test('two failed destinations and an unproductive arrival defer the same target while preserving landing proof',async()=>{
+ const bot=fakeBot();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ const item={id:91,name:'item',position:new Vec3(2.5,64,.5)};bot.entities[91]=item;let probes=0,walks=0;
+ bot.pathfinder.getPathFromTo=function*(movement,start,goal){if(++probes<=2)yield{result:{status:'noPath',path:[]}};else yield{result:{status:'success',path:[{x:goal.x,y:goal.y,z:goal.z}]}}};
+ bot.pathfinder.goto=async goal=>{walks++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5)};
+ const actions=createActions(bot),context={starterScope:'job/1'};
+ const result=await actions.execute('pickup',{radius:8},undefined,context);
+ assert.equal(result.deferred_drops[0].failures,3);assert.equal(result.landing_verified,true);assert.equal(result.pursuit_unverified,false);
+ assert.equal(result.unreachable.at(-1).code,'PICKUP_NO_COLLECTION_PROGRESS');
+ await actions.execute('pickup',{radius:8},undefined,context);assert.equal(walks,1);
+});
+
+test('late target disappearance during pickup grace clears remaining work without a no-progress record',async()=>{
+ const bot=fakeBot();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ const item={id:91,name:'item',position:new Vec3(2.5,64,.5)};bot.entities[91]=item;
+ bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);setTimeout(()=>{delete bot.entities[91];bot.emit('entityGone',item)},10)};
+ const result=await createActions(bot).execute('pickup',{radius:8},undefined,{starterScope:'job/1'});
+ assert.deepEqual(result.remaining_drops,[]);assert.deepEqual(result.unreachable,[]);assert.equal(bot.listenerCount('playerCollect'),0);
+});
+
+test('aborting pickup during grace removes the target collection listener',async()=>{
+ const bot=fakeBot(),controller=new AbortController();for(let x=-2;x<=5;x++)for(let z=-2;z<=2;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ bot.entities[91]={id:91,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);setTimeout(()=>controller.abort(),10)};
+ await assert.rejects(createActions(bot).execute('pickup',{radius:8},controller.signal,{starterScope:'job/1'}),{name:'AbortError'});
+ assert.equal(bot.listenerCount('playerCollect'),0);
+});

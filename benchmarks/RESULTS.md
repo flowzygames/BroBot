@@ -6,6 +6,8 @@ The latest complete development evaluation used frozen source `5b66f11`: **454 a
 
 Earlier health interruption, mining preflight and injury-reporting evidence remains historical: [health](results/health-interrupt-2026-10-04/README.md), [mining](results/mining-preflight-2026-10-04/README.md), [pre-dig](results/pre-dig-recheck-2026-10-04/README.md), [injury reporting](results/injury-reporting-2026-10-04/README.md). None replaces a failed frozen release result.
 
+The later source includes 463 passing automated checks plus exact-source prepared integration and two selected natural-world passes for the pickup-progress correction. Those selected trials demonstrate actual no-progress deferral and later collection, but are not a new 20-world cohort. [Later patch evidence](results/pickup-material-progress-2026-10-04/README.md).
+
 ## Historical records below
 
 # Pickup-budget cohort — October 3, 2026

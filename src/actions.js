@@ -327,6 +327,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // especially diagonally. Aim at the drop rather than the nearest cell.
       destinations.sort((a, b) => a.offset(0.5, 0, 0.5).distanceTo(target.position) - b.offset(0.5, 0, 0.5).distanceTo(target.position))
       let destination = null, pursuitStarted = false
+      const pursuitInventory = inventoryMap()
+      let collectedByBot = false
+      const observedCollection = (collector, item) => { if (collector?.id === bot.entity.id && item?.id === target.id) collectedByBot = true }
+      bot.on('playerCollect', observedCollection)
       try {
         assert(destinations.length, 'No validated standing space near dropped item')
         // Give each drop one destination attempt before retrying a blocked
@@ -338,10 +342,22 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (navigationRemaining() <= 0) { pickupLimited = drops().length > 0; break }
         pursuitStarted = true
         const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, navigationRemaining()), waitForLanding: true, safeToStop: () => isDryLanding(bot), atDestination: () => isAtPickupStandingCell(bot,p) })
-        if (outcome.landingVerified && !ctx.pickupSettledFailure) { ctx.pickupUnverified = false; dropRetryCache.succeeded(target,ctx.starterScope) }
+        if (outcome.landingVerified && !ctx.pickupSettledFailure) ctx.pickupUnverified = false
         log('pickup', `Drop ${target.id} pursuit ended: ${outcome.reason}`, { id: target.id, destination: plainPos(p), position: plainPos(bot.entity.position), onGround: bot.entity.onGround, reason: outcome.reason, started: outcome.started, landingVerified: outcome.landingVerified })
         checked(ctx)
         await pause(ctx, Math.min(200, remaining()))
+        // A safe arrival proves the landing, not collection. Allow the existing
+        // bounded packet-settlement grace before considering material progress.
+        if (!bot.entities?.[target.id] || collectedByBot || outcome.reason === 'collected') {
+          dropRetryCache.succeeded(target, ctx.starterScope)
+        } else if (bot.entities[target.id] === target && outcome.landingVerified && outcome.reason === 'arrived'
+          && !Object.values(changes(pursuitInventory)).some(delta => delta > 0)) {
+          const failure = { id: target.id, error: 'Reached a grounded pickup position but the item remains without inventory progress', code: 'PICKUP_NO_COLLECTION_PROGRESS' }
+          dropRetryCache.failed(target, ctx.starterScope, failure.error)
+          failures.push(failure)
+          ctx.pickupFailures = [...(ctx.pickupFailures ?? []), failure].slice(-64)
+          log('pickup', `Drop ${target.id} remains after grounded arrival`, { id: target.id, code: failure.code, position: plainPos(bot.entity.position), onGround: bot.entity.onGround, navigationLandingVerified: true })
+        }
       } catch (error) {
         checked(ctx)
         ctx.pickupUnverified = true
@@ -361,7 +377,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         ctx.pickupFailures = [...(ctx.pickupFailures ?? []), failure].slice(-64)
         if (passivelySettled) break
         if (!planningLimited && remaining() > 0) await pause(ctx, Math.min(150, remaining()))
-      }
+      } finally { bot.removeListener('playerCollect', observedCollection) }
     }
     pickupLimited ||= remaining() <= 0 && drops().length > 0
     if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})

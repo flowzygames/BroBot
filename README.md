@@ -1,4 +1,4 @@
-> Latest verified source: **454 automated checks**, **17/17 prepared Minecraft phases**, **13/20 known worlds** and **3/3 separate original worlds** on frozen source `5b66f11`. [Complete evidence and limits](benchmarks/results/recovery-full454-2026-10-04/README.md). The downloadable Core 0.2 package and its frozen scores below are unchanged.
+> Latest complete natural-world benchmark snapshot: **454 automated checks**, **17/17 prepared Minecraft phases**, **13/20 known worlds** and **3/3 separate original worlds** on frozen source `5b66f11`. [Complete evidence and limits](benchmarks/results/recovery-full454-2026-10-04/README.md). The downloadable Core 0.2 package and its frozen scores below are unchanged.
 
 > **BroBot Core 0.2:** 346 automated checks and **11/20** known natural worlds, versus Core 0.1’s 10/20. One additional completion; nine worlds still failed. Separate original-world regression: **1/3**, down from Core 0.1’s 2/3. [Full records and limitations](benchmarks/results/core02-2026-10-04/README.md).
 
@@ -14,7 +14,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 > **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
-> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package, including guarded pickup endings, failed-save handling, and bounded pickup retries. The release scores below belong to their cited frozen snapshots; they are not measurements of every later source change. New development evaluations are retained separately.
+> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The latest placement and pickup-progress fixes pass **463 automated checks**; their exact-source prepared and selected-world verification is [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
 
 ## New in Core 0.2
 
@@ -28,6 +28,8 @@ Core names identify the software agent release, not a newly trained foundation m
 
 ## New in the development source
 
+- Rechecks the held placement item after aiming, before sending the placement request
+- Distinguishes reaching a dropped item from actually collecting it, so an unchanged failed pickup cannot endlessly reset its retry history
 - Reuses unchanged collection candidates without repeating the same search after unrelated distant block updates
 - Keeps failed pickup retries bounded while rechecking changed terrain, movement and item identity
 - Retains actual verified waypoint arrivals so nominal coordinates cannot reopen spent return loops
