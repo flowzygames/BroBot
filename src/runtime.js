@@ -10,7 +10,7 @@ import { ActionRunner } from './runner.js';
 import { createActions, visibleBlockFace } from './actions.js';
 import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
-import { SurvivalJob, STARTER_LOG_RADIUS } from './survival.js';
+import { SurvivalJob, STARTER_LOG_RADIUS, nextStarterStep } from './survival.js';
 import { findTransitPickupClearance } from './pickup-transit.js';
 import { findPickupClearance, findTreeFoliage, hasPowderSnowContact } from './survival-observation.js';
 import { publicConfig } from './config.js';
@@ -45,32 +45,38 @@ export class Runtime {
       observe: async signal => {
         const seen = await this.execute('inspect', { radius: 32 }, signal);
         const blocks = seen.nearby_blocks ?? [];
-        // Search logs separately: dense underground ore must not fill inspect's
-        // generic resource cap before a nearby tree is considered.
-        const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
-        const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
-        const excludedLogs = this.survival.job?.excluded ?? {};
-        const logOrigin = this.bot.entity.position.floored();
-        const positions = this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
-        // findBlocks may fill a small cap in one chunk section before examining a
-        // closer tree across its boundary. Sort a larger bounded sample, then
-        // keep only sixteen logs for the local foliage rays.
-        const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
-        const wood = observedLogs[0];
         const p = seen.position;
-        const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
         // A dense ore field can also crowd our placed table out of inspect's
         // generic result cap. Search this critical workstation independently.
         const tableId = this.bot.registry.blocksArray.find(b => b.name === 'crafting_table')?.id;
         const foundTables = tableId == null ? [] : this.bot.findBlocks({ matching: [tableId], maxDistance: 32, count: 16 });
         const tablePositions = [...foundTables, ...blocks.filter(b => b.name === 'crafting_table').map(b => b.position), ...(this.survival.job?.tables ?? [])];
         const tables = [...new Map(tablePositions.map(p => [JSON.stringify(p), p])).values()].filter(p => { const block = this.bot.blockAt(new Vec3(p.x, p.y, p.z)); return block == null || block.name === 'crafting_table'; }).slice(0, 8);
-        return { powderSnowContact: hasPowderSnowContact(this.bot), wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach: tables.some(t => {
+        const tableInReach = tables.some(t => {
           if (!p || this.bot.blockAt(new Vec3(t.x, t.y, t.z))?.name !== 'crafting_table' || Math.hypot(t.x - p.x, t.y - p.y, t.z - p.z) > 4) return false;
           const position = new Vec3(t.x, t.y, t.z);
           if (this.bot.world?.raycast) return visibleBlockFace(this.bot.world, this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0), position, 4.5);
           return !this.bot.canSeeBlock || this.bot.canSeeBlock(this.bot.blockAt(position));
-        }) };
+        });
+        const powderSnowContact = hasPowderSnowContact(this.bot);
+        // Search logs separately: dense underground ore must not fill inspect's
+        // generic resource cap before a nearby tree is considered.
+        const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
+        const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
+        const excludedLogs = this.survival.job?.excluded ?? {};
+        const logOrigin = this.bot.entity.position.floored();
+        // Once carried materials determine the next action, scanning forest
+        // sections again adds latency without changing that decision. Keep
+        // checking workstation, drop and safety observations below.
+        const needsWood = !this.survival.job?.home || Boolean(nextStarterStep(seen, {...this.survival.job,tables}, {tableInReach,powderSnowContact}).scout);
+        const positions = needsWood ? this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) }) : [];
+        // findBlocks may fill a small cap in one chunk section before examining a
+        // closer tree across its boundary. Sort a larger bounded sample, then
+        // keep only sixteen logs for the local foliage rays.
+        const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
+        const wood = observedLogs[0];
+        const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
+        return { powderSnowContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
       execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });

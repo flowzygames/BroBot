@@ -667,3 +667,28 @@ test('urgent food recovery outranks a queued scouting recovery', async () => {
   assert.equal(f.job.state().scouts, 0);
   assert.notEqual(f.job.state().status, 'complete');
 });
+
+test('material progress reopens spent scout targets without resetting the scout budget',async()=>{
+  const f=fixture({maxSteps:1});
+  f.job.observe=async()=>{f.job.job.scouts=5;f.job.job.scoutAttempts=[{origin:{...f.state.position},direction:'north',distance:4,status:'unverified'}];f.job.job.lastScoutSuccess={completed:true};return{wood:'oak'}};
+  f.job.start();await f.job.promise;
+  assert.deepEqual(f.job.state().scoutAttempts,[]);assert.equal(f.job.state().lastScoutSuccess,null);assert.equal(f.job.state().scouts,5);
+});
+test('verified clearance reopens spent scout targets',async()=>{
+  const f=fixture({maxSteps:3});f.job.observe=async()=>({wood:'oak',foliage:{x:1,y:64,z:0,expected_block:'oak_leaves'}});
+  f.job.execute=async name=>{if(name==='collect')throw new Error('blocked');assert.equal(name,'dig_at');f.job.job.scoutAttempts=[{origin:{...f.state.position},direction:'north',distance:4,status:'unverified'}];return{mined:1}};
+  f.job.start();await f.job.promise;assert.deepEqual(f.job.state().scoutAttempts,[]);
+});
+test('completed non-novel walking records its actual edge without clearing old probes',async()=>{
+  const f=fixture({maxSteps:1});f.job.observe=async()=>({});
+  f.job.execute=async(name,args)=>{
+    assert.equal(name,'explore');f.job.job.scoutAttempts=[{origin:{x:100,y:64,z:100},direction:'north',distance:4,status:'unverified'}];
+    const offsets={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]},[dx,dz]=offsets[args.direction];
+    f.state.position={x:f.state.position.x+dx*args.distance,y:64,z:f.state.position.z+dz*args.distance};
+    f.job.job.observedPositions.push({...f.state.position});
+    return{explored:true,distance:args.distance,direction:args.direction,directions_tried:[args.direction],route_attempts:[{direction:args.direction,status:'verified'}]};
+  };
+  f.job.start();await f.job.promise;
+  const attempts=f.job.state().scoutAttempts;
+  assert.equal(attempts.length,2);assert.equal(attempts[0].origin.x,100);assert.equal(attempts[1].completed,true);assert.equal(attempts[1].novel,false);assert.deepEqual(attempts[1].endpoint,f.state.position);
+});

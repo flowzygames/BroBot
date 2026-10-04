@@ -232,11 +232,14 @@ export class SurvivalJob {
         scoutRecorded = true;
         const allowed = [decision.args.direction, ...(decision.args.alternatives ?? [])];
         const tried = Array.isArray(result?.directions_tried) ? result.directions_tried.filter(d => allowed.includes(d)).slice(0, 4) : [decision.args.direction];
+        let completedEndpoint = null, completedNovel = false;
         if (result?.explored === true && Number.isFinite(result.distance) && result.distance >= decision.args.distance - 2) {
           const endpoint = this.snapshot().position;
           if (endpoint && ['x','y','z'].every(k => Number.isFinite(endpoint[k])) && distance(endpoint, decision.scoutOrigin ?? before.position) >= decision.args.distance - 2) {
+            completedEndpoint = { ...endpoint };
+            completedNovel = !(this.job.observedPositions ?? []).some(p => distance(p, endpoint) <= 4);
             this.job.lastScoutSuccess = { completed: true, adaptive: decision.args.distance < Math.min(64, 12 * (1 + Math.floor((this.job.scouts - 1) / 2))), endpoint: { ...endpoint }, distance: decision.args.distance,
-              novel: !(this.job.observedPositions ?? []).some(p => distance(p, endpoint) <= 4) };
+              novel: completedNovel };
           }
         }
         const outcomes = Array.isArray(result?.route_attempts) ? result.route_attempts.filter(a => a && typeof a === 'object') : [];
@@ -244,7 +247,8 @@ export class SurvivalJob {
           && !outcomes.some(a => a.status === 'verified' || a.status === 'cancelled');
         this.job.scoutAttempts = [...(Array.isArray(this.job.scoutAttempts) ? this.job.scoutAttempts : []),
           ...tried.map(direction => ({ origin: { ...(decision.scoutOrigin ?? before.position) }, direction,
-            distance: decision.args.distance, status: outcomes.find(a => a.direction === direction)?.status ?? 'unknown', exhausted }))].slice(-STARTER_SCOUT_LIMIT * 4);
+            distance: decision.args.distance, status: outcomes.find(a => a.direction === direction)?.status ?? 'unknown', exhausted,
+            ...(completedEndpoint && direction === (result.direction ?? decision.args.direction) ? {completed:true,novel:completedNovel,endpoint:completedEndpoint} : {}) }))].slice(-STARTER_SCOUT_LIMIT * 4);
       };
       this.job.steps++; this.save();
       try {
@@ -266,6 +270,12 @@ export class SurvivalJob {
         }
         const progress = gained || terrainCleared || (decision.name === 'explore' && distance(before.position, after.position) > 1) || (decision.name === 'go_to' && distance(after.position, decision.args) < distance(before.position, decision.args) - 1) || (after.food ?? 0) > (before.food ?? 0);
         remember({ action: decision.name, args: decision.args, reason: decision.reason, result, progress });
+        if (gained || terrainCleared) {
+          // Real material/terrain progress can make previously spent local
+          // probes useful again. Ordinary walking must not reopen a scout loop.
+          this.job.scoutAttempts = [];
+          this.job.lastScoutSuccess = null;
+        }
         if (progress) failures.clear();
         else failures.set(signature, (failures.get(signature) ?? 0) + 1);
         if (Array.isArray(result.remaining_drops)) {
