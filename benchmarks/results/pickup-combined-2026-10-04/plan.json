@@ -1,0 +1,49 @@
+{
+  "source": "2fc3075afb4c0eecd3b0c168b2200b1463f78a5f",
+  "queued": "2026-10-04T11:34:15.536397+00:00",
+  "waitsFor": "brobot-pickup383-eval/plan.json finished",
+  "classification": "prepared integration and selected diagnostic replay, not a full cohort score",
+  "cases": [
+    {
+      "benchmark": "Trailhead",
+      "seed": "454806089",
+      "status": "passed",
+      "elapsedMs": 101064,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-combined/.server/benchmarks/2026-10-04T12-09-04-558Z-4095460d/result.json",
+      "commit": "2fc3075afb4c0eecd3b0c168b2200b1463f78a5f",
+      "dirty": false,
+      "returnCode": 0
+    },
+    {
+      "benchmark": "Trailhead",
+      "seed": "113919219",
+      "status": "passed",
+      "elapsedMs": 294766,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-combined/.server/benchmarks/2026-10-04T12-11-30-002Z-675de3f2/result.json",
+      "commit": "2fc3075afb4c0eecd3b0c168b2200b1463f78a5f",
+      "dirty": false,
+      "returnCode": 0
+    },
+    {
+      "benchmark": "Trailhead",
+      "seed": "386690312",
+      "status": "failed",
+      "elapsedMs": 300006,
+      "reason": "Starter job time budget reached.",
+      "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-combined/.server/benchmarks/2026-10-04T12-17-01-247Z-506b0bc7/result.json",
+      "commit": "2fc3075afb4c0eecd3b0c168b2200b1463f78a5f",
+      "dirty": false,
+      "returnCode": 1
+    }
+  ],
+  "started": "2026-10-04T12:06:45.576769+00:00",
+  "prepared": {
+    "passed": true,
+    "phases": 17,
+    "returnCode": 0,
+    "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-combined/.server/smoke/2026-10-04T12-06-46-007Z-9ac1f485/result.json"
+  },
+  "finished": "2026-10-04T12:22:29.867981+00:00"
+}

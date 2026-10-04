@@ -1,0 +1,305 @@
+{
+  "source": "7eb1797b489d2824a3140757c7adc500987246c3",
+  "applicationSource": "2fc3075afb4c0eecd3b0c168b2200b1463f78a5f",
+  "queued": "2026-10-04T11:44:32.977674+00:00",
+  "waitsFor": "brobot-pickup407-validation/plan.json finished",
+  "classification": "Two console-prepared short falls, not a natural-world starter benchmark",
+  "scriptSha256": "e5f117ae497d4f3f001a3a190cfa4f6a255a5f0e56b60120538c5fdeaf1ac714",
+  "started": "2026-10-04T12:22:33.024950+00:00",
+  "passed": true,
+  "phases": [
+    {
+      "name": "Paper and bridge startup",
+      "passed": true,
+      "elapsedMs": 15195,
+      "details": {
+        "edition": "MCPE",
+        "motd": "\"BroBot - local Minecraft companion\"",
+        "protocol": "2193",
+        "version": "26.51"
+      }
+    },
+    {
+      "name": "Mineflayer joins the real server",
+      "passed": true,
+      "elapsedMs": 2102,
+      "details": {
+        "position": {
+          "x": 0.5,
+          "y": 65,
+          "z": 0.5
+        },
+        "mode": "survival"
+      }
+    },
+    {
+      "name": "Passively verify dry ground after prepared short falls",
+      "passed": true,
+      "elapsedMs": 1340,
+      "details": {
+        "fixture": "Console teleports create short controlled falls above prepared stone or one-layer snow. Timed frames are Mineflayer client observations, not independent server position evidence or a natural-world starter benchmark.",
+        "trials": [
+          {
+            "surface": "stone",
+            "started": {
+              "at": "2026-10-04T12:22:51.707Z",
+              "position": {
+                "x": 0.5,
+                "y": 65.9,
+                "z": 4.5
+              },
+              "velocityY": -0.0784000015258789,
+              "onGround": false,
+              "windowMs": 500
+            },
+            "settled": true,
+            "frames": [
+              {
+                "elapsedMs": 50.797677000002295,
+                "at": "2026-10-04T12:22:51.758Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.82159999847413,
+                  "z": 4.5
+                },
+                "velocityY": -0.1552320045166016,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 99.94839000000138,
+                "at": "2026-10-04T12:22:51.807Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.66636799395752,
+                  "z": 4.5
+                },
+                "velocityY": -0.230527368912964,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 149.97356600000057,
+                "at": "2026-10-04T12:22:51.857Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.43584062504456,
+                  "z": 4.5
+                },
+                "velocityY": -0.30431682745754424,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 199.94786100000056,
+                "at": "2026-10-04T12:22:51.907Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.13152379758702,
+                  "z": 4.5
+                },
+                "velocityY": -0.37663049823865513,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 249.95462899999984,
+                "at": "2026-10-04T12:22:51.957Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65,
+                  "z": 4.5
+                },
+                "velocityY": -0.0784000015258789,
+                "onGround": true
+              },
+              {
+                "elapsedMs": 299.9977830000025,
+                "at": "2026-10-04T12:22:52.007Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65,
+                  "z": 4.5
+                },
+                "velocityY": -0.0784000015258789,
+                "onGround": true
+              }
+            ],
+            "final": {
+              "at": "2026-10-04T12:22:52.008Z",
+              "position": {
+                "x": 0.5,
+                "y": 65,
+                "z": 4.5
+              },
+              "onGround": true,
+              "health": 20
+            },
+            "observedBlocks": [
+              {
+                "position": {
+                  "x": 0,
+                  "y": 64,
+                  "z": 4
+                },
+                "name": "stone",
+                "stateId": 1,
+                "shapes": [
+                  [
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1
+                  ]
+                ],
+                "properties": {}
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 65,
+                  "z": 4
+                },
+                "name": "air",
+                "stateId": 0,
+                "shapes": [],
+                "properties": {}
+              }
+            ],
+            "settledElapsedMs": 300.3651140000002
+          },
+          {
+            "surface": "snow",
+            "started": {
+              "at": "2026-10-04T12:22:52.360Z",
+              "position": {
+                "x": 0.5,
+                "y": 65.9,
+                "z": 4.5
+              },
+              "velocityY": -0.0784000015258789,
+              "onGround": false,
+              "windowMs": 500
+            },
+            "settled": true,
+            "frames": [
+              {
+                "elapsedMs": 50.0450860000019,
+                "at": "2026-10-04T12:22:52.410Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.82159999847413,
+                  "z": 4.5
+                },
+                "velocityY": -0.1552320045166016,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 100.09770299999946,
+                "at": "2026-10-04T12:22:52.460Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.66636799395752,
+                  "z": 4.5
+                },
+                "velocityY": -0.230527368912964,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 151.1191910000016,
+                "at": "2026-10-04T12:22:52.511Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.43584062504456,
+                  "z": 4.5
+                },
+                "velocityY": -0.30431682745754424,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 201.36929400000008,
+                "at": "2026-10-04T12:22:52.561Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65.13152379758702,
+                  "z": 4.5
+                },
+                "velocityY": -0.37663049823865513,
+                "onGround": false
+              },
+              {
+                "elapsedMs": 251.5380460000015,
+                "at": "2026-10-04T12:22:52.611Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65,
+                  "z": 4.5
+                },
+                "velocityY": -0.0784000015258789,
+                "onGround": true
+              },
+              {
+                "elapsedMs": 302.1089310000025,
+                "at": "2026-10-04T12:22:52.662Z",
+                "position": {
+                  "x": 0.5,
+                  "y": 65,
+                  "z": 4.5
+                },
+                "velocityY": -0.0784000015258789,
+                "onGround": true
+              }
+            ],
+            "final": {
+              "at": "2026-10-04T12:22:52.662Z",
+              "position": {
+                "x": 0.5,
+                "y": 65,
+                "z": 4.5
+              },
+              "onGround": true,
+              "health": 20
+            },
+            "observedBlocks": [
+              {
+                "position": {
+                  "x": 0,
+                  "y": 64,
+                  "z": 4
+                },
+                "name": "stone",
+                "stateId": 1,
+                "shapes": [
+                  [
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1
+                  ]
+                ],
+                "properties": {}
+              },
+              {
+                "position": {
+                  "x": 0,
+                  "y": 65,
+                  "z": 4
+                },
+                "name": "snow",
+                "stateId": 5950,
+                "shapes": [],
+                "properties": {
+                  "layers": "1"
+                }
+              }
+            ],
+            "settledElapsedMs": 302.26706900000136
+          }
+        ]
+      }
+    }
+  ],
+  "result": "/workspace/scratch/ec0ad557001f/brobot-passive-live/.server/smoke/2026-10-04T12-22-33-504Z-9f1af6db/result.json",
+  "returnCode": 0,
+  "finished": "2026-10-04T12:22:53.961260+00:00"
+}
