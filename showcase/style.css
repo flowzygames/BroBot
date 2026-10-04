@@ -28,3 +28,7 @@ body{background:var(--paper)}header{max-width:none;position:sticky;top:0;z-index
 @media(max-width:420px){header{padding:0 16px;gap:10px}header .brand{font-size:25px}.boticon{width:27px}.menu-toggle{font-size:12px;padding:10px}.small-button span{display:none}.hero h1{font-size:53px}.world-bubble{padding:13px;max-width:90%;white-space:normal;width:max-content}.world-wrap{height:370px}.world-caption{left:14px;right:14px}.world-caption>span{max-width:150px;line-height:1.5}.hero-meta{font-size:9px}.release-strip{padding:20px}.hero-actions .button{padding:16px 19px}h2{letter-spacing:-2px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.mission-grid>a,.button{transition:none}.mission-grid>a:hover,.button:hover{transform:none}}
 .tag{color:#546242}.command>span:first-child{color:#546242}.eyebrow{line-height:1.6}.trace-controls button,.bench-tabs button,.world-tabs button,.command-toolbar .filters button{min-height:44px}.download-note{line-height:1.8!important}
+/* Reset legacy wrapping rules before applying the new compact shell. */
+header{min-height:0;flex-wrap:nowrap}header nav{width:auto;order:initial}
+@media(min-width:851px) and (max-width:1000px){header{gap:12px;padding:0 18px}header nav{gap:12px}header nav a{font-size:12px}header .small-button{padding:11px}header .small-button span{margin-left:8px}}
+@media(max-width:850px){header{height:74px;min-height:0;flex-wrap:nowrap}header nav{width:auto;order:initial;top:74px}}
