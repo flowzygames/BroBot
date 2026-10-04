@@ -12,7 +12,9 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the current source completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+
+> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package, including guarded pickup endings, failed-save handling, and bounded pickup retries. The release scores below belong to their cited frozen snapshots; they are not measurements of every later source change. New development evaluations are retained separately.
 
 ## New in Core 0.2
 
