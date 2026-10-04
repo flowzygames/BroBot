@@ -182,7 +182,7 @@ test('runtime tree observation is not starved by ore and returns only a nearby l
     blockAt: p => ({ name: p.equals(new Vec3(4,64,0)) ? 'oak_log' : p.equals(new Vec3(2,65,0)) ? 'oak_leaves' : 'air', position: p }),
     world: { raycast: (eye, direction, distance) => { assert.ok(Math.abs(direction.norm() - 1) < 0.001); assert.ok(distance <= 4.2); return { name: 'oak_leaves', position: new Vec3(2, 65, 0) }; } }, quit: () => {}
   };
-  try { assert.deepEqual(await runtime.survival.observe(), { powderSnowContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
+  try { assert.deepEqual(await runtime.survival.observe(), { terrainRevision:0, localTerrain:[], resourceEvidence: Array.from({length:64},()=>({name:'iron_ore',position:{x:2,y:60,z:0}})), powderSnowContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
   finally { await runtime.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
@@ -691,4 +691,29 @@ test('completed non-novel walking records its actual edge without clearing old p
   f.job.start();await f.job.promise;
   const attempts=f.job.state().scoutAttempts;
   assert.equal(attempts.length,2);assert.equal(attempts[0].origin.x,100);assert.equal(attempts[1].completed,true);assert.equal(attempts[1].novel,false);assert.deepEqual(attempts[1].endpoint,f.state.position);
+});
+
+function unchangedScoutFixture(change=null) {
+  const f=fixture({maxSteps:5});f.add('wooden_pickaxe',1);f.add('stick',2);const actions=[];let resourceRevision=0,scouted=false;
+  f.job.observe=async()=>({wood:'oak',tableInReach:true,resourceEvidence:[{name:'stone',position:{x:resourceRevision,y:60,z:0}}]});
+  f.job.execute=async(name,args)=>{
+    actions.push(name);
+    if(name==='collect')throw new Error('No reachable stone');
+    if(name==='explore'){
+      if(!scouted){scouted=true;if(change==='resources')resourceRevision++;if(change==='inventory')f.add('cobblestone',3);if(change==='position')f.state.position.x+=1;}
+      throw Object.assign(new Error('No route'),{result:{route_attempts:[args.direction,...args.alternatives].map(direction=>({direction,status:'unverified'}))}});
+    }
+    return{};
+  };
+  return{...f,actions};
+}
+test('failed stationary scout continues exploration instead of repeating unchanged stone batches',async()=>{
+  const f=unchangedScoutFixture();f.job.start();await f.job.promise;
+  assert.deepEqual(f.actions,['collect','collect','explore','explore','explore']);assert.equal(f.job.state().steps,5);
+});
+test('new resource evidence or actual movement restores a fresh gathering attempt',async()=>{
+  for(const change of ['resources','position']){const f=unchangedScoutFixture(change);f.job.start();await f.job.promise;assert.equal(f.actions[3],'collect',change);}
+});
+test('new crafting materials outrank an unchanged-scout continuation',async()=>{
+  const f=unchangedScoutFixture('inventory');f.job.start();await f.job.promise;assert.equal(f.actions[3],'craft');
 });

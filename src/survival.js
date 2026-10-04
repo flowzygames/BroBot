@@ -8,6 +8,7 @@ const LOW_AIR_MESSAGE = 'Air is low. Work stopped, but the world keeps running. 
 const WOODS = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry', 'pale_oak'];
 const FOODS = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple'];
 const countItems = state => Object.fromEntries((state.inventory ?? []).map(i => [i.name, (state.inventory ?? []).filter(j => j.name === i.name).reduce((n, j) => n + j.count, 0)]));
+const inventoryKey = state => JSON.stringify(Object.entries(countItems(state)).sort(([a],[b])=>a.localeCompare(b)));
 const distance = (a, b) => a && b ? Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) : Infinity;
 const dimension = d => String(d).replace(/^minecraft:/, '');
 const action = (name, args, reason) => ({ name, args, reason });
@@ -172,6 +173,11 @@ export class SurvivalJob {
       // recovery (including queued scouts and leaf clearance). The route still
       // goes through the normal safety checks and certified walking executor.
       if (decision.waypointKind === 'home' || decision.name === 'eat') recovery = null;
+      if (recovery?.afterFailedScout) {
+        const current=this.snapshot();
+        if(!(decision.scout || decision.name==='collect') || inventoryKey(current)!==recovery.inventoryKey
+          || JSON.stringify(observation)!==recovery.observationKey || distance(current.position,recovery.position)>0.1) recovery=null;
+      }
       if (recovery?.name === 'pickup') {
         // A clearance action may already collect the tracked materials. Never
         // turn its stale continuation into an unscoped trip after other litter.
@@ -288,6 +294,15 @@ export class SurvivalJob {
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
         remember({ action: decision.name, args: decision.args, error: error.message, result: error.result });
+        const after=this.snapshot(), routes=error.result?.route_attempts;
+        if(decision.name==='explore' && Array.isArray(routes) && routes.length && routes.every(r=>r?.status==='unverified')
+          && distance(before.position,after.position)<=0.1 && inventoryKey(before)===inventoryKey(after)) {
+          // The failed probe changed no material or position. Try an unspent
+          // scout instead of paying for two identical failed mining batches.
+          // Fresh resources, tables, inventory or movement invalidate this hint.
+          recovery={scout:'The last route probe left gathering conditions unchanged. Try another bounded approach.',afterFailedScout:true,
+            inventoryKey:inventoryKey(after),observationKey:JSON.stringify(observation),position:{...after.position}};
+        }
       }
       await sleep(this.intervalMs, undefined, { signal });
     }
