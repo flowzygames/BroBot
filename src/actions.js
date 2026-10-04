@@ -1,3 +1,4 @@
+import { DropRetryCache } from './drop-retry-cache.js'
 import { isDryLanding, isAtPickupStandingCell } from './body-hazards.js'
 import { certifyWorkstationEgress } from './workstation-egress.js'
 import { sectionSearchDistance } from './block-search.js'
@@ -94,6 +95,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   configureCollisionContact(bot)
   let active = null
   let movements = null
+  const dropRetryCache = new DropRetryCache(bot)
   const items = () => bot.inventory?.items() ?? []
   const itemCount = name => items().filter(i => i.name === name).reduce((n, i) => n + i.count, 0)
   const inventoryMap = () => Object.fromEntries([...new Set(items().map(i => i.name))].map(name => [name, itemCount(name)]))
@@ -304,7 +306,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     for (let n = 0; n < 24 && !planningLimited; n++) {
       checked(ctx)
       if (remaining() <= 0) { pickupLimited = drops().length > 0; break }
-      const target = drops().filter(e => (attempts.get(e.id) ?? 0) < 3).sort((a, b) => (attempts.get(a.id) ?? 0) - (attempts.get(b.id) ?? 0) || a.position.distanceTo(bot.entity.position) - b.position.distanceTo(bot.entity.position))[0]
+      const target = drops().filter(e => !dropRetryCache.deferred(e,ctx.starterScope) && (attempts.get(e.id) ?? 0) < 3).sort((a, b) => (attempts.get(a.id) ?? 0) - (attempts.get(b.id) ?? 0) || a.position.distanceTo(bot.entity.position) - b.position.distanceTo(bot.entity.position))[0]
       if (!target) break
       attempts.set(target.id, (attempts.get(target.id) ?? 0) + 1)
       // Drops from upper logs/ores are often still falling. Walking to their
@@ -333,13 +335,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         checked(ctx)
         if (remaining() <= 0) { pickupLimited = drops().length > 0; break }
         const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, remaining()), waitForLanding: true, safeToStop: () => isDryLanding(bot), atDestination: () => isAtPickupStandingCell(bot,p) })
-        if (outcome.landingVerified) ctx.pickupUnverified = false
+        if (outcome.landingVerified) { ctx.pickupUnverified = false; dropRetryCache.succeeded(target,ctx.starterScope) }
         log('pickup', `Drop ${target.id} pursuit ended: ${outcome.reason}`, { id: target.id, destination: plainPos(p), position: plainPos(bot.entity.position), onGround: bot.entity.onGround, reason: outcome.reason, started: outcome.started, landingVerified: outcome.landingVerified })
         checked(ctx)
         await pause(ctx, Math.min(200, remaining()))
       } catch (error) {
         checked(ctx)
         ctx.pickupUnverified = true
+        dropRetryCache.failed(target,ctx.starterScope,error.message)
         log('pickup', `Drop ${target.id} pursuit failed: ${error.message}`, { id:target.id, destination:destination?plainPos(destination):null, position:plainPos(bot.entity.position), onGround:bot.entity.onGround, landingVerified:false })
         if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
@@ -351,7 +354,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
     pickupLimited ||= remaining() <= 0 && drops().length > 0
     if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
-    return { pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
+    return { deferred_drops:drops().map(e=>dropRetryCache.deferred(e,ctx.starterScope)).filter(Boolean), pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
     } finally { ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
   }
 
@@ -444,7 +447,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         throw error
       }
     }
-    const result = { pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    const result = { deferred_drops:pickup.deferred_drops??[], pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
   }
@@ -514,7 +517,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') error.result = { ...error.result, completed:false, mined:1, block:name, position:plainPos(p), inventory_changes:changes(before) }
       throw error
     }
-    return { completed: !pickup.pursuit_unverified && pickup.remaining_drops.length === 0, pickup_landing_verified:pickup.landing_verified, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
+    return { deferred_drops:pickup.deferred_drops??[], completed: !pickup.pursuit_unverified && pickup.remaining_drops.length === 0, pickup_landing_verified:pickup.landing_verified, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
   }
 
   async function descendNotch (args, ctx) {
@@ -1114,14 +1117,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  async function execute (name, args = {}, signal) {
+  async function execute (name, args = {}, signal, executionContext = {}) {
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
     assert(args && typeof args === 'object' && !Array.isArray(args), 'Action arguments must be an object')
     assert(!active, 'Another physical action is running or draining after cancellation')
     if (signal?.aborted) throw abortError()
     assert(bot.entity?.position, 'Bot has not spawned')
     const controller = new AbortController()
-    const ctx = { signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const ctx = { starterScope:executionContext.starterScope, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     const cancel = () => stop()
     signal?.addEventListener('abort', cancel, { once: true })

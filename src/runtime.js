@@ -81,7 +81,7 @@ export class Runtime {
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
         return { terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
-      execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
+      execute: (name, args, signal) => this.execute(name, args, signal, { starterScope:`${this.playSession}/${this.survival.job.id}` }), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
     this.lastEat = 0;
     this.reflexTimer = setInterval(() => this.reflex(), 1000);
@@ -211,7 +211,7 @@ export class Runtime {
     this.memory.set('owner', this.owner);
     this.log('config', `In-game controller: ${this.owner || 'disabled'}`);
   }
-  async execute(name, args, signal) {
+  async execute(name, args, signal, executionContext = {}) {
     if (this.connection !== 'connected' || !this.actions) throw new Error('BroBot is not connected to Minecraft yet. Start npm run server.');
     signal?.throwIfAborted();
     if (!this.definitions().some(tool => tool.name === name)) throw new Error(`Unknown action: ${name}`);
@@ -232,7 +232,7 @@ export class Runtime {
     }
     const actions = this.actions;
     const progression = this.progression;
-    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : s => actions.execute(name, args, s);
+    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : s => actions.execute(name, args, s, executionContext);
     return this.runner.run(name, run, () => actions.stop(), signal);
   }
   async command(input, speaker = this.owner) {

@@ -1174,3 +1174,15 @@ test('one physical collect action shares the three-attempt limit for a persisten
  assert.equal(result.mined,2);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.completed,false);assert.equal(attempts,3);
  await actions.execute('pickup',{radius:8});assert.equal(attempts,6,'a fresh physical action can retry after observing again');
 });
+
+test('starter-only deferral records implicit pickup failures, retains drops and allows direct retry',async()=>{
+ const bot=fakeBot();for(const x of [2,3])bot.putBlock('stone',new Vec3(x,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let attempts=0;
+ const item={id:77,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.dig=async block=>{bot.removeBlock(block.position);bot.addItem('cobblestone');bot.entities[77]=item};
+ bot.pathfinder.getPathFromTo=function*(){attempts++;yield{result:{status:'noPath',path:[]}}};
+ const actions=createActions(bot),context={starterScope:'job/1'};
+ await actions.execute('collect',{block:'stone',count:1,radius:8},undefined,context);assert.equal(attempts,3);
+ const result=await actions.execute('pickup',{radius:8},undefined,context);
+ assert.equal(attempts,3);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.deferred_drops[0].id,77);
+ await actions.execute('pickup',{radius:8});assert.equal(attempts,6);
+});
