@@ -2,6 +2,161 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SurvivalJob, nextStarterStep } from '../src/survival.js';
 import { parseCommand } from '../src/commands.js';
+import { STARTER_MIN_HEALTH } from '../src/starter-limits.js';
+
+test('hostile recovery waits for the interrupted action to drain and pauses afterward',async()=>{
+ let began,drain;const started=new Promise(r=>{began=r});let recoveries=0,stops=0;
+ const f=recoveryFixture({recoverFromHostile:async()=>{recoveries++;assert.ok(f.job.active);assert.equal(f.job.active.signal.aborted,false);return{separated:true};}});
+ f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted work');};
+ f.job.stopActions=()=>{stops++;};
+ f.job.start();await started;
+ f.state.entities=[{id:22,name:'zombie',type:'hostile',distance:1.4}];
+ assert.equal(f.job.requestHostileRecovery({id:22,name:'zombie',type:'hostile'}),true);
+ const pending=f.job.hostileRecovery;
+ assert.equal(f.job.requestHostileRecovery({id:23,name:'zombie',type:'hostile'}),true);
+ assert.equal(f.job.hostileRecovery,pending);assert.equal(stops,1);assert.equal(recoveries,0);
+ drain();await f.job.promise;
+ assert.equal(recoveries,1);assert.equal(f.job.state().status,'paused');assert.equal(f.job.active,null);assert.equal(f.job.hostileRecovery,null);
+ assert.equal(f.job.state().history.length,0,'hostile interruption is not a resource failure');
+});
+
+test('user stop, changed session and expired deadline prevent delayed hostile recovery',async()=>{
+ for(const mode of ['stop','session','expired','quarantine']){
+  let began,drain,session=1,now=0,recovered=0;const started=new Promise(r=>{began=r});
+  const f=recoveryFixture({session:()=>session,now:()=>now,recoverFromHostile:async()=>{recovered++;return{separated:true};}});
+  f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+  f.job.start();await started;f.job.requestHostileRecovery({id:22,name:'zombie',type:'hostile'});
+  if(mode==='stop')f.job.stop('User stopped');
+  if(mode==='session')session++;
+  if(mode==='expired')now=8001;
+  if(mode==='quarantine')f.state.terrainTrust={trusted:false};
+  drain();await f.job.promise;assert.equal(recovered,0,mode);assert.equal(f.job.state().status,'paused',mode);
+  if(mode==='stop')assert.equal(f.job.state().reason,'User stopped');
+ }
+});
+
+test('hostile recovery handles observation interruption and later user cancellation',async()=>{
+ let began,drain,entered,finish;const observing=new Promise(r=>{began=r}),recovering=new Promise(r=>{entered=r});
+ const f=recoveryFixture({recoverFromHostile:async(request,signal)=>{entered();await new Promise(r=>{finish=r});signal.throwIfAborted();return{separated:true};}});
+ f.job.observe=async()=>{began();await new Promise(r=>{drain=r});throw Error('observation interrupted');};
+ f.job.start();await observing;f.job.requestHostileRecovery({id:22,type:'hostile'});drain();await recovering;
+ f.job.stop('User stopped recovery');finish();await f.job.promise;
+ assert.equal(f.job.state().reason,'User stopped recovery');assert.equal(f.job.active,null);
+});
+
+test('hostile recovery rejects invalid sources and contains a failed recovery result',async()=>{
+ const f=recoveryFixture({recoverFromHostile:async()=>{throw Error('No verified escape');}});let began,drain;const started=new Promise(r=>{began=r});
+ f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+ assert.equal(f.job.requestHostileRecovery({id:22,type:'hostile'}),false);
+ f.job.start();await started;
+ for(const source of [null,{id:22,type:'player'},{type:'hostile'}])assert.equal(f.job.requestHostileRecovery(source),false);
+ f.job.requestHostileRecovery({id:22,type:'hostile'});drain();await f.job.promise;
+ assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/No verified escape/);
+});
+
+test('requested recovery receipt survives restart while the cancelled action drains',async()=>{
+ let began,drain;const started=new Promise(r=>{began=r});const order=[];
+ const f=recoveryFixture({recoverFromHostile:async()=>({separated:true})});
+ f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+ f.job.start();await started;
+ f.job.job.hostileRecovery={status:'verified',result:{separated:true}};f.job.save();
+ const save=f.memory.set;f.memory.set=(...args)=>{order.push('save');save(...args);};
+ f.job.stopActions=()=>order.push('stop');f.job.requestHostileRecovery({id:22,type:'hostile'});
+ assert.deepEqual(order,['stop','save']);
+ const restored=new SurvivalJob({memory:f.memory,context:'test'});
+ assert.equal(restored.state().status,'paused');assert.equal(restored.state().hostileRecovery.status,'requested');
+ assert.equal(restored.state().hostileRecovery.result,null);assert.equal(restored.active,null);
+ drain();await f.job.promise;
+ const terminal=new SurvivalJob({memory:f.memory,context:'test'});
+ assert.equal(terminal.state().hostileRecovery.status,'verified');assert.equal(terminal.state().status,'paused');
+});
+test('recovery request and terminal receipt survive reopening the actual memory file',async()=>{
+ const {Memory}=await import('../src/memory.js');
+ const {mkdtemp,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');
+ const directory=await mkdtemp(join(tmpdir(),'brobot-recovery-receipt-'));
+ let drain;
+ try{
+  let began;const started=new Promise(r=>{began=r}),memory=new Memory(directory);
+  const f=recoveryFixture({memory,recoverFromHostile:async()=>({separated:true})});
+  f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+  f.job.start();await started;f.job.requestHostileRecovery({id:22,type:'hostile'});
+  const reopened=new SurvivalJob({memory:new Memory(directory),context:'test'});
+  assert.equal(reopened.state().status,'paused');assert.equal(reopened.state().hostileRecovery.status,'requested');
+  assert.equal(reopened.state().hostileRecovery.result,null);assert.equal(reopened.active,null);
+  drain();await f.job.promise;
+  const finished=new SurvivalJob({memory:new Memory(directory),context:'test'});
+  assert.equal(finished.state().hostileRecovery.status,'verified');assert.equal(finished.state().hostileRecovery.result.separated,true);
+ }finally{drain?.();await rm(directory,{recursive:true,force:true});}
+});
+test('failed recovery persistence prevents escape and still releases lifecycle ownership',async()=>{
+ for(const quarantine of [false,true]){
+  let began,drain,recovered=0;const started=new Promise(r=>{began=r});
+  const f=recoveryFixture({recoverFromHostile:async()=>{recovered++;return{separated:true};}});
+  f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+  f.job.start();await started;
+  f.job.stopActions=()=>{if(quarantine)f.job.active.abort(Error('terrain quarantined'));};
+  f.memory.set=()=>{throw Error('disk write failed');};
+  assert.equal(f.job.requestHostileRecovery({id:22,type:'hostile'}),true);
+  assert.match(f.job.active.signal.reason.message,quarantine?/terrain quarantined/:/Cannot persist hostile recovery/);
+  const rejected=assert.rejects(f.job.promise,/disk write failed/);drain();await rejected;
+  assert.equal(recovered,0);assert.equal(f.job.active,null);assert.equal(f.job.hostileRecovery,null);
+  assert.equal(f.job.state().hostileRecovery.result,null);
+ }
+});
+
+function recoveryFixture(options={}){const f=fixture(options);f.state.terrainTrust={trusted:true};return f;}
+
+test('a resumed failed hostile recovery replaces the previous successful receipt',async()=>{
+ const f=recoveryFixture({recoverFromHostile:async()=>({separated:true})});
+ for(const first of [true,false]){
+  let began,drain;const started=new Promise(r=>{began=r});
+  f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+  f.job.recoverFromHostile=async()=>{if(!first)throw Error('No route this time');return{separated:true};};
+  f.job.start({resume:!first});await started;f.job.requestHostileRecovery({id:22,type:'hostile'});
+  assert.equal(f.job.state().hostileRecovery.result,null);
+  drain();await f.job.promise;
+  if(first)assert.equal(f.job.state().hostileRecovery.result.separated,true);
+  else{assert.equal(f.job.state().hostileRecovery.result,null);assert.match(f.job.state().hostileRecovery.reason,/No route this time/);}
+ }
+});
+
+test('hostile recovery never accepts a late or invalidated success receipt',async()=>{
+ for(const mode of ['repeat','expired','trust','health','connection','dimension','boundary']){
+  let now=0,began,drain,entered,finish;const started=new Promise(r=>{began=r}),recovering=new Promise(r=>{entered=r});
+  const f=recoveryFixture({now:()=>now,recoverFromHostile:async()=>{entered();await new Promise(r=>{finish=r});return{separated:true};}});
+  f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('interrupted');};
+  f.job.start();await started;f.job.requestHostileRecovery({id:22,type:'hostile'});drain();await recovering;
+  if(mode==='repeat')f.job.requestHostileRecovery({id:22,type:'hostile'});
+  if(mode==='expired')now=8001;
+  if(mode==='trust')f.state.terrainTrust.trusted=false;
+  if(mode==='health')f.state.health=STARTER_MIN_HEALTH;
+  if(mode==='connection')f.state.connected=false;
+  if(mode==='dimension')f.state.dimension='the_nether';
+  if(mode==='boundary')f.state.position.x=300;
+  finish();await f.job.promise;
+  assert.equal(f.job.state().status,'paused',mode);assert.notEqual(f.job.state().hostileRecovery?.result?.separated,true,mode);
+ }
+});
+
+test('synchronous quarantine during hostile cancellation suppresses recovery',async()=>{
+ let began,drain,recoveries=0;const started=new Promise(r=>{began=r});
+ const f=recoveryFixture({recoverFromHostile:async()=>{recoveries++;return{separated:true};}});
+ f.job.execute=async()=>{began();await new Promise(r=>{drain=r});throw Error('unconfirmed dig');};
+ f.job.stopActions=()=>{f.state.terrainTrust.trusted=false;f.job.active.abort(Error('terrain quarantined'));};
+ f.job.start();await started;f.job.requestHostileRecovery({id:22,type:'hostile'});drain();await f.job.promise;
+ assert.equal(recoveries,0);assert.equal(f.job.state().reason,'terrain quarantined');
+});
+
+test('pending hostile recovery outranks successful action and observation resolution',async()=>{
+ for(const stage of ['action','observation']){
+  let began,drain,recoveries=0;const started=new Promise(r=>{began=r});
+  const f=recoveryFixture({recoverFromHostile:async()=>{recoveries++;return{separated:false};}});
+  const delayed=async()=>{began();await new Promise(r=>{drain=r});return{completed:true,wood:'oak'};};
+  if(stage==='action')f.job.execute=delayed;else f.job.observe=delayed;
+  f.job.start();await started;f.job.requestHostileRecovery({id:22,type:'hostile'});drain();await f.job.promise;
+  assert.equal(recoveries,1,stage);assert.equal(f.job.state().status,'paused');assert.equal(f.job.state().history.length,0);
+ }
+});
 
 function fixture(options = {}) {
   const data = {}, events = [], calls = [];

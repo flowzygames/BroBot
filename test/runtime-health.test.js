@@ -69,3 +69,35 @@ test('lethal health updates leave cancellation reason to the death handler', () 
     assert.equal(runtime.runner.active.controller.signal.aborted,false);
   }
 });
+
+test('an observed hostile hit interrupts starter collection before a low-health packet',()=>{
+ const {runtime,stops}=fixture(20);
+ runtime.checkHostileHurt({id:175,name:'zombie',type:'hostile'});
+ assert.equal(stops.length,1);assert.match(stops[0],/Hostile attack.*world keeps running/);
+ assert.equal(runtime.runner.active.controller.signal.aborted,true);
+ runtime.checkHostileHurt({type:'hostile'});assert.equal(stops.length,1);
+});
+test('hostile-hit interruption is scoped and never guesses an unavailable source',()=>{
+ for(const [options,source,health] of [[{starter:false},{type:'hostile'},20],[{action:'eat'},{type:'hostile'},20],[{action:null},{type:'hostile'},20],[{aborted:true},{type:'hostile'},20],[{},null,10],[{},{name:'zombie'},10],[{},{type:'player'},10],[{},{type:'hostile'},0]]){
+  const {runtime,stops}=fixture(health,options);runtime.checkHostileHurt(source);assert.equal(stops.length,0);
+ }
+});
+
+test('real runtime wiring reacts to its own hostile hit and ignores retired connections', async()=>{
+ const {EventEmitter}=await import('node:events'),{mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+ const {default:mineflayer}=await import('mineflayer'),{default:minecraftData}=await import('minecraft-data'),{Vec3}=await import('vec3'),{loadConfig}=await import('../src/config.js');
+ const directory=await mkdtemp(join(tmpdir(),'brobot-hostile-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory}));
+ const bot=Object.assign(new EventEmitter(),{health:20,food:20,registry:minecraftData('1.21.8'),entity:{id:7,position:new Vec3(.5,64,.5)},loadPlugin(){},quit(){},inventory:{items:()=>[]}});
+ const create=mineflayer.createBot;mineflayer.createBot=()=>bot;const oldStop=runtime.stop;let stops=0;
+ try{
+  runtime.connect();runtime.connection='connected';runtime.survival.active=new AbortController();
+  runtime.runner.active={name:'collect',controller:new AbortController(),cleanup(){}};
+  runtime.stop=()=>{stops++;runtime.runner.active.controller.abort()};
+  bot.emit('entityHurt',{id:8},{name:'zombie',type:'hostile'});assert.equal(stops,0);
+  bot.emit('entityHurt',bot.entity,{id:175,name:'zombie',type:'hostile'});assert.equal(stops,1);assert.equal(bot.health,20);
+  runtime.runner.active={name:'collect',controller:new AbortController(),cleanup(){}};
+  runtime.bot={...bot,quit(){}};bot.emit('entityHurt',bot.entity,{name:'zombie',type:'hostile'});assert.equal(stops,1);
+ }finally{
+  mineflayer.createBot=create;runtime.runner.active=null;runtime.survival.active=null;runtime.stop=oldStop;await runtime.close();await rm(directory,{recursive:true,force:true});
+ }
+});

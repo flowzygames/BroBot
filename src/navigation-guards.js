@@ -11,7 +11,7 @@ const abortError = () => Object.assign(new Error('Action cancelled'), { name: 'A
 
 // Use the public path generator rather than mutating the pathfinder's active goal.
 // A timeout is unknown, never evidence that a route is safe.
-export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, fixedEndpoint = null, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
+export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, fixedEndpoint = null, validateNode = null, onCertifiedPaths = null, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
   if (typeof bot.pathfinder.getPathFromTo !== 'function') throw new Error('Return-path planning is unavailable; refusing collection travel')
   const deadline = performance.now() + planningBudget
   const check = () => { if (signal?.aborted) throw abortError(); if (performance.now() >= deadline) throw new Error('Return-path planning budget exhausted') }
@@ -30,6 +30,7 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
     check()
     if (result?.status !== 'success') throw new Error(`No verified returnable walking route (${result?.status ?? 'unknown'})`)
     if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
+    if (validateNode && result.path.some(p => !validateNode(p))) throw new Error('No verified returnable walking route (unsafe node)')
     return result
   }
   // Pickup already validates an exact standing cell. A sealed drop pocket can
@@ -48,6 +49,7 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
   // Origin goal is supplied by the caller so the helper does not depend on an internal goal class.
   if (fixed && !endpoint.equals(fixed)) throw new Error('Forward route ended at a different fixed endpoint')
   if (!reverse) reverse = await plan(endpoint, origin)
+  if (onCertifiedPaths) { onCertifiedPaths({forward:forward.path.map(p=>({x:p.x,y:p.y,z:p.z})),reverse:reverse.path.map(p=>({x:p.x,y:p.y,z:p.z}))});check() }
   return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
 }
 

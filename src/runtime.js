@@ -94,7 +94,9 @@ export class Runtime {
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
         return { ...(canopyGrounded ? {canopyGrounded:true} : {}), ...(nextStep?.name === 'craft' ? {craftGeometry:craftGeometryKey(this.bot)} : {}), terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
-      execute: (name, args, signal) => this.execute(name, args, signal, { starterScope:`${this.playSession}/${this.survival.job.id}` }), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
+      execute: (name, args, signal) => this.execute(name, args, signal, { starterScope:`${this.playSession}/${this.survival.job.id}` }),
+      recoverFromHostile: (request,signal) => this.recoverFromHostile(request,signal),
+      stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
     this.lastEat = 0;
     this.reflexTimer = setInterval(() => this.reflex(), 1000);
@@ -186,7 +188,8 @@ export class Runtime {
     this.injuryObserver = observeOwnInjuries(bot, {
       isCurrent: () => this.bot === bot && !this.closed,
       log: this.log.bind(this), action: () => this.runner.active?.name ?? null,
-      onHealth: () => this.checkHealth()
+      onHealth: () => this.checkHealth(),
+      onHurt: source => this.checkHostileHurt(source)
     });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
@@ -287,6 +290,28 @@ export class Runtime {
       return this.execute('go_to', { x: Math.floor(target.position.x), y: Math.floor(target.position.y), z: Math.floor(target.position.z), radius: 2 });
     }
     throw new Error('Unsupported command.');
+  }
+  checkHostileHurt(source) {
+    const bot = this.bot, active = this.runner.active;
+    if (this.connection !== 'connected' || !bot || this.closed || !this.survival.active || !active
+      || active.controller.signal.aborted || active.name === 'eat' || source?.type !== 'hostile') return;
+    // This responds to an explicit observed attacker, without joining separate
+    // health packets or guessing a missing source. Recovery may attempt one
+    // bounded melee retreat; it does not pause the world or prevent another hit.
+    if (Number.isFinite(bot.health) && bot.health <= 0) return;
+    if(!this.survival.requestHostileRecovery?.(source))this.stop('Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.');
+  }
+  async recoverFromHostile(request,signal) {
+    const bot=this.bot,actions=this.actions;
+    const guard=()=>{
+      if(this.closed||this.bot!==bot||this.actions!==actions)throw Error('Recovery connection changed');
+      this.survival.checkRecoveryState(request,request.controller);
+      assertTerrainTrusted(bot);
+    };
+    guard();
+    if(typeof actions?.retreatFromHostile!=='function')throw Error('Bounded starter retreat is unavailable');
+    const args={sourceId:request.source.id,deadline:request.deadline,home:{...request.job.home.position},dimension:bot.game.dimension};
+    return this.runner.run('starter_retreat',s=>actions.retreatFromHostile(args,s,{starterScope:`${request.session}/${request.jobId}`,recoveryGuard:guard}),()=>actions.stop(),signal);
   }
   checkHealth() {
     const bot = this.bot, active = this.runner.active;

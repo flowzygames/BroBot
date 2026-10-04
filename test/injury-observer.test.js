@@ -61,3 +61,12 @@ test('installed Mineflayer respawn ordering retains the first new-life health lo
  update(17);assert.equal(f.observer.recent()[0].kind,'health_loss');assert.equal(f.observer.recent()[0].before,20);assert.equal(f.observer.recent()[0].after,17);assert.equal(f.observer.recent()[0].loss,3);
  f.observer.dispose();
 });
+
+test('own hurt safety callback precedes logging and retains the original action context',()=>{
+ const bot=Object.assign(new EventEmitter(),{entity:{id:7,position:{x:0,y:64,z:0}},health:20});
+ const order=[],logs=[];let active='collect';
+ const observer=observeOwnInjuries(bot,{action:()=>active,onHurt:source=>{order.push('guard');assert.equal(source.type,'hostile');assert.equal(source.username,undefined);active=null},log:(type,message,data)=>{order.push('log');logs.push(data)}});
+ bot.emit('entityHurt',bot.entity,{id:8,name:'zombie',type:'hostile',username:'not-retained'});
+ assert.deepEqual(order,['guard','log']);assert.equal(logs[0].action,'collect');assert.equal(logs[0].health_observed,20);
+ observer.dispose();bot.emit('entityHurt',bot.entity,{type:'hostile'});assert.equal(order.length,2);
+});

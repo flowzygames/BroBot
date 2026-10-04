@@ -1,6 +1,7 @@
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { PickupProbeLedger } from './pickup-probe-ledger.js'
+import { runStarterRetreat } from './starter-retreat.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -1124,6 +1125,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   const handlers = {
+    starter_retreat: (args,ctx) => runStarterRetreat(bot,args,{signal:ctx.signal,check:()=>checked(ctx),guard:ctx.recoveryGuard,abort:error=>{ctx.controller.abort(error);stop()},prepareMovement:()=>{configureMovement();return movements}}),
     inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt, descend_notch: descendNotch,
     go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius, { returnable: args.returnable === true, walkingTimeoutMs: 45000 }); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
     place: async (args, ctx) => placeOne(ctx, cleanName(args.block, 'block'), coordinates(args, ctx)),
@@ -1243,7 +1245,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (signal?.aborted) throw abortError()
     assert(bot.entity?.position, 'Bot has not spawned')
     const controller = new AbortController()
-    const ctx = { starterScope:executionContext.starterScope, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const ctx = { starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     const cancel = () => stop()
     signal?.addEventListener('abort', cancel, { once: true })
@@ -1260,5 +1262,5 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  return { execute, stop, snapshot, definitions }
+  return { execute, stop, snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
 }
