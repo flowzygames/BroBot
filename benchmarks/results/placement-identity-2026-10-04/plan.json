@@ -1,0 +1,21 @@
+{
+  "source": "5ba9e30421e863e3cc970999e3fe9c024f9f35f4",
+  "queued": "2026-10-04T16:54:23.487795+00:00",
+  "classification": "Prepared physical integration of final-placement identity patch. Separate from frozen454 natural-world scores.",
+  "checks": [
+    {
+      "name": "prepared17",
+      "returnCode": 0,
+      "passed": true,
+      "result": "/workspace/scratch/ec0ad557001f/brobot-placement457-eval/.server/smoke/2026-10-04T17-42-24-103Z-b521936d/result.json"
+    },
+    {
+      "name": "preparedCanopy",
+      "returnCode": 0,
+      "passed": true,
+      "result": "/workspace/scratch/ec0ad557001f/brobot-placement457-eval/.server/smoke/canopy-recovery-2026-10-04T17-44-43-754Z-4a29b80f/result.json"
+    }
+  ],
+  "started": "2026-10-04T17:42:23.545286+00:00",
+  "finished": "2026-10-04T17:45:27.417372+00:00"
+}

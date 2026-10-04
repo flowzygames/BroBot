@@ -682,20 +682,18 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         assert(isAir(loaded(p)), 'Placement location became occupied')
         await step(ctx, () => bot.equip(owned(name), 'hand'))
         checked(ctx)
-        let proof
-        if (beforePlace) {
-          assert(typeof bot._placeBlockWithOptions === 'function', 'Guarded workstation placement is unavailable')
-          await step(ctx, () => bot.lookAt(support.reference.position.offset(0.5+support.face.x*0.5,0.5+support.face.y*0.5,0.5+support.face.z*0.5)))
-          proof = await beforePlace()
-        }
+        assert(typeof bot._placeBlockWithOptions === 'function', 'Guarded block placement is unavailable')
+        // Finish aiming before final checks. The pinned placement helper can
+        // then send synchronously without a second hidden look await.
+        await step(ctx, () => bot.lookAt(support.reference.position.offset(0.5+support.face.x*0.5,0.5+support.face.y*0.5,0.5+support.face.z*0.5)))
+        const proof = beforePlace ? await beforePlace() : null
         checked(ctx)
         assert(isAir(loaded(p)), 'Placement location became occupied')
         assert(isSolid(loaded(support.reference.position)), 'Placement support changed')
         if (proof) assert(proof.validate(), 'Workstation exit geometry or position changed before placement')
+        assert(bot.heldItem?.name === name && bot.heldItem.count > 0, 'Held placement item changed before placement')
         bot.setControlState('sneak', true)
-        try { await step(ctx, () => beforePlace
-          ? bot._placeBlockWithOptions(loaded(support.reference.position), support.face, { forceLook:'ignore', swingArm:'right' })
-          : bot.placeBlock(loaded(support.reference.position), support.face)) } finally { bot.setControlState('sneak', false) }
+        try { await step(ctx, () => bot._placeBlockWithOptions(loaded(support.reference.position), support.face, { forceLook:'ignore', swingArm:'right' })) } finally { bot.setControlState('sneak', false) }
         await pause(ctx, 100)
         assert(matchesPlacedBlock(loaded(p).name, name), `Server placement mismatch: expected ${name}, observed ${loaded(p).name}`)
         return { placed: true, block: loaded(p).name, position: plainPos(p) }

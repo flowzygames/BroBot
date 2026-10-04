@@ -1355,3 +1355,32 @@ test('a local update refreshes collection choices to include a newly exposed nea
   assert.deepEqual(error.result.failures.slice(0,2).map(f=>f.position.x),[8,7]);assert.equal(error.result.search_scans,2);return true;
  });
 });
+
+test('workstation placement rejects a changed held item after its final look',async()=>{
+ const bot=fakeBot();let packets=0;bot.addItem('crafting_table');const wrong=bot.addItem('stone');
+ for(let x=-4;x<=4;x++)for(let z=-4;z<=4;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ bot.recipesFor=(type,metadata,count,table)=>table?[{result:{count:1},requiresTable:true}]:[];
+ bot.lookAt=async()=>{bot.heldItem=wrong};bot._placeBlockWithOptions=async()=>{packets++};
+ await assert.rejects(createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1}));assert.equal(packets,0);
+});
+
+test('ordinary placement checks held-item identity after aiming and avoids a hidden look race',async()=>{
+ const bot=fakeBot();bot.addItem('oak_planks');const wrong=bot.addItem('stone');bot.putBlock('dirt',new Vec3(2,63,0));let packets=0;
+ bot.lookAt=async()=>{bot.heldItem=wrong};
+ bot.placeBlock=async()=>{await bot.lookAt();packets++};
+ bot._placeBlockWithOptions=async(reference,face,options)=>{if(options.forceLook!=='ignore')await bot.lookAt();packets++};
+ await assert.rejects(createActions(bot).execute('place',{block:'oak_planks',x:2,y:64,z:0}));assert.equal(packets,0);
+});
+
+test('ordinary placement uses one explicit aim and refuses an emptied held stack',async()=>{
+ for(const emptied of [false,true]){
+  const bot=fakeBot();bot.addItem('oak_planks');bot.putBlock('dirt',new Vec3(2,63,0));let aims=0,packets=0;
+  bot.lookAt=async()=>{aims++;if(emptied)bot.heldItem.count=0};
+  bot.placeBlock=async()=>{throw Error('Hidden-look placement path must not be used')};
+  bot._placeBlockWithOptions=async(reference,face,options)=>{assert.equal(options.forceLook,'ignore');packets++;bot.putBlock(bot.heldItem.name,reference.position.plus(face))};
+  const result=createActions(bot).execute('place',{block:'oak_planks',x:2,y:64,z:0});
+  if(emptied){await assert.rejects(result,/Held placement item changed/);assert.equal(packets,0)}
+  else{assert.equal((await result).placed,true);assert.equal(packets,1)}
+  assert.equal(aims,1);
+ }
+});
