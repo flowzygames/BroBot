@@ -42,8 +42,9 @@ test('standalone return corridor rejects waterlogged non-leaf stairs', async()=>
 });
 
 import {createActions} from '../src/actions.js';
+import {terrainTrustStatus} from '../src/terrain-trust.js';
 function actionFixture(){
- const {bot,cells}=fixture();bot.health=20;bot.food=20;bot.setControlState=()=>{};bot.stopDigging=()=>{};bot.deactivateItem=()=>{};bot.lookAt=async()=>{};
+ const {bot,cells}=fixture();bot.version='1.21.8';bot._client=new EventEmitter();bot.game.dimension='overworld';bot.digTime=()=>0;bot.health=20;bot.food=20;bot.setControlState=()=>{};bot.stopDigging=()=>{};bot.deactivateItem=()=>{};bot.lookAt=async()=>{};
  const item={name:'shears',type:bot.registry.itemsByName.shears.id,count:1};bot.inventory.items=()=>[item];bot.equip=async i=>{bot.heldItem=i;};bot.canDigBlock=()=>true;
  return{bot,cells};
 }
@@ -57,13 +58,14 @@ test('cancelling descent during mining stops digging and drains the action',asyn
  const {bot}=actionFixture(),controller=new AbortController(),listeners=bot.listenerCount('blockUpdate');let stopped=0,finish;
  bot.dig=()=>new Promise(resolve=>{finish=resolve;queueMicrotask(()=>controller.abort());});
  bot.stopDigging=()=>{stopped++;finish?.();};
- await assert.rejects(createActions(bot).execute('descend_notch',{},controller.signal),{name:'AbortError'});
+ await assert.rejects(createActions(bot).execute('descend_notch',{},controller.signal),{code:'MINING_UNCONFIRMED'});
+ assert.equal(terrainTrustStatus(bot).trusted,false);
  assert.ok(stopped>0);assert.equal(bot.listenerCount('blockUpdate'),listeners);
 });
 
 test('descent refuses departure if mining invalidates the home support',async()=>{
  const {bot,cells}=actionFixture(),listeners=bot.listenerCount('blockUpdate');let mined=0;
- bot.dig=async()=>{mined++;cells.delete('1,1,0');cells.delete('0,0,0');};
+ bot.dig=async block=>{mined++;bot._client.emit('packet',{location:block.position,type:0},{name:'block_change'});cells.delete('1,1,0');cells.delete('0,0,0');};
  await assert.rejects(createActions(bot).execute('descend_notch',{}),/anchor|protected log|corridor geometry/i);
  assert.equal(mined,1);assert.deepEqual(bot.entity.position.toArray(),[.5,2,.5]);assert.equal(bot.listenerCount('blockUpdate'),listeners);
 });

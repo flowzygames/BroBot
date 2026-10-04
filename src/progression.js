@@ -1,3 +1,4 @@
+import { assertTerrainTrusted } from './terrain-trust.js';
 import { Vec3 } from 'vec3';
 
 const AIR = new Set(['air', 'cave_air', 'void_air']);
@@ -197,6 +198,8 @@ function pause(ms, signal) {
 }
 
 export function createProgression(bot, { actions, memory, log = () => {} }) {
+  const checkSignal = checked;
+  const checkedBot = signal => { assertTerrainTrusted(bot); checkSignal(signal); };
   const state = new Map();
   const get = (key, fallback) => memory?.get ? memory.get(key, fallback) : (state.get(key) ?? fallback);
   const set = (key, value) => memory?.set ? memory.set(key, value) : state.set(key, value);
@@ -205,11 +208,11 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
   const count = name => items().filter(i => i.name === name).reduce((sum, i) => sum + i.count, 0);
   const here = () => dimension(bot.game?.dimension);
   const health = signal => {
-    checked(signal);
+    checkedBot(signal);
     if (!bot.entity?.position || bot.health <= 0) throw new Error('Bot is not alive and spawned.');
     if (bot.health <= 8) throw new Error('Combat stopped: health is at or below four hearts. Eat and recover before retrying.');
   };
-  const act = async (name, args, signal) => { checked(signal); const result = await actions.execute(name, args, signal); checked(signal); return result; };
+  const act = async (name, args, signal) => { checkedBot(signal); const result = await actions.execute(name, args, signal); checkedBot(signal); return result; };
   const equip = (name, signal) => act('equip', { item: name, destination: 'hand' }, signal);
   const approach = (p, signal, radius = 2) => act('go_to', { x: Math.floor(p.x), y: Math.floor(p.y), z: Math.floor(p.z), radius }, signal);
   const findBlocks = (name, radius, countLimit = 128) => {
@@ -219,20 +222,20 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
   };
   const waitUntil = async (predicate, ms, signal) => {
     const deadline = Date.now() + ms;
-    while (Date.now() < deadline) { checked(signal); const result = predicate(); if (result) return result; await pause(100, signal); }
-    checked(signal);
+    while (Date.now() < deadline) { checkedBot(signal); const result = predicate(); if (result) return result; await pause(100, signal); }
+    checkedBot(signal);
     return null;
   };
   const eyes = () => bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
 
   async function clickTop(reference, signal) {
-    checked(signal);
+    checkedBot(signal);
     const eye = eyes(), target = reference.position.offset(0.5, 0.81, 0.5), delta = target.minus(eye);
     if (delta.norm() > 4.5) throw new Error('Top face is outside interaction reach.');
     const hit = bot.world.raycast(eye, delta.normalize(), 4.5);
     if (!hit?.position.equals(reference.position) || hit.face !== 1) throw new Error('Top face is obstructed. Approach from above the frame, outside the portal opening.');
     await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 0.8125, 0.5));
-    checked(signal);
+    checkedBot(signal);
   }
 
   async function buildPortal(args, signal) {
@@ -273,7 +276,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
           for (const offset of offsets) {
             const stand = { x: p.x + (args.axis === 'z' ? offset : 0), y: args.y, z: p.z + (args.axis === 'x' ? offset : 0) };
             if (!AIR.has(block(stand)?.name) || !AIR.has(block({ ...stand, y: stand.y + 1 })?.name) || block({ ...stand, y: stand.y - 1 })?.boundingBox !== 'block') continue;
-            try { await approach(stand, signal, 0); positioned = true; break; } catch { checked(signal); }
+            try { await approach(stand, signal, 0); positioned = true; break; } catch { checkedBot(signal); }
           }
           if (!positioned) throw new Error('No reachable clear ground outside the frame gives access to its top.');
         }
@@ -291,7 +294,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
         const hit = bot.world.raycast(eye, delta.scaled(1 / distance), distance + 0.1);
         if (hit && !hit.position.equals(reference.position)) throw new Error('Ignition face is obstructed.');
         await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 1, 0.5));
-        checked(signal);
+        checkedBot(signal);
       }
       const active = await waitUntil(() => blueprint.interior.some(p => block(p)?.name === 'nether_portal'), 3000, signal);
       if (!active) throw new Error('Frame exists, but no active portal blocks were observed after ignition.');
@@ -314,7 +317,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
     const controller = new AbortController();
     const forwardAbort = () => controller.abort(signal.reason);
     signal?.addEventListener('abort', forwardAbort, { once: true });
-    checked(signal);
+    checkedBot(signal);
     const timer = setTimeout(() => controller.abort(new Error('Portal approach or dimension transition timed out.')), args.timeout * 1000);
     const arrival = setInterval(() => { if (here() !== start) actions.stop(); }, 100);
     try {
@@ -325,7 +328,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
         let edge = null, lastError;
         for (const candidate of edges.slice(0, 8)) {
           try { await approach(candidate.standing, controller.signal, 0); edge = candidate; break; }
-          catch (error) { if (here() !== start) break; checked(controller.signal); lastError = error; }
+          catch (error) { if (here() !== start) break; checkedBot(controller.signal); lastError = error; }
         }
         if (!edge && here() === start) throw lastError ?? new Error('No safe End portal edge was reachable.');
         if (here() === start) {
@@ -334,12 +337,12 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
           const dx = target.x - bot.entity.position.x, dz = target.z - bot.entity.position.z;
           if (Math.hypot(dx, dz) > 1.7 || Math.abs(bot.entity.position.y - edge.standing.y) > 0.5) throw new Error('The bot did not reach the expected safe portal edge.');
           actions.stop();
-          await bot.look(Math.atan2(-dx, -dz), 0, true); checked(controller.signal);
+          await bot.look(Math.atan2(-dx, -dz), 0, true); checkedBot(controller.signal);
           const enteredBy = Date.now() + 2000;
           bot.setControlState('forward', true);
           try {
             while (here() === start && Date.now() < enteredBy) {
-              checked(controller.signal);
+              checkedBot(controller.signal);
               const p = bot.entity.position;
               if (Math.hypot(target.x - p.x, target.z - p.z) < 0.2) break;
               if (p.y < edge.portal.y - 0.5) throw new Error('The bot fell below the expected portal surface without a dimension change.');
@@ -377,7 +380,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
     };
     bot.on('entitySpawn', sample); bot.on('entityMoved', sample);
     try {
-      await bot.look(bot.entity.yaw, 0.35, true); checked(signal);
+      await bot.look(bot.entity.yaw, 0.35, true); checkedBot(signal);
       bot.activateItem();
       await waitUntil(() => tracked, 2500, signal);
       if (!tracked) throw new Error('No newly thrown eye entity was observed. Check that there is open space above; do not assume a bearing.');
@@ -406,7 +409,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
     if (count('ender_eye') < missing.length) throw new Error(`This ring needs ${missing.length} eyes; inventory has ${count('ender_eye')}.`);
     let inserted = 0;
     for (const original of missing) {
-      checked(signal);
+      checkedBot(signal);
       let frame = block(original.position);
       if (hasEye(frame)) continue;
       const facing = FACING[frame.getProperties().facing];
@@ -457,7 +460,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       if (!shot) return { fired: false, blocked: 'No reliable bow trajectory within 96 horizontal blocks.' };
       const trajectory = clearTrajectory(shot);
       if (!trajectory.clear) return { fired: false, blocked: trajectory.reason, obstruction: trajectory.position };
-      await bot.look(shot.yaw, shot.pitch, true); checked(signal);
+      await bot.look(shot.yaw, shot.pitch, true); checkedBot(signal);
       bot.deactivateItem(); fired = true;
       await pause(Math.min(3500, Math.max(700, shot.ticks * 50 + 300)), signal);
       return { fired: true, targetPresent: Boolean(bot.entities[entity.id]) };
@@ -557,14 +560,14 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
         const current = bot.entities[dragon.id];
         const currentPhase = current?.metadata?.[keys.indexOf('phase')];
         if (!current || ![6, 7].includes(currentPhase)) continue;
-        await bot.lookAt(current.position, true); checked(signal);
+        await bot.lookAt(current.position, true); checkedBot(signal);
         bot.attack({ id: current.id + 3 }); meleeAttempts++;
         await pause(700, signal);
       }
       if (deathObserved) set('dragonDeathObserved', { at: new Date().toISOString(), dimension: 'end', evidence: 'entityDead event for ender_dragon' });
       return result();
     } catch (error) {
-      checked(parentSignal);
+      checkedBot(parentSignal);
       if (!budget.signal.aborted) throw error;
       return result();
     } finally { clearTimeout(timer); bot.removeListener('entityDead', died); actions.stop(); }
@@ -581,7 +584,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
     async execute(name, args = {}, signal) {
       if (!Object.hasOwn(handlers, name)) throw new Error(`Unknown progression tool: ${name}`);
       if (!args || typeof args !== 'object' || Array.isArray(args)) throw new Error('Progression arguments must be an object.');
-      checked(signal);
+      checkedBot(signal);
       if (running) throw new Error('A progression action is already running. Cancel it before starting another.');
       running = true;
       const stop = () => { if (bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9); actions.stop(); };

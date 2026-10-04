@@ -1,0 +1,268 @@
+{
+  "kind": "prepared-server-block-receipt-observer",
+  "started": "2026-10-04T19:02:30.383Z",
+  "passed": true,
+  "limits": "Observer experiment only. Adventure refusal and survival success use separate bot connections in a console-prepared peaceful world. No production action integration, causality proof, movement certification or automatic terrain quarantine is claimed.",
+  "cases": [
+    {
+      "mode": "adventure",
+      "packets": [
+        {
+          "at": 1791140569051,
+          "name": "block_change",
+          "data": {
+            "location": {
+              "x": 2,
+              "z": 0,
+              "y": 64
+            },
+            "type": 137
+          }
+        },
+        {
+          "at": 1791140569061,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        },
+        {
+          "at": 1791140569552,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        }
+      ],
+      "outbound": [
+        {
+          "at": 1791140569047,
+          "status": 0,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        },
+        {
+          "at": 1791140569548,
+          "status": 2,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        }
+      ],
+      "localUpdates": [
+        {
+          "at": 1791140569051,
+          "old": "oak_log",
+          "next": "oak_log"
+        },
+        {
+          "at": 1791140569548,
+          "old": "oak_log",
+          "next": "air"
+        }
+      ],
+      "digCompletedEvents": 1,
+      "before": {
+        "block": "oak_log",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ]
+      },
+      "digResolved": true,
+      "afterDig": {
+        "receipt": {
+          "position": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "dimension": "overworld",
+          "latest": {
+            "stateId": 137,
+            "packet": "block_change",
+            "sequence": 1
+          },
+          "cleanupErrors": [],
+          "active": true,
+          "invalidReason": null,
+          "serverObservedAir": false
+        },
+        "cachedBlock": "air"
+      },
+      "finalReceipt": {
+        "position": {
+          "x": 2,
+          "y": 64,
+          "z": 0
+        },
+        "dimension": "overworld",
+        "latest": {
+          "stateId": 137,
+          "packet": "block_change",
+          "sequence": 1
+        },
+        "cleanupErrors": [],
+        "active": false,
+        "invalidReason": "deadline_expired",
+        "serverObservedAir": false
+      },
+      "serverConsoleTarget": "oak_log",
+      "after": {
+        "block": "air",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ],
+        "health": 20
+      },
+      "passed": true
+    },
+    {
+      "mode": "survival",
+      "packets": [
+        {
+          "at": 1791140574553,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        },
+        {
+          "at": 1791140575053,
+          "name": "block_change",
+          "data": {
+            "location": {
+              "x": 2,
+              "z": 0,
+              "y": 64
+            },
+            "type": 0
+          }
+        },
+        {
+          "at": 1791140575056,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        }
+      ],
+      "outbound": [
+        {
+          "at": 1791140574517,
+          "status": 0,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        },
+        {
+          "at": 1791140575016,
+          "status": 2,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        }
+      ],
+      "localUpdates": [
+        {
+          "at": 1791140575017,
+          "old": "oak_log",
+          "next": "air"
+        },
+        {
+          "at": 1791140575053,
+          "old": "air",
+          "next": "air"
+        }
+      ],
+      "digCompletedEvents": 1,
+      "before": {
+        "block": "oak_log",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ]
+      },
+      "digResolved": true,
+      "afterDig": {
+        "receipt": {
+          "position": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "dimension": "overworld",
+          "latest": null,
+          "cleanupErrors": [],
+          "active": true,
+          "invalidReason": null,
+          "serverObservedAir": false
+        },
+        "cachedBlock": "air"
+      },
+      "finalReceipt": {
+        "position": {
+          "x": 2,
+          "y": 64,
+          "z": 0
+        },
+        "dimension": "overworld",
+        "latest": {
+          "stateId": 0,
+          "packet": "block_change",
+          "sequence": 1
+        },
+        "cleanupErrors": [],
+        "active": true,
+        "invalidReason": null,
+        "serverObservedAir": true
+      },
+      "serverConsoleTarget": "air",
+      "after": {
+        "block": "air",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          },
+          {
+            "name": "oak_log",
+            "count": 1
+          }
+        ],
+        "health": 20
+      },
+      "passed": true
+    }
+  ],
+  "sourceHashes": {
+    "src/experimental/block-receipts.js": "056ae19447d7ae34e741c0f149c444108f92a990568ba1d2ed2bbc9f3844e0aa",
+    "scripts/diagnostic-block-receipts.js": "44f0668dd9cb783b7a4b2b32d00eff5cf4cf0d9ccfbca36128ec7df3a8296b2b",
+    "test/block-receipts.test.js": "061c18cb67bfce6075722164d849aae35246f1908fd1419fcd1630110b4aebff",
+    "package-lock.json": "1495150c57c51f6af34967459c5de0d99b87616e3cd1199f5875a78494a0c706"
+  },
+  "cleanupErrors": [],
+  "commit": "5b1a001b5e9e994a302a844779786789de56f7d6",
+  "dirty": false,
+  "finished": "2026-10-04T19:02:57.002Z"
+}

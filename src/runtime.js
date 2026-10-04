@@ -1,3 +1,4 @@
+import { assertTerrainTrusted, terrainTrustStatus } from './terrain-trust.js';
 import { isFluidBearingBlock } from './navigation-guards.js';
 import { craftGeometryKey } from './craft-retry-evidence.js';
 import { observeOwnInjuries } from './injury-observer.js';
@@ -47,7 +48,11 @@ export class Runtime {
     this.survival = new SurvivalJob({
       memory: this.memory, snapshot: () => this.snapshot(), session: () => this.playSession, context: `${config.minecraft.host}:${config.minecraft.port}/${config.minecraft.username}`,
       observe: async signal => {
+        const observedBot = this.bot;
+        assertTerrainTrusted(observedBot);
         const seen = await this.execute('inspect', { radius: 32 }, signal);
+        if (this.bot !== observedBot) throw new Error('Minecraft connection changed during starter observation');
+        assertTerrainTrusted(observedBot);
         const blocks = seen.nearby_blocks ?? [];
         const p = seen.position;
         // A dense ore field can also crowd our placed table out of inspect's
@@ -109,12 +114,13 @@ export class Runtime {
   }
   definitions() { return [...(this.actions?.definitions || []), ...(this.progression?.definitions || []), ...this.localDefinitions]; }
   snapshot() {
+    const terrainTrust = terrainTrustStatus(this.bot);
     let world = {};
     try { world = this.actions?.snapshot() || {}; } catch { /* connection is transitioning */ }
     let progression = {};
     try { progression = observeProgression(world); } catch { /* no spawned world yet */ }
     const players = this.bot ? Object.values(this.bot.players).filter(p => p.entity && p.username !== this.bot.username).map(p => p.username) : [];
-    return { ...world, players, connected: this.connection === 'connected', connection: this.connection, owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression, survival: this.survival?.state() ?? null, recentInjuries: this.injuryObserver?.recent() ?? [] };
+    return { ...world, players, connected: this.connection === 'connected' && terrainTrust.trusted, terrainTrust, connection: terrainTrust.trusted ? this.connection : 'quarantined', owner: this.owner, action: this.runner.state(), memory: this.memory.snapshot(), progression, survival: this.survival?.state() ?? null, recentInjuries: this.injuryObserver?.recent() ?? [] };
   }
   state() { return { ...this.snapshot(), config: publicConfig(this.config), ai: this.brain.state(), events: this.events, tools: this.definitions() }; }
   connect() {
@@ -143,7 +149,17 @@ export class Runtime {
     bot.on('blockUpdate',terrainChanged);
     bot.on('chunkColumnLoad',terrainChanged);
     bot.on('chunkColumnUnload',terrainChanged);
+    bot.on('terrainUntrusted', error => {
+      if (this.bot !== bot) return;
+      this.connection = 'quarantined';
+      this.brain.stop(error.message);
+      this.survival.stop(error.message);
+      this.runner.stop(error.message);
+      this.actions?.stop();
+      this.log('error', 'Mining confirmation failed; disconnecting before terrain can be reused. Resume explicitly after reconnecting.');
+    });
     bot.on('spawn', () => {
+      if (!terrainTrustStatus(bot).trusted) { bot.quit('Unverified terrain requires a fresh connection'); return; }
       if (this.bot !== bot) return;
       this.playSession++;
       this.terrainRevision++;
@@ -219,6 +235,7 @@ export class Runtime {
     this.log('config', `In-game controller: ${this.owner || 'disabled'}`);
   }
   async execute(name, args, signal, executionContext = {}) {
+    assertTerrainTrusted(this.bot);
     if (this.connection !== 'connected' || !this.actions) throw new Error('BroBot is not connected to Minecraft yet. Start npm run server.');
     signal?.throwIfAborted();
     if (!this.definitions().some(tool => tool.name === name)) throw new Error(`Unknown action: ${name}`);
@@ -282,7 +299,7 @@ export class Runtime {
   }
   reflex() {
     const bot = this.bot;
-    if (this.connection !== 'connected' || !bot || this.closed) return;
+    if (this.connection !== 'connected' || !bot || this.closed || !terrainTrustStatus(bot).trusted) return;
     this.checkHealth();
     if (bot.food >= 18 || this.runner.active || this.survival.active || Date.now() - this.lastEat < 10000) return;
     const foods = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple', 'melon_slice', 'sweet_berries'];

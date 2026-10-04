@@ -1,3 +1,5 @@
+import { confirmedMining } from './experimental/confirmed-mining.js'
+import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
 import { awaitPassiveLanding } from './passive-settlement.js'
 import { isDryLanding, isAtPickupStandingCell } from './body-hazards.js'
@@ -126,7 +128,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const positions = bot.findBlocks({ matching: id, maxDistance: sectionSearchDistance(radius), count: 256 }).filter(p => p.distanceTo(origin) <= radius && accept(bot.blockAt(p))).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
     return positions.length ? bot.blockAt(positions[0]) : null
   }
-  const checked = ctx => { if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
+  const checked = ctx => { assertTerrainTrusted(bot); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
   const step = async (ctx, fn) => { checked(ctx); const result = await fn(); checked(ctx); return result }
 
   function stop () {
@@ -251,6 +253,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   function snapshot () {
+    assertTerrainTrusted(bot)
     const position = bot.entity?.position
     return {
       connected: !!position,
@@ -570,9 +573,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const current = validateTarget()
       assert(!current.canHarvest || current.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${current.name}; refusing to destroy it without drops`)
       beforeDig?.()
-      return bot.dig(current, 'ignore')
+      return confirmedMining({ bot, block: current, signal: ctx.signal })
     })
-    assert(loaded(p).name !== block.name, `Server did not confirm mining ${block.name}`)
+    assert(isAir(loaded(p)), `Confirmed mining target is no longer air`)
     return block.name
   }
 
@@ -1191,6 +1194,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   async function execute (name, args = {}, signal, executionContext = {}) {
+    assertTerrainTrusted(bot)
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
     assert(args && typeof args === 'object' && !Array.isArray(args), 'Action arguments must be an object')
     assert(!active, 'Another physical action is running or draining after cancellation')

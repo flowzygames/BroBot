@@ -1,0 +1,239 @@
+{
+  "kind": "prepared-confirmed-mining-actions",
+  "started": "2026-10-04T19:17:33.553Z",
+  "passed": true,
+  "limits": "Candidate createActions mining integration. Adventure refusal and survival success use separate bot connections in a console-prepared peaceful world. Tests no false mined result, quarantine/disconnect, refusal of later actions and positive real inventory. Not a full world benchmark or causal attribution of every server update.",
+  "cases": [
+    {
+      "mode": "adventure",
+      "packets": [
+        {
+          "at": 1791141473087,
+          "name": "block_change",
+          "data": {
+            "location": {
+              "x": 2,
+              "z": 0,
+              "y": 64
+            },
+            "type": 137
+          }
+        },
+        {
+          "at": 1791141473105,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        },
+        {
+          "at": 1791141473596,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        }
+      ],
+      "outbound": [
+        {
+          "at": 1791141473083,
+          "status": 0,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        },
+        {
+          "at": 1791141473584,
+          "status": 2,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        }
+      ],
+      "localUpdates": [
+        {
+          "at": 1791141473088,
+          "old": "oak_log",
+          "next": "oak_log"
+        },
+        {
+          "at": 1791141473585,
+          "old": "oak_log",
+          "next": "air"
+        }
+      ],
+      "digCompletedEvents": 1,
+      "before": {
+        "block": "oak_log",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ]
+      },
+      "actionError": {
+        "message": "Mining not confirmed: post-dig receipt deadline expired",
+        "code": "MINING_UNCONFIRMED"
+      },
+      "afterAction": {
+        "terrainTrust": {
+          "trusted": false,
+          "reason": "Mining not confirmed: post-dig receipt deadline expired",
+          "at": "2026-10-04T19:17:58.593Z"
+        },
+        "cachedBlock": "air"
+      },
+      "disconnectReason": "Unconfirmed terrain edit; reconnect before continuing",
+      "subsequentActionsBlocked": true,
+      "serverConsoleTarget": "oak_log",
+      "after": {
+        "block": "air",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ],
+        "health": 20
+      },
+      "passed": true
+    },
+    {
+      "mode": "survival",
+      "packets": [
+        {
+          "at": 1791141480047,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        },
+        {
+          "at": 1791141480547,
+          "name": "block_change",
+          "data": {
+            "location": {
+              "x": 2,
+              "z": 0,
+              "y": 64
+            },
+            "type": 0
+          }
+        },
+        {
+          "at": 1791141480553,
+          "name": "acknowledge_player_digging",
+          "data": {
+            "sequenceId": 0
+          }
+        }
+      ],
+      "outbound": [
+        {
+          "at": 1791141480012,
+          "status": 0,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        },
+        {
+          "at": 1791141480513,
+          "status": 2,
+          "location": {
+            "x": 2,
+            "y": 64,
+            "z": 0
+          },
+          "face": 1
+        }
+      ],
+      "localUpdates": [
+        {
+          "at": 1791141480513,
+          "old": "oak_log",
+          "next": "air"
+        },
+        {
+          "at": 1791141480547,
+          "old": "air",
+          "next": "air"
+        }
+      ],
+      "digCompletedEvents": 1,
+      "before": {
+        "block": "oak_log",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          }
+        ]
+      },
+      "actionResult": {
+        "deferred_drops": [],
+        "passive_settlement": false,
+        "completed": true,
+        "pickup_landing_verified": true,
+        "mined": 1,
+        "block": "oak_log",
+        "position": {
+          "x": 2,
+          "y": 64,
+          "z": 0
+        },
+        "inventory_changes": {
+          "oak_log": 1
+        },
+        "remaining_drops": [],
+        "pickup_failures": []
+      },
+      "afterAction": {
+        "terrainTrust": {
+          "trusted": true
+        },
+        "cachedBlock": "air"
+      },
+      "serverConsoleTarget": "air",
+      "after": {
+        "block": "air",
+        "inventory": [
+          {
+            "name": "iron_axe",
+            "count": 1
+          },
+          {
+            "name": "oak_log",
+            "count": 1
+          }
+        ],
+        "health": 20
+      },
+      "passed": true,
+      "disconnectReason": "Receipt experiment complete"
+    }
+  ],
+  "sourceHashes": {
+    "src/experimental/block-receipts.js": "dfe1cddaea1df7a03a51624d67ead2cf0cab1d38153f9cc334a4538d01b6dcf5",
+    "src/experimental/confirmed-mining.js": "269cc9e38bdb2506febce404b6589ae310fb3d0fb868dad004978a019370305e",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/actions.js": "5cd76464cfd7ce2fad5b2f043d3338d02db77dc5a022021aa6e8274ad7f79967",
+    "src/runtime.js": "707a6558e2bec30724db2e313aee32067d9869ef6bf075032adbb57124a50195",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "scripts/diagnostic-confirmed-mining.js": "278d2637033388c6773b2b0c4e2067043c0cf1fabe55c6f6a6ed6cd892538f16",
+    "package-lock.json": "1495150c57c51f6af34967459c5de0d99b87616e3cd1199f5875a78494a0c706"
+  },
+  "cleanupErrors": [],
+  "commit": "e37362f21606fbea028ef42fcec403f97f30ad68",
+  "dirty": false,
+  "finished": "2026-10-04T19:18:02.885Z"
+}
