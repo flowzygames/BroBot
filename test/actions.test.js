@@ -7,6 +7,33 @@ import { createActions, definitions } from '../src/actions.js'
 
 const registry = minecraftData('1.21.8')
 
+test('pickup avoids duplicate failed destination probes while other drops still get a turn', async () => {
+  const bot = fakeBot()
+  for (const x of [0,1,2,5]) bot.putBlock('stone',new Vec3(x,63,0))
+  bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)}
+  bot.entities[3]={id:3,name:'item',position:new Vec3(5.5,64,.5)}
+  const probes=[]
+  bot.pathfinder.getPathFromTo=function * (movement,start) { probes.push(start.toArray());yield {result:{status:'noPath',path:[]}} }
+  let moves=0;bot.pathfinder.setGoal=goal=>{if(goal)moves++}
+  await createActions(bot).execute('pickup',{radius:8})
+  assert.deepEqual(probes,[[2,64,0],[5,64,0],[1,64,0]])
+  assert.equal(moves,0)
+})
+
+test('pickup may retry a failed cell after terrain changes during planning and removes its observers', async () => {
+  const bot=fakeBot()
+  bot.putBlock('stone',new Vec3(0,63,0));bot.putBlock('stone',new Vec3(2,63,0))
+  bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)}
+  let probes=0
+  bot.pathfinder.getPathFromTo=function * () {
+    probes++
+    try{yield {result:{status:'noPath',path:[]}}}finally{if(probes===1)bot.emit('blockUpdate')}
+  }
+  await createActions(bot).execute('pickup',{radius:8})
+  assert.equal(probes,2)
+  for(const event of ['blockUpdate','chunkColumnLoad','chunkColumnUnload','entitySpawn','entityGone','entityMoved','entityUpdate'])assert.equal(bot.listenerCount(event),0,event)
+})
+
 function leafPickupFixture () {
   const bot = fakeBot()
   bot.putBlock('stone', new Vec3(0, 63, 0))
@@ -1553,7 +1580,7 @@ test('one physical collect action shares the three-attempt limit for a persisten
  bot.pathfinder.getPathFromTo=function*(){attempts++;yield{result:{status:'noPath',path:[]}}};
  const actions=createActions(bot);const result=await actions.execute('collect',{block:'stone',count:2,radius:8});
  assert.equal(result.mined,2);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.completed,false);assert.equal(attempts,3);
- await actions.execute('pickup',{radius:8});assert.equal(attempts,6,'a fresh physical action can retry after observing again');
+ await actions.execute('pickup',{radius:8});assert.equal(attempts,4,'a fresh physical action retries the sole distinct destination once');
 });
 
 test('failed pickup can observe dry passive landing without claiming arrival or continuing mining',async()=>{
@@ -1585,7 +1612,7 @@ test('starter-only deferral records implicit pickup failures, retains drops and 
  await actions.execute('collect',{block:'stone',count:1,radius:8},undefined,context);assert.equal(attempts,3);
  const result=await actions.execute('pickup',{radius:8},undefined,context);
  assert.equal(attempts,3);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.deferred_drops[0].id,77);
- await actions.execute('pickup',{radius:8});assert.equal(attempts,6);
+ await actions.execute('pickup',{radius:8});assert.equal(attempts,5,'direct retry tests both distinct cells without duplicating one');
 });
 test('starter cache bookkeeping read errors cannot bypass an unsafe pickup ending',async()=>{
  const bot=fakeBot();for(const x of [2,3])bot.putBlock('stone',new Vec3(x,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let digs=0,walks=0,failRead=false;

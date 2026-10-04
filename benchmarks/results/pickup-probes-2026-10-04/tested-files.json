@@ -1,0 +1,10 @@
+{
+  "testedCommit": "98087b53ef9c55292e1fae2135da0d2e70ca61bc",
+  "sha256": {
+    "src/actions.js": "66881ab3a75caf0a2da710eacce3101d20a372e85d0f69d7541461276fcbe332",
+    "src/pickup-probe-ledger.js": "56fbe13f88dac72df9cb0127bf6119382c048c2a9b83eb1ea4676586b5ad7c38",
+    "test/actions.test.js": "382a925ac24f412347f823f5785272ee555dff494b344d37c240fafc6127519f",
+    "test/pickup-probe-ledger.test.js": "44f96eb59db516eb87b9e8c7ef5c56e44b1a99d6901755a8d27ee31a6f3ddfd2",
+    "scripts/diagnostic-pickup-probes.js": "2c598d5a595c3e947eca3b69b2fd840b1bbd248a038c73181f31f4e94cde641d"
+  }
+}
