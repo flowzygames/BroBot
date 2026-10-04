@@ -12,7 +12,7 @@ function fakeBot () {
   const blocks = new Map()
   const stacks = []
   bot.registry = registry
-  bot.entity = { id: 1, position: new Vec3(0.5, 64, 0.5), yaw: 0, pitch: 0, height: 1.62, effects: {} }
+  bot.entity = { id: 1, position: new Vec3(0.5, 64, 0.5), yaw: 0, pitch: 0, height: 1.62, onGround: true, effects: {} }
   bot.health = 20
   bot.food = 10
   bot.game = { minY: -64, height: 384, dimension: 'overworld' }
@@ -40,6 +40,7 @@ function fakeBot () {
   bot.look = async () => {}
   bot.lookAt = async () => {}
   bot.placeBlock = async (reference, face) => { putBlock(bot.heldItem.name, reference.position.plus(face)); bot.heldItem.count-- }
+  bot._placeBlockWithOptions = (...args) => bot.placeBlock(...args)
   bot.canDigBlock = () => true
   bot.recipesFor = () => []
   bot.recipesAll = () => []
@@ -606,7 +607,7 @@ test('pickup can use a diagonal grass-covered landing without terrain modificati
 test('craft uses a carried table locally instead of traveling to a distant duplicate', async () => {
   const bot = fakeBot()
   bot.putBlock('crafting_table', new Vec3(20, 64, 0))
-  bot.putBlock('dirt', new Vec3(-1, 63, -1))
+  for(let x=-4;x<=4;x++)for(let z=-4;z<=4;z++)bot.putBlock('dirt',new Vec3(x,63,z))
   bot.addItem('crafting_table')
   const recipe = { requiresTable: true, result: { count: 1 } }
   bot.recipesFor = (id, meta, count, table) => table ? [recipe] : []
@@ -1038,3 +1039,25 @@ test('expanded section search still refuses resources outside the requested sphe
   await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 }), /Could not collect/)
   assert.equal(moved, false)
 })
+
+test('automatic workstation placement cancels during look without sending a placement', async () => {
+  const bot=fakeBot(),controller=new AbortController();let placed=0;
+  bot.addItem('crafting_table');
+  for(let x=-4;x<=4;x++)for(let z=-4;z<=4;z++)bot.putBlock('stone',new Vec3(x,63,z));
+  bot.recipesFor=(type,metadata,count,table)=>table?[{result:{count:1},requiresTable:true}]:[];
+  bot.lookAt=async()=>{controller.abort()};
+  bot._placeBlockWithOptions=async()=>{placed++};
+  await assert.rejects(createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1},controller.signal),{name:'AbortError'});
+  assert.equal(placed,0);assert.equal(bot.inventory.items().find(i=>i.name==='crafting_table').count,1);
+});
+
+test('automatic workstation rechecks terrain changed during its final look', async () => {
+  const bot=fakeBot();let placed=0;
+  bot.addItem('crafting_table');
+  for(let x=-4;x<=4;x++)for(let z=-4;z<=4;z++)bot.putBlock('stone',new Vec3(x,63,z));
+  bot.recipesFor=(type,metadata,count,table)=>table?[{result:{count:1},requiresTable:true}]:[];
+  bot.lookAt=async()=>{for(let x=-4;x<=4;x++)for(let z=-4;z<=4;z++)if(x||z)bot.removeBlock(new Vec3(x,63,z))};
+  bot._placeBlockWithOptions=async()=>{placed++};
+  await assert.rejects(createActions(bot).execute('craft',{item:'wooden_pickaxe',count:1}),/No verified local exit/);
+  assert.equal(placed,0);
+});
