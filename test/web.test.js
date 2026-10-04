@@ -5,6 +5,42 @@ import { request } from 'node:http';
 import { once } from 'node:events';
 import { createDashboard } from '../src/web.js';
 
+test('dashboard rejects malformed request URLs without shutting down', async () => {
+  const runtime = { state: () => ({ alive: true }) };
+  // Port zero keeps this fixture isolated; explicitly supply the configured Host.
+  const server = createDashboard(runtime, 0);
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const port = server.address().port;
+  const get = (path, host = '127.0.0.1:0') => new Promise((resolve, reject) => {
+    const req = request({ hostname: '127.0.0.1', port, path, headers: { Host: host } }, res => {
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => { body += chunk; });
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, body: JSON.parse(body) }); }
+        catch (error) { reject(error); }
+      });
+      res.on('error', reject);
+    });
+    req.setTimeout(2000, () => req.destroy(new Error('Dashboard request timed out.')));
+    req.on('error', reject);
+    req.end();
+  });
+  try {
+    assert.equal((await get('http://[', 'evil.example')).status, 403);
+    const invalid = await get('http://[');
+    assert.equal(invalid.status, 400);
+    assert.equal(invalid.body.error, 'Invalid URL');
+    const state = await get('/api/state');
+    assert.equal(state.status, 200);
+    assert.equal(state.body.alive, true);
+  } finally {
+    server.closeAllConnections();
+    await new Promise(resolve => server.close(resolve));
+  }
+});
+
 test('dashboard enforces host, origin and token while allowing stop during a long command', async () => {
   const probe = createServer(); probe.listen(0, '127.0.0.1'); await once(probe,'listening'); const port=probe.address().port; await new Promise(resolve=>probe.close(resolve));
   let finish, stops=0;
