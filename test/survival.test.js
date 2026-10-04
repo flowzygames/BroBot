@@ -731,7 +731,7 @@ test('unsafe pickup settlement blocks the starter instead of scheduling another 
 
 function blockedCraftScoutFixture(change=null){
  const f=fixture({maxSteps:5});f.add('crafting_table',1);f.add('oak_planks',6);f.add('stick',4);const actions=[];let terrainRevision=0,scouted=false;
- f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision});
+ f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision,craftGeometry:`local-${terrainRevision}`});
  f.job.execute=async(name,args)=>{actions.push(name);if(name==='craft')throw Error('No safe nearby location to place crafting_table');if(name==='explore'){
   if(!scouted){scouted=true;if(change==='terrain')terrainRevision++;if(change==='position')f.state.position.x+=1;if(change==='inventory')f.add('wooden_pickaxe',1)}
   throw Object.assign(Error('No route'),{result:{route_attempts:[args.direction,...args.alternatives].map(direction=>({direction,status:'unverified'}))}})
@@ -754,10 +754,24 @@ test('a newly reachable table outranks the first recovery scout from old collect
  f.job.start();await f.job.promise;assert.equal(actions[2],'craft');
 });
 test('new craft geometry invalidates older failure counts before queuing a scout',async()=>{
- const f=blockedCraftScoutFixture();let observations=0;f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision:++observations>=3?1:0});f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
+ const f=blockedCraftScoutFixture();let observations=0;f.job.observe=async()=>({wood:'oak',tableInReach:false,craftGeometry:++observations>=3?'changed-local':'original-local'});f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
 });
 test('a craft failure that moves the bot cannot transfer older retry counts to the new pose',async()=>{
  const f=blockedCraftScoutFixture();const execute=f.job.execute;let first=true;
  f.job.execute=async(name,args)=>{if(name==='craft'&&first){first=false;f.state.position.x+=1}return execute(name,args)};
  f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
+});
+
+test('unrelated global terrain revisions do not reopen unchanged failed workstation crafting', async () => {
+  const f=blockedCraftScoutFixture();let revision=0;
+  f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision:++revision,craftGeometry:'same-local-state'});
+  f.job.start();await f.job.promise;
+  assert.deepEqual(f.actions,['craft','craft','explore','explore','explore']);
+});
+
+test('reordering unchanged table observations cannot reset blocked craft attempts',async()=>{
+ const f=blockedCraftScoutFixture();let revision=0;
+ const tables=[{x:20,y:64,z:0},{x:22,y:64,z:0}];
+ f.job.observe=async()=>({tableInReach:false,craftGeometry:'same',tables:++revision%2?tables:[...tables].reverse()});
+ f.job.start();await f.job.promise;assert.deepEqual(f.actions,['craft','craft','explore','explore','explore']);
 });
