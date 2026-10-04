@@ -1,0 +1,10 @@
+{
+  "testedCommit": "b13628ba4af0faef0d4cf1b6b48c8b6ef86d85ad",
+  "sha256": {
+    "src/actions.js": "27d37d166081de29782e73ee8fe92e903d58955cc3578382a8c90b891e2d2c03",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "test/actions.test.js": "90d60a3db0f15b9927c0c91685a0e66ebd17ee22e75e9798b83dbbb69dbe7ed1",
+    "test/starter-leaf-support.test.js": "567494b6f0dc4d38d73ee978f48338eb6564d43da02f8442352d03d4e6042fed",
+    "scripts/diagnostic-pickup-leaf-landings.js": "53ecd1bc3445d0062205aeac6ab74576b1cb191fd62c2d4bcad22f71a1e429ba"
+  }
+}

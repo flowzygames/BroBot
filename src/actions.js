@@ -1,4 +1,4 @@
-import { assertStarterLeafSupport } from './starter-leaf-support.js'
+import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -292,6 +292,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   async function pickupInternal (ctx, radius = 12, entityIds = null) {
+    const safeLanding = () => isDryLanding(bot) && (!ctx.starterScope || hasAnchoredLeafLanding(bot,bot.entity.position))
+    const safeDestination = p => !ctx.starterScope || hasAnchoredLeafLanding(bot,p.offset(.5,0,.5))
     assert(entityIds == null || (Array.isArray(entityIds) && entityIds.length <= 64 && entityIds.every(id => Number.isSafeInteger(id) && id >= 0 && id <= 2147483647)), 'entity_ids must contain at most 64 valid item ids')
     const allowed = entityIds == null ? null : new Set(entityIds)
     const before = inventoryMap()
@@ -324,7 +326,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       for (let x = -1; x <= 1; x++) for (let z = -1; z <= 1; z++) {
         for (let down = -1; down <= 8; down++) {
           const p = dropPosition.offset(x, -down, z)
-          if (passable(bot.blockAt(p)) && passable(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { destinations.push(p); break }
+          if (passable(bot.blockAt(p)) && passable(bot.blockAt(p.offset(0, 1, 0))) && isSolid(bot.blockAt(p.offset(0, -1, 0)))) { if (safeDestination(p)) destinations.push(p); break }
         }
       }
       // A cell close to the bot can still be outside item-pickup reach,
@@ -343,9 +345,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         destination = p
         const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, navigationRemaining()))
         checked(ctx)
+        assert(safeDestination(p), 'Pickup leaf landing lost its retained log anchor')
         if (navigationRemaining() <= 0) { pickupLimited = drops().length > 0; break }
         pursuitStarted = true
-        const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, navigationRemaining()), waitForLanding: true, safeToStop: () => isDryLanding(bot), atDestination: () => isAtPickupStandingCell(bot,p) })
+        const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, navigationRemaining()), waitForLanding: true, safeToStop: safeLanding, atDestination: () => isAtPickupStandingCell(bot,p) })
         if (outcome.landingVerified && !ctx.pickupSettledFailure) ctx.pickupUnverified = false
         log('pickup', `Drop ${target.id} pursuit ended: ${outcome.reason}`, { id: target.id, destination: plainPos(p), position: plainPos(bot.entity.position), onGround: bot.entity.onGround, reason: outcome.reason, started: outcome.started, landingVerified: outcome.landingVerified })
         checked(ctx)
@@ -367,14 +370,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         ctx.pickupUnverified = true
         dropRetryCache.failed(target,ctx.starterScope,error.message)
         let passivelySettled = false
-        const neededSettlement = !isDryLanding(bot)
+        const neededSettlement = !safeLanding()
         if (neededSettlement && pursuitStarted && error.message !== 'Pickup navigation goal replaced') {
-          passivelySettled = await awaitPassiveLanding(bot, { signal:ctx.signal, deadline:performance.now()+Math.min(500,remaining()) })
+          passivelySettled = await awaitPassiveLanding(bot, { signal:ctx.signal, deadline:performance.now()+Math.min(500,remaining()) }) && safeLanding()
           checked(ctx)
           if (passivelySettled) ctx.pickupSettledFailure = true
         }
         log('pickup', `Drop ${target.id} pursuit failed: ${error.message}`, { id:target.id, destination:destination?plainPos(destination):null, position:plainPos(bot.entity.position), onGround:bot.entity.onGround, landingVerified:false, passivelySettled })
-        if ((neededSettlement && !passivelySettled) || !isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
+        if ((neededSettlement && !passivelySettled) || !safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         const failure = { id: target.id, error: error.message, code: error.code ?? null }
         failures.push(failure)
@@ -384,7 +387,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       } finally { bot.removeListener('playerCollect', observedCollection) }
     }
     pickupLimited ||= remaining() <= 0 && drops().length > 0
-    if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
+    if (!safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
     return { deferred_drops:drops().map(e=>dropRetryCache.deferred(e,ctx.starterScope)).filter(Boolean), passive_settlement:Boolean(ctx.pickupSettledFailure), pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
     } finally { ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
   }
