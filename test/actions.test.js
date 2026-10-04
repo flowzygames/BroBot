@@ -7,6 +7,75 @@ import { createActions, definitions } from '../src/actions.js'
 
 const registry = minecraftData('1.21.8')
 
+function leafPickupFixture () {
+  const bot = fakeBot()
+  bot.putBlock('stone', new Vec3(0, 63, 0))
+  bot.putBlock('oak_leaves', new Vec3(2, 63, 0))
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.5, 64, .5) }
+  let moves = 0
+  bot.pathfinder.goto = async goal => {
+    moves++
+    bot.entity.position = new Vec3(goal.x + .5, goal.y, goal.z + .5)
+    delete bot.entities[2]
+    bot.addItem('oak_log')
+  }
+  return { bot, moves: () => moves }
+}
+
+test('starter pickup refuses detached leaf destinations while direct pickup is unchanged', async () => {
+  for (const starter of [true, false]) {
+    const { bot, moves } = leafPickupFixture()
+    const result = await createActions(bot).execute('pickup', { radius: 8 }, undefined, starter ? { starterScope: 'job/leaf' } : {})
+    assert.equal(moves(), starter ? 0 : 1)
+    assert.equal(result.inventory_changes.oak_log ?? 0, starter ? 0 : 1)
+  }
+})
+
+test('starter pickup accepts a retained leaf anchor', async () => {
+  const { bot, moves } = leafPickupFixture()
+  bot.putBlock('oak_log', new Vec3(2, 62, 0))
+  const result = await createActions(bot).execute('pickup', { radius: 8 }, undefined, { starterScope: 'job/leaf' })
+  assert.equal(moves(), 1)
+  assert.equal(result.landing_verified, true)
+  assert.equal(result.inventory_changes.oak_log, 1)
+})
+
+test('starter pickup rechecks leaf anchors after planning before moving', async () => {
+  const { bot, moves } = leafPickupFixture()
+  bot.putBlock('oak_log', new Vec3(2, 62, 0))
+  const original = bot.pathfinder.getPathFromTo
+  bot.pathfinder.getPathFromTo = function * (...args) {
+    try { yield * original(...args) }
+    finally { bot.removeBlock(new Vec3(2, 62, 0)) }
+  }
+  const result = await createActions(bot).execute('pickup', { radius: 8 }, undefined, { starterScope: 'job/leaf' })
+  assert.equal(moves(), 0)
+  assert.equal(result.inventory_changes.oak_log ?? 0, 0)
+})
+
+test('starter pickup cannot certify a leaf landing whose anchor disappears after arrival', async () => {
+  const { bot } = leafPickupFixture()
+  bot.putBlock('oak_log', new Vec3(2, 62, 0))
+  const original = bot.pathfinder.goto
+  bot.pathfinder.goto = async goal => {
+    await original(goal)
+    bot.entity.position.y += .01
+    setTimeout(() => bot.removeBlock(new Vec3(2, 62, 0)), 30)
+  }
+  await assert.rejects(createActions(bot).execute('pickup', { radius: 8 }, undefined, { starterScope: 'job/leaf' }), { code: 'PICKUP_UNSAFE_SETTLEMENT' })
+})
+
+test('starter pickup failure on a detached leaf cannot become a safe exception settlement', async () => {
+  const { bot } = leafPickupFixture()
+  bot.putBlock('oak_log', new Vec3(2, 62, 0))
+  bot.pathfinder.goto = async goal => {
+    bot.entity.position = new Vec3(goal.x + .5, goal.y, goal.z + .5)
+    bot.removeBlock(new Vec3(2, 62, 0))
+    throw Error('route failed')
+  }
+  await assert.rejects(createActions(bot).execute('pickup', { radius: 8 }, undefined, { starterScope: 'job/leaf' }), { code: 'PICKUP_UNSAFE_SETTLEMENT' })
+})
+
 function fakeBot () {
   const bot = new EventEmitter()
   const blocks = new Map()

@@ -1,7 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Vec3 } from 'vec3';
-import { assertStarterLeafSupport, STARTER_SUPPORT_PROTECTED } from '../src/starter-leaf-support.js';
+import { assertStarterLeafSupport, hasAnchoredLeafLanding, STARTER_SUPPORT_PROTECTED } from '../src/starter-leaf-support.js';
+
+test('pickup leaf footprint requires a current anchor across height jitter and adjacent cells',()=>{
+ const f=fixture();
+ for(const y of [63.98,64,64.02])assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(.5,y,.5)),true);
+ f.cells.delete(f.target.position.toString());
+ for(const y of [63.98,64,64.02])assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(.5,y,.5)),false);
+ f.put('stone',-1,63,0);
+ assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(-.05,64,.5)),false);
+ assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(-.5,64,.5)),true);
+});
+
+test('pickup leaf footprint fails closed on missing cells, failed reads and invalid geometry',()=>{
+ const f=fixture();
+ f.bot.blockAt=()=>null;assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(.5,64,.5)),false);
+ f.bot.blockAt=()=>{throw Error('unloaded')};assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(.5,64,.5)),false);
+ assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(NaN,64,.5)),false);
+ f.bot.physics={playerHalfWidth:10};assert.equal(hasAnchoredLeafLanding(f.bot,new Vec3(.5,64,.5)),false);
+});
 function fixture(){
  const cells=new Map();const put=(name,x,y,z)=>{const b={name,position:new Vec3(x,y,z),boundingBox:name==='air'?'empty':'block',isWaterlogged:false};cells.set(b.position.toString(),b);return b;};
  put('oak_leaves',0,63,0);put('oak_leaves',1,63,0);const target=put('oak_log',2,63,0);

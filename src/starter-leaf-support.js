@@ -5,6 +5,27 @@ export const STARTER_SUPPORT_PROTECTED = 'STARTER_SUPPORT_PROTECTED';
 const valid = p => p && ['x','y','z'].every(k => Number.isFinite(p[k]) && Math.abs(p[k]) <= (k === 'y' ? 2048 : 29999984));
 const refuse = (message, support) => Object.assign(new Error(message), { code:STARTER_SUPPORT_PROTECTED, ...(support ? { support:{x:support.x,y:support.y,z:support.z} } : {}) });
 
+// A pickup destination can be detached before it ever becomes a retained
+// waypoint. This checks only the landing footprint, not every traversed cell.
+// Do not cache across planning or packet settlement: anchors can disappear.
+export function hasAnchoredLeafLanding(bot, position) {
+  if (!valid(position) || typeof bot.blockAt !== 'function') return false;
+  const half = bot.physics?.playerHalfWidth ?? .3;
+  if (!Number.isFinite(half) || half <= 0 || half > 1) return false;
+  const top = Math.round(position.y);
+  const y = Math.abs(position.y-top) <= .03 ? top-1 : Math.floor(position.y-1e-7);
+  try {
+    for (let x = Math.floor(position.x-half+1e-7); x <= Math.floor(position.x+half-1e-7); x++) {
+      for (let z = Math.floor(position.z-half+1e-7); z <= Math.floor(position.z+half-1e-7); z++) {
+        const p = new Vec3(x,y,z), block = bot.blockAt(p);
+        if (!block) return false;
+        if (/_leaves$/.test(block.name) && !retainedLeafAnchor(q => bot.blockAt(q),p)) return false;
+      }
+    }
+    return true;
+  } catch { return false; }
+}
+
 // Conservative protection for currently observed leaf supports at retained
 // positions. This is not a reservation of every route, nor a decay prediction.
 export function assertStarterLeafSupport(bot, target, { home, positions = [] } = {}) {
