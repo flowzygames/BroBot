@@ -728,3 +728,36 @@ test('unsafe pickup settlement blocks the starter instead of scheduling another 
  const f=fixture();let physical=0;f.job.execute=async()=>{physical++;throw Object.assign(Error('Unverified dry pickup stop'),{code:'PICKUP_UNSAFE_SETTLEMENT'})};
  f.job.start();await f.job.promise;assert.equal(physical,1);assert.equal(f.job.state().status,'blocked');assert.match(f.job.state().reason,/Unverified dry pickup stop/);
 });
+
+function blockedCraftScoutFixture(change=null){
+ const f=fixture({maxSteps:5});f.add('crafting_table',1);f.add('oak_planks',6);f.add('stick',4);const actions=[];let terrainRevision=0,scouted=false;
+ f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision});
+ f.job.execute=async(name,args)=>{actions.push(name);if(name==='craft')throw Error('No safe nearby location to place crafting_table');if(name==='explore'){
+  if(!scouted){scouted=true;if(change==='terrain')terrainRevision++;if(change==='position')f.state.position.x+=1;if(change==='inventory')f.add('wooden_pickaxe',1)}
+  throw Object.assign(Error('No route'),{result:{route_attempts:[args.direction,...args.alternatives].map(direction=>({direction,status:'unverified'}))}})
+ }return{}};
+ return{...f,actions};
+}
+test('unchanged failed scouts do not repeat a blocked workstation craft',async()=>{
+ const f=blockedCraftScoutFixture();f.job.start();await f.job.promise;assert.deepEqual(f.actions,['craft','craft','explore','explore','explore']);
+});
+test('new terrain or movement permits a fresh craft attempt after a failed scout',async()=>{
+ for(const change of ['terrain','position']){const f=blockedCraftScoutFixture(change);f.job.start();await f.job.promise;assert.equal(f.actions[3],'craft',change)}
+});
+test('new tool inventory outranks a stale blocked-craft scout continuation',async()=>{
+ const f=blockedCraftScoutFixture('inventory');f.job.start();await f.job.promise;assert.equal(f.actions[3],'collect');
+});
+test('a newly reachable table outranks the first recovery scout from old collect failures',async()=>{
+ const f=fixture({maxSteps:5});f.add('wooden_pickaxe',1);f.add('stick',2);f.add('cobblestone',3);const actions=[];let observations=0;
+ f.job.observe=async()=>({wood:'oak',tableInReach:++observations>=4,terrainRevision:observations>=4?1:0});
+ f.job.execute=async(name,args)=>{actions.push(name);if(name==='collect')throw Error('No stone route');if(name==='explore')throw Object.assign(Error('No scout route'),{result:{route_attempts:[args.direction,...args.alternatives].map(direction=>({direction,status:'unverified'}))}});if(name==='craft'){f.add('stone_pickaxe',1);return{crafted:1}}return{}};
+ f.job.start();await f.job.promise;assert.equal(actions[2],'craft');
+});
+test('new craft geometry invalidates older failure counts before queuing a scout',async()=>{
+ const f=blockedCraftScoutFixture();let observations=0;f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision:++observations>=3?1:0});f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
+});
+test('a craft failure that moves the bot cannot transfer older retry counts to the new pose',async()=>{
+ const f=blockedCraftScoutFixture();const execute=f.job.execute;let first=true;
+ f.job.execute=async(name,args)=>{if(name==='craft'&&first){first=false;f.state.position.x+=1}return execute(name,args)};
+ f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
+});
