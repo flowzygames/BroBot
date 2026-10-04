@@ -612,3 +612,58 @@ test('uninterrupted successful scouting preserves the original distance schedule
   assert.deepEqual(distances,[12,12,24,24,36,36]);
   assert.equal(f.job.state().lastScoutSuccess.adaptive,false);
 });
+
+
+test('finished kit cancels a queued scouting recovery and returns home', async () => {
+  const f = fixture(); let observations = 0; const executed = [];
+  f.job.observe = async () => {
+    observations++;
+    if (observations === 4) { f.add('stone_pickaxe', 1); f.add('furnace', 1); }
+    return { wood: 'oak' };
+  };
+  f.job.execute = async (name, args) => {
+    executed.push(name);
+    if (name === 'collect') { f.state.position.x = 10.5; throw Error('Blocked route'); }
+    return f.execute(name, args);
+  };
+  f.job.start(); await f.job.promise;
+  assert.deepEqual(executed, ['collect', 'collect', 'go_to']);
+  assert.equal(f.job.state().status, 'complete');
+  assert.equal(f.job.state().scouts, 0);
+});
+
+test('finished kit cancels queued leaf clearance without digging', async () => {
+  const f = fixture(); let observations = 0; const executed = [];
+  f.job.observe = async () => {
+    observations++;
+    if (observations === 4) { f.add('stone_pickaxe', 1); f.add('furnace', 1); }
+    return { wood: 'oak', foliage: { x: 11, y: 65, z: 0, expected_block: 'oak_leaves' } };
+  };
+  f.job.execute = async (name, args) => {
+    executed.push(name);
+    if (name === 'collect') { f.state.position.x = 10.5; throw Error('Blocked route'); }
+    return f.execute(name, args);
+  };
+  f.job.start(); await f.job.promise;
+  assert.deepEqual(executed, ['collect', 'collect', 'go_to']);
+  assert.equal(f.job.state().status, 'complete');
+});
+
+
+test('urgent food recovery outranks a queued scouting recovery', async () => {
+  const f = fixture({maxSteps: 3}); let observations = 0; const executed = [];
+  f.job.observe = async () => {
+    if (++observations === 4) { f.state.food = 8; f.add('bread', 1); }
+    return { wood: 'oak' };
+  };
+  f.job.execute = async (name, args) => {
+    executed.push(name);
+    if (name === 'collect') throw Error('Blocked route');
+    return f.execute(name, args);
+  };
+  f.job.start(); await f.job.promise;
+  assert.deepEqual(executed, ['collect', 'collect', 'eat']);
+  assert.equal(f.state.food, 20);
+  assert.equal(f.job.state().scouts, 0);
+  assert.notEqual(f.job.state().status, 'complete');
+});
