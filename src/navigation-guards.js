@@ -81,9 +81,10 @@ export async function planRankedRoutes(candidates, plan, { signal, budget = 1600
 
 // Item-aware navigation owns its listeners/goal. No never-ending goto promise is
 // left behind when an item is acquired, disappears, or a local budget expires.
-export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75 } = {}) {
+export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75, waitForLanding = false, safeToStop = () => true, atDestination = null } = {}) {
   return new Promise((resolve, reject) => {
-    let settled = false, timer, lastMove = performance.now(), position = bot.entity.position.clone(), ownsGoal = false
+    let settled = false, timer, lastMove = performance.now(), position = bot.entity.position.clone(), ownsGoal = false, pendingReason = null, verifiedLanding = false
+    const started = performance.now()
     const exists = () => !!bot.entities?.[entity.id]
     const finish = (error, reason) => {
       if (settled) return
@@ -96,24 +97,48 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
         try { bot.pathfinder.setGoal(null) } catch {}
         try { bot.clearControlStates?.() } catch {}
       }
-      if (error) reject(error); else resolve({ reason })
+      if (error) reject(error); else resolve(waitForLanding ? { reason, started: ownsGoal, landingVerified: verifiedLanding } : { reason })
     }
     const aborted = () => finish(abortError())
-    const gone = e => { if (e.id === entity.id) finish(null, 'target_gone') }
-    const collected = (collector, item) => { if (collector?.id === bot.entity.id && item?.id === entity.id) finish(null, 'collected') }
-    const reached = g => { if (!g || g === goal) finish(null, 'arrived') }
+    const deadlineReached = () => performance.now() - started >= timeoutMs;
+    const readyToStop = () => {
+      if (!waitForLanding) return true;
+      if (bot.entity.onGround !== true) return false;
+      try {
+        const destination = atDestination ? atDestination() : typeof goal.isEnd === 'function' ? goal.isEnd(bot.entity.position.floored()) : !['x','y','z'].every(k => Number.isFinite(goal[k])) || ['x','y','z'].every(k => Math.floor(bot.entity.position[k]) === goal[k]);
+        return Boolean(destination && safeToStop());
+      } catch (error) { finish(error instanceof Error ? error : new Error('Landing safety check failed')); return false; }
+    };
+    const requestFinish = reason => {
+      if (deadlineReached()) return finish(new Error('Pickup navigation exceeded its local time budget'));
+      if (pendingReason !== 'collected') pendingReason = reason;
+      if (readyToStop()) { verifiedLanding = waitForLanding; finish(null, pendingReason); }
+    };
+    // An item can be collected during a jump. Keep the already-certified goal
+    // until its grounded certified destination rather than abandoning a landing midflight.
+    const gone = e => { if (e.id === entity.id) requestFinish('target_gone') }
+    const collected = (collector, item) => { if (collector?.id === bot.entity.id && item?.id === entity.id) requestFinish('collected') }
+    const reached = g => { if (!g || g === goal) requestFinish(pendingReason || 'arrived') }
     const changed = g => { if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Pickup navigation goal replaced')) }
     const pathUpdate = result => {
       if (result.status === 'noPath' || result.status === 'timeout') finish(new Error(`Pickup navigation ${result.status}`))
     }
     if (signal?.aborted) return aborted()
-    if (!exists()) return finish(null, 'target_gone')
+    if (!exists()) {
+      if (!waitForLanding) return finish(null, 'target_gone');
+      try {
+        if (bot.entity.onGround !== true || !safeToStop()) return finish(Object.assign(new Error('Drop vanished before pursuit from an unverified landing'), { code: 'PICKUP_UNSAFE_SETTLEMENT' }));
+      } catch (error) { return finish(error instanceof Error ? error : new Error('Landing safety check failed')); }
+      return finish(null, 'target_gone_before_pursuit');
+    }
     signal?.addEventListener('abort', aborted, { once: true })
     bot.on('entityGone', gone); bot.on('playerCollect', collected); bot.on('goal_reached', reached); bot.on('goal_updated', changed); bot.on('path_update', pathUpdate)
-    const started = performance.now()
     timer = setInterval(() => {
       if (signal?.aborted) return aborted()
-      if (!exists()) return finish(null, 'target_gone')
+      if (deadlineReached()) return finish(new Error('Pickup navigation exceeded its local time budget'))
+      if (!exists()) requestFinish('target_gone')
+      if (settled) return
+      if (pendingReason && readyToStop()) return requestFinish(pendingReason)
       const now = performance.now()
       if (bot.entity.position.distanceTo(position) >= 0.35) { position = bot.entity.position.clone(); lastMove = now }
       if (now - started >= timeoutMs) finish(new Error('Pickup navigation exceeded its local time budget'))

@@ -65,12 +65,4 @@ export function findTreeFoliage(bot, logs = []) {
 
 // Check the observed player body, including block-edge overlap. Route avoidance
 // cannot protect a bot that already spawned or was displaced into powder snow.
-export function hasPowderSnowContact(bot) {
-  const p = bot.entity?.position;
-  if (!p || !['x','y','z'].every(k => Number.isFinite(p[k])) || !bot.blockAt) return false;
-  for (let x=Math.floor(p.x-0.3+1e-7);x<=Math.floor(p.x+0.3-1e-7);x++)
-    for (let z=Math.floor(p.z-0.3+1e-7);z<=Math.floor(p.z+0.3-1e-7);z++)
-      for (let y=Math.floor(p.y+1e-7);y<=Math.floor(p.y+1.8-1e-7);y++)
-        if (bot.blockAt(new Vec3(x,y,z))?.name === 'powder_snow') return true;
-  return false;
-}
+export { hasPowderSnowContact, hasLavaContact } from './body-hazards.js';

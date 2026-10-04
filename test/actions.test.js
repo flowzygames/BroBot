@@ -970,7 +970,7 @@ test('a single explicit returnable scout reports failed probe evidence without m
   assert.equal(moves,0);
 });
 
-test('collection yields partial progress and remaining drops when pickup time is spent', async t => {
+test('collection yields partial progress and remaining drops when pickup time is spent', {timeout:5000}, async t => {
   const bot=fakeBot();let now=0,digs=0,pursuits=0;
   t.mock.method(performance,'now',()=>now);
   for(let x=0;x<8;x++)for(let z=-1;z<=1;z++)bot.putBlock('dirt',new Vec3(x,63,z));
@@ -983,7 +983,7 @@ test('collection yields partial progress and remaining drops when pickup time is
   assert.equal(result.pickup_limited,true);assert.equal(result.inventory_changes.oak_log,1);
   assert.deepEqual(result.remaining_drops.map(x=>x.id),[99]);
   assert.equal(bot.pathfinder.goal,null);
-  bot.pathfinder.goto=async()=>{pursuits++;now+=100;delete bot.entities[99];bot.addItem('oak_log')};
+  bot.pathfinder.goto=async goal=>{pursuits++;bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5);now+=100;delete bot.entities[99];bot.addItem('oak_log')};
   const next=await actions.execute('pickup',{radius:8,entity_ids:[99]});
   assert.equal(pursuits,2);assert.equal(next.pickup_limited,false);assert.equal(next.remaining_drops.length,0);
 });
@@ -1145,3 +1145,23 @@ test('final mining check sees a replaced target, changed footing, or changed too
     assert.equal(digs,0,change)
   }
 })
+test('dig_at cannot claim completion from disappeared drops at an ungrounded ending',async()=>{
+ const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('stone',p);
+ bot.dig=async()=>{bot.removeBlock(p);bot.addItem('cobblestone');bot.entity.onGround=false};
+ await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0}),e=>e.code==='PICKUP_UNSAFE_SETTLEMENT'&&e.result.inventory_changes.cobblestone===1);
+});
+test('collect does not mine another block after an unsafe pickup ending',async()=>{
+ const bot=fakeBot();bot.putBlock('stone',new Vec3(2,64,0));bot.putBlock('stone',new Vec3(3,64,0));let mined=0;
+ bot.dig=async block=>{mined++;bot.removeBlock(block.position);bot.addItem('cobblestone');bot.entity.onGround=false};
+ await assert.rejects(createActions(bot).execute('collect',{block:'stone',count:2,radius:8}),e=>e.code==='PICKUP_UNSAFE_SETTLEMENT');assert.equal(mined,1);
+});
+
+test('collect retains an earlier failed pickup reason across a final empty pass',async()=>{
+ const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('stone',p);bot.putBlock('dirt',new Vec3(2,63,0));
+ bot.dig=async()=>{bot.removeBlock(p);bot.entities[77]={id:77,name:'item',position:new Vec3(2.5,64,.5)}};
+ bot.pathfinder.goto=async()=>{delete bot.entities[77];throw new Error('Recorded pickup walk failure')};
+ const result=await createActions(bot).execute('collect',{block:'stone',count:1,radius:8});
+ assert.equal(result.completed,false);assert.equal(result.pickup_pursuit_unverified,true);
+ assert.equal(result.pickup_landing_verified,false);assert.equal(result.remaining_drops.length,0);
+ assert.ok(result.pickup_failures.some(f=>/Pickup navigation noPath/.test(f.error)));
+});
