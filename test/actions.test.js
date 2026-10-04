@@ -1165,3 +1165,12 @@ test('collect retains an earlier failed pickup reason across a final empty pass'
  assert.equal(result.pickup_landing_verified,false);assert.equal(result.remaining_drops.length,0);
  assert.ok(result.pickup_failures.some(f=>/Pickup navigation noPath/.test(f.error)));
 });
+
+test('one physical collect action shares the three-attempt limit for a persistent unreachable drop',async()=>{
+ const bot=fakeBot();bot.putBlock('stone',new Vec3(2,64,0));bot.putBlock('stone',new Vec3(3,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let attempts=0;
+ bot.dig=async block=>{bot.removeBlock(block.position);bot.addItem('cobblestone');bot.entities[77]={id:77,name:'item',position:new Vec3(2.5,64,.5)}};
+ bot.pathfinder.getPathFromTo=function*(){attempts++;yield{result:{status:'noPath',path:[]}}};
+ const actions=createActions(bot);const result=await actions.execute('collect',{block:'stone',count:2,radius:8});
+ assert.equal(result.mined,2);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.completed,false);assert.equal(attempts,3);
+ await actions.execute('pickup',{radius:8});assert.equal(attempts,6,'a fresh physical action can retry after observing again');
+});

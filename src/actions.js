@@ -289,7 +289,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const allowed = entityIds == null ? null : new Set(entityIds)
     const before = inventoryMap()
     const drops = () => Object.values(bot.entities ?? {}).filter(e => e.name === 'item' && (!allowed || allowed.has(e.id)) && e.position && insideBoundary(e.position) && e.position.distanceTo(bot.entity.position) <= radius && e.position.distanceTo(ctx.origin) <= 128)
-    const attempts = new Map()
+    // All pickup passes inside one physical action share this bounded retry
+    // ledger. Mining another block must not reset three failed probes for the
+    // same lingering drop; a new physical action can inspect and retry afresh.
+    const attempts = ctx.pickupAttempts ??= new Map()
     const failures = []
     let planningLimited = (ctx.planningUsed ?? 0) >= 7000
     let pickupLimited = false
