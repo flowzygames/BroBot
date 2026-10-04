@@ -1215,3 +1215,96 @@ test('starter cache bookkeeping read errors cannot bypass an unsafe pickup endin
  await assert.rejects(createActions(bot).execute('collect',{block:'stone',count:2,radius:8},undefined,{starterScope:'job/1'}),{code:'PICKUP_UNSAFE_SETTLEMENT'});
  assert.equal(digs,1);assert.equal(walks,1);
 });
+
+test('unchanged failed collection approaches reuse one bounded candidate scan', async () => {
+  const bot = fakeBot()
+  for (let x = 8; x < 16; x++) bot.putBlock('stone', new Vec3(x, 64, 0))
+  let scans = 0, digs = 0
+  const find = bot.findBlocks
+  bot.findBlocks = options => { scans++; return find(options) }
+  bot.pathfinder.getPathFromTo = function * () { yield { result: { status: 'noPath', path: [] } } }
+  bot.dig = async () => { digs++ }
+  const start = bot.entity.position.clone()
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 24 }), error => {
+    assert.equal(error.result.failures.length, 8)
+    assert.equal(new Set(error.result.failures.map(f => JSON.stringify(f.position))).size, 8)
+    assert.equal(error.result.search_scans, 1)
+    assert.equal(error.result.search_reuses, 7)
+    return true
+  })
+  assert.equal(scans, 1)
+  assert.equal(digs, 0)
+  assert.ok(bot.entity.position.equals(start))
+  for (const event of ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload', 'physicsTick']) assert.equal(bot.listenerCount(event), 0)
+})
+
+test('collection candidate reuse invalidates on observed world changes or movement', async () => {
+  for (const change of ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload', 'position', 'dimension', 'roundTrip']) {
+    const bot = fakeBot()
+    for (let x = 8; x < 16; x++) bot.putBlock('stone', new Vec3(x, 64, 0))
+    let scans = 0, probes = 0
+    const find = bot.findBlocks
+    bot.findBlocks = options => { scans++; return find(options) }
+    bot.pathfinder.getPathFromTo = function * () {
+      if (++probes === 1) {
+        if (change === 'position') bot.entity.position.x += .2
+        else if (change === 'dimension') bot.game.dimension = 'the_nether'
+        else if (change === 'roundTrip') {
+          bot.entity.position.x += .2; bot.emit('physicsTick'); bot.entity.position.x -= .2
+        } else bot.emit(change)
+      }
+      yield { result: { status: 'noPath', path: [] } }
+    }
+    await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 24 }))
+    assert.ok(scans >= 2, change)
+    for (const event of ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload', 'physicsTick']) assert.equal(bot.listenerCount(event), 0, change)
+  }
+})
+
+test('successful mining refreshes collection search and cancellation releases its observers', async () => {
+  const bot = fakeBot()
+  bot.putBlock('stone', new Vec3(2, 64, 0))
+  let scans = 0, digs = 0
+  const find = bot.findBlocks
+  bot.findBlocks = options => { scans++; return find(options) }
+  bot.dig = async block => {
+    bot.removeBlock(block.position); bot.addItem('cobblestone'); digs++
+    if (digs === 1) bot.putBlock('stone', new Vec3(3, 64, 0))
+  }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 2, radius: 8 })
+  assert.equal(result.mined, 2)
+  assert.equal(scans, 2)
+  assert.equal(result.search_reuses, 0)
+  const other = fakeBot(), controller = new AbortController()
+  other.findBlocks = options => { controller.abort(); options.useExtraInfo({ position: new Vec3(2, 64, 0) }) }
+  await assert.rejects(createActions(other).execute('collect', { block: 'stone', count: 1, radius: 8 }, controller.signal), { name: 'AbortError' })
+  for (const event of ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload', 'physicsTick']) assert.equal(other.listenerCount(event), 0)
+})
+
+test('cached collection candidates recheck liquid hazards before any approach', async () => {
+  const bot = fakeBot()
+  for (const x of [8, 10, 12]) bot.putBlock('stone', new Vec3(x, 64, 0))
+  let probes = 0
+  bot.pathfinder.getPathFromTo = function * () {
+    if (++probes === 1) bot.putBlock('water', new Vec3(10, 64, 1)) // Even without an update event.
+    yield { result: { status: 'noPath', path: [] } }
+  }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 24 }), error => {
+    assert.deepEqual(error.result.failures.map(f => f.position.x), [8, 12])
+    assert.ok(error.result.search_reuses > 0)
+    return true
+  })
+})
+
+test('cached collection preserves ranked alternatives beyond the scan iteration prefix', async () => {
+  const bot = fakeBot(), blocks = []
+  for (let x = 20; x < 52; x++) for (let z = 0; z < 16; z++) blocks.push(bot.putBlock('stone', new Vec3(x, 64, z)))
+  blocks.push(bot.putBlock('stone', new Vec3(8, 64, 0)), bot.putBlock('stone', new Vec3(10, 64, 0)))
+  bot.findBlocks = options => { for (const block of blocks) options.useExtraInfo(block); return [] }
+  bot.pathfinder.getPathFromTo = function * () { yield { result: { status: 'noPath', path: [] } } }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 64 }), error => {
+    assert.deepEqual(error.result.failures.slice(0, 2).map(f => f.position.x), [8, 10])
+    assert.equal(error.result.search_scans, 1)
+    return true
+  })
+})

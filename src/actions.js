@@ -387,6 +387,16 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let consecutiveFailures = 0
     let pickup = { remaining_drops: [], unreachable: [], planning_limited: false }
     let planningLimited = false
+    let candidateCache = null, candidateRevision = 0
+    let searchScans = 0, searchReuses = 0
+    const invalidateCandidates = () => { candidateRevision++; candidateCache = null }
+    const invalidateOnMovement = () => {
+      if (candidateCache && !bot.entity?.position?.equals(candidateCache.position)) invalidateCandidates()
+    }
+    const worldEvents = ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload']
+    for (const event of worldEvents) bot.on(event, invalidateCandidates)
+    bot.on('physicsTick', invalidateOnMovement)
+    try {
     while (mined < count) {
       checked(ctx)
       // Filter before findBlocks applies its count cap. Dense buried stone must
@@ -394,7 +404,24 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // Mineflayer applies useExtraInfo to real positioned blocks (not palettes).
       // Time/count budgets are checked on matching blocks, not a hard timeout
       // for findBlocks itself; its fixed radius also bounds nonmatching scans.
-      const candidates = []
+      let candidates = []
+      const scanRevision = candidateRevision
+      const boundaryKey = JSON.stringify(movementBoundary())
+      const canReuse = candidateCache && candidateCache.position.equals(bot.entity.position)
+        && candidateCache.dimension === dimension() && candidateCache.boundaryKey === boundaryKey
+      if (canReuse) {
+        candidates = candidateCache.positions.filter(p => {
+          checked(ctx)
+          if (skipped.has(p.toString()) || p.distanceTo(bot.entity.position.floored()) > radius || p.distanceTo(ctx.origin) > 128 || !insideBoundary(p)) return false
+          const block = bot.blockAt(p)
+          return block?.name === name && DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d)))) && !miningEnvironmentIssue(block)
+        })
+      }
+      // Reuse only the already observed untried candidates. Exhaustion gets a
+      // fresh bounded scan so an earlier count/time cap cannot hide later cells.
+      if (canReuse && candidates.length) searchReuses++
+      else {
+      searchScans++
       const searchOrigin = bot.entity.position.floored()
       const searchLimit = Symbol('collection search limit')
       const deadline = performance.now() + 500
@@ -416,6 +443,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (error !== searchLimit) throw error
         searchLimited = true
       }
+      }
       // Nearby depth can be a misleading shortcut: prefer surface-height resources
       // before trying a dense cave face. Returnability is still verified separately.
       const effort = p => {
@@ -429,6 +457,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         return p.distanceTo(bot.entity.position) + (nearbyTrunk ? 0 : 3 * Math.abs(p.y - bot.entity.position.y)) + (stableLanding || nearbyTrunk ? 0 : 32)
       }
       const choices = candidates.sort((a, b) => effort(a) - effort(b)).slice(0, 128)
+      // Mineflayer may visit a whole section layer before its count cap. Cache
+      // ranked choices, never the raw iteration prefix that can omit better cells.
+      if (candidateRevision === scanRevision) candidateCache = { positions: choices.map(p => p.clone()), position: bot.entity.position.clone(), dimension: dimension(), boundaryKey }
       if (!choices.length) break
       const p = choices[0]
       skipped.add(p.toString())
@@ -438,6 +469,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (block.name !== name) continue
         await harvestBlock(ctx, p)
         mined++
+        invalidateCandidates()
         consecutiveFailures = 0
         await pause(ctx, 300)
         pickup = await pickupInternal(ctx, 6)
@@ -458,9 +490,13 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         throw error
       }
     }
-    const result = { deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    const result = { search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
+    } finally {
+      for (const event of worldEvents) bot.removeListener(event, invalidateCandidates)
+      bot.removeListener('physicsTick', invalidateOnMovement)
+    }
   }
 
   function miningEnvironmentIssue (block) {
