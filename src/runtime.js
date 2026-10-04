@@ -1,5 +1,5 @@
 import { sectionSearchDistance } from './block-search.js';
-import { STARTER_MOVEMENT_RADIUS } from './starter-limits.js';
+import { STARTER_MOVEMENT_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import mineflayer from 'mineflayer';
 import pathfinderModule from 'mineflayer-pathfinder';
 import toolModule from 'mineflayer-tool';
@@ -155,6 +155,7 @@ export class Runtime {
       }).catch(error => this.say(error.message));
     });
     bot.on('breath', () => { if (this.bot === bot) this.survival.checkAir(); });
+    bot.on('health', () => { if (this.bot === bot) this.checkHealth(); });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
       this.survival.stop('Died; inspect the respawn state before resuming.');
@@ -254,10 +255,20 @@ export class Runtime {
     }
     throw new Error('Unsupported command.');
   }
+  checkHealth() {
+    const bot = this.bot, active = this.runner.active;
+    if (this.connection !== 'connected' || !bot || this.closed || !active || active.controller.signal.aborted || active.name === 'eat') return;
+    // Match the starter's between-action guard during a long gather or walk.
+    // Direct controls retain their existing threshold. Pausing cannot prevent
+    // damage already in flight or rescue a bot from its current environment.
+    // Mineflayer emits health before death; let the death handler own lethal packets.
+    const threshold = this.survival.active ? STARTER_MIN_HEALTH : 6;
+    if (Number.isFinite(bot.health) && bot.health > 0 && bot.health <= threshold) this.stop('Low health: work paused. The world keeps running; reach safety before resuming.');
+  }
   reflex() {
     const bot = this.bot;
     if (this.connection !== 'connected' || !bot || this.closed) return;
-    if (bot.health <= 6 && this.runner.active && !this.runner.active.controller.signal.aborted && this.runner.active.name !== 'eat') this.stop('Low health: paused work to recover.');
+    this.checkHealth();
     if (bot.food >= 18 || this.runner.active || this.survival.active || Date.now() - this.lastEat < 10000) return;
     const foods = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple', 'melon_slice', 'sweet_berries'];
     const item = bot.inventory.items().find(item => foods.includes(item.name));
