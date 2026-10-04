@@ -40,6 +40,7 @@ export class Runtime {
     ];
     this.brain = new Brain({ config: config.ai, memory: this.memory, definitions: () => this.definitions(), snapshot: () => this.snapshot(), execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), say: text => this.say(text), log: this.log.bind(this) });
     this.playSession = 0;
+    this.terrainRevision = 0;
     this.survival = new SurvivalJob({
       memory: this.memory, snapshot: () => this.snapshot(), session: () => this.playSession, context: `${config.minecraft.host}:${config.minecraft.port}/${config.minecraft.username}`,
       observe: async signal => {
@@ -76,7 +77,7 @@ export class Runtime {
         const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
         const wood = observedLogs[0];
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
-        return { powderSnowContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
+        return { terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
       execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
@@ -125,9 +126,16 @@ export class Runtime {
       this.scheduleReconnect();
       return;
     }
+    // Invalidate failed-search continuations when geometry or loaded terrain
+    // changes, including stone omitted from inspect's generic resource list.
+    const terrainChanged=()=>{if(this.bot===bot)this.terrainRevision++;};
+    bot.on('blockUpdate',terrainChanged);
+    bot.on('chunkColumnLoad',terrainChanged);
+    bot.on('chunkColumnUnload',terrainChanged);
     bot.on('spawn', () => {
       if (this.bot !== bot) return;
       this.playSession++;
+      this.terrainRevision++;
       const movements = new pathfinderModule.Movements(bot);
       movements.canDig = false;
       movements.allow1by1towers = false;

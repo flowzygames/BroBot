@@ -48,3 +48,18 @@ for (const [name, inventory, food, expectedScans, nearTable = false] of [
   try{const observation=await runtime.survival.observe(new AbortController().signal);assert.equal(logScans,expectedScans);assert.equal(tableScans,1);assert.equal(observation.wood,expectedScans?'spruce':undefined);}
   finally{await runtime.close();await rm(directory,{recursive:true,force:true});}
 });
+
+test('real runtime invalidates failed searches on block and chunk updates including non-resource stone',async()=>{
+  const {EventEmitter}=await import('node:events'),{default:mineflayer}=await import('mineflayer');
+  const directory=await mkdtemp(join(tmpdir(),'brobot-terrain-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),registry=minecraftData('1.21.8');
+  const bot=Object.assign(new EventEmitter(),{registry,entity:{position:new Vec3(.5,64,.5)},loadPlugin(){},quit(){},findBlocks:()=>[],blockAt:p=>({name:'air',position:p,boundingBox:'empty'})});
+  const create=mineflayer.createBot;mineflayer.createBot=()=>bot;
+  let local=[{name:'air',position:{x:1,y:64,z:0}}];
+  runtime.execute=async()=>({position:bot.entity.position,nearby_blocks:[],local_blocks:local});
+  try{
+    runtime.connect();const first=await runtime.survival.observe();assert.equal(first.terrainRevision,0);
+    local=[{name:'stone',position:{x:1,y:64,z:0}}];bot.emit('blockUpdate',null,local[0]);
+    const changed=await runtime.survival.observe();assert.equal(changed.terrainRevision,1);assert.notDeepEqual(changed.localTerrain,first.localTerrain);
+    bot.emit('chunkColumnLoad',new Vec3(16,0,0));bot.emit('chunkColumnUnload',new Vec3(32,0,0));assert.equal((await runtime.survival.observe()).terrainRevision,3);
+  }finally{mineflayer.createBot=create;await runtime.close();await rm(directory,{recursive:true,force:true});}
+});
