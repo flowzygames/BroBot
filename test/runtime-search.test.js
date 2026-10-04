@@ -73,3 +73,18 @@ test('runtime observation exposes lava at the recorded body position before sele
  try{const observation=await runtime.survival.observe();assert.equal(observation.lavaContact,true);assert.equal(observation.powderSnowContact,false);assert.equal(observation.wood,undefined)}
  finally{await runtime.close();await rm(directory,{recursive:true,force:true})}
 });
+
+test('runtime reports local craft geometry independently of global terrain churn',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'brobot-craft-context-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),registry=minecraftData('1.21.8');
+ const position=new Vec3(.5,64,.5),blocks=new Map();
+ runtime.survival.job={home:{position:{x:.5,y:64,z:.5},dimension:'overworld'},tables:[]};
+ runtime.bot={registry,entity:{position},game:{dimension:'overworld'},quit(){},findBlocks:()=>[],blockAt:p=>blocks.get(p.toString())??{name:'air',position:p,stateId:0,boundingBox:'empty',shapes:[]}};
+ runtime.execute=async()=>({connected:true,position,dimension:'overworld',health:20,food:20,inventory:[{name:'oak_log',count:3}],entities:[],nearby_blocks:[]});
+ try{
+  const first=await runtime.survival.observe();assert.match(first.craftGeometry,/^[a-f0-9]{64}$/);
+  runtime.terrainRevision++;blocks.set(new Vec3(100,64,0).toString(),{name:'stone',stateId:1,boundingBox:'block'});
+  const remote=await runtime.survival.observe();assert.notEqual(remote.terrainRevision,first.terrainRevision);assert.equal(remote.craftGeometry,first.craftGeometry);
+  blocks.set(new Vec3(7,64,0).toString(),{name:'oak_trapdoor',stateId:10,boundingBox:'block'});
+  assert.notEqual((await runtime.survival.observe()).craftGeometry,first.craftGeometry);
+ }finally{await runtime.close();await rm(directory,{recursive:true,force:true})}
+});
