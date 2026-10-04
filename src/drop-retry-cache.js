@@ -3,6 +3,7 @@
 export class DropRetryCache {
   constructor(bot,{now=()=>performance.now(),ttlMs=30000,limit=128}={}){this.bot=bot;this.now=now;this.ttlMs=ttlMs;this.limit=limit;this.scope=null;this.records=new Map()}
   fingerprint(entity, itemPosition=entity?.position, botPosition=this.bot.entity?.position){
+    try {
     const p=itemPosition,b=botPosition;
     if(!p||!b||!['x','y','z'].every(k=>Number.isFinite(p[k])&&Number.isFinite(b[k])))return null;
     const cells=new Map();
@@ -11,6 +12,7 @@ export class DropRetryCache {
       cells.set(q.toString(),block?[block.stateId??null,block.name,Boolean(block.isWaterlogged)]:null);
     }
     return JSON.stringify([...cells].sort(([a],[b])=>a.localeCompare(b)));
+    } catch { return null }
   }
   setScope(scope){if(typeof scope!=='string'||!scope)return false;if(this.scope!==scope){this.records.clear();this.scope=scope}return true}
   current(entity,scope){

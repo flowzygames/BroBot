@@ -23,3 +23,7 @@ test('pickup accepts a measured dry slab top but not a whole-block-wrong landing
  bot.entity.position.y=63;assert.equal(isAtPickupStandingCell(bot,goal),false);
  bot.entity.position.y=63.5;blocks.set(new Vec3(0,63,0).toString(),{name:'water',shapes:[]});assert.equal(isAtPickupStandingCell(bot,goal),false);
 });
+test('failed body reads are unknown for landing while observed neighboring lava remains visible',()=>{
+ const {bot}=fixture();bot.blockAt=p=>{if(p.y===64)throw Error('unknown cell');return p.y===65?{name:'lava'}:{name:'air'}};
+ assert.equal(isDryLanding(bot),false);assert.equal(hasLavaContact(bot),true);
+});

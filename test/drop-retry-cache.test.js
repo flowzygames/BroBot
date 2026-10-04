@@ -23,3 +23,6 @@ test('deferrals expire, reset on new job/session and clear after verified succes
 test('cache stays bounded and malformed position cannot create a deferral',()=>{
  const f=fixture();for(let id=0;id<150;id++)f.cache.failed({...f.item,id},'job/1','No path');assert.equal(f.cache.records.size,128);f.item.position.x=NaN;f.cache.failed(f.item,'job/1','No path');assert.equal(f.cache.deferred(f.item,'job/1'),null);
 });
+test('world-read failures make the optimization a cache miss instead of throwing',()=>{
+ const f=fixture();failThree(f);f.bot.blockAt=()=>{throw Error('unavailable')};assert.doesNotThrow(()=>f.cache.failed(f.item,'job/1','No path'));assert.equal(f.cache.deferred(f.item,'job/1'),null);
+});

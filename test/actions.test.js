@@ -1175,6 +1175,26 @@ test('one physical collect action shares the three-attempt limit for a persisten
  await actions.execute('pickup',{radius:8});assert.equal(attempts,6,'a fresh physical action can retry after observing again');
 });
 
+test('failed pickup can observe dry passive landing without claiming arrival or continuing mining',async()=>{
+ const bot=fakeBot();for(const x of [2,3])bot.putBlock('stone',new Vec3(x,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let digs=0,walks=0;
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('cobblestone');bot.entities[77]={id:77,name:'item',position:new Vec3(2.5,64,.5)}};
+ bot.pathfinder.goto=async()=>{
+  walks++;bot.entity.onGround=false;bot.entity.velocity=new Vec3(0,-.4,0);
+  setTimeout(()=>{bot.entity.onGround=true;bot.entity.velocity.y=0;delete bot.entities[77];bot.emit('physicsTick');setTimeout(()=>bot.emit('physicsTick'),20)},20);
+  throw Error('Path failed during descent');
+ };
+ const result=await createActions(bot).execute('collect',{block:'stone',count:2,radius:8});
+ assert.equal(result.completed,false);assert.equal(result.passive_settlement,true);assert.equal(result.pickup_landing_verified,false);
+ assert.equal(digs,1);assert.equal(walks,1);assert.equal(result.inventory_changes.cobblestone,1);assert.equal(result.remaining_drops.length,0);
+ assert.ok(result.pickup_failures.length);assert.equal(bot.listenerCount('physicsTick'),0);
+});
+test('failed passive verification stays fatal even if grounded state changes without fresh samples',async()=>{
+ const bot=fakeBot();bot.putBlock('stone',new Vec3(2,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let digs=0,walks=0;
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.entities[77]={id:77,name:'item',position:new Vec3(2.5,64,.5)}};
+ bot.pathfinder.goto=async()=>{walks++;bot.entity.onGround=false;bot.entity.velocity=new Vec3(0,-.4,0);setTimeout(()=>{bot.entity.onGround=true;bot.entity.velocity.y=0;delete bot.entities[77]},20);throw Error('No verified landing')};
+ await assert.rejects(createActions(bot).execute('collect',{block:'stone',count:1,radius:8}),{code:'PICKUP_UNSAFE_SETTLEMENT'});assert.equal(digs,1);assert.equal(walks,1);
+});
+
 test('starter-only deferral records implicit pickup failures, retains drops and allows direct retry',async()=>{
  const bot=fakeBot();for(const x of [2,3])bot.putBlock('stone',new Vec3(x,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let attempts=0;
  const item={id:77,name:'item',position:new Vec3(2.5,64,.5)};
@@ -1185,4 +1205,13 @@ test('starter-only deferral records implicit pickup failures, retains drops and 
  const result=await actions.execute('pickup',{radius:8},undefined,context);
  assert.equal(attempts,3);assert.equal(result.remaining_drops[0].id,77);assert.equal(result.deferred_drops[0].id,77);
  await actions.execute('pickup',{radius:8});assert.equal(attempts,6);
+});
+test('starter cache bookkeeping read errors cannot bypass an unsafe pickup ending',async()=>{
+ const bot=fakeBot();for(const x of [2,3])bot.putBlock('stone',new Vec3(x,64,0));bot.putBlock('dirt',new Vec3(2,63,0));let digs=0,walks=0,failRead=false;
+ const read=bot.blockAt;bot.blockAt=p=>{if(failRead){failRead=false;throw Error('Transient cache read failure')}return read(p)};
+ const item={id:77,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('cobblestone');bot.entities[77]=item};
+ bot.pathfinder.goto=async goal=>{walks++;if(walks===1){bot.entity.onGround=false;bot.entity.velocity=new Vec3(0,-.4,0);failRead=true;throw Error('Failed while falling')}bot.entity.onGround=true;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);delete bot.entities[77]};
+ await assert.rejects(createActions(bot).execute('collect',{block:'stone',count:2,radius:8},undefined,{starterScope:'job/1'}),{code:'PICKUP_UNSAFE_SETTLEMENT'});
+ assert.equal(digs,1);assert.equal(walks,1);
 });
