@@ -1,4 +1,5 @@
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
+import { sameItemIdentity } from './item-identity.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -824,7 +825,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         assert(attempts < 40, 'Could not store inventory cursor item')
         const item = window.selectedItem
         const slots = inventorySlots()
-        const same = slot => { const there = window.slots[slot]; return there && there.type === item.type && there.metadata === item.metadata && there.count < there.stackSize }
+        const same = slot => { const there = window.slots[slot]; return sameItemIdentity(there,item) && there.count < there.stackSize }
         let destination = preferred != null && (!window.slots[preferred] || same(preferred)) ? preferred : slots.find(same)
         if (destination == null) destination = slots.find(slot => !window.slots[slot])
         assert(destination != null, 'Inventory is full; the cursor still holds an item')
@@ -833,7 +834,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         const remaining = item.count - moved
         const expectedStored = (there?.count ?? 0) + moved
         await click(destination)
-        await confirmed(() => (remaining === 0 ? !window.selectedItem : window.selectedItem?.type === item.type && window.selectedItem.count === remaining) && window.slots[destination]?.type === item.type && window.slots[destination].count === expectedStored, 'Server did not confirm storing the cursor item; refusing to repeat an uncertain click')
+        await confirmed(() => (remaining === 0 ? !window.selectedItem : sameItemIdentity(window.selectedItem,item) && window.selectedItem.count === remaining) && sameItemIdentity(window.slots[destination],item) && window.slots[destination].count === expectedStored, 'Server did not confirm storing the cursor item; refusing to repeat an uncertain click')
         preferred = undefined
       }
     }

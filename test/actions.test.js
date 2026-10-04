@@ -294,6 +294,81 @@ test('real crafting path synchronizes every cursor/grid/output click and preserv
   assert.equal(server.slots[1], null)
 })
 
+test('craft stores ordinary output without swapping a same-type named stack', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 1)
+  const named = { ...stack('oak_planks', 1), components: [{ type: 'custom_name', data: { type: 'string', value: 'Reserved' } }] }
+  server.slots[9] = named
+  let swaps = 0
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else if (JSON.stringify(server.slots[slot].components ?? []) !== JSON.stringify(server.cursor.components ?? [])) { const previous = server.slots[slot]; server.slots[slot] = server.cursor; server.cursor = previous; swaps++ }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); server.slots[slot].count += server.cursor.count; server.cursor = null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 4 })
+  assert.equal(result.crafted, 4)
+  assert.equal(swaps, 0)
+  assert.deepEqual(server.slots[9], named)
+  assert.equal(inventory.items().filter(item => !item.components?.length).reduce((n,item) => n + item.count, 0), 4)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('craft refuses a stored output with changed components despite matching type and count', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 1)
+  const named = { ...stack('oak_planks', 1), components: [{ type: 'custom_name', data: { type: 'string', value: 'Reserved' } }] }
+  server.slots[9] = named
+  let swaps = 0
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = { ...server.cursor, ...(slot >= 9 && server.cursor.type === plankType ? {components:[{type:"custom_name",data:{type:"string",value:"Changed"}}]} : {}) }; server.cursor = null }
+      else if (JSON.stringify(server.slots[slot].components ?? []) !== JSON.stringify(server.cursor.components ?? [])) { const previous = server.slots[slot]; server.slots[slot] = server.cursor; server.cursor = previous; swaps++ }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); server.slots[slot].count += server.cursor.count; server.cursor = null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  await assert.rejects(createActions(bot).execute('craft', { item: 'oak_planks', count: 4 }), /Server did not confirm storing the cursor item/)
+  assert.equal(swaps, 0)
+})
+
 test('mining refuses blocks whose drops require an unavailable tool', async () => {
   const bot = fakeBot()
   bot.putBlock('diamond_ore', new Vec3(2, 64, 0), { canHarvest: () => false })
