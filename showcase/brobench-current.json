@@ -1,5 +1,5 @@
 {
-  "name": "Current308 known-world evidence",
+  "name": "BroBot Core 0.1 known-world evidence",
   "date": "2026-10-03 UTC",
   "protocol": "Known natural worlds;300s;empty survival inventory. Prepared metrics not rerun, historical data kept separately. No aggregate intelligence score.",
   "commits": {
@@ -243,5 +243,6 @@
         ]
       }
     }
-  }
+  },
+  "agentDisplayName": "BroBot Core 0.1"
 }
