@@ -1,0 +1,71 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Runtime } from '../src/runtime.js';
+
+function fixture(health, { starter = true, action = 'collect', aborted = false } = {}) {
+  const stops = [];
+  const runtime = Object.create(Runtime.prototype);
+  runtime.bot = { health, food: 20, inventory: { items: () => [] } };
+  runtime.connection = 'connected'; runtime.closed = false;
+  runtime.survival = { active: starter };
+  const controller = new AbortController(); if (aborted) controller.abort();
+  runtime.runner = { active: action ? { name: action, controller } : null };
+  runtime.stop = reason => { stops.push(reason); controller.abort(); };
+  return { runtime, stops };
+}
+
+test('starter interrupts ongoing gathering at the recorded 6.783 health, before its action finishes', () => {
+  const { runtime, stops } = fixture(6.783);
+  runtime.reflex();
+  assert.equal(stops.length, 1);
+  assert.match(stops[0], /health/i);
+  assert.equal(runtime.runner.active.controller.signal.aborted, true);
+});
+test('starter health boundary matches the between-action guard', () => {
+  for (const [health, expected] of [[8,1],[8.001,0],[20,0]]) {
+    const { runtime, stops } = fixture(health); runtime.reflex(); assert.equal(stops.length, expected);
+  }
+});
+test('direct control keeps its existing health boundary and eating can finish', () => {
+  for (const [health, options, expected] of [[7,{starter:false},0],[6,{starter:false},1],[6,{action:'eat'},0],[6,{aborted:true},0],[6,{action:null},0]]) {
+    const {runtime,stops}=fixture(health,options);runtime.reflex();assert.equal(stops.length,expected);
+  }
+});
+
+test('health events stop an active starter action immediately and stale connections cannot stop new work', async () => {
+  const { EventEmitter } = await import('node:events');
+  const { mkdtemp, rm } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { default: mineflayer } = await import('mineflayer');
+  const { default: minecraftData } = await import('minecraft-data');
+  const { Vec3 } = await import('vec3');
+  const { loadConfig } = await import('../src/config.js');
+  const directory = await mkdtemp(join(tmpdir(), 'brobot-health-'));
+  const runtime = new Runtime(loadConfig({ BROBOT_DATA_DIR: directory }));
+  const bot = Object.assign(new EventEmitter(), { health: 20, food: 20, registry: minecraftData('1.21.8'),
+    entity: { position: new Vec3(.5,64,.5) }, loadPlugin() {}, quit() {}, inventory: { items: () => [] } });
+  const create = mineflayer.createBot; mineflayer.createBot = () => bot;
+  let stops = 0; const oldStop = runtime.stop;
+  try {
+    runtime.connect(); runtime.connection = 'connected';
+    runtime.survival.active = { controller: new AbortController() };
+    runtime.runner.active = { name: 'collect', controller: new AbortController(), cleanup() {} };
+    runtime.stop = () => { stops++; runtime.runner.active.controller.abort(); };
+    bot.health = 7.5; bot.emit('health'); assert.equal(stops,1);
+    bot.emit('health'); assert.equal(stops,1, 'already stopping must not repeat');
+    runtime.runner.active = { name:'collect',controller:new AbortController(),cleanup(){} };
+    runtime.bot = {...bot, health:20, quit(){}};
+    bot.health = 1; bot.emit('health'); assert.equal(stops,1,'ignore retired connection');
+  } finally {
+    mineflayer.createBot = create; runtime.runner.active = null; runtime.survival.active = null;
+    runtime.stop = oldStop; await runtime.close(); await rm(directory,{recursive:true,force:true});
+  }
+});
+
+test('lethal health updates leave cancellation reason to the death handler', () => {
+  for (const health of [0,-1]) {
+    const {runtime,stops}=fixture(health);runtime.checkHealth();assert.equal(stops.length,0);
+    assert.equal(runtime.runner.active.controller.signal.aborted,false);
+  }
+});

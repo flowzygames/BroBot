@@ -1,6 +1,14 @@
+# Current release and source follow-up
+
+BroBot Core0.2 download: **11/20 known worlds**, separate original trio **1/3**, prepared integration **17/17**,346 automated checks. [Complete frozen evidence](results/core02-2026-10-04/README.md). Core0.1 previously scored10/20 and2/3 respectively; the release is not uniformly better.
+
+Source now includes an additional health-interruption fix with351 checks and a controlled real-server fixture. Its one selected natural-world pass is not substituted into frozen release scores. [Follow-up evidence](results/health-interrupt-2026-10-04/README.md).
+
+## Historical records below
+
 # Pickup-budget cohort — October 3, 2026
 
-Current308 application completed **10/20** known worlds on clean source69d36c2. All20 ran once without interrupted/replaced cases. Prior305 completed8/20; prior2879/20; older90-block27512/20. Gains versus305:1587439118,355620996,1244186709. Loss:113919219 timed out. Same seeds are not identical paths or mob timing; no isolated causality claim.
+Historical Core0.1 /308 application completed **10/20** known worlds on clean source69d36c2. All20 ran once without interrupted/replaced cases. Prior305 completed8/20; prior2879/20; older90-block27512/20. Gains versus305:1587439118,355620996,1244186709. Loss:113919219 timed out. Same seeds are not identical paths or mob timing; no isolated causality claim.
 
 [All outcomes and conditions](results/pickup-cohort-2026-10-03/README.md). Prepared17/17 and automated308 checks remain separate. Half the worlds still failed; this is development evidence, not stable1.0.
 

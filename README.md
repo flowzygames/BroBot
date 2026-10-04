@@ -1,3 +1,5 @@
+> Source follow-up: **351 automated checks**; starter actions now interrupt at the same low-health boundary as the planner. [Targeted evidence and limits](benchmarks/results/health-interrupt-2026-10-04/README.md). The downloadable Core0.2 build and its frozen scores below are unchanged.
+
 > **BroBot Core 0.2:** 346 automated checks and **11/20** known natural worlds, versus Core 0.1’s 10/20. One additional completion; nine worlds still failed. Separate original-world regression: **1/3**, down from Core 0.1’s 2/3. [Full records and limitations](benchmarks/results/core02-2026-10-04/README.md).
 
 # BroBot
