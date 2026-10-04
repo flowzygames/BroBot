@@ -1,0 +1,2737 @@
+{
+  "seed": "386690312",
+  "testedCommit": "15cdc9a880eed2bb7131e0e96f7bf734b4c56fad",
+  "journalSha256": "cc0e61a2dc293f2162431c3adb166554d5662ac54991e0ff00e5789c1cafdfc2",
+  "events": [
+    {
+      "line": 128,
+      "at": "2026-10-04T09:58:28.385Z",
+      "type": "result",
+      "message": "inspect completed",
+      "data": {
+        "connected": true,
+        "position": {
+          "x": -205.6,
+          "y": 65,
+          "z": 11.51
+        },
+        "dimension": "overworld",
+        "health": 20,
+        "food": 20,
+        "oxygen": null,
+        "time": 5202,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "acacia_planks",
+            "count": 3,
+            "durability_used": null
+          },
+          {
+            "name": "stick",
+            "count": 2,
+            "durability_used": null
+          },
+          {
+            "name": "wooden_pickaxe",
+            "count": 1,
+            "durability_used": 12
+          },
+          {
+            "name": "cobblestone",
+            "count": 6,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "wooden_pickaxe",
+        "entities": [
+          {
+            "id": 942,
+            "name": "item",
+            "type": "other",
+            "username": null,
+            "position": {
+              "x": -205.12,
+              "y": 64,
+              "z": 10.36
+            },
+            "distance": 1.6
+          },
+          {
+            "id": 934,
+            "name": "item",
+            "type": "other",
+            "username": null,
+            "position": {
+              "x": -205.12,
+              "y": 63,
+              "z": 8.42
+            },
+            "distance": 3.7
+          },
+          {
+            "id": 111,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -182.48,
+              "y": 66,
+              "z": 16.5
+            },
+            "distance": 23.7
+          },
+          {
+            "id": 110,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -181.11,
+              "y": 64,
+              "z": -4.11
+            },
+            "distance": 29.1
+          },
+          {
+            "id": 745,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.35,
+              "y": 61.76,
+              "z": -14.49
+            },
+            "distance": 31.1
+          },
+          {
+            "id": 705,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -223.31,
+              "y": 62.05,
+              "z": -14.01
+            },
+            "distance": 31.2
+          },
+          {
+            "id": 150,
+            "name": "cow",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -173.85,
+              "y": 67,
+              "z": 1.85
+            },
+            "distance": 33.2
+          },
+          {
+            "id": 706,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -224.37,
+              "y": 60.96,
+              "z": -16.41
+            },
+            "distance": 33.9
+          },
+          {
+            "id": 695,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.56,
+              "y": 61.94,
+              "z": -22.59
+            },
+            "distance": 38.2
+          },
+          {
+            "id": 694,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -221.47,
+              "y": 62,
+              "z": -23.49
+            },
+            "distance": 38.5
+          },
+          {
+            "id": 747,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.03,
+              "y": 62.58,
+              "z": -23.48
+            },
+            "distance": 38.7
+          },
+          {
+            "id": 693,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.43,
+              "y": 62,
+              "z": -23.41
+            },
+            "distance": 38.9
+          },
+          {
+            "id": 123,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -189.45,
+              "y": 64,
+              "z": 47.46
+            },
+            "distance": 39.4
+          },
+          {
+            "id": 891,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -225.42,
+              "y": 61.05,
+              "z": -22.59
+            },
+            "distance": 39.6
+          },
+          {
+            "id": 699,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -225.91,
+              "y": 61.56,
+              "z": -23.49
+            },
+            "distance": 40.6
+          },
+          {
+            "id": 109,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -171.37,
+              "y": 65,
+              "z": -12.41
+            },
+            "distance": 41.8
+          },
+          {
+            "id": 908,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -246.39,
+              "y": 62.48,
+              "z": 0.61
+            },
+            "distance": 42.3
+          },
+          {
+            "id": 909,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -246.65,
+              "y": 62.18,
+              "z": -0.78
+            },
+            "distance": 42.9
+          },
+          {
+            "id": 657,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -206.22,
+              "y": 57.88,
+              "z": -32.4
+            },
+            "distance": 44.5
+          },
+          {
+            "id": 917,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -207.4,
+              "y": 56.38,
+              "z": -32.44
+            },
+            "distance": 44.8
+          },
+          {
+            "id": 875,
+            "name": "squid",
+            "type": "passive",
+            "username": null,
+            "position": {
+              "x": -222.4,
+              "y": 54,
+              "z": -28.58
+            },
+            "distance": 44.8
+          },
+          {
+            "id": 933,
+            "name": "squid",
+            "type": "passive",
+            "username": null,
+            "position": {
+              "x": -220.26,
+              "y": 56.37,
+              "z": -30.91
+            },
+            "distance": 45.7
+          },
+          {
+            "id": 864,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -235.09,
+              "y": 60.43,
+              "z": -24.69
+            },
+            "distance": 46.9
+          },
+          {
+            "id": 848,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -235.52,
+              "y": 59.67,
+              "z": -24.44
+            },
+            "distance": 47.1
+          }
+        ],
+        "nearby_blocks": [
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 67,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 68,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 59,
+              "z": 12
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 11
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 69,
+              "z": 8
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 10
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 70,
+              "z": 8
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 11
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 60,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 58,
+              "z": 13
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 10
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 6
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 13
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 71,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 60,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 11
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 57,
+              "z": 13
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 72,
+              "z": 9
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 13
+            }
+          },
+          {
+            "name": "oak_log",
+            "position": {
+              "x": -214,
+              "y": 65,
+              "z": 14
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 3
+            }
+          },
+          {
+            "name": "acacia_log",
+            "position": {
+              "x": -202,
+              "y": 72,
+              "z": 8
+            }
+          },
+          {
+            "name": "oak_log",
+            "position": {
+              "x": -214,
+              "y": 64,
+              "z": 14
+            }
+          }
+        ],
+        "local_blocks": [
+          {
+            "name": "stone",
+            "position": {
+              "x": -208,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -207,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -207,
+              "y": 64,
+              "z": 12
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -207,
+              "y": 64,
+              "z": 13
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 64,
+              "z": 12
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 64,
+              "z": 13
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 9
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 12
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 13
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -204,
+              "y": 64,
+              "z": 9
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -204,
+              "y": 64,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -204,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -204,
+              "y": 64,
+              "z": 12
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -204,
+              "y": 64,
+              "z": 13
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 65,
+              "z": 9
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 65,
+              "z": 10
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -205,
+              "y": 65,
+              "z": 9
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -205,
+              "y": 65,
+              "z": 10
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -205,
+              "y": 65,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -205,
+              "y": 65,
+              "z": 12
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -204,
+              "y": 65,
+              "z": 9
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -204,
+              "y": 65,
+              "z": 10
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -204,
+              "y": 65,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -204,
+              "y": 65,
+              "z": 12
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -204,
+              "y": 65,
+              "z": 13
+            }
+          },
+          {
+            "name": "short_grass",
+            "position": {
+              "x": -206,
+              "y": 66,
+              "z": 9
+            }
+          },
+          {
+            "name": "short_grass",
+            "position": {
+              "x": -206,
+              "y": 66,
+              "z": 10
+            }
+          },
+          {
+            "name": "short_grass",
+            "position": {
+              "x": -205,
+              "y": 66,
+              "z": 9
+            }
+          },
+          {
+            "name": "short_grass",
+            "position": {
+              "x": -205,
+              "y": 66,
+              "z": 10
+            }
+          }
+        ],
+        "local_blocks_note": "Non-air blocks within 2 blocks horizontally and Y -1..+2 relative to feet, for choosing precise digs and supports.",
+        "craftable_hints": [
+          {
+            "item": "stick",
+            "output_per_craft": 4,
+            "requires_table": false
+          }
+        ],
+        "recipe_note": "Hints are a limited list; craft checks all recipes for the requested item."
+      }
+    },
+    {
+      "line": 129,
+      "at": "2026-10-04T09:58:28.446Z",
+      "type": "action",
+      "message": "Started dig_at"
+    },
+    {
+      "line": 130,
+      "at": "2026-10-04T09:58:31.406Z",
+      "type": "injury",
+      "message": "Hurt observed from an unavailable source during dig_at. Health and hurt packets are separate observations.",
+      "data": {
+        "at": "2026-10-04T09:58:31.406Z",
+        "kind": "hurt_observation",
+        "entityId": 37,
+        "source": null,
+        "sourceStatus": "unavailable",
+        "health_observed": 20,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "dig_at",
+        "position": {
+          "x": -206.30000003,
+          "y": 63.1212968405392,
+          "z": 9.08722409329892
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "line": 131,
+      "at": "2026-10-04T09:58:31.406Z",
+      "type": "injury",
+      "message": "Health fell 20.0 \u2192 16.0 during dig_at. Damage cause is unconfirmed.",
+      "data": {
+        "at": "2026-10-04T09:58:31.406Z",
+        "kind": "health_loss",
+        "before": 20,
+        "after": 16,
+        "loss": 4,
+        "cause": "unattributed",
+        "action": "dig_at",
+        "position": {
+          "x": -206.30000003,
+          "y": 63.1212968405392,
+          "z": 9.08722409329892
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "line": 132,
+      "at": "2026-10-04T09:58:31.505Z",
+      "type": "result",
+      "message": "dig_at completed",
+      "data": {
+        "completed": true,
+        "mined": 1,
+        "block": "grass_block",
+        "position": {
+          "x": -206,
+          "y": 65,
+          "z": 10
+        },
+        "inventory_changes": {
+          "cobblestone": 2,
+          "dirt": 1
+        },
+        "remaining_drops": [],
+        "pickup_failures": []
+      }
+    },
+    {
+      "line": 133,
+      "at": "2026-10-04T09:58:31.659Z",
+      "type": "action",
+      "message": "Started inspect"
+    },
+    {
+      "line": 134,
+      "at": "2026-10-04T09:58:31.670Z",
+      "type": "result",
+      "message": "inspect completed",
+      "data": {
+        "connected": true,
+        "position": {
+          "x": -206.3,
+          "y": 62,
+          "z": 9.02
+        },
+        "dimension": "overworld",
+        "health": 16,
+        "food": 20,
+        "oxygen": null,
+        "time": 5262,
+        "is_raining": false,
+        "sleeping": false,
+        "inventory": [
+          {
+            "name": "stick",
+            "count": 2,
+            "durability_used": null
+          },
+          {
+            "name": "wooden_pickaxe",
+            "count": 1,
+            "durability_used": 12
+          },
+          {
+            "name": "cobblestone",
+            "count": 8,
+            "durability_used": null
+          },
+          {
+            "name": "acacia_planks",
+            "count": 3,
+            "durability_used": null
+          },
+          {
+            "name": "dirt",
+            "count": 1,
+            "durability_used": null
+          }
+        ],
+        "equipment": {
+          "helmet": null,
+          "chestplate": null,
+          "leggings": null,
+          "boots": null,
+          "off_hand": null
+        },
+        "held_item": "acacia_planks",
+        "entities": [
+          {
+            "id": 111,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -182.48,
+              "y": 66,
+              "z": 16.5
+            },
+            "distance": 25.3
+          },
+          {
+            "id": 745,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.7,
+              "y": 62.11,
+              "z": -14.05
+            },
+            "distance": 28.3
+          },
+          {
+            "id": 705,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -224.95,
+              "y": 61.91,
+              "z": -12.74
+            },
+            "distance": 28.7
+          },
+          {
+            "id": 110,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -180.37,
+              "y": 64,
+              "z": -3.73
+            },
+            "distance": 29
+          },
+          {
+            "id": 706,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -223.46,
+              "y": 61.94,
+              "z": -14.66
+            },
+            "distance": 29.3
+          },
+          {
+            "id": 695,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.56,
+              "y": 61.94,
+              "z": -22.59
+            },
+            "distance": 35.5
+          },
+          {
+            "id": 694,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -221.47,
+              "y": 62,
+              "z": -23.49
+            },
+            "distance": 35.9
+          },
+          {
+            "id": 747,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.03,
+              "y": 62.58,
+              "z": -23.48
+            },
+            "distance": 36.1
+          },
+          {
+            "id": 693,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -222.43,
+              "y": 62,
+              "z": -23.41
+            },
+            "distance": 36.2
+          },
+          {
+            "id": 150,
+            "name": "cow",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -171.36,
+              "y": 67,
+              "z": -0.28
+            },
+            "distance": 36.5
+          },
+          {
+            "id": 891,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -225.42,
+              "y": 61.38,
+              "z": -22.59
+            },
+            "distance": 37
+          },
+          {
+            "id": 908,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -246.39,
+              "y": 62.58,
+              "z": 0.61
+            },
+            "distance": 41
+          },
+          {
+            "id": 109,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -171.37,
+              "y": 65,
+              "z": -12.41
+            },
+            "distance": 41.1
+          },
+          {
+            "id": 909,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -246.65,
+              "y": 62.51,
+              "z": -0.78
+            },
+            "distance": 41.5
+          },
+          {
+            "id": 657,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -206.22,
+              "y": 57.88,
+              "z": -32.4
+            },
+            "distance": 41.6
+          },
+          {
+            "id": 875,
+            "name": "squid",
+            "type": "passive",
+            "username": null,
+            "position": {
+              "x": -222.4,
+              "y": 54,
+              "z": -28.58
+            },
+            "distance": 41.7
+          },
+          {
+            "id": 917,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -207.4,
+              "y": 56.38,
+              "z": -32.44
+            },
+            "distance": 41.9
+          },
+          {
+            "id": 123,
+            "name": "armadillo",
+            "type": "animal",
+            "username": null,
+            "position": {
+              "x": -189.45,
+              "y": 64,
+              "z": 47.46
+            },
+            "distance": 42
+          },
+          {
+            "id": 933,
+            "name": "squid",
+            "type": "passive",
+            "username": null,
+            "position": {
+              "x": -220.26,
+              "y": 56.37,
+              "z": -30.91
+            },
+            "distance": 42.7
+          },
+          {
+            "id": 864,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -235.09,
+              "y": 60.76,
+              "z": -24.69
+            },
+            "distance": 44.4
+          },
+          {
+            "id": 848,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -235.52,
+              "y": 60,
+              "z": -24.44
+            },
+            "distance": 44.5
+          },
+          {
+            "id": 865,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -236.12,
+              "y": 60.27,
+              "z": -24.49
+            },
+            "distance": 44.9
+          },
+          {
+            "id": 744,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -235.52,
+              "y": 60.25,
+              "z": -25.51
+            },
+            "distance": 45.3
+          },
+          {
+            "id": 873,
+            "name": "salmon",
+            "type": "water_creature",
+            "username": null,
+            "position": {
+              "x": -236.89,
+              "y": 57.92,
+              "z": -24.51
+            },
+            "distance": 45.6
+          }
+        ],
+        "nearby_blocks": [
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 6
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 10
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 60,
+              "z": 6
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 6
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 10
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 59,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 59,
+              "z": 12
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 60,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 5
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 58,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 60,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 4
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 4
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 58,
+              "z": 13
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 58,
+              "z": 13
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -208,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -206,
+              "y": 57,
+              "z": 12
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 3
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 60,
+              "z": 3
+            }
+          },
+          {
+            "name": "coal_ore",
+            "position": {
+              "x": -207,
+              "y": 57,
+              "z": 13
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 3
+            }
+          }
+        ],
+        "local_blocks": [
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -209,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -209,
+              "y": 61,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -209,
+              "y": 61,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 10
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -208,
+              "y": 61,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 10
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -207,
+              "y": 61,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 10
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 61,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 10
+            }
+          },
+          {
+            "name": "gravel",
+            "position": {
+              "x": -205,
+              "y": 61,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -209,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -209,
+              "y": 62,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -208,
+              "y": 62,
+              "z": 11
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "lava",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -207,
+              "y": 62,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -206,
+              "y": 62,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 8
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 9
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 10
+            }
+          },
+          {
+            "name": "gravel",
+            "position": {
+              "x": -205,
+              "y": 62,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -209,
+              "y": 63,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -208,
+              "y": 63,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -207,
+              "y": 63,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 63,
+              "z": 7
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -206,
+              "y": 63,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -206,
+              "y": 63,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 63,
+              "z": 7
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 63,
+              "z": 8
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 63,
+              "z": 9
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 63,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 63,
+              "z": 11
+            }
+          },
+          {
+            "name": "short_grass",
+            "position": {
+              "x": -209,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -208,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -207,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -206,
+              "y": 64,
+              "z": 7
+            }
+          },
+          {
+            "name": "grass_block",
+            "position": {
+              "x": -206,
+              "y": 64,
+              "z": 11
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 7
+            }
+          },
+          {
+            "name": "stone",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 8
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 9
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 10
+            }
+          },
+          {
+            "name": "dirt",
+            "position": {
+              "x": -205,
+              "y": 64,
+              "z": 11
+            }
+          }
+        ],
+        "local_blocks_note": "Non-air blocks within 2 blocks horizontally and Y -1..+2 relative to feet, for choosing precise digs and supports.",
+        "craftable_hints": [
+          {
+            "item": "stick",
+            "output_per_craft": 4,
+            "requires_table": false
+          }
+        ],
+        "recipe_note": "Hints are a limited list; craft checks all recipes for the requested item."
+      }
+    },
+    {
+      "line": 135,
+      "at": "2026-10-04T09:58:31.690Z",
+      "type": "action",
+      "message": "Started collect"
+    },
+    {
+      "line": 136,
+      "at": "2026-10-04T09:58:32.182Z",
+      "type": "injury",
+      "message": "Hurt observed from an unavailable source during collect. Health and hurt packets are separate observations.",
+      "data": {
+        "at": "2026-10-04T09:58:32.182Z",
+        "kind": "hurt_observation",
+        "entityId": 37,
+        "source": null,
+        "sourceStatus": "unavailable",
+        "health_observed": 16.83333396911621,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "collect",
+        "position": {
+          "x": -206.30000003,
+          "y": 62,
+          "z": 9.02420081533245
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "line": 137,
+      "at": "2026-10-04T09:58:32.182Z",
+      "type": "injury",
+      "message": "Health fell 16.8 \u2192 12.8 during collect. Damage cause is unconfirmed.",
+      "data": {
+        "at": "2026-10-04T09:58:32.182Z",
+        "kind": "health_loss",
+        "before": 16.83333396911621,
+        "after": 12.833333969116211,
+        "loss": 4,
+        "cause": "unattributed",
+        "action": "collect",
+        "position": {
+          "x": -206.30000003,
+          "y": 62,
+          "z": 9.02420081533245
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "line": 138,
+      "at": "2026-10-04T09:58:32.400Z",
+      "type": "injury",
+      "message": "Hurt observed from an unavailable source during collect. Health and hurt packets are separate observations.",
+      "data": {
+        "at": "2026-10-04T09:58:32.400Z",
+        "kind": "hurt_observation",
+        "entityId": 37,
+        "source": null,
+        "sourceStatus": "unavailable",
+        "health_observed": 13.500000953674316,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "collect",
+        "position": {
+          "x": -206.30000003,
+          "y": 62,
+          "z": 9.02420081533245
+        },
+        "dimension": "overworld"
+      }
+    },
+    {
+      "line": 139,
+      "at": "2026-10-04T09:58:32.400Z",
+      "type": "injury",
+      "message": "Health fell 13.5 \u2192 9.5 during collect. Damage cause is unconfirmed.",
+      "data": {
+        "at": "2026-10-04T09:58:32.400Z",
+        "kind": "health_loss",
+        "before": 13.500000953674316,
+        "after": 9.500000953674316,
+        "loss": 4,
+        "cause": "unattributed",
+        "action": "collect",
+        "position": {
+          "x": -206.30000003,
+          "y": 62,
+          "z": 9.02420081533245
+        },
+        "dimension": "overworld"
+      }
+    }
+  ]
+}

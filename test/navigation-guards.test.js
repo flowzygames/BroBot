@@ -156,3 +156,58 @@ test('unexpected ranked-probe failure preserves prior attempts while propagating
     if(direction==='north')throw Error('No verified returnable walking route (noPath)');throw failure;
   }),error=>{assert.equal(error,failure);assert.deepEqual(error.result.directions_tried,['north','east']);assert.equal(error.result.route_attempts.length,2);return true});
 });
+
+test('collecting a drop midair retains the certified landing goal until grounded',async()=>{
+ const b=bot();b.entity.onGround=false;let done=false;
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,pollMs:5}).then(r=>{done=true;return r});
+ b.emit('playerCollect',b.entity,b.entities[2]);await new Promise(r=>setImmediate(r));
+ assert.equal(done,false);assert.equal(b.pathfinder.goal,goal);assert.equal(b.clears??0,0);
+ b.entity.position=new Vec3(2.5,68,.5);b.entity.onGround=true;b.emit('goal_reached',goal);
+ assert.equal((await pending).reason,'collected');assert.equal(b.pathfinder.goal,null);clean(b);
+});
+test('a disappearing drop midair does not cancel flight, but user cancellation still does',async()=>{
+ const b=bot();b.entity.onGround=false;const controller=new AbortController();
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,signal:controller.signal,pollMs:5});
+ const item=b.entities[2];delete b.entities[2];b.emit('entityGone',item);
+ assert.equal(b.pathfinder.goal,goal);controller.abort();await assert.rejects(pending,{name:'AbortError'});assert.equal(b.pathfinder.goal,null);clean(b);
+});
+test('pickup waits past an unsafe grounded point and preserves the collected outcome',async()=>{
+ const b=bot();b.entity.onGround=false;let safe=false,done=false;
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,safeToStop:()=>safe,pollMs:5}).then(r=>{done=true;return r});
+ const item=b.entities[2];b.emit('playerCollect',b.entity,item);delete b.entities[2];b.emit('entityGone',item);
+ b.entity.onGround=true;await new Promise(r=>setTimeout(r,15));assert.equal(done,false);assert.equal(b.pathfinder.goal,goal);
+ b.entity.position=new Vec3(2.5,68,.5);safe=true;assert.equal((await pending).reason,'collected');clean(b);
+});
+test('waiting for a landing remains bounded and never overrides a replacement goal',async()=>{
+ const b=bot();b.entity.onGround=false;
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,pollMs:5,timeoutMs:20,stallMs:100});b.emit('playerCollect',b.entity,b.entities[2]);
+ await assert.rejects(pending,/local time budget/);clean(b);
+ const next=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true});b.emit('playerCollect',b.entity,b.entities[2]);const replacement={x:9};b.pathfinder.setGoal(replacement);
+ await assert.rejects(next,/replaced/);assert.equal(b.pathfinder.goal,replacement);clean(b);
+});
+test('a failed landing observation rejects the pursuit and releases owned movement',async()=>{
+ const b=bot();b.entity.onGround=true;b.entity.position=new Vec3(2.5,68,.5);
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,safeToStop:()=>{throw Error('stale world')}});
+ b.emit('playerCollect',b.entity,b.entities[2]);await assert.rejects(pending,/stale world/);assert.equal(b.pathfinder.goal,null);clean(b);
+});
+test('landing after the local deadline cannot beat a slower timer tick',async()=>{
+ const b=bot();b.entity.onGround=false;const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,timeoutMs:20,pollMs:75});
+ b.emit('playerCollect',b.entity,b.entities[2]);await new Promise(r=>setTimeout(r,35));b.entity.position=new Vec3(2.5,68,.5);b.entity.onGround=true;b.emit('goal_reached',goal);
+ await assert.rejects(pending,/local time budget/);clean(b);
+});
+test('a target gone before pursuit is explicit and cannot bless an unsafe starting pose',async()=>{
+ for(const grounded of [false,true]){
+  const b=bot(),item=b.entities[2];delete b.entities[2];b.entity.onGround=grounded;
+  const pending=pursueDroppedItem(b,goal,item,{waitForLanding:true});
+  if(grounded)assert.deepEqual(await pending,{reason:'target_gone_before_pursuit',started:false,landingVerified:false});
+  else await assert.rejects(pending,e=>e.code==='PICKUP_UNSAFE_SETTLEMENT');
+  assert.equal(b.pathfinder.goal,null);assert.equal(b.clears??0,0);clean(b);
+ }
+});
+test('native airborne arrival cleanup is not reported as a grounded verified arrival',async()=>{
+ const b=bot();b.entity.onGround=false;let done=false;
+ const pending=pursueDroppedItem(b,goal,b.entities[2],{waitForLanding:true,pollMs:5}).then(r=>{done=true;return r});
+ b.emit('goal_reached',goal);b.pathfinder.goal=null;b.clearControlStates();await new Promise(r=>setImmediate(r));assert.equal(done,false);
+ b.entity.position=new Vec3(2.5,68,.5);b.entity.onGround=true;
+ assert.equal((await pending).landingVerified,true);clean(b);
+});

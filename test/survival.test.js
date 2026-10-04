@@ -182,7 +182,7 @@ test('runtime tree observation is not starved by ore and returns only a nearby l
     blockAt: p => ({ name: p.equals(new Vec3(4,64,0)) ? 'oak_log' : p.equals(new Vec3(2,65,0)) ? 'oak_leaves' : 'air', position: p }),
     world: { raycast: (eye, direction, distance) => { assert.ok(Math.abs(direction.norm() - 1) < 0.001); assert.ok(distance <= 4.2); return { name: 'oak_leaves', position: new Vec3(2, 65, 0) }; } }, quit: () => {}
   };
-  try { assert.deepEqual(await runtime.survival.observe(), { terrainRevision:0, localTerrain:[], resourceEvidence: Array.from({length:64},()=>({name:'iron_ore',position:{x:2,y:60,z:0}})), powderSnowContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
+  try { assert.deepEqual(await runtime.survival.observe(), { terrainRevision:0, localTerrain:[], resourceEvidence: Array.from({length:64},()=>({name:'iron_ore',position:{x:2,y:60,z:0}})), powderSnowContact: false, lavaContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
   finally { await runtime.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
@@ -716,4 +716,15 @@ test('new resource evidence or actual movement restores a fresh gathering attemp
 });
 test('new crafting materials outrank an unchanged-scout continuation',async()=>{
   const f=unchangedScoutFixture('inventory');f.job.start();await f.job.promise;assert.equal(f.actions[3],'craft');
+});
+test('starter will not start another gather or claim completion while lava is observed at its body',()=>{
+ const state={connected:true,dimension:'overworld',health:16,food:20,position:{x:-206.3,y:62,z:9.02},inventory:[],entities:[]};
+ const job={home:{position:state.position,dimension:'overworld'}};
+ for(const inventory of [[],[{name:'wooden_pickaxe',count:1},{name:'cobblestone',count:8},{name:'stick',count:2}],[{name:'stone_pickaxe',count:1},{name:'furnace',count:1}]]){
+  const result=nextStarterStep({...state,inventory},job,{lavaContact:true});assert.match(result.blocked,/Lava.*world keeps running/);assert.equal(result.name,undefined);assert.equal(result.complete,undefined);
+ }
+});
+test('unsafe pickup settlement blocks the starter instead of scheduling another recovery action',async()=>{
+ const f=fixture();let physical=0;f.job.execute=async()=>{physical++;throw Object.assign(Error('Unverified dry pickup stop'),{code:'PICKUP_UNSAFE_SETTLEMENT'})};
+ f.job.start();await f.job.promise;assert.equal(physical,1);assert.equal(f.job.state().status,'blocked');assert.match(f.job.state().reason,/Unverified dry pickup stop/);
 });

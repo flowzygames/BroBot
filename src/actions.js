@@ -1,3 +1,4 @@
+import { isDryLanding, isAtPickupStandingCell } from './body-hazards.js'
 import { certifyWorkstationEgress } from './workstation-egress.js'
 import { sectionSearchDistance } from './block-search.js'
 import pathfinderPackage from 'mineflayer-pathfinder'
@@ -318,26 +319,36 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // A cell close to the bot can still be outside item-pickup reach,
       // especially diagonally. Aim at the drop rather than the nearest cell.
       destinations.sort((a, b) => a.offset(0.5, 0, 0.5).distanceTo(target.position) - b.offset(0.5, 0, 0.5).distanceTo(target.position))
+      let destination = null
       try {
         assert(destinations.length, 'No validated standing space near dropped item')
         // Give each drop one destination attempt before retrying a blocked
         // neighbor. One unreachable item must not monopolize the shared budget.
         const p = destinations[(attempts.get(target.id) - 1) % Math.min(3, destinations.length)]
+        destination = p
         const goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, remaining()))
         checked(ctx)
         if (remaining() <= 0) { pickupLimited = drops().length > 0; break }
-        await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, remaining()) })
+        const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, remaining()), waitForLanding: true, safeToStop: () => isDryLanding(bot), atDestination: () => isAtPickupStandingCell(bot,p) })
+        if (outcome.landingVerified) ctx.pickupUnverified = false
+        log('pickup', `Drop ${target.id} pursuit ended: ${outcome.reason}`, { id: target.id, destination: plainPos(p), position: plainPos(bot.entity.position), onGround: bot.entity.onGround, reason: outcome.reason, started: outcome.started, landingVerified: outcome.landingVerified })
         checked(ctx)
         await pause(ctx, Math.min(200, remaining()))
       } catch (error) {
         checked(ctx)
+        ctx.pickupUnverified = true
+        log('pickup', `Drop ${target.id} pursuit failed: ${error.message}`, { id:target.id, destination:destination?plainPos(destination):null, position:plainPos(bot.entity.position), onGround:bot.entity.onGround, landingVerified:false })
+        if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
-        failures.push({ id: target.id, error: error.message, code: error.code ?? null })
+        const failure = { id: target.id, error: error.message, code: error.code ?? null }
+        failures.push(failure)
+        ctx.pickupFailures = [...(ctx.pickupFailures ?? []), failure].slice(-64)
         if (!planningLimited && remaining() > 0) await pause(ctx, Math.min(150, remaining()))
       }
     }
     pickupLimited ||= remaining() <= 0 && drops().length > 0
-    return { inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: failures, planning_limited: planningLimited, pickup_limited: pickupLimited }
+    if (!isDryLanding(bot)) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
+    return { pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
     } finally { ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }
   }
 
@@ -416,14 +427,21 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; break }
       } catch (error) {
         checked(ctx)
+        if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') { error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }; throw error }
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null })
         if (planningLimited) break
         if (++consecutiveFailures >= 8) break
       }
     }
-    if (mined && !planningLimited && !pickup.pickup_limited) { await pause(ctx, 300); pickup = await pickupInternal(ctx, 12) }
-    const result = { completed: mined === count && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    if (mined && !planningLimited && !pickup.pickup_limited) {
+      await pause(ctx, 300)
+      try { pickup = await pickupInternal(ctx, 12) } catch (error) {
+        if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }
+        throw error
+      }
+    }
+    const result = { pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
   }
@@ -488,8 +506,12 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     assert(expectedBlock == null || block.name === expectedBlock, 'Target block changed before mining')
     const name = await harvestBlock(ctx, p, { expectedBlock })
     await pause(ctx, 350)
-    const pickup = await pickupInternal(ctx, 8)
-    return { completed: pickup.remaining_drops.length === 0, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
+    let pickup
+    try { pickup = await pickupInternal(ctx, 8) } catch (error) {
+      if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') error.result = { ...error.result, completed:false, mined:1, block:name, position:plainPos(p), inventory_changes:changes(before) }
+      throw error
+    }
+    return { completed: !pickup.pursuit_unverified && pickup.remaining_drops.length === 0, pickup_landing_verified:pickup.landing_verified, mined: 1, block: name, position: plainPos(p), inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable }
   }
 
   async function descendNotch (args, ctx) {

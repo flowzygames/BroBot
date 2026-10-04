@@ -63,3 +63,13 @@ test('real runtime invalidates failed searches on block and chunk updates includ
     bot.emit('chunkColumnLoad',new Vec3(16,0,0));bot.emit('chunkColumnUnload',new Vec3(32,0,0));assert.equal((await runtime.survival.observe()).terrainRevision,3);
   }finally{mineflayer.createBot=create;await runtime.close();await rm(directory,{recursive:true,force:true});}
 });
+
+test('runtime observation exposes lava at the recorded body position before selecting more work',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'brobot-lava-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),registry=minecraftData('1.21.8');
+ const position=new Vec3(-206.3,62,9.02);
+ runtime.survival.job={home:{position:{x:-205,y:65,z:11},dimension:'overworld'},tables:[],observedPositions:[]};
+ runtime.bot={registry,entity:{position},quit(){},findBlocks:()=>[],blockAt:p=>({name:p.equals(new Vec3(-207,62,9))?'lava':'air',position:p,boundingBox:'empty'})};
+ runtime.execute=async()=>({connected:true,position,dimension:'overworld',health:16,food:20,inventory:[{name:'wooden_pickaxe',count:1},{name:'stick',count:2}],entities:[],nearby_blocks:[]});
+ try{const observation=await runtime.survival.observe();assert.equal(observation.lavaContact,true);assert.equal(observation.powderSnowContact,false);assert.equal(observation.wood,undefined)}
+ finally{await runtime.close();await rm(directory,{recursive:true,force:true})}
+});
