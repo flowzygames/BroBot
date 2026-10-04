@@ -799,6 +799,75 @@ test('sleep refuses dimensions where beds explode', async () => {
   await assert.rejects(createActions(bot).execute('sleep', {}), /overworld/)
 })
 
+test('sleep refuses a dimension change during bed approach',async()=>{
+  const bot=fakeBot();bot.time={timeOfDay:18000};bot.isABed=b=>b?.name==='red_bed';
+  bot.putBlock('red_bed',new Vec3(10,64,0));let clicks=0;
+  bot._client.write=()=>{clicks++};bot.sleep=()=>{throw Error('Native sleep must not run')};
+  bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,64,goal.z+.5);bot.game.dimension='the_nether';bot.emit('respawn')};
+  await assert.rejects(createActions(bot).execute('sleep',{}),/session changed/);assert.equal(clicks,0);
+  assert.equal(bot.listenerCount('respawn'),0);
+})
+
+test('activation and sleep never send after cancellation or session changes during aiming',async()=>{
+  for(const action of ['activate','sleep'])for(const mode of ['stop','dimension','respawn','end','target','distance']){
+    const bot=fakeBot(),controller=new AbortController();bot.time={timeOfDay:18000};bot.isABed=b=>b?.name==='red_bed';
+    const p=new Vec3(1,64,0);bot.putBlock(action==='sleep'?'red_bed':'lever',p);let began,drain,packets=0;
+    const started=new Promise(r=>{began=r});bot.lookAt=async()=>{began();await new Promise(r=>{drain=r})};
+    bot._client.write=()=>{packets++};bot.swingArm=()=>{};
+    const actions=createActions(bot),pending=actions.execute(action,action==='sleep'?{}:{x:1,y:64,z:0},controller.signal);
+    await started;
+    if(mode==='stop')controller.abort();
+    if(mode==='dimension')bot.game.dimension='the_nether';
+    if(mode==='respawn'||mode==='end')bot.emit(mode);
+    if(mode==='target')bot.putBlock('stone',p);
+    if(mode==='distance')bot.entity.position.x=20;
+    const rejected=assert.rejects(pending);drain();await rejected;
+    assert.equal(packets,0,`${action}/${mode}`);
+    for(const e of ['respawn','spawn','end','sleep'])assert.equal(bot.listenerCount(e),0,`${action}/${mode}/${e}`);
+  }
+})
+
+test('guarded sleep confirms an empty-hand server acknowledgement and cleans listeners',async()=>{
+  const bot=fakeBot();bot.time={timeOfDay:18000};bot.isABed=b=>b?.name==='red_bed';bot.putBlock('red_bed',new Vec3(1,64,0));
+  let packets=0;bot.swingArm=()=>{};bot.sleep=()=>{throw Error('Native sleep must not run')};
+  bot._client.write=(name,packet)=>{assert.equal(name,'block_place');assert.equal(packet.hand,0);packets++;bot.isSleeping=true;bot.emit('sleep')};
+  const result=await createActions(bot).execute('sleep',{});assert.equal(result.sleeping,true);assert.equal(packets,1);
+  for(const e of ['respawn','spawn','end','sleep'])assert.equal(bot.listenerCount(e),0);
+})
+
+test('guarded activation uses the pinned packet and refuses unsupported versions',async()=>{
+  for(const version of ['1.21.8','1.20.1']){
+    const bot=fakeBot();bot.version=version;bot.putBlock('lever',new Vec3(1,64,0));bot.swingArm=()=>{};const packets=[];
+    bot._client.write=(name,packet)=>packets.push({name,packet});
+    const pending=createActions(bot).execute('activate',{x:1,y:64,z:0});
+    if(version==='1.21.8'){assert.equal((await pending).activated,'lever');assert.equal(packets.length,1);assert.equal(packets[0].packet.sequence,0)}
+    else{await assert.rejects(pending,/verified only/);assert.equal(packets.length,0)}
+  }
+})
+
+test('activation cannot inspect or close a replacement session window after sending',async()=>{
+  const bot=fakeBot();bot.putBlock('lever',new Vec3(1,64,0));bot.swingArm=()=>{};let closed=0;
+  bot.closeWindow=async()=>{closed++};
+  bot._client.write=()=>setTimeout(()=>{bot.game.dimension='the_nether';bot.currentWindow={id:99,type:'new-session-window'};bot.emit('respawn')},10);
+  await assert.rejects(createActions(bot).execute('activate',{x:1,y:64,z:0}),/session changed/);
+  assert.equal(closed,0);assert.equal(bot.currentWindow.id,99);
+})
+
+test('sleep cannot return stale success after acknowledgement changes session',async()=>{
+  const bot=fakeBot();bot.time={timeOfDay:18000};bot.isABed=b=>b?.name==='red_bed';bot.putBlock('red_bed',new Vec3(1,64,0));bot.swingArm=()=>{};
+  bot._client.write=()=>{bot.isSleeping=true;bot.emit('sleep');bot.emit('respawn')};
+  await assert.rejects(createActions(bot).execute('sleep',{}),/session changed/);
+})
+
+test('sleep rechecks dawn, sleeping state and bed occupancy immediately before sending',async()=>{
+  for(const mode of ['dawn','sleeping','occupied']){
+    const bot=fakeBot();bot.time={timeOfDay:18000};bot.isABed=b=>b?.name==='red_bed';let occupied=false;
+    bot.putBlock('red_bed',new Vec3(1,64,0),{getProperties:()=>({occupied})});let sent=0;bot._client.write=()=>{sent++};
+    bot.lookAt=async()=>{if(mode==='dawn')bot.time.timeOfDay=0;if(mode==='sleeping')bot.isSleeping=true;if(mode==='occupied')occupied=true};
+    await assert.rejects(createActions(bot).execute('sleep',{}));assert.equal(sent,0,mode);
+  }
+})
+
 test('smelt refuses occupied furnace and leaves existing items alone', async () => {
   const bot = fakeBot()
   bot.addItem('raw_iron', 1)
