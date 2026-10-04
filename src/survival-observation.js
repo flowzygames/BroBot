@@ -8,7 +8,8 @@ const supportable = name => CLEARABLE.has(name) || /_(log|leaves)$/.test(name ??
 
 // Recover our observed drops from one-block-high pockets. Never clear a
 // container, ore, unknown block, supporting block, liquid, or unseen obstruction.
-export function findPickupClearance(bot, ids = []) {
+export function findPickupClearance(bot, ids = [], protectedPositions = []) {
+  const protectedCells=new Set(protectedPositions.map(p=>`${p.x},${p.y},${p.z}`));
   if (!Array.isArray(ids) || !bot.world?.raycast || !bot.entity?.position) return null;
   const position = bot.entity.position, eye = position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
   const items = ids.map(id => bot.entities?.[id]).filter(e => e?.name === 'item' && e.position?.distanceTo(position) <= 6).sort((a, b) => a.position.distanceTo(position) - b.position.distanceTo(position));
@@ -21,7 +22,7 @@ export function findPickupClearance(bot, ids = []) {
     const below = obstruction?.position ? bot.blockAt(obstruction.position.offset(0, -1, 0)) : null;
     const lower = obstruction?.position ? bot.blockAt(obstruction.position.offset(0, -2, 0)) : null;
     const supported = (supportable(below?.name) && below.boundingBox === 'block') || (AIR.has(below?.name) && supportable(lower?.name) && lower.boundingBox === 'block');
-    if (supported && /_leaves$/.test(obstruction?.name ?? '') && obstruction.position.y >= Math.ceil(position.y - 0.001) && visibleBlockFace(bot.world, eye, obstruction.position, 4.2)) {
+    if (supported && !protectedCells.has(`${obstruction?.position?.x},${obstruction?.position?.y},${obstruction?.position?.z}`) && /_leaves$/.test(obstruction?.name ?? '') && obstruction.position.y >= Math.ceil(position.y - 0.001) && visibleBlockFace(bot.world, eye, obstruction.position, 4.2)) {
       const p = obstruction.position;
       return { x: p.x, y: p.y, z: p.z, expected_block: obstruction.name };
     }
@@ -32,6 +33,7 @@ export function findPickupClearance(bot, ids = []) {
     const head = clearable(first?.name) ? first : AIR.has(first?.name) && clearable(second?.name) ? second : null;
     if (!AIR.has(bot.blockAt(feet)?.name) || !supportable(floor?.name) || floor.boundingBox !== 'block' || !clearable(head?.name)) continue;
     const p = head.position;
+    if(protectedCells.has(`${p.x},${p.y},${p.z}`))continue;
     const overlaps = position.x + 0.31 > p.x && position.x - 0.31 < p.x + 1 && position.z + 0.31 > p.z && position.z - 0.31 < p.z + 1;
     if (overlaps && p.y < position.y && p.y + 1 >= position.y - 0.1) continue;
     if (!visibleBlockFace(bot.world, eye, p, 4.2)) continue;
@@ -43,7 +45,8 @@ export function findPickupClearance(bot, ids = []) {
 // A lower trunk ray may pass through a gap while another observed trunk ray
 // hits the leaf wall that is actually blocking approach. Keep the existing
 // bounded log sample, try several rays, and leave excavation to normal dig_at.
-export function findTreeFoliage(bot, logs = []) {
+export function findTreeFoliage(bot, logs = [], protectedPositions = []) {
+  const protectedCells=new Set(protectedPositions.map(p=>`${p.x},${p.y},${p.z}`));
   if (!Array.isArray(logs) || !bot.world?.raycast || !bot.entity?.position || !bot.blockAt) return null;
   const position = bot.entity.position, eye = position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
   const candidates = logs.slice(0, 16).filter(block => block?.position && /_log$/.test(block.name ?? '')).sort((a, b) => a.position.distanceTo(position) - b.position.distanceTo(position));
@@ -52,7 +55,7 @@ export function findTreeFoliage(bot, logs = []) {
     if (!Number.isFinite(distance) || distance <= 0) continue;
     const hit = bot.world.raycast(eye, delta.scaled(1 / distance), Math.min(4.2, distance));
     const leaf = hit?.position ? bot.blockAt(hit.position) : null;
-    if (!leaf?.position || !/_leaves$/.test(leaf.name ?? '') || leaf.isWaterlogged || leaf.diggable === false || leaf.position.y < Math.ceil(position.y - 0.001)) continue;
+    if (!leaf?.position || protectedCells.has(`${leaf.position.x},${leaf.position.y},${leaf.position.z}`) || !/_leaves$/.test(leaf.name ?? '') || leaf.isWaterlogged || leaf.diggable === false || leaf.position.y < Math.ceil(position.y - 0.001)) continue;
     const neighbors = [[1,0,0],[-1,0,0],[0,0,1],[0,0,-1],[0,1,0],[0,-1,0]].map(([x,y,z]) => bot.blockAt(leaf.position.offset(x,y,z)));
     if (neighbors.some(block => !block || isFluidBearingBlock(block))) continue;
     if (/^(sand|red_sand|gravel|anvil|chipped_anvil|damaged_anvil|pointed_dripstone)$|_concrete_powder$/.test(neighbors[4].name)) continue;
@@ -73,4 +76,14 @@ export function hasPowderSnowContact(bot) {
       for (let y=Math.floor(p.y+1e-7);y<=Math.floor(p.y+1.8-1e-7);y++)
         if (bot.blockAt(new Vec3(x,y,z))?.name === 'powder_snow') return true;
   return false;
+}
+
+
+// Only an eligibility hint. The descent action still certifies the actual
+// landing, retained supports, dry corridor and return route before mutation.
+export function hasGroundedCanopySupport(bot) {
+  const p=bot.entity?.position;
+  if(!p || !bot.entity.onGround || Math.abs(p.y-Math.round(p.y))>0.03)return false;
+  const floor=bot.blockAt?.(p.floored().offset(0,-1,0));
+  return Boolean(floor && /_(leaves|log)$/.test(floor.name) && floor.boundingBox==='block' && !isFluidBearingBlock(floor));
 }

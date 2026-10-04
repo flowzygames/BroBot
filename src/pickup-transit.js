@@ -13,7 +13,8 @@ const SIDES = [[1,0,0],[-1,0,0],[0,0,1],[0,0,-1],[0,1,0]];
 // A small, read-only counterfactual probe. It never changes the bot/world or
 // executes its computed routes. The ordinary dig and pickup actions revalidate
 // the real terrain, support, tool, expected block and actual inventory afterward.
-export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNodes = 512, now = () => performance.now() } = {}) {
+export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNodes = 512, protectedPositions = [], now = () => performance.now() } = {}) {
+  const protectedCells=new Set(protectedPositions.map(p=>`${p.x},${p.y},${p.z}`));
   const movement = bot.pathfinder?.movements, position = bot.entity?.position;
   if (!position || !Array.isArray(ids) || !ids.length || !bot.world?.raycast || !movement?.getNeighbors || !bot.registry?.blocksByName?.air) return null;
   if (movement.canDig !== false || movement.allowParkour !== false || movement.allow1by1towers !== false || movement.allowFreeMotion !== false || movement.scafoldingBlocks?.length !== 0) return null;
@@ -98,6 +99,7 @@ export function findTransitPickupClearance(bot, ids = [], { budgetMs = 80, maxNo
   for(let x=-2;x<=2;x++)for(let z=-2;z<=2;z++)for(let y=0;y<=3;y++) {
     if(exhausted())return null;
     const p=origin.offset(x,y,z),b=bot.blockAt(p);
+    if(protectedCells.has(`${p.x},${p.y},${p.z}`))continue;
     if(!b || (!NATURAL.has(b.name)&&!FOLIAGE.test(b.name)) || b.isWaterlogged || b.diggable===false || p.y<Math.ceil(position.y-0.001))continue;
     if(eye.distanceTo(p.offset(.5,.5,.5))>4.5 || !visibleBlockFace(bot.world,eye,p,4.2))continue;
     const neighbors=SIDES.map(([dx,dy,dz])=>bot.blockAt(p.offset(dx,dy,dz)));

@@ -1,0 +1,32 @@
+{
+  "sourceCommit": "c65959d650ec5b3827eb138ddb020a78e01d05c3",
+  "classification": "selected development experiment",
+  "passed": 0,
+  "scheduled": 3,
+  "cases": [
+    {
+      "seed": "924242050",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 264564,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "notchAttempts": 0
+    },
+    {
+      "seed": "1276821265",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 120934,
+      "reason": "No bounded exploration target remains inside the job area.",
+      "notchAttempts": 1
+    },
+    {
+      "seed": "1542908414",
+      "status": "failed",
+      "passed": false,
+      "elapsedMs": 270621,
+      "reason": "Low health: paused work to recover.",
+      "notchAttempts": 0
+    }
+  ]
+}

@@ -482,7 +482,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const bound = movementBoundary()
       const home = bound ? new Vec3(bound.center.x, bound.center.y, bound.center.z).floored() : ctx.origin.floored()
       const plan = await planLeafNotch(bot, home, { signal: ctx.signal })
-      assert(plan, 'No certified one-leaf descent is available from this grounded position')
+      if(!plan)throw Object.assign(new Error('No certified one-leaf descent is available from this grounded position'),{code:'NO_CERTIFIED_DESCENT'})
+      assert(plan.protectedBlocks.length<=512,'Descent protected support set is too large')
+      const protectedLogs=plan.protectedBlocks.map(p=>new Vec3(...p)).filter(p=>/_log$/.test(loaded(p).name)).map(plainPos)
+      assert(protectedLogs.length<=64,'Descent return-anchor set is too large')
       const target = new Vec3(...plan.landing)
       assert(insideBoundary(target), 'Descent would leave the job boundary')
       let targetCleared = false
@@ -534,7 +537,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       }
       validateSupports()
       assert(bot.health >= 12, 'Health fell below the safe descent threshold')
-      return { completed: true, mined: 1, descended_blocks: 1, position: plainPos(bot.entity.position), return_home: plainPos(home), experimental: true }
+      return { completed: true, mined: 1, descended_blocks: 1, position: plainPos(bot.entity.position), return_home: plainPos(home), protected_logs:protectedLogs, protected_blocks:plan.protectedBlocks.map(p=>plainPos(new Vec3(...p))), experimental: true }
     } finally {
       clearTimeout(deadline)
       if (onCorridorChange) bot.removeListener('blockUpdate', onCorridorChange)

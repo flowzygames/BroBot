@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Vec3 } from 'vec3';
-import { findPickupClearance, findTreeFoliage, hasPowderSnowContact } from '../src/survival-observation.js';
+import { findPickupClearance, findTreeFoliage, hasPowderSnowContact, hasGroundedCanopySupport } from '../src/survival-observation.js';
 function fixture() {
   const blocks = new Map();
   const bot = { entity: { position: new Vec3(0.5, 64, 0.5) }, entities: { 10: { id: 10, name: 'item', position: new Vec3(2.5, 63, 0.5) } }, world: { raycast: () => ({ position: new Vec3(2, 64, 0) }) } };
@@ -113,4 +113,20 @@ test('powder contact includes thin overlap but excludes exact face contact', () 
   bot.blockAt=p=>({name:p.y===66?'powder_snow':'air'});
   bot.entity.position=new Vec3(0.5,64.2005,0.5);assert.equal(hasPowderSnowContact(bot),true);
   bot.entity.position=new Vec3(0.5,64.2,0.5);assert.equal(hasPowderSnowContact(bot),false);
+});
+
+
+test('canopy recovery eligibility requires grounded dry supported leaf or log geometry',()=>{
+  const p=new Vec3(.5,64,.5),bot={entity:{position:p,onGround:true},blockAt:()=>({name:'spruce_leaves',boundingBox:'block'})};
+  assert.equal(hasGroundedCanopySupport(bot),true);
+  bot.blockAt=()=>({name:'spruce_log',boundingBox:'block'});assert.equal(hasGroundedCanopySupport(bot),true);
+  bot.entity.onGround=false;assert.equal(hasGroundedCanopySupport(bot),false);bot.entity.onGround=true;
+  bot.entity.position=p.offset(0,.5,0);assert.equal(hasGroundedCanopySupport(bot),false);bot.entity.position=p;
+  for(const block of [null,{name:'stone',boundingBox:'block'},{name:'spruce_leaves',boundingBox:'block',isWaterlogged:true}]){bot.blockAt=()=>block;assert.equal(hasGroundedCanopySupport(bot),false);}
+});
+
+test('pickup observation omits a protected return-chain clearance target',()=>{
+  const {bot}=fixture();
+  assert.ok(findPickupClearance(bot,[10]));
+  assert.equal(findPickupClearance(bot,[10],[{x:2,y:64,z:0}]),null);
 });

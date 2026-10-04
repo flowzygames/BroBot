@@ -12,7 +12,7 @@ import { createProgression, observeProgression } from './progression.js';
 import { Brain } from './brain.js';
 import { SurvivalJob, STARTER_LOG_RADIUS, nextStarterStep } from './survival.js';
 import { findTransitPickupClearance } from './pickup-transit.js';
-import { findPickupClearance, findTreeFoliage, hasPowderSnowContact } from './survival-observation.js';
+import { findPickupClearance, findTreeFoliage, hasPowderSnowContact, hasGroundedCanopySupport } from './survival-observation.js';
 import { publicConfig } from './config.js';
 import { parseCommand, authorizedChat, HELP } from './commands.js';
 
@@ -64,19 +64,21 @@ export class Runtime {
         const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
         const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
         const excludedLogs = this.survival.job?.excluded ?? {};
+        const protectedBlocks = this.survival.job?.protectedReturnBlocks ?? [];
+        const protectedLogs = new Set((this.survival.job?.protectedReturnLogs ?? []).map(p=>`${p.x},${p.y},${p.z}`));
         const logOrigin = this.bot.entity.position.floored();
         // Once carried materials determine the next action, scanning forest
         // sections again adds latency without changing that decision. Keep
         // checking workstation, drop and safety observations below.
         const needsWood = !this.survival.job?.home || Boolean(nextStarterStep(seen, {...this.survival.job,tables}, {tableInReach,powderSnowContact}).scout);
-        const positions = needsWood ? this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) }) : [];
+        const positions = needsWood ? this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !protectedLogs.has(`${block.position.x},${block.position.y},${block.position.z}`) && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) }) : [];
         // findBlocks may fill a small cap in one chunk section before examining a
         // closer tree across its boundary. Sort a larger bounded sample, then
         // keep only sixteen logs for the local foliage rays.
         const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
         const wood = observedLogs[0];
-        const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
-        return { powderSnowContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
+        const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name), protectedBlocks);
+        return { powderSnowContact, canopySupport:hasGroundedCanopySupport(this.bot), wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds, protectedBlocks) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds, {protectedPositions:protectedBlocks}) : null), tables, tableInReach };
       },
       execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });

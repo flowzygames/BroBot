@@ -182,7 +182,7 @@ test('runtime tree observation is not starved by ore and returns only a nearby l
     blockAt: p => ({ name: p.equals(new Vec3(4,64,0)) ? 'oak_log' : p.equals(new Vec3(2,65,0)) ? 'oak_leaves' : 'air', position: p }),
     world: { raycast: (eye, direction, distance) => { assert.ok(Math.abs(direction.norm() - 1) < 0.001); assert.ok(distance <= 4.2); return { name: 'oak_leaves', position: new Vec3(2, 65, 0) }; } }, quit: () => {}
   };
-  try { assert.deepEqual(await runtime.survival.observe(), { powderSnowContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
+  try { assert.deepEqual(await runtime.survival.observe(), { powderSnowContact: false, canopySupport: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
   finally { await runtime.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
@@ -691,4 +691,95 @@ test('completed non-novel walking records its actual edge without clearing old p
   f.job.start();await f.job.promise;
   const attempts=f.job.state().scoutAttempts;
   assert.equal(attempts.length,2);assert.equal(attempts[0].origin.x,100);assert.equal(attempts[1].completed,true);assert.equal(attempts[1].novel,false);assert.deepEqual(attempts[1].endpoint,f.state.position);
+});
+
+function canopyRecoveryFixture({reason='No verified returnable walking route (noPath)',descentError=null,afterSweep=null,maxSteps=8}={}) {
+  const f=fixture({maxSteps});f.add('wooden_pickaxe',1);f.add('stick',2);
+  const actions=[];let initialized=false;
+  f.job.observe=async()=>{
+    if(!initialized){initialized=true;f.job.job.scoutAttempts=[{origin:{...f.state.position},direction:'north',distance:8,status:'unverified',exhausted:true}];}
+    return{wood:'oak',canopySupport:true,tableInReach:true};
+  };
+  f.job.execute=async(name,args)=>{
+    actions.push({name,args});
+    if(name==='collect')throw new Error('No reachable stone');
+    if(name==='explore'){
+      afterSweep?.(f);
+      throw Object.assign(new Error(reason),{result:{directions_tried:['north','east','south','west'],route_attempts:['north','east','south','west'].map(direction=>({direction,status:'unverified',reason}))}});
+    }
+    if(name==='descend_notch'){
+      if(descentError)throw descentError;
+      f.state.position.y-=1;
+      return{completed:true,mined:1,descended_blocks:1,protected_logs:[{x:1,y:63,z:0}],protected_blocks:[{x:1,y:63,z:0}]};
+    }
+    return{};
+  };
+  return{...f,actions};
+}
+test('one complete short no-path sweep permits one certified descent attempt per job',async()=>{
+  const f=canopyRecoveryFixture();f.job.start();await f.job.promise;
+  assert.equal(f.actions.filter(a=>a.name==='descend_notch').length,1);assert.equal(f.job.state().notchAttempts,1);
+  assert.deepEqual(f.job.state().protectedReturnLogs,[{x:1,y:63,z:0}]);assert.notEqual(f.job.state().status,'complete');
+});
+test('a certified pre-mutation refusal consumes the attempt and allows ordinary work',async()=>{
+  const f=canopyRecoveryFixture({descentError:Object.assign(new Error('No certified descent'),{code:'NO_CERTIFIED_DESCENT'})});
+  f.job.start();await f.job.promise;const i=f.actions.findIndex(a=>a.name==='descend_notch');assert.ok(i>=0);assert.ok(f.actions.length>i+1);assert.equal(f.actions.filter(a=>a.name==='descend_notch').length,1);
+});
+test('uncertain descent failure blocks immediately without subsequent work',async()=>{
+  const f=canopyRecoveryFixture({descentError:new Error('Landing geometry changed after mining')});f.job.start();await f.job.promise;
+  assert.equal(f.actions.at(-1).name,'descend_notch');assert.match(f.job.state().reason,/uncertain progress/);assert.equal(f.job.state().status,'blocked');
+});
+test('planning timeouts cannot trigger automatic terrain recovery',async()=>{
+  const f=canopyRecoveryFixture({reason:'Return-path planning budget exhausted'});f.job.start();await f.job.promise;assert.ok(f.actions.every(a=>a.name!=='descend_notch'));
+});
+test('fresh complete kit outranks the queued canopy recovery',async()=>{
+  const f=canopyRecoveryFixture({afterSweep:f=>{f.add('stone_pickaxe',1);f.add('furnace',1)}});f.job.start();await f.job.promise;
+  assert.equal(f.job.state().status,'complete');assert.ok(f.actions.every(a=>a.name!=='descend_notch'));
+});
+test('automatic gathering retains protected return logs ahead of ordinary exclusions',async()=>{
+  const f=fixture({maxSteps:1}),anchor={x:1,y:64,z:0};f.job.observe=async()=>{f.job.job.protectedReturnLogs=[anchor];f.job.job.excluded={oak_log:Array.from({length:128},(_,i)=>({x:i+2,y:64,z:0}))};return{wood:'oak'}};
+  f.job.start();await f.job.promise;assert.deepEqual(f.calls[0].args.skip_positions[0],anchor);assert.equal(f.calls[0].args.skip_positions.length,128);
+});
+
+test('an incomplete resolved descent result blocks subsequent gathering',async()=>{
+  const f=canopyRecoveryFixture(),execute=f.job.execute;f.job.execute=(name,args)=>name==='descend_notch'?Promise.resolve({completed:false,protected_logs:[],protected_blocks:[]}):execute(name,args);
+  f.job.start();await f.job.promise;assert.match(f.job.state().reason,/uncertain progress.*one-block landing/);assert.equal(f.job.state().status,'blocked');
+});
+test('automatic leaf clearance cannot remove a retained return-chain support',async()=>{
+  const f=fixture({maxSteps:4});const leaf={x:1,y:64,z:0};
+  f.job.observe=async()=>{f.job.job.protectedReturnBlocks=[leaf];return{wood:'oak',foliage:{...leaf,expected_block:'oak_leaves'}}};
+  f.job.execute=async(name,args)=>{assert.notEqual(name,'dig_at');if(name==='collect')throw new Error('Blocked tree approach');return f.execute(name,args)};
+  f.job.start();await f.job.promise;assert.ok(f.calls.some(a=>a.name==='explore'));
+});
+
+test('descent attempt is persisted before execution and survives process restart',async()=>{
+  const f=canopyRecoveryFixture(),execute=f.job.execute;
+  f.job.execute=(name,args)=>{if(name==='descend_notch')assert.equal(f.data.survivalJob.notchAttempts,1);return execute(name,args)};
+  f.job.start();await f.job.promise;
+  const restarted=new SurvivalJob({memory:f.memory,snapshot:()=>structuredClone(f.state),observe:async()=>({wood:'oak',canopySupport:true,tableInReach:true}),execute:async name=>{assert.notEqual(name,'descend_notch');throw new Error('Unavailable')},stopActions(){},context:'test',maxSteps:1,intervalMs:0});
+  assert.equal(restarted.state().notchAttempts,1);assert.deepEqual(restarted.state().protectedReturnBlocks,[{x:1,y:63,z:0}]);
+  restarted.start({resume:true});await restarted.promise;assert.equal(restarted.state().notchAttempts,1);
+});
+test('malformed persisted recovery counts and unbounded protected data fail closed',async()=>{
+  const f=fixture({maxSteps:1});f.job.start();await f.job.promise;const saved=structuredClone(f.data.survivalJob);
+  for(const patch of [{notchAttempts:-1},{notchAttempts:2},{notchAttempts:.5},{protectedReturnBlocks:Array(513).fill({x:0,y:64,z:0})},{protectedReturnLogs:[{x:NaN,y:64,z:0}]}]){
+    assert.throws(()=>new SurvivalJob({memory:{get:()=>({...saved,...patch})},snapshot:()=>f.state}),/recovery evidence is invalid/);
+  }
+});
+test('old persisted scout failures alone never trigger canopy mutation after resume',async()=>{
+  const f=fixture({maxSteps:1});f.add('wooden_pickaxe',1);f.add('stick',2);f.job.execute=async()=>{throw new Error('blocked')};f.job.start();await f.job.promise;
+  f.job.job.scoutAttempts=['north','east','south','west'].map(direction=>({origin:{...f.state.position},direction,distance:4,status:'unverified',exhausted:true}));f.job.save();
+  const resumed=new SurvivalJob({memory:f.memory,snapshot:()=>structuredClone(f.state),observe:async()=>({wood:'oak',canopySupport:true}),execute:async name=>{assert.notEqual(name,'descend_notch');throw new Error('blocked')},stopActions(){},context:'test',maxSteps:1,intervalMs:0});
+  resumed.start({resume:true});await resumed.promise;assert.equal(resumed.state().notchAttempts,undefined);
+});
+test('pose drift or a partial direction sweep cannot qualify for canopy recovery',async()=>{
+  for(const mode of ['moved','partial','cancelled']){
+    const f=canopyRecoveryFixture(),execute=f.job.execute;
+    f.job.execute=async(name,args)=>{if(name!=='explore')return execute(name,args);
+      if(mode==='moved')f.state.position.x+=.2;
+      const directions=mode==='partial'?['north','east','south']:['north','east','south','west'];
+      throw Object.assign(new Error('No route'),{result:{directions_tried:directions,route_attempts:directions.map(direction=>({direction,status:mode==='cancelled'&&direction==='west'?'cancelled':'unverified',reason:'No verified returnable walking route (noPath)'}))}});
+    };
+    f.job.start();await f.job.promise;assert.equal(f.job.state().notchAttempts,undefined,mode);
+  }
 });

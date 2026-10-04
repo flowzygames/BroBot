@@ -110,6 +110,9 @@ export class SurvivalJob {
     this.dropRecoverySession = null;
     this.job = memory.get('survivalJob', null);
     if (this.job && (this.job.version !== 1 || typeof this.job.context !== 'string' || !Array.isArray(this.job.history) || !Number.isSafeInteger(this.job.steps) || this.job.steps < 0 || !Number.isSafeInteger(this.job.scouts) || this.job.scouts < 0 || !this.job.home?.position || !['x', 'y', 'z'].every(k => Number.isFinite(this.job.home.position[k])) || !['running', 'paused', 'blocked', 'complete'].includes(this.job.status))) throw new Error('Saved starter job is invalid. Restore its record before resuming.');
+    const validProtected=(value,max)=>value===undefined || (Array.isArray(value)&&value.length<=max&&value.every(p=>p&&['x','y','z'].every(k=>Number.isSafeInteger(p[k]))));
+    if(this.job && ((this.job.notchAttempts!==undefined && ![0,1].includes(this.job.notchAttempts)) || !validProtected(this.job.protectedReturnLogs,64) || !validProtected(this.job.protectedReturnBlocks,512)
+      || (this.job.protectedReturnLogs ?? []).some(p=>!(this.job.protectedReturnBlocks ?? []).some(q=>p.x===q.x&&p.y===q.y&&p.z===q.z))))throw new Error('Saved starter recovery evidence is invalid. Restore its record before resuming.');
     if (this.job?.status === 'running') { this.job.status = 'paused'; this.job.reason = 'Process restarted. Resume explicitly after checking the world.'; this.save(); }
   }
   save() { this.memory.set('survivalJob', this.job); }
@@ -144,6 +147,7 @@ export class SurvivalJob {
     const deadline = Date.now() + this.maxDurationMs;
     const failures = new Map();
     const firstStep = this.job.steps;
+    let canopySweep = null;
     let recovery = this.job.recoverDropIds?.length ? action('pickup', { radius: 16, entity_ids: [...this.job.recoverDropIds] }, 'Recover still-observed drops from this play session after resuming.') : null;
     const excludeFailures = (decision, result) => {
       if (decision.name !== 'collect' || !result?.failures) return;
@@ -158,6 +162,7 @@ export class SurvivalJob {
       signal.throwIfAborted();
       if (Date.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
       const before = this.snapshot();
+      const pendingCanopySweep = canopySweep; canopySweep = null;
       // Check lifecycle/health before any further inspection or movement.
       let decision = nextStarterStep(before, this.job, {});
       if (decision.blocked) throw new Error(decision.blocked);
@@ -167,6 +172,7 @@ export class SurvivalJob {
       if (Array.isArray(observation.tables)) this.job.tables = observation.tables.slice(0, 8);
       decision = nextStarterStep(this.snapshot(), this.job, observation);
       if (decision.blocked) throw new Error(decision.blocked);
+      const needsGathering = decision.name === 'collect' && decision.args.block === 'stone';
       if (decision.complete) { this.job.status = 'complete'; this.job.evidence = decision.evidence; this.job.reason = 'Observed a stone pickaxe and furnace in inventory, alive and back at the start.'; this.log('survival', this.job.reason); return; }
       // Freshly observed completion prerequisites outrank stale gathering
       // recovery (including queued scouts and leaf clearance). The route still
@@ -190,6 +196,21 @@ export class SurvivalJob {
         decision = action('dig_at', observation.pickupClearance, 'Open safe headroom above an observed drop, then pick it up.');
         recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Pick up the materials after opening headroom.');
       }
+      if(decision.name==='dig_at' && (this.job.protectedReturnBlocks ?? []).some(p=>p.x===decision.args.x && p.y===decision.args.y && p.z===decision.args.z)) {
+        recovery=null;
+        decision={scout:'The clearance target supports a certified return route. Find another approach.'};
+      }
+      if (needsGathering && pendingCanopySweep && observation.canopySupport === true && (this.job.notchAttempts ?? 0) < 1) {
+        const fresh=this.snapshot();
+        if(fresh.health>=12 && fresh.food>10 && distance(pendingCanopySweep.origin,fresh.position)<=0.1) {
+          // Consume one immediate, complete geometric no-path sweep only.
+          // Timeouts, old mixed records and resumed jobs cannot trigger this.
+          this.job.notchAttempts=(this.job.notchAttempts ?? 0)+1;
+          this.save();
+          recovery=null;
+          decision=action('descend_notch',{},'Try one certified leaf step after all short walking exits failed.');
+        }
+      }
       if (decision.scout) {
         if (this.job.scouts >= STARTER_SCOUT_LIMIT) throw new Error(`Exploration budget exhausted: ${decision.scout}`);
         const origin = this.snapshot().position;
@@ -200,7 +221,12 @@ export class SurvivalJob {
         decision = { ...action('explore', { ...choices[0], alternatives: choices.slice(1).map(c => c.direction) }, decision.scout), scoutOrigin: { ...origin } };
       }
       const signature = JSON.stringify([decision.name, decision.args]);
-      if (decision.name === 'collect' && this.job.excluded?.[decision.args.block]?.length) decision.args.skip_positions = this.job.excluded[decision.args.block];
+      if (decision.name === 'collect') {
+        const anchors=/_log$/.test(decision.args.block)?(this.job.protectedReturnLogs ?? []):[];
+        const excluded=this.job.excluded?.[decision.args.block] ?? [];
+        const positions=[...new Map([...anchors,...excluded].map(p=>[JSON.stringify(p),p])).values()].slice(0,128);
+        if(positions.length)decision.args.skip_positions=positions;
+      }
       if ((failures.get(signature) ?? 0) >= 2) {
         if (decision.name === 'go_to') {
           if (decision.travelOrigin && decision.travelTarget) {
@@ -243,6 +269,11 @@ export class SurvivalJob {
           }
         }
         const outcomes = Array.isArray(result?.route_attempts) ? result.route_attempts.filter(a => a && typeof a === 'object') : [];
+        const compass=['north','east','south','west'];
+        if(decision.args.distance===4 && compass.every(direction=>allowed.includes(direction) && outcomes.some(a=>a.direction===direction && a.status==='unverified' && /\(noPath\)/.test(a.reason ?? '')))
+          && !outcomes.some(a=>a.status!=='unverified') && distance(this.snapshot().position,decision.scoutOrigin ?? before.position)<=0.1) {
+          canopySweep={origin:{...(decision.scoutOrigin ?? before.position)}};
+        }
         const exhausted = allowed.every(direction => outcomes.some(a => a.direction === direction && a.status === 'unverified'))
           && !outcomes.some(a => a.status === 'verified' || a.status === 'cancelled');
         this.job.scoutAttempts = [...(Array.isArray(this.job.scoutAttempts) ? this.job.scoutAttempts : []),
@@ -256,17 +287,27 @@ export class SurvivalJob {
         rememberScout(result);
         signal.throwIfAborted();
         const after = this.snapshot();
+        if(decision.name==='descend_notch') {
+          if(result.completed!==true||result.mined!==1||result.descended_blocks!==1||!before.position||!after.position||Math.abs(before.position.y-after.position.y-1)>=0.1)throw new Error('Descent did not confirm the observed one-block landing');
+          if(!Array.isArray(result.protected_blocks)||result.protected_blocks.length>512||result.protected_blocks.some(p=>!p||!['x','y','z'].every(k=>Number.isSafeInteger(p[k]))))throw new Error('Descent did not supply bounded support evidence');
+          if(!Array.isArray(result.protected_logs)||result.protected_logs.length>64||result.protected_logs.some(p=>!p||!['x','y','z'].every(k=>Number.isSafeInteger(p[k]))))throw new Error('Descent did not supply bounded return-anchor evidence');
+          if(result.protected_logs.some(p=>!result.protected_blocks.some(q=>p.x===q.x&&p.y===q.y&&p.z===q.z)))throw new Error('Descent log anchors do not match its protected support set');
+          this.job.protectedReturnLogs=result.protected_logs.map(p=>({...p}));
+          this.job.protectedReturnBlocks=result.protected_blocks.map(p=>({...p}));
+        }
         excludeFailures(decision, result);
         const initialItems = countItems(before), finalItems = countItems(after);
         const gained = Object.entries(finalItems).some(([name, count]) => count > (initialItems[name] ?? 0));
-        const terrainCleared = decision.name === 'dig_at' && result.mined === 1;
+        const descended = decision.name === 'descend_notch' && result.completed === true && result.mined === 1 && result.descended_blocks === 1 && before.position && after.position && Math.abs(before.position.y-after.position.y-1)<0.1;
+        const terrainCleared = (decision.name === 'dig_at' && result.mined === 1) || descended;
         if (terrainCleared) {
+          const clearingPosition=descended?after.position:decision.args;
           // A verified local terrain change can invalidate an earlier blocked
           // approach. Retry nearby resources while retaining distant failures.
           for (const [block, positions] of Object.entries(this.job.excluded ?? {})) {
-            this.job.excluded[block] = positions.filter(p => distance(p, decision.args) > 6);
+            this.job.excluded[block] = positions.filter(p => distance(p, clearingPosition) > 6);
           }
-          this.job.ignoredTables = (this.job.ignoredTables ?? []).filter(p => distance(p, decision.args) > 6);
+          this.job.ignoredTables = (this.job.ignoredTables ?? []).filter(p => distance(p, clearingPosition) > 6);
         }
         const progress = gained || terrainCleared || (decision.name === 'explore' && distance(before.position, after.position) > 1) || (decision.name === 'go_to' && distance(after.position, decision.args) < distance(before.position, decision.args) - 1) || (after.food ?? 0) > (before.food ?? 0);
         remember({ action: decision.name, args: decision.args, reason: decision.reason, result, progress });
@@ -288,6 +329,7 @@ export class SurvivalJob {
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
         remember({ action: decision.name, args: decision.args, error: error.message, result: error.result });
+        if(decision.name==='descend_notch' && error.code!=='NO_CERTIFIED_DESCENT')throw new Error(`Descent stopped with uncertain progress: ${error.message}. Review BroBot's position before resuming.`);
       }
       await sleep(this.intervalMs, undefined, { signal });
     }
