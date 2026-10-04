@@ -442,29 +442,38 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
     else await approachBlock(ctx, p)
-    const block = loaded(p)
-    assert(!isAir(block), 'Requested block is already air')
-    assert(expectedBlock == null || block.name === expectedBlock, 'Target block changed before mining')
-    const feet = bot.entity.position.floored()
-    const position = bot.entity.position
-    const touchesFootprint = position.x + 0.31 > p.x && position.x - 0.31 < p.x + 1 && position.z + 0.31 > p.z && position.z - 0.31 < p.z + 1
-    const supportsFootprint = touchesFootprint && p.y < position.y && p.y + 1 >= position.y - 0.1
-    assert(!(p.x === feet.x && p.z === feet.z && p.y < feet.y) && !supportsFootprint, 'Will not dig the block supporting the bot')
-    assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
-    const issue = miningEnvironmentIssue(block)
-    assert(!issue, issue)
+    const original = loaded(p)
+    const validateTarget = () => {
+      const block = loaded(p)
+      assert(!isAir(block), 'Requested block is already air')
+      assert(block.name === original.name && (expectedBlock == null || block.name === expectedBlock), 'Target block changed before mining')
+      const feet = bot.entity.position.floored()
+      const position = bot.entity.position
+      const touchesFootprint = position.x + 0.31 > p.x && position.x - 0.31 < p.x + 1 && position.z + 0.31 > p.z && position.z - 0.31 < p.z + 1
+      const supportsFootprint = touchesFootprint && p.y < position.y && p.y + 1 >= position.y - 0.1
+      assert(!(p.x === feet.x && p.z === feet.z && p.y < feet.y) && !supportsFootprint, 'Will not dig the block supporting the bot')
+      assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
+      const issue = miningEnvironmentIssue(block)
+      assert(!issue, issue)
+      if (requireCurrentReach) assert(visibleHere(block), 'Mining target is no longer visible from the certified stage')
+      return block
+    }
+    const block = validateTarget()
     let tool = bot.pathfinder?.bestHarvestTool(block)
     if (!tool || (block.canHarvest && !block.canHarvest(tool.type))) {
       tool = items().filter(item => !block.canHarvest || block.canHarvest(item.type)).sort((a, b) => (block.digTime?.(a.type, false, false, false, [], bot.entity.effects) ?? 0) - (block.digTime?.(b.type, false, false, false, [], bot.entity.effects) ?? 0))[0]
     }
     if (tool) await step(ctx, () => bot.equip(tool, 'hand'))
     assert(!block.canHarvest || block.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${block.name}; refusing to destroy it without drops`)
-    assert(expectedBlock == null || loaded(p).name === expectedBlock, 'Target block changed before mining')
+    // Mineflayer normally awaits lookAt inside dig(). Look first, then make
+    // the final checks and use its supported 'ignore' mode so no hidden look
+    // await can separate validation from the start-dig packet.
+    await step(ctx, () => bot.lookAt(p.offset(0.5, 0.5, 0.5), true))
     await step(ctx, () => {
-      // Equipping can yield to a block update. Do not mine using a stale dry-world check.
-      const issue = miningEnvironmentIssue(loaded(p))
-      assert(!issue, issue)
-      beforeDig?.(); return bot.dig(block, true)
+      const current = validateTarget()
+      assert(!current.canHarvest || current.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${current.name}; refusing to destroy it without drops`)
+      beforeDig?.()
+      return bot.dig(current, 'ignore')
     })
     assert(loaded(p).name !== block.name, `Server did not confirm mining ${block.name}`)
     return block.name

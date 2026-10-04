@@ -1114,3 +1114,34 @@ test('real Mineflayer search filters unsafe resources before the 512-candidate c
   const result=await createActions(bot).execute('collect',{block:'stone',count:1,radius:64})
   assert.equal(result.mined,1);assert.equal(result.failures.length,0);assert.equal(result.search_limited,false)
 })
+
+test('mining rechecks terrain after looking and sends no dig when a fluid arrives',async()=>{
+  const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('stone',p)
+  let digs=0,looks=0
+  bot.lookAt=async()=>{looks++;bot.putBlock('water',p.offset(0,1,0))}
+  bot.dig=async(block,forceLook)=>{if(forceLook!=='ignore')await bot.lookAt();digs++;bot.removeBlock(block.position)}
+  await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0}),/adjacent liquid/)
+  assert.equal(looks,1);assert.equal(digs,0)
+})
+test('cancellation during mining look never sends a dig request',async()=>{
+  const bot=fakeBot(),p=new Vec3(2,64,0),controller=new AbortController();bot.putBlock('stone',p)
+  let digs=0;bot.lookAt=async()=>{controller.abort()}
+  bot.dig=async(block,forceLook)=>{if(forceLook!=='ignore')await bot.lookAt();digs++;bot.removeBlock(block.position)}
+  await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0},controller.signal),{name:'AbortError'})
+  assert.equal(digs,0)
+})
+
+test('final mining check sees a replaced target, changed footing, or changed tool after look',async()=>{
+  for(const change of ['target','footing','tool']){
+    const bot=fakeBot(),p=new Vec3(2,64,0),pick=bot.addItem('wooden_pickaxe')
+    bot.putBlock('stone',p,{canHarvest:type=>type===pick.type});bot.pathfinder.bestHarvestTool=()=>pick
+    bot.lookAt=async()=>{
+      if(change==='target')bot.putBlock('iron_ore',p)
+      if(change==='footing')bot.entity.position=new Vec3(2.5,65,.5)
+      if(change==='tool')bot.heldItem=null
+    }
+    let digs=0;bot.dig=async()=>{digs++}
+    await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0}),/changed before mining|supporting the bot|suitable tool/)
+    assert.equal(digs,0,change)
+  }
+})
