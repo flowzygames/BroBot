@@ -26,8 +26,8 @@ export function createDashboard(runtime, port, { shutdown } = {}) {
     const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'Content-Security-Policy': "default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'" };
     const send = (status, data) => { res.writeHead(status, { ...headers, 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(data)); };
     if (!hosts.has(req.headers.host)) { send(403, { error: 'Use the local dashboard address.' }); return; }
-    const path = new URL(req.url, `http://127.0.0.1:${port}`).pathname;
     try {
+      const path = new URL(req.url, `http://127.0.0.1:${port}`).pathname;
       if (req.method === 'GET' && assets.has(path)) {
         const [file, type] = assets.get(path);
         const content = await readFile(new URL(`../public/${file}`, import.meta.url));
