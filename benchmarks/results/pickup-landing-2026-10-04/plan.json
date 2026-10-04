@@ -1,0 +1,27 @@
+{
+  "source": "8dbe23c09fe9b2cba6714a7d428255dcf1cd20d1",
+  "queued": "2026-10-04T10:30:57.465466+00:00",
+  "waitsFor": "brobot-core021-eval/plan.json finished",
+  "classification": "prepared integration and selected diagnostic replay, not a full cohort score",
+  "cases": [
+    {
+      "benchmark": "Trailhead",
+      "seed": "386690312",
+      "status": "passed",
+      "elapsedMs": 287077,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-landing/.server/benchmarks/2026-10-04T10-40-13-413Z-784d8fc8/result.json",
+      "commit": "8dbe23c09fe9b2cba6714a7d428255dcf1cd20d1",
+      "dirty": false,
+      "returnCode": 0
+    }
+  ],
+  "started": "2026-10-04T10:37:57.483311+00:00",
+  "prepared": {
+    "passed": true,
+    "phases": 17,
+    "returnCode": 0,
+    "result": "/workspace/scratch/ec0ad557001f/brobot-pickup-landing/.server/smoke/2026-10-04T10-37-58-018Z-8ebb4389/result.json"
+  },
+  "finished": "2026-10-04T10:45:45.740384+00:00"
+}
