@@ -878,17 +878,22 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     // which cannot be synchronized by wrapping the public clickWindow method.
     // Drive every grid, cursor, and inventory click explicitly and reconcile
     // each with the server. This also puts a cancellation check at each click.
-    const window = table ? await step(ctx, () => bot.openBlock(table)) : bot.inventory
+    let window
     const size = table ? 3 : 2
     let completed = false
-    const { sync, click, confirmed, inventorySlots, storeCursor } = inventorySession(ctx, window)
-    async function emptyGrid () {
-      await storeCursor()
-      for (let slot = 1; slot <= size * size; slot++) {
-        if (window.slots[slot]) { await click(slot); await storeCursor() }
-      }
-    }
     try {
+      checked(ctx)
+      // Retain the acquired window inside cleanup scope before checking any
+      // cancellation that arrived while the open operation was pending.
+      window = table ? await bot.openBlock(table) : bot.inventory
+      checked(ctx)
+      const { sync, click, confirmed, inventorySlots, storeCursor } = inventorySession(ctx, window)
+      async function emptyGrid () {
+        await storeCursor()
+        for (let slot = 1; slot <= size * size; slot++) {
+          if (window.slots[slot]) { await click(slot); await storeCursor() }
+        }
+      }
       await sync()
       await emptyGrid()
       const plan = []
@@ -933,7 +938,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       await sync()
       completed = true
     } finally {
-      if (table || !completed) { try { await bot.closeWindow(window) } catch {} }
+      if (window && (table || !completed)) { try { await bot.closeWindow(window) } catch {} }
     }
   }
 
@@ -958,13 +963,20 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let fuelName = args.fuel == null ? null : cleanName(args.fuel, 'fuel')
     if (fuelName) assert(fuelUnits(fuelName) > 0, 'Unsupported fuel; provide coal, charcoal, planks, or logs')
     const block = await workstation(ctx, 'furnace')
-    const furnace = await step(ctx, () => bot.openFurnace(block))
-    const before = itemCount(output)
+    let furnace
+    let before
     let closed = false
     try {
+      checked(ctx)
+      furnace = await bot.openFurnace(block)
+      checked(ctx)
+      before = itemCount(output)
       assert(!furnace.inputItem() && !furnace.outputItem() && !furnace.fuelItem(), 'Furnace is occupied; refusing to mix with existing items')
       const transaction = inventorySession(ctx, furnace)
       await transaction.sync()
+      // Contents can change while synchronization is pending. Refuse newly
+      // observed input, output or fuel before transferring anything.
+      assert(!furnace.inputItem() && !furnace.outputItem() && !furnace.fuelItem(), 'Furnace is occupied; refusing to mix with existing items')
       const windowCount = () => furnace.slots.slice(furnace.inventoryStart, furnace.inventoryEnd).filter(item => item?.name === output).reduce((total, item) => total + item.count, 0)
       const windowBefore = windowCount()
       // Reuse heat from earlier batches. Re-inserting coal while the furnace
@@ -995,7 +1007,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const produced = itemCount(output) - before
       assert(produced >= count, `Furnace output was taken but inventory confirmation received only ${produced}/${count} ${output}`)
       return { input: name, output, smelted: produced, furnace: plainPos(block.position), fuel_added: { item: fuelName, count: fuelCount }, existing_heat_seconds: existingSeconds }
-    } finally { if (!closed) { try { await furnace.close() } catch {} } }
+    } finally { if (furnace && !closed) { try { await furnace.close() } catch {} } }
   }
 
   async function build (args, ctx) {

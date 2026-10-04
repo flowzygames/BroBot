@@ -1517,3 +1517,42 @@ test('starter protects retained actual waypoint supports and leaf connectors in 
   await assert.rejects(actions.execute('dig_at',{x:1,y:63,z:0},undefined,{starterScope:'job/support'}),{code:'STARTER_SUPPORT_PROTECTED'});
   assert.equal(digs,0);
 });
+
+for (const occupiedSlot of [0,1,2]) test(`smelt refuses foreign contents first revealed by sync in slot ${occupiedSlot}`,async()=>{
+ const bot=fakeBot();bot.putBlock('furnace',new Vec3(2,64,0));bot.addItem('sand',2);bot.addItem('coal',1);
+ const foreign={name:occupiedSlot===0?'sand':occupiedSlot===1?'coal':'glass',type:registry.itemsByName[occupiedSlot===0?'sand':occupiedSlot===1?'coal':'glass'].id,count:1,metadata:0};
+ const slots=Array(39).fill(null);slots[3]={...bot.inventory.items()[0]};slots[4]={...bot.inventory.items()[1]};
+ let closed=0,clicks=0;
+ const furnace={id:7,slots,inventoryStart:3,inventoryEnd:39,selectedItem:null,inputItem(){return this.slots[0];},fuelItem(){return this.slots[1];},outputItem(){return this.slots[2];},async close(){closed++;}};
+ bot.openFurnace=async()=>furnace;
+ bot._syncWindow=async()=>{furnace.slots[occupiedSlot]=foreign;};
+ bot.clickWindow=async()=>{clicks++;throw Error('Unexpected transfer after occupied sync');};
+ await assert.rejects(createActions(bot).execute('smelt',{item:'sand',count:2,fuel:'coal'}),/Furnace is occupied/);
+ assert.equal(clicks,0);assert.equal(closed,1);assert.equal(furnace.slots[occupiedSlot],foreign);assert.equal(foreign.count,1);
+});
+
+for(const kind of ['craft','smelt'])test(`cancelled ${kind} closes a window acquired after cancellation before accepting another action`,async()=>{
+ const bot=fakeBot(),controller=new AbortController();let resolveOpen,releaseClose,closed=0;
+ const window={id:7,slots:Array(46).fill(null),inventoryStart:10,inventoryEnd:46,selectedItem:null};
+ const close=()=>{closed++;return new Promise(resolve=>{releaseClose=()=>{if(bot.currentWindow===window)bot.currentWindow=null;resolve();};});};
+ bot.clickWindow=async()=>{throw Error('No transfer after cancellation');};bot._syncWindow=async()=>{};bot.closeWindow=close;
+ let args;
+ if(kind==='craft'){
+  bot.putBlock('crafting_table',new Vec3(2,64,0));bot.addItem('oak_planks',3);bot.addItem('stick',2);
+  bot.recipesFor=()=>[{requiresTable:true,result:{id:registry.itemsByName.wooden_pickaxe.id,count:1}}];
+  bot.openBlock=()=>new Promise(resolve=>{resolveOpen=resolve;});args={item:'wooden_pickaxe',count:1};
+ }else{
+  bot.putBlock('furnace',new Vec3(2,64,0));bot.addItem('sand',1);bot.addItem('coal',1);window.close=close;
+  bot.openFurnace=()=>new Promise(resolve=>{resolveOpen=resolve;});args={item:'sand',count:1,fuel:'coal'};
+ }
+ const actions=createActions(bot),pending=actions.execute(kind,args,controller.signal);
+ const rejection=assert.rejects(pending,{name:'AbortError'});
+ const deadline=Date.now()+1000;while(!resolveOpen){assert.ok(Date.now()<deadline,'window acquisition started');await new Promise(resolve=>setImmediate(resolve));}
+ controller.abort();await assert.rejects(actions.execute('inspect',{radius:1}),/running or draining/);
+ bot.currentWindow=window;resolveOpen(window);
+ const closeDeadline=Date.now()+1000;while(!releaseClose){assert.ok(Date.now()<closeDeadline,'late window cleanup started');await new Promise(resolve=>setImmediate(resolve));}
+ await assert.rejects(actions.execute('inspect',{radius:1}),/running or draining/);
+ releaseClose();await rejection;
+ assert.equal(closed,1);assert.equal(bot.currentWindow,null);
+ assert.equal((await actions.execute('inspect',{radius:1})).connected,true);
+});

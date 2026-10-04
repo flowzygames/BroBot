@@ -14,7 +14,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 > **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
-> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The server-confirmed mining source passes **502 automated checks** and **17/17 prepared Minecraft phases**, plus a separate real refusal/success fixture. [Exact evidence and limits](benchmarks/results/confirmed-mining-2026-10-04/README.md). Earlier placement and pickup-progress verification remains [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
+> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The current development source passes **522 automated checks** and **17/17 prepared Minecraft phases**. Recent fixes cover server-confirmed mining, retained leaf supports, and furnace/menu handling. [Latest window-safety evidence](benchmarks/results/window-safety-2026-10-04/README.md) · [Mining receipt proof](benchmarks/results/confirmed-mining-2026-10-04/README.md) · [Leaf-support evidence and targeted-world limits](benchmarks/results/retained-leaf-support-2026-10-04/README.md). Earlier placement and pickup-progress verification remains [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
 
 ## New in Core 0.2
 
@@ -28,6 +28,9 @@ Core names identify the software agent release, not a newly trained foundation m
 
 ## New in the development source
 
+- Protects loaded leaf anchors beneath home, retained actual return points and the current grounded footprint during automatic starter mining
+- Rechecks furnace contents after server synchronization before transferring input or fuel
+- Closes crafting/furnace windows acquired after cancellation before accepting the next direct action
 - Requires actual server block updates before counting a mined block, rather than trusting local predicted air
 - Stops and disconnects after an unconfirmed mining edit, so later actions cannot use an unverified terrain cache; goals stay paused after reconnecting
 - Rechecks the held placement item after aiming, before sending the placement request

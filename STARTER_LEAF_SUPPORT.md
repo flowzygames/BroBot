@@ -8,7 +8,7 @@ For each relevant loaded leaf support, the guard hypothetically replaces the int
 
 Typed collection refusals exclude that candidate within the existing 128-position limit and allow other safe targets. Repeated protected-support failures do not trigger destructive foliage clearing. A protected recovery dig stops truthfully instead of retrying the same connector. Direct controls outside the automatic starter retain their existing behavior.
 
-This is not a reservation of every return path, a prediction of decay timing, or protection against external changes and already-missing supports. It does not establish that a previously failed world will finish. The broader guard is an intended replacement for the held home-only prototype, not a new stable release.
+This is not a reservation of every return path, a prediction of decay timing, or protection against external changes and already-missing supports. It does not establish that a previously failed world will finish. The broader guard replaces the closed home-only prototype in PR 44. It remains part of the development source rather than a new stable release.
 
 ## Verification so far
 
