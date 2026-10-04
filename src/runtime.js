@@ -1,3 +1,4 @@
+import { isFluidBearingBlock } from './navigation-guards.js';
 import { craftGeometryKey } from './craft-retry-evidence.js';
 import { observeOwnInjuries } from './injury-observer.js';
 import { sectionSearchDistance } from './block-search.js';
@@ -61,6 +62,10 @@ export class Runtime {
           if (this.bot.world?.raycast) return visibleBlockFace(this.bot.world, this.bot.entity.position.offset(0, this.bot.entity.eyeHeight ?? 1.62, 0), position, 4.5);
           return !this.bot.canSeeBlock || this.bot.canSeeBlock(this.bot.blockAt(position));
         });
+        const currentPosition = this.bot.entity.position;
+        const underfoot = this.bot.blockAt(new Vec3(Math.floor(currentPosition.x), Math.floor(currentPosition.y)-1, Math.floor(currentPosition.z)));
+        const canopyGrounded = this.bot.entity.onGround === true && Math.abs(currentPosition.y-Math.round(currentPosition.y)) <= .03
+          && Boolean(underfoot && /_(leaves|log)$/.test(underfoot.name) && underfoot.boundingBox === 'block' && !isFluidBearingBlock(underfoot));
         const powderSnowContact = hasPowderSnowContact(this.bot);
         const lavaContact = hasLavaContact(this.bot);
         // Search logs separately: dense underground ore must not fill inspect's
@@ -81,9 +86,9 @@ export class Runtime {
         const observedLogs = positions.map(p => this.bot.blockAt(p)).filter(b => b && pattern.test(b.name)).sort((a,b) => a.position.distanceTo(this.bot.entity.position) - b.position.distanceTo(this.bot.entity.position)).slice(0,16);
         const wood = observedLogs[0];
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
-        return { ...(nextStep?.name === 'craft' ? {craftGeometry:craftGeometryKey(this.bot)} : {}), terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
+        return { ...(canopyGrounded ? {canopyGrounded:true} : {}), ...(nextStep?.name === 'craft' ? {craftGeometry:craftGeometryKey(this.bot)} : {}), terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
-      execute: (name, args, signal) => this.execute(name, args, signal), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
+      execute: (name, args, signal) => this.execute(name, args, signal, { starterScope:`${this.playSession}/${this.survival.job.id}` }), stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
     this.lastEat = 0;
     this.reflexTimer = setInterval(() => this.reflex(), 1000);
@@ -213,7 +218,7 @@ export class Runtime {
     this.memory.set('owner', this.owner);
     this.log('config', `In-game controller: ${this.owner || 'disabled'}`);
   }
-  async execute(name, args, signal) {
+  async execute(name, args, signal, executionContext = {}) {
     if (this.connection !== 'connected' || !this.actions) throw new Error('BroBot is not connected to Minecraft yet. Start npm run server.');
     signal?.throwIfAborted();
     if (!this.definitions().some(tool => tool.name === name)) throw new Error(`Unknown action: ${name}`);
@@ -234,7 +239,7 @@ export class Runtime {
     }
     const actions = this.actions;
     const progression = this.progression;
-    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : s => actions.execute(name, args, s);
+    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : s => actions.execute(name, args, s, executionContext);
     return this.runner.run(name, run, () => actions.stop(), signal);
   }
   async command(input, speaker = this.owner) {

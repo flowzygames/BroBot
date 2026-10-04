@@ -463,7 +463,7 @@ test('far starter home return follows observed short legs without claiming early
 test('far return never invents an unobserved midpoint or claims a completed kit at distance', () => {
   const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position.x=230;
   const step=nextStarterStep(f.state,{home:{position:{x:0,y:64,z:0},dimension:'overworld'}},{});
-  assert.match(step.blocked,/No observed intermediate waypoint/);assert.ok(!step.complete);
+  assert.match(step.blocked,/No unspent observed waypoint/);assert.ok(!step.complete);
 });
 test('far table travel keeps actual table identity while choosing a local observed hop', () => {
   const f=fixture();f.state.position.x=230;
@@ -762,6 +762,37 @@ test('a craft failure that moves the bot cannot transfer older retry counts to t
  f.job.start();await f.job.promise;assert.deepEqual(f.actions.slice(0,3),['craft','craft','craft']);
 });
 
+test('a failed return edge does not suppress a distinct nearby standing pose', () => {
+  const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);
+  const home={x:.5,y:64,z:.5};f.state.position={x:8.4,y:64,z:.5};
+  const step=nextStarterStep(f.state,{home:{position:home,dimension:'overworld'},ignoredTravelEdges:[{from:{x:6.5,y:64,z:.5},to:home}]},{});
+  assert.equal(step.name,'go_to');assert.equal(step.args.returnable,true);
+});
+
+test('return failure counts belong to the attempted pose rather than a fresh nearby pose', async () => {
+  const f=fixture({maxSteps:8});f.add('stone_pickaxe',1);f.add('furnace',1);
+  let calls=0;
+  f.job.observe=async()=>{if(calls===2)f.state.position={x:8.4,y:64,z:.5};return{}};
+  f.job.execute=async(name,args,signal)=>{
+    if(name==='go_to'&&++calls<=2)throw Error('Return-path planning budget exhausted');
+    return f.execute(name,args,signal);
+  };
+  f.job.start();f.state.position={x:6.5,y:64,z:.5};await f.job.promise;
+  assert.equal(calls,3);assert.equal(f.job.state().status,'complete');
+  assert.equal(f.job.state().ignoredTravelEdges?.length??0,0);
+});
+
+test('explicit resume gives previously excluded return edges a fresh bounded verification', async () => {
+  const f=fixture({maxSteps:8});f.add('stone_pickaxe',1);f.add('furnace',1);
+  f.job.start();await f.job.promise;
+  f.state.position={x:6.5,y:64,z:.5};f.job.job.status='blocked';
+  f.job.job.ignoredTravelEdges=[{from:{...f.state.position},to:{...f.job.job.home.position}}];
+  let inspections=0;f.job.observe=async()=>{inspections++;return{}};
+  f.job.start({resume:true});await f.job.promise;
+  assert.ok(inspections>0);assert.equal(f.job.state().status,'complete');
+  assert.ok(f.calls.some(c=>c.name==='go_to'&&c.args.returnable));
+});
+
 test('unrelated global terrain revisions do not reopen unchanged failed workstation crafting', async () => {
   const f=blockedCraftScoutFixture();let revision=0;
   f.job.observe=async()=>({wood:'oak',tableInReach:false,terrainRevision:++revision,craftGeometry:'same-local-state'});
@@ -774,4 +805,178 @@ test('reordering unchanged table observations cannot reset blocked craft attempt
  const tables=[{x:20,y:64,z:0},{x:22,y:64,z:0}];
  f.job.observe=async()=>({tableInReach:false,craftGeometry:'same',tables:++revision%2?tables:[...tables].reverse()});
  f.job.start();await f.job.promise;assert.deepEqual(f.actions,['craft','craft','explore','explore','explore']);
+});
+
+function canopyCraftFixture(maxSteps=5) {
+ const f=fixture({maxSteps});f.add('crafting_table',1);f.add('oak_planks',6);f.add('stick',4);const actions=[];
+ f.job.observe=async()=>({canopyGrounded:true,craftGeometry:'same-local',tableInReach:false});
+ return {...f,actions};
+}
+test('blocked canopy crafting can use one existing certified descent before trying the craft again',async()=>{
+ const f=canopyCraftFixture();let descended=false;
+ f.job.execute=async(name,args,signal)=>{
+  f.actions.push(name);if(name==='craft'&&!descended)throw Object.assign(Error('No verified workstation exit'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});
+  if(name==='descend_notch'){descended=true;f.state.position.y--;return{completed:true,mined:1,descended_blocks:1}}
+  return f.execute(name,args,signal);
+ };
+ f.job.start();await f.job.promise;
+ assert.deepEqual(f.actions.slice(0,4),['craft','craft','descend_notch','craft']);
+ assert.equal(f.job.state().canopyDescentAttempts.length,1);
+ assert.equal(f.job.state().history.find(e=>e.action==='descend_notch').progress,true);
+});
+test('an uncertified notch is attempted only once at the same cell and remains a recorded failure',async()=>{
+ const f=canopyCraftFixture(8);
+ f.job.execute=async(name,args)=>{f.actions.push(name);if(name==='craft')throw Object.assign(Error('No certified change'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});if(name==='descend_notch')throw Error('No certified change');return{}};
+ f.job.start();await f.job.promise;
+ assert.equal(f.actions.filter(n=>n==='descend_notch').length,1);assert.ok(f.actions.includes('explore'));
+ assert.match(f.job.state().history.find(e=>e.action==='descend_notch').error,/No certified/);
+});
+test('canopy fallback retains its stricter health and grounded prerequisites',async()=>{
+ for(const option of ['low-health','not-grounded']){
+  const f=canopyCraftFixture(3);if(option==='low-health')f.state.health=10;
+  f.job.observe=async()=>({canopyGrounded:option!=='not-grounded',craftGeometry:'same',tableInReach:false});
+  f.job.execute=async(name,args)=>{f.actions.push(name);throw Object.assign(Error('blocked'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'})};
+  f.job.start();await f.job.promise;assert.ok(!f.actions.includes('descend_notch'),option);
+ }
+});
+test('a newly usable table preempts a queued canopy descent',async()=>{
+ const f=canopyCraftFixture(3);let observations=0;
+ f.job.observe=async()=>({canopyGrounded:true,craftGeometry:'same',tableInReach:++observations>=4});
+ f.job.execute=async(name,args)=>{f.actions.push(name);throw Object.assign(Error('blocked'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'})};
+ f.job.start();await f.job.promise;assert.deepEqual(f.actions,['craft','craft','craft']);
+});
+test('canopy recovery cannot exceed four attempted cells or invent progress without a real descent',async()=>{
+ const f=canopyCraftFixture(20);
+ f.job.execute=async(name,args)=>{f.actions.push(name);if(name==='craft')throw Object.assign(Error('blocked'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});if(name==='descend_notch'){f.state.position.x+=2;f.state.position.y--;return{completed:true,mined:1,descended_blocks:1}}return{}};
+ f.job.start();await f.job.promise;assert.equal(f.actions.filter(n=>n==='descend_notch').length,4);assert.equal(f.job.state().canopyDescentAttempts.length,4);
+ const g=canopyCraftFixture(3);g.job.execute=async(name)=>{if(name==='craft')throw Object.assign(Error('blocked'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});return{completed:true,mined:1,descended_blocks:1}};
+ g.job.start();await g.job.promise;assert.equal(g.job.state().history.find(e=>e.action==='descend_notch').progress,false);
+});
+
+test('unrelated craft failures or an available workstation never authorize canopy excavation',async()=>{
+ for(const variant of ['ingredients','other-placement','table-in-reach']) {
+  const f=canopyCraftFixture(5);f.job.observe=async()=>({canopyGrounded:true,craftGeometry:'same',tableInReach:variant==='table-in-reach'});
+  f.job.execute=async(name,args)=>{f.actions.push(name);throw Object.assign(Error('Missing ingredients or another failure'),variant==='table-in-reach'?{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'}:variant==='other-placement'?{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'furnace'}:{})};
+  f.job.start();await f.job.promise;assert.ok(!f.actions.includes('descend_notch'),variant);
+ }
+});
+
+test('queued canopy recovery yields to completion, food and changed support',async()=>{
+ for(const change of ['complete','food','support']){
+  const f=canopyCraftFixture(3);let observations=0;
+  f.job.observe=async()=>{
+   if(++observations>=4){if(change==='complete'){f.add('stone_pickaxe',1);f.add('furnace',1)}if(change==='food'){f.state.food=8;f.add('bread',1)}}
+   return{canopyGrounded:change!=='support'||observations<4,craftGeometry:'same',tableInReach:false};
+  };
+  f.job.execute=async(name,args,signal)=>{f.actions.push(name);if(name==='craft')throw Object.assign(Error('No workstation exit'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});return f.execute(name,args,signal)};
+  f.job.start();await f.job.promise;assert.ok(!f.actions.includes('descend_notch'),change);
+  if(change==='complete')assert.equal(f.job.state().status,'complete');if(change==='food')assert.equal(f.actions.at(-1),'eat');
+ }
+});
+test('mixed recipe and workstation failures do not meet the two-placement-failure threshold',async()=>{
+ const f=canopyCraftFixture(3);let crafts=0;
+ f.job.execute=async(name)=>{f.actions.push(name);if(name==='craft'){crafts++;throw Object.assign(Error('craft failed'),crafts===2?{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'}:{})}return{}};
+ f.job.start();await f.job.promise;assert.ok(!f.actions.includes('descend_notch'));assert.equal(f.actions.at(-1),'explore');
+});
+
+test('saved malformed canopy attempt history fails closed, including explicit null',async()=>{
+ const f=fixture();f.job.start();await f.job.promise;
+ const saved=f.job.state();
+ for(const attempts of [null,{},[{x:NaN,y:64,z:0}],Array.from({length:5},(_,x)=>({x,y:64,z:0}))]){
+  f.memory.set('survivalJob',{...saved,canopyDescentAttempts:attempts});
+  assert.throws(()=>new SurvivalJob({memory:f.memory,snapshot:()=>f.state,observe:async()=>({}),execute:f.execute,stopActions(){},context:'test'}),/canopy recovery history/);
+ }
+});
+test('explicit resume preserves the four-cell canopy attempt cap',async()=>{
+ const f=canopyCraftFixture(20);
+ f.job.execute=async(name)=>{if(name==='craft')throw Object.assign(Error('No exit'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'});if(name==='descend_notch'){f.state.position.x+=2;f.state.position.y--;return{completed:true,mined:1,descended_blocks:1}}return{}};
+ f.job.start();await f.job.promise;assert.equal(f.job.state().canopyDescentAttempts.length,4);
+ f.state.position.x=30;f.job.maxSteps=3;const resumed=[];
+ f.job.execute=async(name)=>{resumed.push(name);throw Object.assign(Error('No exit'),{code:'WORKSTATION_EGRESS_UNVERIFIED',workstation:'crafting_table'})};
+ f.job.start({resume:true});await f.job.promise;
+ assert.ok(!resumed.includes('descend_notch'));assert.equal(f.job.state().canopyDescentAttempts.length,4);
+});
+test('sub-block arrival jitter cannot reopen a failed return edge from the same standing cell',()=>{
+ const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position={x:4.5,y:71,z:.5};
+ const home={position:{x:.5,y:75,z:.5},dimension:'overworld'};
+ const step=nextStarterStep(f.state,{home,ignoredTravelEdges:[{from:{x:4.44,y:71,z:.61},to:home.position}]},{});
+ assert.match(step.blocked,/No unspent observed/);assert.equal(step.name,undefined);
+});
+
+test('return graph cannot ping-pong between rounded arrivals and older fractional observations',async()=>{
+ const f=fixture({maxSteps:16});f.state.position={x:.5,y:75,z:.5};f.add('stone_pickaxe',1);f.add('furnace',1);
+ const a={x:4.3,y:71,z:.6},b={x:10.3,y:72,z:24.3};const moves=[];
+ f.job.execute=async(name,args)=>{
+  assert.equal(name,'go_to');moves.push({...args});
+  if(args.x===0&&args.z===0)throw Error('Return-path planning budget exhausted');
+  f.state.position=args.x===4?{x:4.5,y:71,z:.5}:{x:10.5,y:72,z:24.5};return{arrived:true};
+ };
+ f.job.start();f.state.position={x:4.44,y:71,z:.61};f.job.job.observedPositions=[a,b];await f.job.promise;
+ assert.match(f.job.state().reason,/No unspent observed/);assert.equal(moves.length,5);
+ assert.equal(moves.filter(p=>p.x===10&&p.z===24).length,1);assert.equal(moves.filter(p=>p.x===4&&p.z===0).length,0);
+});
+
+test('radius-accepted observed arrivals represent their waypoints instead of reopening failed return cycles',async()=>{
+ const f=fixture({maxSteps:8});f.state.position={x:.5,y:75,z:.5};f.add('stone_pickaxe',1);f.add('furnace',1);
+ const a={x:4.31,y:71,z:.47},b={x:10.48,y:72,z:24.34},a1={x:4.5,y:71,z:1.5},b1={x:10.38,y:72,z:23.32};
+ const home={...f.state.position};const receipt=(target,position)=>{const args={x:Math.floor(target.x),y:target.y,z:Math.floor(target.z),radius:1,returnable:true};return{action:'go_to',args,result:{arrived:true,position,target:{x:args.x,y:args.y,z:args.z},radius:1}}};
+ const moves=[];f.job.execute=async(name,args)=>{moves.push(args);f.state.position=args.x===4?{...a1}:{...b1};return receipt(args,f.state.position).result};
+ f.job.start();f.state.position={...a1};f.job.job.observedPositions=[a,b];f.job.job.history=[receipt(a,a1),receipt(b,b1)];f.job.job.ignoredTravelEdges=[{from:a1,to:home},{from:b1,to:home}];await f.job.promise;
+ assert.equal(moves.length,0);assert.match(f.job.state().reason,/No unspent observed/);assert.deepEqual(f.job.state().home.position,home);
+});
+
+test('unverified or malformed arrival receipts cannot redefine an observed return waypoint',()=>{
+ const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);
+ const a={x:4.31,y:71,z:.47},b={x:10.48,y:72,z:24.34},a1={x:4.5,y:71,z:1.5},b1={x:10.38,y:72,z:23.32};
+ f.state.position=b1;const home={position:{x:.5,y:75,z:.5},dimension:'overworld'};
+ const valid={action:'go_to',args:{x:4,y:71,z:0,radius:1,returnable:true},result:{arrived:true,target:{x:4,y:71,z:0},position:a1,radius:1}};
+ const base={home,observedPositions:[a,b],ignoredTravelEdges:[{from:a1,to:home.position},{from:b1,to:home.position}]};
+ assert.match(nextStarterStep(f.state,{...base,history:[valid]},{}).blocked,/No unspent observed/);
+ for(const change of [{result:{...valid.result,arrived:false}},{result:{...valid.result,target:{x:5,y:71,z:0}}},{result:{...valid.result,position:{x:4.5,y:71,z:100}}},{result:{...valid.result,radius:8}},{args:{...valid.args,returnable:false}},{args:{...valid.args,radius:2},result:{...valid.result,radius:2}}]){
+  assert.equal(nextStarterStep(f.state,{...base,history:[{...valid,...change}]},{}).name,'go_to');
+ }
+});
+
+test('arrival representatives never move final goals or enlarge the requested leg bound',()=>{
+ const f=fixture();f.state.position={x:5.5,y:64,z:.5};
+ const table={x:10,y:64,z:0},home={position:{x:.5,y:64,z:.5},dimension:'overworld'};
+ const receipt={action:'go_to',args:{x:10,y:64,z:0,radius:2,returnable:true},result:{arrived:true,position:{x:8.5,y:64,z:.5},target:table,radius:2}};
+ const step=nextStarterStep(f.state,{home,tables:[table],observedPositions:[table],history:[receipt]},{});
+ assert.equal(step.args.x,10);assert.equal(step.args.z,0);assert.equal(step.finalTravelLeg,true);
+ f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position={x:148,y:64,z:0};
+ const far={action:'go_to',args:{x:50,y:64,z:0,radius:1,returnable:true},result:{arrived:true,position:{x:52.5,y:64,z:.5},target:{x:50,y:64,z:0},radius:1}};
+ assert.match(nextStarterStep(f.state,{home,observedPositions:[{x:50,y:64,z:0}],history:[far]},{}).blocked,/No unspent observed/);
+});
+
+test('successful arrival identity survives history expiry for retained waypoints',async()=>{
+ const f=fixture({maxSteps:1});f.state.position={x:.5,y:75,z:.5};f.add('stone_pickaxe',1);f.add('furnace',1);
+ const a={x:4.31,y:71,z:.47},a1={x:4.5,y:71,z:1.5},b1={x:10.38,y:72,z:23.32},home={...f.state.position};
+ const receipt={action:'go_to',args:{x:4,y:71,z:0,radius:1,returnable:true},result:{arrived:true,target:{x:4,y:71,z:0},position:a1,radius:1}};
+ f.job.start();f.state.position=b1;f.job.job.observedPositions=[a];f.job.job.history=[receipt];f.job.job.ignoredTravelEdges=[{from:a1,to:home},{from:b1,to:home}];await f.job.promise;
+ assert.equal(f.job.state().travelArrivals.length,1);
+ const saved=f.job.state();saved.history=Array.from({length:40},()=>({action:'inspect',result:{}}));
+ assert.match(nextStarterStep(f.state,saved,{}).blocked,/No unspent observed/);
+});
+test('return leg bounds apply to the emitted integer target, not only its fractional waypoint',()=>{
+ const f=fixture();f.add('stone_pickaxe',1);f.add('furnace',1);f.state.position={x:146.5,y:64,z:0};
+ assert.match(nextStarterStep(f.state,{home:{position:{x:0,y:64,z:0},dimension:'overworld'},observedPositions:[{x:50.9,y:64,z:0}]},{}).blocked,/No unspent observed/);
+});
+
+test('saved arrival aliases are pruned when their observed waypoint is discarded', async()=>{
+ const f=fixture({maxSteps:1}); f.job.start(); await f.job.promise;
+ const target={x:12,y:64,z:0}, position={x:12.5,y:64,z:1.5};
+ f.job.job.observedPositions=[target];
+ f.job.job.travelArrivals=[{target,position,radius:1}];
+ f.job.save(); assert.equal(f.memory.get('survivalJob').travelArrivals.length,1);
+ f.job.job.observedPositions=[]; f.job.save();
+ assert.deepEqual(f.memory.get('survivalJob').travelArrivals,[]);
+});
+
+test('malformed persistent return aliases fail closed when loading a job',async()=>{
+ const f=fixture({maxSteps:1}); f.job.start(); await f.job.promise;
+ const saved=f.memory.get('survivalJob');
+ for(const travelArrivals of [null,{},[{}],[{target:{x:1.2,y:64,z:0},position:{x:1.5,y:64,z:.5},radius:1}],Array(65).fill({target:{x:1,y:64,z:0},position:{x:1.5,y:64,z:.5},radius:1})]) {
+  f.memory.set('survivalJob',{...saved,travelArrivals});
+  assert.throws(()=>new SurvivalJob({memory:f.memory,snapshot:()=>f.state,context:'test'}),/Saved travel arrival evidence is invalid/);
+ }
 });

@@ -1,5 +1,13 @@
 # Bounded multi-log foliage recovery
 
+## Current development hook
+
+The newer development controller may invoke the existing one-leaf `descend_notch` action after two explicitly typed crafting-table egress failures. It requires fresh healthy grounded canopy evidence, retains every existing geometric/return-route check, and permits at most four distinct-cell attempts across resumes. A controlled persistent-leaf fixture demonstrated one actual step down, pickaxe crafting and a separately requested home return. No natural-world activation occurred in the complete 454-source cohort. This does not enable a full-canopy escape or the separate held stone-excavation planner.
+
+[Implementation and prepared proof](../benchmarks/results/recovery-candidate-2026-10-04/README.md) · [Complete natural-world results and limitations](../benchmarks/results/recovery-full454-2026-10-04/README.md)
+
+The dated experiments below are historical and remain separate from this hook.
+
 A ray toward the first observed trunk block can pass through an existing gap,
 even when another part of the same tree is behind a reachable leaf obstruction.
 The earlier observation path stopped after that first ray and could consume
@@ -24,7 +32,7 @@ results below establish partial wood acquisition, but not full starter completio
 ## Experimental validation, October 1, 2026
 
 Application commit: `42e5d8708e82f1d8e024e82e0780642eb5184529`.
-This prototype remains unpublished; the downloadable build is the separately
+At this historical checkpoint, the prototype was unpublished and the downloadable build was the separately
 validated 219-check transit-recovery version.
 
 - 225 automated checks passed
@@ -76,10 +84,10 @@ clearance, and benchmark limits have not been relaxed.
 
 ## Experimental explicit one-leaf descent action
 
-The unpublished prototype now exposes `action descend_notch {}`. It attempts
+This historical prototype introduced `action descend_notch {}`. It attempts
 only one adjacent, one-block-lower leaf notch from the current grounded position.
 It does not select a distant staging point, excavate a complete trunk staircase,
-or run automatically inside `survive starter`.
+or, at that historical checkpoint, run automatically inside `survive starter`. The current narrowly gated automatic hook is described at the top of this document.
 
 Before mining it requires health at least 12, food at least 10, a visible dry
 leaf, supported headroom, hypothetical routes out and home, and retained log
@@ -101,7 +109,7 @@ next intended dig.
 The longer geometry-only trunk spiral needs roughly forty removals. It remains
 unimplemented and untested live. Existing starter budgets have not been raised.
 The last full automated check of this experimental action passed 245 tests;
-this does not change the published 219-check build or its 10-of-20 score.
+that experiment did not change the then-published 219-check build or its 10-of-20 score.
 
 The same experimental application also passed all 17 prepared live regression
 phases and all 20 local command/control cases. These are regression checks,
@@ -131,7 +139,7 @@ natural-world score describe different kinds of evidence.
 
 All twenty per-seed records, the selection plan, hashes and paired comparison
 are retained in `benchmarks/results/canopy-notch-2026-10-01/paired-summary-245.json`.
-The public download and published 219-check / 10-of-20 score remain unchanged.
+At that historical checkpoint, the public download and published 219-check / 10-of-20 score remained unchanged.
 Next diagnostic work should isolate pickup and return-path planning behavior
 without weakening support/return-route guards or increasing benchmark budgets.
 
@@ -165,8 +173,8 @@ natural-world run of seed 454806089 on application a3e2242 passed in 107.416
 seconds, with verified pickup gains, stone pickaxe, furnace and a living return
 to the start. Its complete result is retained separately as targeted-pocket-254.json.
 This single targeted pass does not replace the retained 8/20 experiment or the
-released 10/20 score. The complete same-20 regression now matches the previous published 10/20 pass/fail set; see the latest validation below.
+released 10/20 score. The complete same-20 regression now matches the previous published 10/20 pass/fail set; see the historical validation below.
 
-## Latest complete validation
+## Historical standing cell validation
 
 The new standing-cell application a3e2242 completed 10/20 known worlds, retaining every published 682 success and failure. Full prepared live 17/17, skills 11/11, controls 20/20 and all 254 automated checks also passed on that frozen source. Full records and the tested-code manifest are in benchmarks/results/pocket-standing-2026-10-01/. The targeted replay remains separate; neither it nor this known-case cohort establishes broad reliability or stable 1.0 readiness.

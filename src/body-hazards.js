@@ -9,16 +9,18 @@ function cells(bot, includeSupport=false) {
   const found=[];
   for(let x=Math.floor(p.x-half+1e-7);x<=Math.floor(p.x+half-1e-7);x++)
     for(let z=Math.floor(p.z-half+1e-7);z<=Math.floor(p.z+half-1e-7);z++)
-      for(let y=Math.floor(p.y+(includeSupport?-1e-7:1e-7));y<=Math.floor(p.y+height-1e-7);y++)found.push(bot.blockAt(new Vec3(x,y,z)));
+      for(let y=Math.floor(p.y+(includeSupport?-1e-7:1e-7));y<=Math.floor(p.y+height-1e-7);y++){
+        try { found.push(bot.blockAt(new Vec3(x,y,z))) } catch { found.push(null) }
+      }
   return found;
 }
 export const hasPowderSnowContact=bot=>Boolean(cells(bot)?.some(b=>b?.name==='powder_snow'));
 export const hasLavaContact=bot=>Boolean(cells(bot)?.some(b=>b&&['lava','flowing_lava'].includes(b.name)));
-export function isDryLanding(bot) {
-  if(bot.entity?.onGround!==true)return false;
+export function isHazardFreeBody(bot) {
   const blocks=cells(bot,true);
   return Boolean(blocks?.length)&&blocks.every(b=>b&&!isFluidBearingBlock(b)&&!HAZARDS.has(b.name));
 }
+export const isDryLanding=bot=>bot.entity?.onGround===true&&isHazardFreeBody(bot);
 
 // Preserve legitimate slab-height arrivals without the library's broad +1Y
 // allowance, which can otherwise accept a whole-block-wrong position.

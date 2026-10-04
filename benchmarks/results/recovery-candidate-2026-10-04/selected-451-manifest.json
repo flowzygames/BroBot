@@ -1,0 +1,46 @@
+{
+  "source": "eef03cf1c349c772000b20135781eee2d5f860ae",
+  "classification": "Prepared canopy recovery followed by predeclared selected natural-world diagnostics. Not a full cohort, public score, or replacement for earlier attempts.",
+  "passed": 2,
+  "total": 3,
+  "files": {
+    "selected-plan.json": {
+      "sha256": "954b21594571447ce3390da53319474c647e4610c38b92ff0520462d819e4e89",
+      "bytes": 1784
+    },
+    "tested-files.json": {
+      "sha256": "9b851c01b2030f0f91ac8d3f536e0f7e8f5ae55357c336fa712e85dcd2627051",
+      "bytes": 8555
+    },
+    "prepared-canopy.json": {
+      "sha256": "129e673d78b467db805db8854ac905a708958c8d91d8b3835bf2a91ea2dfb2f8",
+      "bytes": 68434
+    },
+    "1744809425/result.json": {
+      "sha256": "27be2eafaa58c7a72032aee1db11ef28cbf5203736632a9ea04fcb5f54c78b7c",
+      "bytes": 65007
+    },
+    "1744809425/memory/events.jsonl": {
+      "sha256": "4d85cc54e46240b97decb4bed5514983088426d2d261fc96e06e21ad44e5fe88",
+      "bytes": 138307
+    },
+    "1244186709/result.json": {
+      "sha256": "0aa1f90f4c497e7f86953f3211492d995e64bd3ed38a84d32de3d4e3795bcb71",
+      "bytes": 116482
+    },
+    "1244186709/memory/events.jsonl": {
+      "sha256": "c7f086710975046d1a7eaa38e6535aff2c83db122c6ff35898421bb1861f1be7",
+      "bytes": 308940
+    },
+    "1542908414/result.json": {
+      "sha256": "38f0e760db1f2eee61b16833106fbdc6ea9ddf80fb443f37bc9496136ba5d575",
+      "bytes": 235998
+    },
+    "1542908414/memory/events.jsonl": {
+      "sha256": "8f7010d52046300af28ad4c9ffaa867be1ad1af59340b1009c8312f01ce700b2",
+      "bytes": 516831
+    }
+  },
+  "archiveSha256": "51d1fb99d76f8206211396f6898b8d03c39cef750ac299a1266f7f819321a92d",
+  "archiveBytes": 77697
+}

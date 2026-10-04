@@ -2,7 +2,11 @@
 
 Status is recorded separately for offline logic tests, real-server fixture tests, client access, and an actual autonomous survival run. Passing one category does not establish the others.
 
-## Latest recovery checkpoint
+## Latest complete source evaluation
+
+Frozen source `5b66f11` passed 454 automated checks and 17/17 prepared phases, then completed 13/20 known worlds and 3/3 separate originals under the existing 300-second Trailhead protocol. Every result and full event journal is retained in [the complete evidence archive](../benchmarks/results/recovery-full454-2026-10-04/README.md). One passing run took skeleton damage. These repeated development cases do not prove broad reliability, client compatibility or a particular fix's isolated effect. The public Core 0.2 package and its separate frozen evidence are unchanged; later source patches require their own validation.
+
+## Historical September 30 recovery checkpoint
 
 The September 30 recovery source passed 141 automated tests and all 16 Linux real-server regression phases. One targeted fresh-world starter run passed in 215.975 seconds. This does not establish general survival reliability; the earlier frozen comparison remains 0/3. See [current results and raw evidence](../benchmarks/RESULTS.md). The dated records below describe earlier source versions and remain historical.
 

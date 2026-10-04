@@ -88,3 +88,17 @@ test('runtime reports local craft geometry independently of global terrain churn
   assert.notEqual((await runtime.survival.observe()).craftGeometry,first.craftGeometry);
  }finally{await runtime.close();await rm(directory,{recursive:true,force:true})}
 });
+
+test('runtime canopy hint requires grounded dry log or leaf support and never certifies descent',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'brobot-canopy-hint-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),registry=minecraftData('1.21.8');
+ const position=new Vec3(.5,64,.5);let support={name:'oak_leaves',boundingBox:'block',isWaterlogged:false};
+ runtime.survival.job={home:{position:{x:.5,y:64,z:.5},dimension:'overworld'},tables:[]};
+ runtime.bot={registry,entity:{position,onGround:true},quit(){},findBlocks:()=>[],blockAt:p=>p.equals(new Vec3(0,63,0))?{...support,position:p}:{name:'air',position:p,stateId:0,boundingBox:'empty',shapes:[]}};
+ runtime.execute=async()=>({connected:true,position,dimension:'overworld',health:20,food:20,inventory:[{name:'crafting_table',count:1},{name:'oak_planks',count:6},{name:'stick',count:4}],entities:[],nearby_blocks:[]});
+ try{
+  assert.equal((await runtime.survival.observe()).canopyGrounded,true);
+  runtime.bot.entity.onGround=false;assert.notEqual((await runtime.survival.observe()).canopyGrounded,true);runtime.bot.entity.onGround=true;
+  support.isWaterlogged=true;assert.notEqual((await runtime.survival.observe()).canopyGrounded,true);
+  support={name:'stone',boundingBox:'block'};assert.notEqual((await runtime.survival.observe()).canopyGrounded,true);
+ }finally{await runtime.close();await rm(directory,{recursive:true,force:true})}
+});
