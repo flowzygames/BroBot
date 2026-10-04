@@ -54,8 +54,14 @@ The normal prepared integration suite also passed **17/17** on this final
 frozen source. `raw-results.tar.gz` retains all final trials and earlier failed
 attempts; `manifest.json` records their byte hashes and tested source files.
 The normal suite has no commit field; the frozen execution checkout establishes
-its provenance. A separate three-known-world, 300-second compatibility run is
-in progress; it is not included in these controlled counts.
+its provenance. A separate predeclared three-known-world, 300-second compatibility run
+completed **0/3**: 454806089 paused after a skeleton hit (unsupported retreat
+threat); 924242050 exhausted bounded exploration without obtaining stone;
+1744809425 reached the 300-second job deadline while a mining operation was
+active, causing the existing unconfirmed-edit quarantine/disconnect. No natural
+retreat success is claimed. `selected-589.tar.gz` retains the plan, raw results,
+logs and frozen source manifest. These known cases are not a causal A/B test,
+held-out sample or replacement for the earlier full cohort.
 
 ## Earlier attempts retained
 

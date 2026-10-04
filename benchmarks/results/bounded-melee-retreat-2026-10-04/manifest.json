@@ -180,5 +180,13 @@
     "test/web.test.js": "c312d2b261a02c0b2f5e2e779b19f10932fd1cb2e9f91c8f1f0f586e2599a2f2",
     "test/workstation-egress.test.js": "6240caaa5417a766e6fb2198f3a168994eb2d449eb64712e6d21deb120a7a77b"
   },
-  "normalPreparedProvenance": "Normal suite lacks a commit field. The clean frozen source above ran all17 phases; its code/test/scripts match the publication branch."
+  "normalPreparedProvenance": "Normal suite lacks a commit field. The clean frozen source above ran all17 phases; its code/test/scripts match the publication branch.",
+  "selectedNaturalArchive": {
+    "file": "selected-589.tar.gz",
+    "bytes": 32424,
+    "sha256": "6e864a0d4051d456b78fb7c294783341afbb5a9965e61ad2b7cb3fa757ec689e",
+    "passed": 0,
+    "cases": 3,
+    "source": "68bc28ae21b4c91bcf8b57186deff72378cb4704"
+  }
 }
