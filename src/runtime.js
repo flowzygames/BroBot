@@ -1,3 +1,4 @@
+import { retainedTravelArrivals } from './survival.js';
 import { assertTerrainTrusted, terrainTrustStatus } from './terrain-trust.js';
 import { isFluidBearingBlock } from './navigation-guards.js';
 import { craftGeometryKey } from './craft-retry-evidence.js';
@@ -170,7 +171,7 @@ export class Runtime {
       movements.allowFreeMotion = false;
       movements.maxDropDown = 3;
       bot.pathfinder.setMovements(movements);
-      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this), movementBoundary: () => this.survival.active ? { center: this.survival.job.home.position, radius: STARTER_MOVEMENT_RADIUS } : null });
+      this.actions = createActions(bot, { memory: this.memory, log: this.log.bind(this), movementBoundary: () => this.survival.active ? { center: this.survival.job.home.position, radius: STARTER_MOVEMENT_RADIUS } : null, starterProtectedPositions: () => this.survival.active ? [...(this.survival.job.observedPositions ?? []).slice(-64),...retainedTravelArrivals(this.survival.job).slice(-64).map(arrival => arrival.position)] : [] });
       this.progression = createProgression(bot, { actions: this.actions, memory: this.memory, log: this.log.bind(this) });
       this.connection = 'connected';
       this.log('connection', `${bot.username} joined Minecraft ${bot.version}.`);

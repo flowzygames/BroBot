@@ -1479,3 +1479,41 @@ test('unsupported mining protocol never sends a dig or poisons otherwise usable 
   await assert.rejects(actions.execute('dig_at',{x:2,y:64,z:0}),/1.21.8 only/);
   assert.equal(digs,0);assert.equal((await actions.execute('inspect',{radius:1})).connected,true);
 });
+
+test('starter protects a new current leaf footprint between harvests inside one collection action', async () => {
+  const bot=fakeBot();bot.entity.position=new Vec3(3.5,64,.5);
+  for(let x=0;x<=12;x++)for(let z=-1;z<=1;z++)bot.putBlock('stone',new Vec3(x,63,z));
+  bot.putBlock('oak_leaves',new Vec3(0,63,0));bot.putBlock('oak_leaves',new Vec3(1,63,0));
+  bot.putBlock('oak_log',new Vec3(2,63,0));bot.putBlock('oak_log',new Vec3(4,64,0));
+  const mined=[];bot.dig=async block=>{mined.push(block.position.x);bot.removeBlock(block.position);bot.addItem('oak_log');bot.entity.position=new Vec3(.5,64,.5);};
+  const actions=createActions(bot,{movementBoundary:()=>({center:{x:10.5,y:64,z:.5},radius:256})});
+  const result=await actions.execute('collect',{block:'oak_log',count:2,radius:8},undefined,{starterScope:'job/support'});
+  assert.deepEqual(mined,[4]);assert.equal(result.mined,1);assert.equal(result.completed,false);
+  assert.ok(result.failures.some(f=>f.code==='STARTER_SUPPORT_PROTECTED'));
+  assert.equal(bot.blockAt(new Vec3(2,63,0)).name,'oak_log');
+});
+
+test('starter anchor proof is repeated after equip and aim without quarantining a refused preflight', async () => {
+  for(const phase of ['equip','look']){
+    const bot=fakeBot();bot.entity.position=new Vec3(3.5,64,.5);bot.addItem('wooden_axe');
+    for(let x=0;x<5;x++)for(let z=-1;z<3;z++)bot.putBlock('stone',new Vec3(x,63,z));
+    for(const p of [new Vec3(0,63,0),new Vec3(1,63,0),new Vec3(1,63,1)])bot.putBlock('oak_leaves',p);
+    bot.putBlock('oak_log',new Vec3(2,63,0));bot.putBlock('oak_log',new Vec3(2,63,1));let digs=0;
+    bot.dig=async()=>{digs++;};
+    if(phase==='equip')bot.equip=async item=>{bot.heldItem=item;bot.removeBlock(new Vec3(2,63,1));};
+    else bot.lookAt=async()=>{bot.removeBlock(new Vec3(2,63,1));};
+    const actions=createActions(bot,{movementBoundary:()=>({center:{x:.5,y:64.02,z:.5},radius:256})});
+    await assert.rejects(actions.execute('dig_at',{x:2,y:63,z:0},undefined,{starterScope:'job/support'}),{code:'STARTER_SUPPORT_PROTECTED'});
+    assert.equal(digs,0);assert.equal((await actions.execute('inspect',{radius:1})).connected,true);
+  }
+});
+
+test('starter protects retained actual waypoint supports and leaf connectors in recovery digs', async () => {
+  const bot=fakeBot();bot.entity.position=new Vec3(3.5,64,.5);
+  for(let x=0;x<=11;x++)bot.putBlock('stone',new Vec3(x,63,0));
+  bot.putBlock('oak_leaves',new Vec3(0,63,0));bot.putBlock('oak_leaves',new Vec3(1,63,0));bot.putBlock('oak_log',new Vec3(2,63,0));let digs=0;
+  bot.dig=async()=>{digs++;};
+  const actions=createActions(bot,{movementBoundary:()=>({center:{x:10.5,y:64,z:.5},radius:256}),starterProtectedPositions:()=>[{x:.5,y:64,z:.5}]});
+  await assert.rejects(actions.execute('dig_at',{x:1,y:63,z:0},undefined,{starterScope:'job/support'}),{code:'STARTER_SUPPORT_PROTECTED'});
+  assert.equal(digs,0);
+});

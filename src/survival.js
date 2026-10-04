@@ -1,3 +1,4 @@
+import { STARTER_SUPPORT_PROTECTED } from './starter-leaf-support.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
 import { recordScoutObservation, rankScouts } from './scout-coverage.js';
@@ -20,7 +21,7 @@ const validTravelArrival = (arrival, home) => validTravelPoint(arrival?.target) 
   && ['x','y','z'].every(k=>Number.isInteger(arrival.target[k])) && [1,2].includes(arrival.radius)
   && distance(arrival.position,{x:arrival.target.x+.5,y:arrival.target.y,z:arrival.target.z+.5})<=arrival.radius+1.2
   && distance(arrival.position,home)<=STARTER_MOVEMENT_RADIUS;
-function retainedTravelArrivals(job) {
+export function retainedTravelArrivals(job) {
   const waypointCells = new Set((Array.isArray(job.observedPositions)?job.observedPositions:[]).filter(validTravelPoint).slice(-64).map(travelCellKey));
   // Intermediate return requests use radius 1. A wider table arrival is not
   // evidence for the tighter request, even when the nominal cell matches.
@@ -199,7 +200,7 @@ export class SurvivalJob {
       if (decision.name !== 'collect' || !result?.failures) return;
       this.job.excluded ??= {};
       const old = this.job.excluded[decision.args.block] ?? [];
-      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && /route|reach|planning|obstruct/i.test(f.error ?? '')).map(f => f.position);
+      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && (f.code === STARTER_SUPPORT_PROTECTED || /route|reach|planning|obstruct/i.test(f.error ?? ''))).map(f => f.position);
       const unique = new Map([...old, ...positions].map(p => [JSON.stringify(p), p]));
       this.job.excluded[decision.args.block] = [...unique.values()].slice(-128);
     };
@@ -289,13 +290,14 @@ export class SurvivalJob {
           this.job.ignoredTables.push(decision.waypointTarget ?? { x: decision.args.x, y: decision.args.y, z: decision.args.z });
           failures.delete(signature); continue;
         }
+        const supportRefused = this.job.history.slice(-4).some(entry => entry.action === 'collect' && entry.args?.block === decision.args.block && entry.result?.failures?.some(f => f.code === STARTER_SUPPORT_PROTECTED));
         const canopyPosition = this.snapshot().position;
         const canopyCell = {x:Math.floor(canopyPosition.x),y:Math.floor(canopyPosition.y),z:Math.floor(canopyPosition.z)};
         const canopyAttempts = Array.isArray(this.job.canopyDescentAttempts) ? this.job.canopyDescentAttempts : [];
         if (decision.name === 'craft' && (blockedWorkstations.get(signature) ?? 0) >= 2 && observation.tableInReach !== true && observation.canopyGrounded === true && this.snapshot().health >= 12 && this.snapshot().food >= 10
           && canopyAttempts.length < 4 && !canopyAttempts.some(p=>distance(p,canopyCell)<.1)) {
           recovery = {...action('descend_notch', {}, 'Try one certified leaf step after repeated blocked workstation crafting.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,'craft')};
-        } else if (decision.name === 'collect' && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
+        } else if (decision.name === 'collect' && !supportRefused && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
           this.job.clearings = (this.job.clearings ?? 0) + 1;
           recovery = action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.');
         } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation,decision.name) };
@@ -373,8 +375,8 @@ export class SurvivalJob {
         rememberScout(error.result);
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
-        remember({ action: decision.name, args: decision.args, error: error.message, result: error.result });
-        if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') throw error;
+        remember({ action: decision.name, args: decision.args, error: error.message, code: error.code ?? null, result: error.result });
+        if (error.code === 'PICKUP_UNSAFE_SETTLEMENT' || error.code === STARTER_SUPPORT_PROTECTED) throw error;
         const after=this.snapshot(), routes=error.result?.route_attempts;
         if(decision.name==='craft'){
           craftFailureContexts.set(signature,actionStartContext);
