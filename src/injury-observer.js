@@ -1,6 +1,6 @@
 // Hurt animations and health packets are independent observations. Never infer
 // one damage amount/cause by joining them, or label an absent source as harmless.
-export function observeOwnInjuries(bot, { isCurrent = () => true, log = () => {}, action = () => null, onHealth = () => {} } = {}) {
+export function observeOwnInjuries(bot, { isCurrent = () => true, log = () => {}, action = () => null, onHealth = () => {}, onHurt = () => {} } = {}) {
   let previousHealth = null, records = [], disposed = false;
   const current = () => !disposed && isCurrent();
   const context = () => {
@@ -36,6 +36,8 @@ export function observeOwnInjuries(bot, { isCurrent = () => true, log = () => {}
     // Do not retain player usernames or mutable/circular entity objects.
     const from = source ? {id:Number.isSafeInteger(source.id)?source.id:null,
       name:typeof source.name==='string'?source.name:null, type:typeof source.type==='string'?source.type:null} : null;
+    // Preserve the original action context, then respond before journal I/O.
+    onHurt(from);
     const label = from ? `${from.name || from.type || 'an observed entity'}${from.id == null ? '' : ` #${from.id}`}` : 'an unavailable source';
     remember({kind:'hurt_observation', entityId:entity.id, source:from, sourceStatus:from?'observed_entity':'unavailable',
       health_observed:Number.isFinite(bot.health)?bot.health:null, healthTiming:'May precede or follow the injury; not a damage amount.', ...ctx},

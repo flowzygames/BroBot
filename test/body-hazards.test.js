@@ -1,7 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Vec3} from 'vec3';
-import {hasLavaContact,hasPowderSnowContact,isDryLanding} from '../src/body-hazards.js';
+import {hasLavaContact,hasPowderSnowContact,isDryLanding,hasObservedStandingSupport} from '../src/body-hazards.js';
+
+test('recovery support requires observed shape contact including full-top jitter',()=>{
+ const {bot,blocks}=fixture();const cube={name:'stone',boundingBox:'block',shapes:[[0,0,0,1,1,1]]};
+ assert.equal(hasObservedStandingSupport(bot),false);blocks.set(new Vec3(0,63,0).toString(),cube);
+ for(const y of [63.98,64,64.02]){bot.entity.position.y=y;assert.equal(hasObservedStandingSupport(bot),true);}
+ bot.entity.position.y=64.2;assert.equal(hasObservedStandingSupport(bot),false);
+});
+test('recovery support handles slab contact and rejects fluid or unknown footprint cells',()=>{
+ const {bot,blocks}=fixture();bot.entity.position.y=63.5;
+ blocks.set(new Vec3(0,63,0).toString(),{name:'stone_slab',boundingBox:'block',shapes:[[0,0,0,1,.5,1]]});
+ assert.equal(hasObservedStandingSupport(bot),true);
+ blocks.get(new Vec3(0,63,0).toString()).isWaterlogged=true;assert.equal(hasObservedStandingSupport(bot),false);
+ blocks.get(new Vec3(0,63,0).toString()).isWaterlogged=false;bot.entity.position.x=.95;blocks.set(new Vec3(1,63,0).toString(),null);assert.equal(hasObservedStandingSupport(bot),false);
+});
 function fixture(){const blocks=new Map();return{blocks,bot:{entity:{position:new Vec3(.5,64,.5),onGround:true},blockAt:p=>blocks.has(p.toString())?blocks.get(p.toString()):{name:'air',boundingBox:'empty'}}};}
 test('recorded lava-position geometry is detected without guessing damage attribution',()=>{
  const {bot,blocks}=fixture();bot.entity.position=new Vec3(-206.3,62,9.02);blocks.set(new Vec3(-207,62,9).toString(),{name:'lava'});

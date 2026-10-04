@@ -137,9 +137,10 @@ export function nextStarterStep(state, job, observation = {}) {
 }
 
 export class SurvivalJob {
-  constructor({ memory, snapshot, observe, execute, stopActions, context, session = null, log = () => {}, maxSteps = 96, maxDurationMs = 600000, intervalMs = 150 }) {
+  constructor({ memory, snapshot, observe, execute, stopActions, context, session = null, recoverFromHostile = null, now = () => performance.now(), log = () => {}, maxSteps = 96, maxDurationMs = 600000, intervalMs = 150 }) {
     Object.assign(this, { memory, snapshot, observe, execute, stopActions, context, log, maxSteps, maxDurationMs, intervalMs });
     this.active = null;
+    this.recoverFromHostile=recoverFromHostile;this.now=now;this.hostileRecovery=null;
     this.session = session ?? (() => this);
     this.dropRecoverySession = null;
     this.job = memory.get('survivalJob', null);
@@ -158,6 +159,70 @@ export class SurvivalJob {
   }
   state() { return this.job ? structuredClone({ ...this.job, history: this.job.history.slice(-8), stopping: Boolean(this.active?.signal.aborted) }) : null; }
   stop(reason = 'Paused by player') { this.active?.abort(new Error(reason)); this.stopActions(reason); }
+  requestHostileRecovery(source) {
+    if(!this.active || this.active.signal.aborted || !this.job || typeof this.recoverFromHostile!=='function'
+      || source?.type!=='hostile' || !Number.isSafeInteger(source.id) || source.id<0)return false;
+    if(this.hostileRecovery?.controller===this.active){
+      if(this.hostileRecovery.phase==='recovering'){
+        this.hostileRecovery.phase='stopping';
+        this.stopActions('Another hostile hit occurred during recovery; no further escape leg will start.');
+      }
+      return true;
+    }
+    const started=this.now();if(!Number.isFinite(started))return false;
+    // Latch first: aborting an uncertain dig may synchronously quarantine the
+    // connection and abort the parent job. Never undo that stronger stop.
+    const request=this.hostileRecovery={controller:this.active,job:this.job,jobId:this.job.id,session:this.session(),phase:'requested',
+      source:{id:source.id,type:'hostile',name:typeof source.name==='string'?source.name:null},at:new Date().toISOString(),started,deadline:started+8000};
+    this.job.hostileRecovery={at:this.hostileRecovery.at,source:this.hostileRecovery.source,status:'requested',result:null};
+    this.stopActions('Hostile attack observed: interrupting starter work for one bounded recovery check.');
+    // Initiate cancellation before synchronous persistence. A restart while
+    // the old physical action drains must not resurrect an earlier success.
+    if(this.hostileRecovery===request&&this.active===request.controller&&this.job===request.job){
+      try{this.save();}catch(error){
+        request.controller.abort(Error(`Cannot persist hostile recovery request: ${error.message}`));
+      }
+    }
+    return true;
+  }
+  checkHostileRecovery() {
+    if(this.hostileRecovery?.controller===this.active)throw Object.assign(new Error('Hostile recovery requested'),{code:'HOSTILE_RECOVERY_REQUESTED'});
+  }
+  checkRecoveryState(request,controller) {
+    controller.signal.throwIfAborted();
+    if(this.active!==controller || this.job!==request.job || this.job.id!==request.jobId || this.session()!==request.session)throw Error('Hostile recovery cancelled: play session changed.');
+    if(request.phase==='stopping')throw Error('Hostile recovery interrupted by another hit; separation is unverified.');
+    const now=this.now();
+    if(!Number.isFinite(now)||now>=request.deadline)throw Error('Hostile recovery deadline expired.');
+    const state=this.snapshot(),p=state.position;
+    if(state.connected!==true || dimension(state.dimension)!==dimension(this.job.home.dimension))throw Error('Hostile recovery unavailable: connection or dimension changed.');
+    if(state.terrainTrust?.trusted!==true)throw Error('Hostile recovery unavailable: terrain is not trusted.');
+    if(!Number.isFinite(state.health)||state.health<=STARTER_MIN_HEALTH)throw Error('Hostile recovery unavailable: health is too low or unknown.');
+    if(Number.isFinite(state.oxygen)&&state.oxygen<=10)throw Error('Hostile recovery unavailable: air is too low.');
+    if(!p || !['x','y','z'].every(k=>Number.isFinite(p[k])) || distance(p,this.job.home.position)>STARTER_MOVEMENT_RADIUS)throw Error('Hostile recovery unavailable: position is outside the starter boundary.');
+    // Nearby hostiles are the reason for recovery, not the ordinary gathering
+    // rule that would reject it. The movement executor validates threat routes.
+  }
+  async finishHostileRecovery(controller) {
+    const request=this.hostileRecovery;
+    if(!request || request.controller!==controller)return false;
+    // Do not mutate a replacement job or launch a continuation for it.
+    if(this.active!==controller || this.job!==request.job)return true;
+    let reason;
+    try{
+      this.checkRecoveryState(request,controller);
+      request.phase='recovering';
+      const result=await this.recoverFromHostile(request,controller.signal);
+      this.checkRecoveryState(request,controller);
+      this.job.hostileRecovery={at:request.at,finished:new Date().toISOString(),source:request.source,status:result?.separated===true?'verified':'unverified',result:structuredClone(result??null)};
+      reason=result?.separated===true ? 'Observed a grounded retreat with separation. Starter work remains paused; the world keeps running.' : 'Hostile recovery did not verify separation. Starter work remains paused; the world keeps running.';
+    }catch(error){
+      reason=controller.signal.aborted ? (controller.signal.reason?.message??error.message) : error.message;
+      if(this.active===controller && this.job===request.job)this.job.hostileRecovery={at:request.at,finished:new Date().toISOString(),source:request.source,status:'unverified',result:null,reason};
+    }
+    if(this.active===controller && this.job===request.job){this.job.status='paused';this.job.reason=reason;this.log('survival',`Starter job paused: ${reason}`);}
+    return true;
+  }
   checkAir() {
     const oxygen = this.snapshot().oxygen;
     if (this.active && Number.isFinite(oxygen) && oxygen <= 10) this.stop(LOW_AIR_MESSAGE);
@@ -180,10 +245,17 @@ export class SurvivalJob {
     this.log('survival', `${resume ? 'Resuming' : 'Starting'} offline starter kit: stone pickaxe, furnace, then return to start.`);
     const controller = new AbortController(); this.active = controller;
     const timer = setTimeout(() => { controller.abort(new Error('Starter job time budget reached.')); this.stopActions('Starter job time budget reached.'); }, this.maxDurationMs); timer.unref?.();
-    this.promise = this.loop(controller.signal).catch(error => {
+    this.promise = this.loop(controller.signal).catch(async error => {
+      if(await this.finishHostileRecovery(controller))return;
       this.job.status = controller.signal.aborted ? 'paused' : 'blocked'; this.job.reason = controller.signal.aborted ? (controller.signal.reason?.message || error.message) : error.message;
       this.log('survival', `Starter job ${this.job.status}: ${this.job.reason}`);
-    }).finally(() => { clearTimeout(timer); this.save(); if (this.active === controller) this.active = null; });
+    }).finally(() => {
+      clearTimeout(timer);
+      try{this.save();}finally{
+        if(this.hostileRecovery?.controller===controller)this.hostileRecovery=null;
+        if(this.active===controller)this.active=null;
+      }
+    });
     return { started: true, mode: 'offline-observation-driven', goal: 'stone pickaxe and furnace, then return to start', id: this.job.id };
   }
   async loop(signal) {
@@ -207,6 +279,7 @@ export class SurvivalJob {
     const remember = entry => { this.job.history.push({ at: new Date().toISOString(), ...entry }); this.job.history = this.job.history.slice(-32); this.save(); };
     while (this.job.steps - firstStep < this.maxSteps) {
       signal.throwIfAborted();
+      this.checkHostileRecovery();
       if (Date.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
       const arrivals = retainedTravelArrivals(this.job);
       if(arrivals.length || this.job.travelArrivals)this.job.travelArrivals=arrivals;
@@ -216,6 +289,7 @@ export class SurvivalJob {
       if (decision.blocked) throw new Error(decision.blocked);
       const observation = await this.observe(signal);
       signal.throwIfAborted();
+      this.checkHostileRecovery();
       this.job.observedPositions = recordScoutObservation(this.job.observedPositions, this.snapshot().position);
       if (Array.isArray(observation.tables)) this.job.tables = observation.tables.slice(0, 8);
       decision = nextStarterStep(this.snapshot(), this.job, observation);
@@ -341,6 +415,7 @@ export class SurvivalJob {
       const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
       try {
         const result = await this.execute(decision.name, decision.args, signal);
+        if(!signal.aborted)this.checkHostileRecovery();
         rememberScout(result);
         signal.throwIfAborted();
         const after = this.snapshot();
@@ -372,6 +447,7 @@ export class SurvivalJob {
         }
         if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
+        if(!signal.aborted)this.checkHostileRecovery();
         rememberScout(error.result);
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
@@ -394,6 +470,7 @@ export class SurvivalJob {
       }
       await sleep(this.intervalMs, undefined, { signal });
     }
+    signal.throwIfAborted();this.checkHostileRecovery();
     const final = nextStarterStep(this.snapshot(), this.job, {});
     if (final.complete) { this.job.status = 'complete'; this.job.evidence = final.evidence; this.job.reason = 'Observed the complete starter kit back at the start on the final allowed step.'; return; }
     throw new Error('Starter job step budget reached. No completion claimed.');

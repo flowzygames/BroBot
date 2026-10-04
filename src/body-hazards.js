@@ -22,6 +22,27 @@ export function isHazardFreeBody(bot) {
 }
 export const isDryLanding=bot=>bot.entity?.onGround===true&&isHazardFreeBody(bot);
 
+// Fresh ground flags alone can lag a disappearing floor. Require observed
+// collision contact beneath at least part of the player's actual footprint.
+// This is an extra recovery preflight, not a change to ordinary movement.
+export function hasObservedStandingSupport(bot) {
+ const p=bot.entity?.position,half=bot.physics?.playerHalfWidth??.3;
+ if(!p||![p.x,p.y,p.z,half].every(Number.isFinite)||half<=0||half>1)return false;
+ const top=Math.round(p.y),y=Math.abs(p.y-top)<=.03?top-1:Math.floor(p.y-1e-7);
+ let contact=false;
+ try{
+  for(let x=Math.floor(p.x-half+1e-7);x<=Math.floor(p.x+half-1e-7);x++)for(let z=Math.floor(p.z-half+1e-7);z<=Math.floor(p.z+half-1e-7);z++){
+   const b=bot.blockAt(new Vec3(x,y,z));
+   if(!b||isFluidBearingBlock(b)||HAZARDS.has(b.name))return false;
+   if(b.boundingBox!=='block'||!Array.isArray(b.shapes))continue;
+   contact ||= b.shapes.some(s=>s.length===6&&s.every(Number.isFinite)&&s[3]>s[0]&&s[4]>s[1]&&s[5]>s[2]
+    && Math.abs(y+s[4]-p.y)<=.03 && Math.min(x+s[3],p.x+half)-Math.max(x+s[0],p.x-half)>1e-7
+    && Math.min(z+s[5],p.z+half)-Math.max(z+s[2],p.z-half)>1e-7);
+  }
+ }catch{return false;}
+ return contact;
+}
+
 // Preserve legitimate slab-height arrivals without the library's broad +1Y
 // allowance, which can otherwise accept a whole-block-wrong position.
 export function isAtPickupStandingCell(bot,target) {
