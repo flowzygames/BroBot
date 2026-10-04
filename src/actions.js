@@ -1,5 +1,5 @@
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
-import { sameItemIdentity } from './item-identity.js'
+import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -793,13 +793,20 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       assert(recipes.length, `Cannot craft ${name}: missing ingredients or crafting table; produced ${produced}/${wanted}`)
       const recipe = recipes[0]
       if (recipe.requiresTable) { assert(table, 'Recipe requires a crafting table'); await approachBlock(ctx, table.position) }
-      await craftBatch(ctx, recipe, recipe.requiresTable ? table : null)
+      const batchOutput = await craftBatch(ctx, recipe, recipe.requiresTable ? table : null)
       // Mineflayer's 2x2 craft can return before the final inventory click is
       // reconciled. Refresh before counting output or choosing the next recipe.
       if (typeof bot._syncWindow === 'function') await step(ctx, () => bot._syncWindow(bot.inventory))
       batches++
       const previous = produced
-      produced = itemCount(name) - before
+      // Restoring a preexisting cursor/grid stack is not newly crafted output.
+      // The synchronized path returns a receipt only after verified storage.
+      // Keep the legacy native fallback's inventory-delta accounting explicit.
+      if (batchOutput == null) produced = itemCount(name) - before
+      else {
+        assert(Number.isSafeInteger(batchOutput) && batchOutput > 0, 'Invalid confirmed crafting output')
+        produced += batchOutput
+      }
       assert(produced > previous && batches <= wanted, `Craft did not increase ${name} inventory`)
     }
     return { item: name, requested: wanted, crafted: produced, inventory_count: itemCount(name), recipe_batches: batches }
@@ -824,13 +831,15 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         checked(ctx)
         assert(attempts < 40, 'Could not store inventory cursor item')
         const item = window.selectedItem
+        const capacity = itemStackCapacity(item)
+        assert(capacity > 0, 'Cannot verify the cursor item stack capacity; refusing an uncertain click')
         const slots = inventorySlots()
-        const same = slot => { const there = window.slots[slot]; return sameItemIdentity(there,item) && there.count < there.stackSize }
+        const same = slot => { const there = window.slots[slot]; return sameItemIdentity(there,item) && there.count < itemStackCapacity(there) }
         let destination = preferred != null && (!window.slots[preferred] || same(preferred)) ? preferred : slots.find(same)
         if (destination == null) destination = slots.find(slot => !window.slots[slot])
         assert(destination != null, 'Inventory is full; the cursor still holds an item')
         const there = window.slots[destination]
-        const moved = Math.min(item.count, (there?.stackSize ?? item.stackSize ?? 64) - (there?.count ?? 0))
+        const moved = Math.min(item.count, (there ? itemStackCapacity(there) : capacity) - (there?.count ?? 0))
         const remaining = item.count - moved
         const expectedStored = (there?.count ?? 0) + moved
         await click(destination)
@@ -877,7 +886,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   async function craftBatch (ctx, recipe, table) {
-    if (typeof bot.clickWindow !== 'function' || typeof bot._syncWindow !== 'function') return step(ctx, () => bot.craft(recipe, 1, table))
+    if (typeof bot.clickWindow !== 'function' || typeof bot._syncWindow !== 'function') {
+      await step(ctx, () => bot.craft(recipe, 1, table))
+      return null
+    }
     // Mineflayer's putAway/putSelectedItemRange use internal optimistic clicks
     // which cannot be synchronized by wrapping the public clickWindow method.
     // Drive every grid, cursor, and inventory click explicitly and reconcile
@@ -941,6 +953,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       await emptyGrid()
       await sync()
       completed = true
+      return outputCount
     } finally {
       if (window && (table || !completed)) { try { await bot.closeWindow(window) } catch {} }
     }

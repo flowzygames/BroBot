@@ -1,7 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sameItemIdentity } from '../src/item-identity.js';
+import { sameItemIdentity, itemStackCapacity } from '../src/item-identity.js';
 const item = extra => ({type:5,metadata:0,count:1,...extra});
+test('cursor capacity honors exact custom limits including increases',()=>{
+ assert.equal(itemStackCapacity(item({stackSize:64})),64);
+ for(const data of [1,16,99])assert.equal(itemStackCapacity(item({stackSize:64,components:[{type:'max_stack_size',data}]})),data);
+});
+test('cursor capacity refuses removed, malformed or unknown limits',()=>{
+ for(const data of [0,-1,100,1.5,'16',null])assert.equal(itemStackCapacity(item({stackSize:64,components:[{type:'max_stack_size',data}]})),0);
+ assert.equal(itemStackCapacity(item({stackSize:64,removedComponents:[{type:'max_stack_size'}]})),0);
+ assert.equal(itemStackCapacity(item({stackSize:64,components:[{type:'max_stack_size',data:16},{type:'max_stack_size',data:16}]})),0);
+ assert.equal(itemStackCapacity(item()),0);
+ for(const components of [[null],[{}]])assert.equal(itemStackCapacity(item({stackSize:64,components})),0);
+});
 test('inventory identity conservatively preserves top-level and nested component array order',()=>{
  const a={type:'custom_name',data:{type:'string',value:'A'}},b={type:'custom_data',data:[1,2]};
  assert.equal(sameItemIdentity(item({components:[a,b]}),item({components:[b,a]})),false);

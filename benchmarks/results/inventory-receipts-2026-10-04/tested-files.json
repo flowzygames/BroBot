@@ -1,0 +1,11 @@
+{
+  "testedCommit": "00f213a7532ef20afddd202f095d72e589ea93fc",
+  "sha256": {
+    "src/actions.js": "102f80debed8cf4277566ec7eec1a6990abe2461a7edec9d247447f48b5d758f",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "test/actions.test.js": "745b3a022e3a2dd0288ab924f066a5c7b5453815d10982ae072289f4c9250d8d",
+    "test/item-identity.test.js": "54795f0715ea43577eff00df5c94b56aa48e6dd54cd9a7c3b9cc05a6140dcf7f",
+    "scripts/diagnostic-stack-capacity.js": "abf341395da6ee577e10b15d41299c9e2bd9fafa8f5c99f6475061f7fe742e6e",
+    "scripts/diagnostic-craft-accounting.js": "bef4b66ae0d417d9a291a5d98fc79b44279b3eecd009631e441ceaa2124697ad"
+  }
+}

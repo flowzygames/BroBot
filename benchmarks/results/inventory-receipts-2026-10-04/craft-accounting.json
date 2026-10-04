@@ -1,0 +1,343 @@
+{
+  "kind": "prepared-crafting-output-accounting",
+  "started": "2026-10-04T21:31:37.988Z",
+  "minecraft": "1.21.8",
+  "fixture": "Prepared peaceful server, two supplied logs and four preexisting planks in cursor or crafting grid. Craft eight genuinely new planks in two batches while preserving preexisting items. Cases cover ordinary cursor, named cursor and existing grid. Not autonomous gathering.",
+  "sourceHashes": {
+    "src/actions.js": "102f80debed8cf4277566ec7eec1a6990abe2461a7edec9d247447f48b5d758f",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "253463abd3b593ec025c9ebb3e0f87a9e8f880ef07a632482bac98a122417657",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "48f029964394a6c2705ced87dcc11154461f58288320bd23a4facbbc6da2f0ab",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "40a88f5d2496cdacf0d6cad09fab1df4887880a55d87d7765c2abe003b676846",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "src/runner.js": "acc0da55a868220e6ac0f50367615cbafd3f4290f28ff0f6e3b61ff080a80a5a",
+    "src/runtime.js": "fd6a100a008d22a2413ce0dde7ecfb3cb7e3001233c43dfb6dcf481e3512d46f",
+    "src/scout-coverage.js": "13c4047e2756ab280a1140ba45355032b06ff5a3db79477b60293e07ecb07a66",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "3f157245153ceeead7caf1aa8561d6fe1d478fcace59c6dd8acdbc8da0642c2a",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "3f8e5c423f93d49a451985fa4f678548252ceb9505f4a65b07e24b984ed2d18f",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-craft-accounting.js": "bef4b66ae0d417d9a291a5d98fc79b44279b3eecd009631e441ceaa2124697ad"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "commit": "00f213a7532ef20afddd202f095d72e589ea93fc",
+  "dirty": false,
+  "cases": [
+    {
+      "location": "cursor",
+      "before": {
+        "slots": [
+          {
+            "slot": 36,
+            "name": "oak_log",
+            "type": 134,
+            "count": 2,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": {
+          "type": 36,
+          "count": 4,
+          "metadata": 0,
+          "nbt": null,
+          "components": [],
+          "removedComponents": [],
+          "componentMap": {},
+          "stackId": null,
+          "name": "oak_planks",
+          "displayName": "Oak Planks",
+          "stackSize": 64
+        }
+      },
+      "craft": {
+        "item": "oak_planks",
+        "requested": 8,
+        "crafted": 8,
+        "inventory_count": 12,
+        "recipe_batches": 2
+      },
+      "after": {
+        "slots": [
+          {
+            "slot": 9,
+            "name": "oak_planks",
+            "type": 36,
+            "count": 12,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": null
+      }
+    },
+    {
+      "location": "named-cursor",
+      "before": {
+        "slots": [
+          {
+            "slot": 36,
+            "name": "oak_log",
+            "type": 134,
+            "count": 2,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": {
+          "type": 36,
+          "count": 4,
+          "metadata": 0,
+          "nbt": null,
+          "components": [
+            {
+              "type": "custom_name",
+              "data": {
+                "type": "string",
+                "value": "Reserved"
+              }
+            }
+          ],
+          "removedComponents": [],
+          "componentMap": {},
+          "stackId": null,
+          "name": "oak_planks",
+          "displayName": "Oak Planks",
+          "stackSize": 64
+        }
+      },
+      "craft": {
+        "item": "oak_planks",
+        "requested": 8,
+        "crafted": 8,
+        "inventory_count": 12,
+        "recipe_batches": 2
+      },
+      "after": {
+        "slots": [
+          {
+            "slot": 9,
+            "name": "oak_planks",
+            "type": 36,
+            "count": 4,
+            "components": [
+              {
+                "type": "custom_name",
+                "data": {
+                  "type": "string",
+                  "value": "Reserved"
+                }
+              }
+            ],
+            "removedComponents": []
+          },
+          {
+            "slot": 10,
+            "name": "oak_planks",
+            "type": 36,
+            "count": 8,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": null
+      }
+    },
+    {
+      "location": "grid",
+      "before": {
+        "slots": [
+          {
+            "slot": 0,
+            "name": "oak_button",
+            "type": 715,
+            "count": 1,
+            "components": [],
+            "removedComponents": []
+          },
+          {
+            "slot": 2,
+            "name": "oak_planks",
+            "type": 36,
+            "count": 4,
+            "components": [],
+            "removedComponents": []
+          },
+          {
+            "slot": 36,
+            "name": "oak_log",
+            "type": 134,
+            "count": 2,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": null
+      },
+      "craft": {
+        "item": "oak_planks",
+        "requested": 8,
+        "crafted": 8,
+        "inventory_count": 12,
+        "recipe_batches": 2
+      },
+      "after": {
+        "slots": [
+          {
+            "slot": 9,
+            "name": "oak_planks",
+            "type": 36,
+            "count": 12,
+            "components": [],
+            "removedComponents": []
+          }
+        ],
+        "cursor": null
+      }
+    }
+  ],
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "oak_planks",
+        "count": 12,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "oak_planks",
+        "count": 12,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastJob": null,
+  "finished": "2026-10-04T21:32:02.123Z"
+}

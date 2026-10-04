@@ -294,6 +294,240 @@ test('real crafting path synchronizes every cursor/grid/output click and preserv
   assert.equal(server.slots[1], null)
 })
 
+test('craft does not count named cursor output as new production', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  server.cursor = {...stack('oak_planks', 4),components:[{type:'custom_name',data:{type:'string',value:'Reserved'}}]}
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); assert.deepEqual(server.slots[slot].components ?? [],server.cursor.components ?? []); server.slots[slot].count += server.cursor.count; server.cursor = null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(result.recipe_batches,2)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),12)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_log').reduce((n,i)=>n+i.count,0),0)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('craft does not count existing grid output as new production', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  server.slots[2] = stack('oak_planks', 4)
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); assert.deepEqual(server.slots[slot].components ?? [],server.cursor.components ?? []); server.slots[slot].count += server.cursor.count; server.cursor = null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(result.recipe_batches,2)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),12)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_log').reduce((n,i)=>n+i.count,0),0)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('craft does not count existing cursor output as new production', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  server.cursor = stack('oak_planks', 4)
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); assert.deepEqual(server.slots[slot].components ?? [],server.cursor.components ?? []); server.slots[slot].count += server.cursor.count; server.cursor = null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(result.recipe_batches,2)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),12)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_log').reduce((n,i)=>n+i.count,0),0)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('cursor storage respects custom stack capacity and moves leftovers into empty slots', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  const custom = count => ({ ...stack('cobblestone', count), components:[{type:'max_stack_size',data:16}] })
+  server.slots[9] = custom(15)
+  server.cursor = custom(2)
+  let clicksOnFull = 0
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); const cap = server.slots[slot].components?.find(c=>c.type==='max_stack_size')?.data ?? 64; const moved=Math.min(server.cursor.count,cap-server.slots[slot].count); if(!moved)clicksOnFull++; server.slots[slot].count += moved; server.cursor.count -= moved; if(!server.cursor.count)server.cursor=null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(clicksOnFull, 0)
+  assert.equal(server.slots[9].count,16)
+  assert.equal(server.slots[10].count,1)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),8)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('cursor storage handles increased custom stack limits', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  const custom = count => ({ ...stack('cobblestone', count), components:[{type:'max_stack_size',data:99}] })
+  server.slots[9] = custom(60)
+  server.cursor = custom(20)
+  let clicksOnFull = 0
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); const cap = server.slots[slot].components?.find(c=>c.type==='max_stack_size')?.data ?? 64; const moved=Math.min(server.cursor.count,cap-server.slots[slot].count); if(!moved)clicksOnFull++; server.slots[slot].count += moved; server.cursor.count -= moved; if(!server.cursor.count)server.cursor=null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(clicksOnFull, 0)
+  assert.equal(server.slots[9].count,80)
+  assert.equal(server.slots[10].name,'oak_planks')
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),8)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
+test('cursor storage handles full custom stacks', async () => {
+  const bot = fakeBot()
+  const logType = registry.itemsByName.oak_log.id
+  const plankType = registry.itemsByName.oak_planks.id
+  const stack = (name, count) => ({ name, type: registry.itemsByName[name].id, metadata: 0, count, stackSize: 64 })
+  const server = { slots: Array(46).fill(null), cursor: null }
+  server.slots[36] = stack('oak_log', 2)
+  const custom = count => ({ ...stack('cobblestone', count), components:[{type:'max_stack_size',data:16}] })
+  server.slots[9] = custom(16)
+  server.cursor = custom(1)
+  let clicksOnFull = 0
+  const inventory = { slots: Array(46).fill(null), selectedItem: null, inventoryStart: 9, inventoryEnd: 45, items () { return this.slots.slice(9, 45).filter(Boolean) } }
+  bot.inventory = inventory
+  const pending = []
+  const recipe = { result: { id: plankType, count: 4 }, requiresTable: false, inShape: null, ingredients: [{ id: logType, metadata: null, count: -1 }] }
+  bot.recipesFor = () => inventory.items().some(item => item.type === logType) ? [recipe] : []
+  bot.craft = async () => { throw new Error('Native optimistic craft must not run') }
+  bot.clickWindow = async (slot, button) => { assert.equal(pending.length, 0, 'Every click must be reconciled before the next'); pending.push({ slot, button }) }
+  bot._syncWindow = async () => {
+    for (const { slot, button } of pending.splice(0)) {
+      if (slot === 0) { assert.equal(server.cursor, null); server.cursor = server.slots[0]; server.slots[1] = null }
+      else if (button === 1) { assert.equal(server.slots[slot], null); server.slots[slot] = { ...server.cursor, count: 1 }; server.cursor.count--; if (!server.cursor.count) server.cursor = null }
+      else if (!server.cursor) { server.cursor = server.slots[slot]; server.slots[slot] = null }
+      else if (!server.slots[slot]) { server.slots[slot] = server.cursor; server.cursor = null }
+      else { assert.equal(server.slots[slot].type, server.cursor.type); const cap = server.slots[slot].components?.find(c=>c.type==='max_stack_size')?.data ?? 64; const moved=Math.min(server.cursor.count,cap-server.slots[slot].count); if(!moved)clicksOnFull++; server.slots[slot].count += moved; server.cursor.count -= moved; if(!server.cursor.count)server.cursor=null }
+      server.slots[0] = server.slots[1]?.type === logType ? stack('oak_planks', 4) : null
+    }
+    inventory.slots = server.slots.map(item => item && { ...item })
+    inventory.selectedItem = server.cursor && { ...server.cursor }
+  }
+  await bot._syncWindow()
+  const result = await createActions(bot).execute('craft', { item: 'oak_planks', count: 8 })
+  assert.equal(result.crafted, 8)
+  assert.equal(clicksOnFull, 0)
+  assert.equal(server.slots[9].count,16)
+  assert.equal(server.slots[10].count,1)
+  assert.equal(inventory.items().filter(i=>i.name==='oak_planks').reduce((n,i)=>n+i.count,0),8)
+  assert.equal(server.cursor, null)
+  assert.equal(server.slots[1], null)
+})
+
 test('craft stores ordinary output without swapping a same-type named stack', async () => {
   const bot = fakeBot()
   const logType = registry.itemsByName.oak_log.id
