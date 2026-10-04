@@ -164,7 +164,8 @@ export class Runtime {
     this.injuryObserver = observeOwnInjuries(bot, {
       isCurrent: () => this.bot === bot && !this.closed,
       log: this.log.bind(this), action: () => this.runner.active?.name ?? null,
-      onHealth: () => this.checkHealth()
+      onHealth: () => this.checkHealth(),
+      onHurt: source => this.checkHostileHurt(source)
     });
     bot.on('death', () => {
       this.brain.stop('Died; waiting for respawn. Resume your goal when ready.');
@@ -264,6 +265,16 @@ export class Runtime {
       return this.execute('go_to', { x: Math.floor(target.position.x), y: Math.floor(target.position.y), z: Math.floor(target.position.z), radius: 2 });
     }
     throw new Error('Unsupported command.');
+  }
+  checkHostileHurt(source) {
+    const bot = this.bot, active = this.runner.active;
+    if (this.connection !== 'connected' || !bot || this.closed || !this.survival.active || !active
+      || active.controller.signal.aborted || active.name === 'eat' || source?.type !== 'hostile') return;
+    // This responds to an explicit observed attacker, without joining separate
+    // health packets or guessing a missing source. It is an interruption, not
+    // combat, retreat, a paused world, or protection from the next hit.
+    if (Number.isFinite(bot.health) && bot.health <= 0) return;
+    this.stop('Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.');
   }
   checkHealth() {
     const bot = this.bot, active = this.runner.active;
