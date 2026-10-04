@@ -536,6 +536,33 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return null
   }
 
+  function assertStarterHomeLeafAnchor (ctx, block) {
+    if (!ctx.starterScope || !/_log$/.test(block.name)) return
+    const home = movementBoundary()?.center
+    assert(home && ['x','y','z'].every(k => Number.isFinite(home[k]) && Math.abs(home[k]) <= (k === 'y' ? 2048 : 29999984)), 'Starter log mining requires a valid saved home')
+    // Protect every observed leaf cell beneath the saved player footprint, not
+    // just its center. This is a local anchor check, not a reservation of all
+    // paths or a prediction of when natural leaves will decay.
+    // Server/physics arrivals can sit a few hundredths above an integer
+    // surface. Use the same grounded-height tolerance as canopy recovery.
+    const homeY = Math.abs(home.y - Math.round(home.y)) <= 0.03 ? Math.round(home.y) : home.y
+    const floorY = Math.floor(homeY - 0.000001)
+    const message = 'Cannot verify a retained anchor beneath the saved starter home'
+    for (let x = Math.floor(home.x - 0.31); x <= Math.floor(home.x + 0.31); x++) {
+      for (let z = Math.floor(home.z - 0.31); z <= Math.floor(home.z + 0.31); z++) {
+        const support = new Vec3(x, floorY, z)
+        if (Math.abs(block.position.x-x) + Math.abs(block.position.y-floorY) + Math.abs(block.position.z-z) > 6) continue
+        const floor = bot.blockAt(support)
+        assert(floor, message)
+        if (!/_leaves$/.test(floor.name)) continue
+        const afterRemoval = position => position.equals(block.position)
+          ? {name:'air',boundingBox:'empty',position,isWaterlogged:false}
+          : bot.blockAt(position)
+        assert(retainedLeafAnchor(afterRemoval, support), message)
+      }
+    }
+  }
+
   async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
     else await approachBlock(ctx, p)
@@ -552,6 +579,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       assert(block.diggable && bot.canDigBlock(block), `Cannot dig ${block.name} from this position`)
       const issue = miningEnvironmentIssue(block)
       assert(!issue, issue)
+      assertStarterHomeLeafAnchor(ctx, block)
       if (requireCurrentReach) assert(visibleHere(block), 'Mining target is no longer visible from the certified stage')
       return block
     }

@@ -1444,3 +1444,80 @@ test('aborting pickup during grace removes the target collection listener',async
  await assert.rejects(createActions(bot).execute('pickup',{radius:8},controller.signal,{starterScope:'job/1'}),{name:'AbortError'});
  assert.equal(bot.listenerCount('playerCollect'),0);
 });
+
+function leafHomeFixture() {
+ const bot=fakeBot(),home=new Vec3(.5,64,.5);bot.entity.position=new Vec3(3.5,64,.5);
+ bot.putBlock('stone',new Vec3(3,63,0));bot.putBlock('oak_leaves',new Vec3(0,63,0));bot.putBlock('oak_leaves',new Vec3(1,63,0));bot.putBlock('oak_log',new Vec3(2,63,0));
+ let digs=0;bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem(block.name)};
+ const actions=createActions(bot,{movementBoundary:()=>({center:home,radius:256})});
+ return{bot,home,actions,digs:()=>digs,scope:{starterScope:'job/home-leaf'}};
+}
+test('automatic starter refuses to mine the retained anchor beneath its saved leaf home',async()=>{
+ for(const name of ['collect','dig_at']){
+  const f=leafHomeFixture(),args=name==='collect'?{block:'oak_log',count:1,radius:8}:{x:2,y:63,z:0};
+  await assert.rejects(f.actions.execute(name,args,undefined,f.scope),/retained anchor beneath the saved starter home/);
+  assert.equal(f.digs(),0);assert.equal(f.bot.blockAt(new Vec3(2,63,0)).name,'oak_log');
+ }
+});
+
+test('starter may remove one log with an independent anchor but not the last retained anchor',async()=>{
+ const f=leafHomeFixture();f.bot.putBlock('oak_log',new Vec3(1,62,0));
+ await f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope);assert.equal(f.digs(),1);
+ await assert.rejects(f.actions.execute('dig_at',{x:1,y:62,z:0},undefined,f.scope),/retained anchor beneath the saved starter home/);
+ assert.equal(f.digs(),1);
+});
+
+test('home anchor checks are repeated after awaited equipment and aiming',async()=>{
+ for(const phase of ['equip','look']){
+  const f=leafHomeFixture();f.bot.putBlock('oak_log',new Vec3(1,62,0));f.bot.addItem('wooden_axe');
+  const equip=f.bot.equip;f.bot.equip=async item=>{await equip(item);if(phase==='equip')f.bot.removeBlock(new Vec3(1,62,0))};
+  f.bot.lookAt=async()=>{if(phase==='look')f.bot.removeBlock(new Vec3(1,62,0))};
+  await assert.rejects(f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope),/retained anchor beneath the saved starter home/);assert.equal(f.digs(),0);
+ }
+});
+
+test('direct log commands retain control even when a saved-home boundary is supplied',async()=>{
+ const f=leafHomeFixture();await f.actions.execute('dig_at',{x:2,y:63,z:0});assert.equal(f.digs(),1);
+});
+
+test('ground-supported homes, distant logs and non-log targets are unaffected by leaf protection',async()=>{
+ for(const mode of ['ground','distant','stone']){
+  const f=leafHomeFixture();let target=new Vec3(2,63,0);
+  if(mode==='ground')f.bot.putBlock('stone',new Vec3(0,63,0));
+  if(mode==='stone')f.bot.putBlock('stone',target);
+  if(mode==='distant'){target=new Vec3(12,63,0);f.bot.putBlock('oak_log',target);f.bot.entity.position=new Vec3(12.5,64,2.5);f.bot.putBlock('stone',new Vec3(12,63,2))}
+  await f.actions.execute('dig_at',{x:target.x,y:target.y,z:target.z},undefined,f.scope);assert.equal(f.digs(),1);
+ }
+});
+
+test('leaf protection covers a saved home footprint crossing negative coordinate boundaries',async()=>{
+ const f=leafHomeFixture();f.home.x=-.1;f.home.z=-.1;f.bot.putBlock('stone',new Vec3(-1,63,-1));
+ await assert.rejects(f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope),/retained anchor beneath the saved starter home/);assert.equal(f.digs(),0);
+});
+
+test('a six-step retained leaf anchor is accepted but a seven-step connection is not proof',async()=>{
+ for(const length of [6,7]){
+  const f=leafHomeFixture();for(let z=1;z<length;z++)f.bot.putBlock('oak_leaves',new Vec3(0,63,z));f.bot.putBlock('oak_log',new Vec3(0,63,length));
+  const action=f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope);
+  if(length===6){await action;assert.equal(f.digs(),1)}else{await assert.rejects(action,/retained anchor beneath the saved starter home/);assert.equal(f.digs(),0)}
+ }
+});
+
+test('unloaded home support or the only alternate anchor cannot authorize starter log mining',async()=>{
+ for(const missing of [new Vec3(0,63,0),new Vec3(1,62,0)]){
+  const f=leafHomeFixture();f.bot.putBlock('oak_log',new Vec3(1,62,0));const read=f.bot.blockAt;f.bot.blockAt=p=>p.equals(missing)?null:read(p);
+  await assert.rejects(f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope),/retained anchor beneath the saved starter home/);assert.equal(f.digs(),0);
+ }
+});
+
+test('invalid saved home data discovered after aiming fails explicitly without mining',async()=>{
+ const f=leafHomeFixture();f.bot.putBlock('oak_log',new Vec3(1,62,0));f.bot.lookAt=async()=>{f.home.x=1e100};
+ await assert.rejects(f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope),/valid saved home/);assert.equal(f.digs(),0);
+});
+
+test('saved-home height jitter near a full-block surface cannot bypass leaf-anchor protection',async()=>{
+ for(const offset of [-.02,.02]){
+  const f=leafHomeFixture();f.home.y=64+offset;
+  await assert.rejects(f.actions.execute('dig_at',{x:2,y:63,z:0},undefined,f.scope),/retained anchor beneath the saved starter home/);assert.equal(f.digs(),0);
+ }
+});
