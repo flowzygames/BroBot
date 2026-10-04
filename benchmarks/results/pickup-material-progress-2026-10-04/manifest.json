@@ -1,0 +1,38 @@
+{
+  "source": "8c98b39b7e69f7b5538c394d37411692c8f70cf5",
+  "classification": "Selected fresh-world verification of pickup material-progress correction, preceded by prepared17. All attempts retained; this is not a full-cohort score and does not replace previous source outcomes.",
+  "passed": 2,
+  "total": 2,
+  "files": {
+    "plan.json": {
+      "sha256": "7c9b5f38a4e40966ceda4dbff8e47fb61124d05d71bc2daa7ef2ded48134c549",
+      "bytes": 1994
+    },
+    "tested-files.json": {
+      "sha256": "ff500862e01cefa55945d3edaf30b0c1e2142fc48ea7ef36cb95a9fa836454db",
+      "bytes": 8829
+    },
+    "prepared17.json": {
+      "sha256": "08965c485ed19545caca854a9df5b1da49f51b5be8d5be8472af3fa075b3218b",
+      "bytes": 8627
+    },
+    "1146093953/result.json": {
+      "sha256": "0bc000a5b29241cd2e00ced71a693ebca61976924c59676fdac4c147fe2c2917",
+      "bytes": 75142
+    },
+    "1146093953/memory/events.jsonl": {
+      "sha256": "dfa3dce633036c2986135dae009aa40521cbe5cb395b568d7f452a77fc3fa4ba",
+      "bytes": 220045
+    },
+    "386690312/result.json": {
+      "sha256": "461c47d0fb5e56a0aa5b918e5e5f4fa5f6d1d9eb5a01f554a7c1cf599a7ae547",
+      "bytes": 174980
+    },
+    "386690312/memory/events.jsonl": {
+      "sha256": "a25bf6148a761b38debc0181742203d8e9076646fb8bcb4b8272c183bbcbed47",
+      "bytes": 426971
+    }
+  },
+  "archiveSha256": "0139f5a554c92d54709d5cf4d0b0d8822a83c98ab376556aef1d2570492abe29",
+  "archiveBytes": 55331
+}

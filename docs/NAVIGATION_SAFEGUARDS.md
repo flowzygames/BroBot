@@ -8,7 +8,7 @@ Local follow-up to the planner and exposed-block selection patches. No change to
 - Require completed successful plans, not partial/timeout results. Navigate to the exact verified endpoint rather than letting a block-face goal choose an unverified alternative endpoint.
 - Bound planning by short generator slices, a per-round-trip budget and a total collection planning budget. Honor cancellation between slices.
 - For dropped items, require loaded support and headroom; try a small bounded set of adjacent standing cells instead of navigating into an obstructed item cell.
-- Item-aware pickup navigation releases its own goal and listeners as soon as the target is collected/disappears. Disappearance does not count as a verified inventory gain.
+- Item-aware pickup navigation observes collection/disappearance but retains its certified movement goal until a verified grounded dry destination or bounded failure. It cleans up its own listeners and never clears a replacement goal. Disappearance does not count as a verified inventory gain.
 - Bound each pickup navigation attempt by local timeout and stalled movement. Preserve caller cancellation and never clear a replacement movement goal.
 
 ## Initial verification (historical)
@@ -23,7 +23,7 @@ The unchanged full real-server fixture suite passed all 16 phases, including gat
 
 ## Limits
 
-Preflight establishes paths in the currently loaded world. It is not a proof against later terrain changes, moving entities, movement drift, interruption midway through a route, or mining away a block used by the planned return route. Planning budgets can conservatively reject a route that would be found with a longer search. Long pickup trips may require another bounded command. No automatic rescue digging/building was enabled.
+Preflight establishes paths in the currently loaded world. It is not a proof against later terrain changes, moving entities, movement drift, interruption midway through a route, or mining away a block used by the planned return route. Planning budgets can conservatively reject a route that would be found with a longer search. Long pickup trips may require another bounded command. At that initial checkpoint, no automatic rescue digging/building was enabled. Newer bounded clearance and one-leaf recovery have separate documented proofs and limits in [foliage recovery](FOLIAGE_RECOVERY.md); they do not guarantee rescue.
 
 Tests are direct server controls and deterministic planner simulations, not live-model autonomous play or rendered Windows-client verification.
 
