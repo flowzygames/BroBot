@@ -57,7 +57,7 @@ export function nextStarterStep(state, job, observation = {}) {
   if ((state.entities ?? []).some(e => e.type === 'hostile' && e.distance < 6)) return { blocked: 'A hostile mob is too close for unarmored starter gathering.' };
   if (has('stone_pickaxe') && has('furnace')) {
     if (distance(state.position, job.home.position) <= 2.5) return { complete: true, evidence: { stone_pickaxe: items.stone_pickaxe, furnace: items.furnace, homeDistance: distance(state.position, job.home.position) } };
-    return starterTravel(state, job, job.home.position, 'Return to the job starting point with the starter kit.');
+    return starterTravel(state, job, job.home.position, 'Return to the job starting point with the starter kit.', 'home');
   }
   const ensurePlanks = wanted => {
     if (WOODS.some(w => (items[`${w}_planks`] ?? 0) >= wanted)) return null;
@@ -168,6 +168,10 @@ export class SurvivalJob {
       decision = nextStarterStep(this.snapshot(), this.job, observation);
       if (decision.blocked) throw new Error(decision.blocked);
       if (decision.complete) { this.job.status = 'complete'; this.job.evidence = decision.evidence; this.job.reason = 'Observed a stone pickaxe and furnace in inventory, alive and back at the start.'; this.log('survival', this.job.reason); return; }
+      // Freshly observed completion prerequisites outrank stale gathering
+      // recovery (including queued scouts and leaf clearance). The route still
+      // goes through the normal safety checks and certified walking executor.
+      if (decision.waypointKind === 'home' || decision.name === 'eat') recovery = null;
       if (recovery?.name === 'pickup') {
         // A clearance action may already collect the tracked materials. Never
         // turn its stale continuation into an unscoped trip after other litter.
