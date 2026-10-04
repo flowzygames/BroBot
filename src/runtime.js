@@ -1,3 +1,4 @@
+import { sectionSearchDistance } from './block-search.js';
 import { STARTER_MOVEMENT_RADIUS } from './starter-limits.js';
 import mineflayer from 'mineflayer';
 import pathfinderModule from 'mineflayer-pathfinder';
@@ -49,7 +50,8 @@ export class Runtime {
         const pattern = /^(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|cherry|pale_oak)_log$/;
         const ids = this.bot.registry.blocksArray.filter(b => pattern.test(b.name)).map(b => b.id);
         const excludedLogs = this.survival.job?.excluded ?? {};
-        const positions = this.bot.findBlocks({ matching: ids, maxDistance: STARTER_LOG_RADIUS, count: 128, useExtraInfo: block => !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
+        const logOrigin = this.bot.entity.position.floored();
+        const positions = this.bot.findBlocks({ matching: ids, maxDistance: sectionSearchDistance(STARTER_LOG_RADIUS), count: 128, useExtraInfo: block => block.position.distanceTo(logOrigin) <= STARTER_LOG_RADIUS && !(excludedLogs[block.name] ?? []).some(p => p.x === block.position.x && p.y === block.position.y && p.z === block.position.z) });
         // findBlocks may fill a small cap in one chunk section before examining a
         // closer tree across its boundary. Sort a larger bounded sample, then
         // keep only sixteen logs for the local foliage rays.

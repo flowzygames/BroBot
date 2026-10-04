@@ -1009,3 +1009,32 @@ test('cancelling pickup still rejects collection and cleans navigation rather th
   assert.equal(digs,1);assert.equal(bot.pathfinder.goal,null);
   for(const event of ['entityGone','playerCollect','goal_reached','goal_updated','path_update'])assert.equal(bot.listenerCount(event),0,event);
 });
+
+test('collection discovers loaded diagonal-section stone within its original radius', async () => {
+  const { realSectionSearch } = await import('./helpers/section-search.js')
+  const bot = fakeBot()
+  const target = new Vec3(-17, 64, -17)
+  const block = bot.putBlock('stone', target)
+  bot.findBlocks = realSectionSearch(bot, [block])
+  assert.deepEqual(bot.findBlocks({ matching: block.type, maxDistance: 32, count: 512 }), [])
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+    const p = goal.target ? goal.target.offset(1, 0, 0) : new Vec3(goal.x, goal.y, goal.z)
+    yield { result: { status: 'success', path: [p] } }
+  }
+  bot.dig = async b => { assert.ok(b.position.equals(target)); bot.removeBlock(target); bot.addItem('cobblestone') }
+  const result = await createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 })
+  assert.equal(result.completed, true)
+  assert.equal(result.inventory_changes.cobblestone, 1)
+})
+
+test('expanded section search still refuses resources outside the requested sphere', async () => {
+  const { realSectionSearch } = await import('./helpers/section-search.js')
+  const bot = fakeBot()
+  const target = new Vec3(-25, 64, -25)
+  const block = bot.putBlock('stone', target)
+  bot.findBlocks = realSectionSearch(bot, [block])
+  let moved = false
+  bot.pathfinder.goto = async () => { moved = true }
+  await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 32 }), /Could not collect/)
+  assert.equal(moved, false)
+})

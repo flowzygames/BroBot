@@ -285,7 +285,7 @@ test('starter log observation and gathering share a bounded radius beyond the ol
  assert.equal(nextStarterStep(state,job,{wood:'oak'}).args.radius,STARTER_LOG_RADIUS);
  const {Runtime}=await import('../src/runtime.js');const{loadConfig}=await import('../src/config.js');const{Vec3}=await import('vec3');const{mkdtemp,rm}=await import('node:fs/promises');const{tmpdir}=await import('node:os');const{join}=await import('node:path');
  const dir=await mkdtemp(join(tmpdir(),'brobot-log-radius-'));const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir}));runtime.execute=async()=>({position:state.position,nearby_blocks:[]});const p=new Vec3(40,64,0);
- runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({maxDistance})=>{assert.equal(maxDistance,48);return[p];},blockAt:q=>({name:'oak_log',position:q}),quit:()=>{}};
+ runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'}]},entity:{position:new Vec3(0.5,64,0.5)},findBlocks:({maxDistance,useExtraInfo})=>{assert.equal(maxDistance,108);assert.equal(useExtraInfo({name:'oak_log',position:p}),true);assert.equal(useExtraInfo({name:'oak_log',position:new Vec3(49,64,0)}),false);return[p];},blockAt:q=>({name:'oak_log',position:q}),quit:()=>{}};
  try{assert.equal((await runtime.survival.observe()).wood,'oak');}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
 });
 
@@ -417,7 +417,7 @@ test('tree observation sorts a bounded wider sample before selecting its sixteen
   const dir=await mkdtemp(join(tmpdir(),'brobot-tree-sample-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:dir,OPENAI_API_KEY:''}));
   const near=new Vec3(2,64,0),far=Array.from({length:16},(_,i)=>new Vec3(20+i,64,0));
   runtime.execute=async()=>({position:{x:.5,y:64,z:.5},nearby_blocks:[]});
-  runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'birch_log'}]},entity:{position:new Vec3(.5,64,.5)},findBlocks:options=>{assert.equal(options.count,128);assert.equal(options.maxDistance,48);return [...far,near];},blockAt:p=>({name:p.equals(near)?'birch_log':'oak_log',position:p}),world:{raycast:()=>null},quit(){}};
+  runtime.bot={registry:{blocksArray:[{id:1,name:'oak_log'},{id:2,name:'birch_log'}]},entity:{position:new Vec3(.5,64,.5)},findBlocks:options=>{assert.equal(options.count,128);assert.equal(options.maxDistance,108);return [...far,near];},blockAt:p=>({name:p.equals(near)?'birch_log':'oak_log',position:p}),world:{raycast:()=>null},quit(){}};
   try{assert.equal((await runtime.survival.observe()).wood,'birch');}finally{await runtime.close();await rm(dir,{recursive:true,force:true});}
 });
 
