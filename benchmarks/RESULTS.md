@@ -2,7 +2,7 @@
 
 BroBot Core0.2 download: **11/20 known worlds**, separate original trio **1/3**, prepared integration **17/17**,346 automated checks. [Complete frozen evidence](results/core02-2026-10-04/README.md). Core0.1 previously scored10/20 and2/3 respectively; the release is not uniformly better.
 
-Source now includes health interruption, mining-candidate filtering and post-aim checks with 358 checks. [Pre-dig integration evidence](results/pre-dig-recheck-2026-10-04/README.md). The controlled health fixture passed; the selected mining replay still failed. [Mining evidence](results/mining-preflight-2026-10-04/README.md). Its one selected natural-world pass is not substituted into frozen release scores. [Follow-up evidence](results/health-interrupt-2026-10-04/README.md).
+Source now includes health interruption, mining-candidate filtering and post-aim checks plus injury reporting, with 365 checks. [Injury diagnostic evidence](results/injury-reporting-2026-10-04/README.md). [Pre-dig integration evidence](results/pre-dig-recheck-2026-10-04/README.md). The controlled health fixture passed; the selected mining replay still failed. [Mining evidence](results/mining-preflight-2026-10-04/README.md). Its one selected natural-world pass is not substituted into frozen release scores. [Follow-up evidence](results/health-interrupt-2026-10-04/README.md).
 
 ## Historical records below
 

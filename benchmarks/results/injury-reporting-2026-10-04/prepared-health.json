@@ -1,0 +1,61 @@
+{
+  "kind": "prepared-health-interruption",
+  "started": "2026-10-04T09:22:24.695Z",
+  "minecraft": "1.21.8",
+  "fixture": "Fresh isolated prepared flat world, supplied log blocks, normal survival with empty inventory. Natural regeneration and mobs disabled. Console applies13 generic damage during real log digging; the ordinary one-second reflex timer is disabled to isolate the health event. Not natural-world reliability or proof of injury prevention.",
+  "sourceHashes": {
+    "src/injury-observer.js": "48f029964394a6c2705ced87dcc11154461f58288320bd23a4facbbc6da2f0ab",
+    "src/runtime.js": "f2b7e00989c92e92f2faabf3b9ff38aa31a4ceb65bb4369a9d3ea80a932514da",
+    "src/survival.js": "7491248252a7a7d31b49b96457a3711cfd8fe48cac676fac216ed5c53f323d99",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "scripts/diagnostic-health-interrupt.js": "35e582a0438e1e99777268ad72d6eb7a2bbf762c4b2e0ec57f41c6915b28ee14"
+  },
+  "passed": true,
+  "before": {
+    "health": 20,
+    "action": "collect",
+    "digging": "oak_log"
+  },
+  "after": {
+    "health": 7,
+    "abortReason": "Low health: work paused. The world keeps running; reach safety before resuming.",
+    "jobStatus": "paused",
+    "jobReason": "Low health: work paused. The world keeps running; reach safety before resuming.",
+    "elapsedMs": 60,
+    "digging": false,
+    "injuries": [
+      {
+        "at": "2026-10-04T09:22:50.127Z",
+        "kind": "hurt_observation",
+        "entityId": 21,
+        "source": null,
+        "sourceStatus": "unavailable",
+        "health_observed": 20,
+        "healthTiming": "May precede or follow the injury; not a damage amount.",
+        "action": "collect",
+        "position": {
+          "x": 1.3149785454473797,
+          "y": 65,
+          "z": 0.49999999999985056
+        },
+        "dimension": "overworld"
+      },
+      {
+        "at": "2026-10-04T09:22:50.168Z",
+        "kind": "health_loss",
+        "before": 20,
+        "after": 7,
+        "loss": 13,
+        "cause": "unattributed",
+        "action": "collect",
+        "position": {
+          "x": 1.3149785454473797,
+          "y": 65,
+          "z": 0.49999999999985056
+        },
+        "dimension": "overworld"
+      }
+    ]
+  },
+  "finished": "2026-10-04T09:22:51.494Z"
+}
