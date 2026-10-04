@@ -14,7 +14,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 > **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
-> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The latest placement and pickup-progress fixes pass **463 automated checks**; their exact-source prepared and selected-world verification is [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
+> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The server-confirmed mining source passes **502 automated checks** and **17/17 prepared Minecraft phases**, plus a separate real refusal/success fixture. [Exact evidence and limits](benchmarks/results/confirmed-mining-2026-10-04/README.md). Earlier placement and pickup-progress verification remains [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
 
 ## New in Core 0.2
 
@@ -28,6 +28,8 @@ Core names identify the software agent release, not a newly trained foundation m
 
 ## New in the development source
 
+- Requires actual server block updates before counting a mined block, rather than trusting local predicted air
+- Stops and disconnects after an unconfirmed mining edit, so later actions cannot use an unverified terrain cache; goals stay paused after reconnecting
 - Rechecks the held placement item after aiming, before sending the placement request
 - Distinguishes reaching a dropped item from actually collecting it, so an unchanged failed pickup cannot endlessly reset its retry history
 - Reuses unchanged collection candidates without repeating the same search after unrelated distant block updates
@@ -37,6 +39,8 @@ Core names identify the software agent release, not a newly trained foundation m
 - Can attempt the existing certified one-leaf descent after two explicitly identified crafting-table exit failures, with fresh healthy grounded evidence and at most four distinct-cell attempts
 
 A controlled Minecraft setup demonstrated the canopy step, pickaxe crafting and a separately requested return. None of the 23 natural-world attempts activated that hook, so general tree escape is not established. Hostile protection is also incomplete: the latest cohort includes a successful run with skeleton damage. [Candidate mechanisms and prepared proof](benchmarks/results/recovery-candidate-2026-10-04/README.md).
+
+Server-confirmed mining currently supports **Java 1.21.8**. Other mining protocol versions and digs estimated longer than 24 seconds are refused before digging. A separate prepared adventure-mode test reproduced a false local mining completion and verified rejection, disconnection and blocked follow-up actions; a new survival connection genuinely mined and collected the log. This is not a new full-world reliability score. [Mining confirmation and recovery behavior](MINING_CONFIRMATION.md).
 
 ## Meet your second pair of hands
 
