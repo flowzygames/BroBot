@@ -1,0 +1,30 @@
+{
+  "label": "BroBot Core 0.2 \u00b7 separate original trio",
+  "sourceCommit": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+  "passed": 1,
+  "scheduled": 3,
+  "cases": [
+    {
+      "seed": "718224",
+      "status": "passed",
+      "elapsedMs": 99256,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "42",
+      "status": "failed",
+      "elapsedMs": 144774,
+      "reason": "A hostile mob is too close for unarmored starter gathering.",
+      "passed": false
+    },
+    {
+      "seed": "20260930",
+      "status": "failed",
+      "elapsedMs": 43573,
+      "reason": "Health is too low to continue gathering safely.",
+      "passed": false
+    }
+  ],
+  "note": "Separate regression set: one success, hostile-mob stop, and low-health stop during stone gathering. Core0.1 previously completed2/3; timing and mob encounters vary."
+}

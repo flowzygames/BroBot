@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Trailhead",
+  "classification": "known-world development cohort",
+  "commit": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+  "publishedEquivalentCommit": "a73e0aa8c7f95d2de34e252487d9b19ef9c29a25",
+  "protocol": "trailhead-v1",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "minecraft": "1.21.8"
+  },
+  "conditions": {
+    "freshNaturalWorld": true,
+    "difficulty": "normal",
+    "mode": "survival",
+    "suppliedItems": false,
+    "preparedTerrain": false,
+    "consoleActions": [
+      "spawnRadius=0 before connection only"
+    ],
+    "spawnRadius": 0,
+    "paidModel": false,
+    "controller": "offline-observation-driven",
+    "timeBudgetSeconds": 300,
+    "startCommand": "survive starter"
+  },
+  "passed": 11,
+  "scheduled": 20,
+  "completed": 20,
+  "complete": true,
+  "cases": [
+    {
+      "seed": "454806089",
+      "status": "passed",
+      "elapsedMs": 121924,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1542908414",
+      "status": "failed",
+      "elapsedMs": 300028,
+      "reason": "Starter job time budget reached.",
+      "passed": false
+    },
+    {
+      "seed": "761598570",
+      "status": "passed",
+      "elapsedMs": 76644,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1587439118",
+      "status": "passed",
+      "elapsedMs": 112600,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "924242050",
+      "status": "failed",
+      "elapsedMs": 234564,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "passed": false
+    },
+    {
+      "seed": "113919219",
+      "status": "passed",
+      "elapsedMs": 292099,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "474859294",
+      "status": "passed",
+      "elapsedMs": 69635,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1576696577",
+      "status": "passed",
+      "elapsedMs": 67147,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1382194916",
+      "status": "passed",
+      "elapsedMs": 165782,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "386690312",
+      "status": "failed",
+      "elapsedMs": 300005,
+      "reason": "Starter job time budget reached.",
+      "passed": false
+    },
+    {
+      "seed": "1744809425",
+      "status": "failed",
+      "elapsedMs": 300329,
+      "reason": "Starter job time budget reached.",
+      "passed": false
+    },
+    {
+      "seed": "61544722",
+      "status": "failed",
+      "elapsedMs": 300004,
+      "reason": "Starter job time budget reached.",
+      "passed": false
+    },
+    {
+      "seed": "1041160109",
+      "status": "passed",
+      "elapsedMs": 256695,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1888406977",
+      "status": "failed",
+      "elapsedMs": 69,
+      "reason": "Powder snow is touching BroBot. Work stopped, but freezing continues. Move BroBot onto dry solid ground before resuming.",
+      "passed": false
+    },
+    {
+      "seed": "1547703085",
+      "status": "failed",
+      "elapsedMs": 258105,
+      "reason": "Exploration budget exhausted: No supported tree logs are visible nearby.",
+      "passed": false
+    },
+    {
+      "seed": "1146093953",
+      "status": "passed",
+      "elapsedMs": 209762,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1014875191",
+      "status": "failed",
+      "elapsedMs": 300005,
+      "reason": "Starter job time budget reached.",
+      "passed": false
+    },
+    {
+      "seed": "355620996",
+      "status": "passed",
+      "elapsedMs": 87615,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    },
+    {
+      "seed": "1276821265",
+      "status": "failed",
+      "elapsedMs": 118531,
+      "reason": "No bounded exploration target remains inside the job area.",
+      "passed": false
+    },
+    {
+      "seed": "1244186709",
+      "status": "passed",
+      "elapsedMs": 245953,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "passed": true
+    }
+  ]
+}

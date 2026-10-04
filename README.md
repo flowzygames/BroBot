@@ -1,4 +1,4 @@
-> Latest source checkpoint: 308 automated checks, 17 prepared live phases and **10/20** known natural worlds. Prior305 scored8/20; older90-block275 scored12/20. [Complete evidence and limitations](benchmarks/results/pickup-cohort-2026-10-03/README.md).
+> **BroBot Core 0.2:** 346 automated checks and **11/20** known natural worlds, versus Core 0.1’s 10/20. One additional completion; nine worlds still failed. Separate original-world regression: **1/3**, down from Core 0.1’s 2/3. [Full records and limitations](benchmarks/results/core02-2026-10-04/README.md).
 
 # BroBot
 
@@ -10,7 +10,17 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 [Get started](#get-started) · [Commands](#your-first-five-minutes) · [How it works](#how-it-works) · [Benchmarks](#measured-not-guessed) · [Alpha roadmap](#the-road-to-alpha-1)
 
-> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the current source completed 10 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+> **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the current source completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
+
+## New in Core 0.2
+
+- Checks for a way out before automatically placing a crafting table
+- Finds resources across diagonal chunk boundaries without expanding the requested collection radius
+- Remembers exhausted scouting directions and tries bounded alternatives
+- Skips redundant collection retries only when fresh terrain, inventory and position checks still match
+- Switches promptly to eating or returning home when the observed state calls for it
+
+Core names identify the software agent release, not a newly trained foundation model. These changes are covered by 346 automated checks. Natural-world success remains limited: 11/20 on the same known development seeds, with no failed run replaced. The automatic canopy-recovery experiment did not demonstrate improvement and is excluded.
 
 ## Meet your second pair of hands
 

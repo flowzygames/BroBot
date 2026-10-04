@@ -71,16 +71,20 @@ for(const [key,g] of Object.entries(checkpoint.groups)){
 }
 assert.equal(checkpoint.groups.pickup308.passed,10);assert.equal(checkpoint.groups.pickup308.scheduled,20);
 assert.equal(checkpoint.groups.original308.passed,2);assert.equal(checkpoint.groups.original308.scheduled,3);
-assert.equal(release.currentPairedEvaluation.sourceCommit,checkpoint.groups.pickup308.sourceCommit);
-assert.equal(release.currentPairedEvaluation.passed,checkpoint.groups.pickup308.passed);
-assert.equal(release.currentOriginalDevelopmentWorlds.sourceCommit,checkpoint.groups.original308.sourceCommit);
+assert.equal(release.currentPairedEvaluation.sourceCommit,checkpoint.groups.core02.sourceCommit);
+assert.equal(release.currentPairedEvaluation.passed,checkpoint.groups.core02.passed);
+assert.equal(release.currentOriginalDevelopmentWorlds.sourceCommit,checkpoint.groups.original346.sourceCommit);
 for(const key of ['MineLine','Workbench','Pathfinder','CommandSense','SafetyLatch','GoalSense-LLM']){
   assert.equal(scorecard.metrics[key].candidate.status,'not_run');
   assert.equal(scorecard.metrics[key].candidate.score,null);
 }
-assert.equal(scorecard.metrics['Trailhead-20'].candidate.passed,10);
+assert.equal(scorecard.metrics['Trailhead-20'].candidate.passed,11);
 const archiveCheck=spawnSync('python3',['-c',
   'import zipfile,json,hashlib,sys; z=zipfile.ZipFile(sys.argv[1]); names=z.namelist(); assert all(n.startswith("BroBot/") and ".." not in n.split("/") for n in names); assert not any(n.startswith(("BroBot/.server/","BroBot/node_modules/","BroBot/.git/","BroBot/showcase/")) or n=="BroBot/.env" for n in names); m=json.loads(z.read("BroBot/"+sys.argv[2])); assert all(hashlib.sha256(z.read("BroBot/"+p)).hexdigest()==h for p,h in m.items()); print("ZIP tested-file manifest verified")',
   path.join(root,'brobot-dev.zip'),release.testedFileManifest],{encoding:'utf8'});
 assert.equal(archiveCheck.status,0,archiveCheck.stderr);
 console.log(archiveCheck.stdout.trim());
+
+assert.equal(checkpoint.groups.core02.passed,11);assert.equal(checkpoint.groups.core02.scheduled,20);
+assert.equal(checkpoint.groups.original346.passed,1);assert.equal(checkpoint.groups.original346.scheduled,3);
+assert.equal(scorecard.metrics.Trailhead.candidate.passed,1);

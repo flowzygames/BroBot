@@ -1,12 +1,12 @@
 {
   "channel": "development",
-  "sourceCommit": "2881d66680cf943435c4fbc3a3351bb93e48ccb9",
-  "sourceTree": "d2007910084e7957073b74c430be0938a6e10057",
-  "packagedCommit": "827585b7a38acd4f8603f9346ced560ec63e0ce7",
-  "testedApplicationCommit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
-  "sha256": "bcd786158ca97a8ab31885b6edb6395f3e7a4c148345e0f42fb936198adbc99a",
-  "bytes": 1231062,
-  "automatedChecks": 308,
+  "sourceCommit": "3d5c23605feb1d92943582996596c41222bc1284",
+  "sourceTree": "261267df6d5df12f7c4b6ca02269f953571fca7b",
+  "packagedCommit": "3d5c23605feb1d92943582996596c41222bc1284",
+  "testedApplicationCommit": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+  "sha256": "2500110350c0ad4409280dea81b4c4ce4efdb32d67fc5fa3df7457b64b524e79",
+  "bytes": 2004732,
+  "automatedChecks": 346,
   "liveRegressionPhases": 17,
   "originalDevelopmentWorlds": {
     "passed": 3,
@@ -18,9 +18,9 @@
     "scheduled": 3,
     "sourceCommit": "1e7ab1f96656cabcdfd28c4f077ce49699e0234a"
   },
-  "multiWorldEvaluation": "Current308:10/20 known worlds. Previous305:8/20;287:9/20;older90-block275:12/20. Different source runs, not identical trajectories.",
+  "multiWorldEvaluation": "Core0.2:11/20 known worlds versus Core0.1:10/20. Separate original trio1/3 versus2/3. One run per seed/source; no general reliability claim.",
   "readyForStable1_0": false,
-  "note": "67 packaged executable/harness/test files verified against frozen308 manifest. Prepared live17/17;original regression2/3. Prior293 preparedskills/controls remain historical, not308 scores.",
+  "note": "71 packaged application/harness/test files match frozen346 manifest. Prepared integration17/17. Original trio1/3. Named prepared skill/control scores not rerun.",
   "widerKnownWorlds": {
     "passed": 2,
     "scheduled": 4,
@@ -50,10 +50,10 @@
   },
   "currentPairedEvaluation": {
     "status": "completed",
-    "passed": 10,
+    "passed": 11,
     "scheduled": 20,
-    "sourceCommit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
-    "note": "All20 ran once without interruption or replacement. Three gains/one loss versus305; not held-out reliability."
+    "sourceCommit": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+    "note": "All20 ran once with no replacements. One gain and no losses versusCore0.1. Known development seeds, not held-out reliability."
   },
   "selectedExpandedWorld": {
     "passed": 1,
@@ -70,20 +70,33 @@
     "note": "Original cohort:9 passes,10 gameplay failures,1 execution interruption. Seed61544722 was rerun separately after an execution-session disconnect and failed; counting that disclosed recovery gives9/20. No completed gameplay failure was replaced. Same known seeds, fresh worlds, not identical-state or held-out trials.",
     "sourceCommit": "a8b739ae5f3064aec1d74ef9205e7a179341d782"
   },
-  "currentSelectedEvaluation": {
-    "passed": 2,
-    "scheduled": 2,
-    "sourceCommit": "ee5084117f8ca492549759b2ec78ef41a18a2b38",
-    "note": "Separate targeted recovery cases355620996 and1244186709; not substituted into fullcohort."
-  },
   "currentOriginalDevelopmentWorlds": {
+    "passed": 1,
+    "scheduled": 3,
+    "sourceCommit": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+    "note": "Down from2/3. Hostile-mob and low-health stops retained."
+  },
+  "testedFileManifest": "benchmarks/results/core02-2026-10-04/tested-files.json",
+  "agentName": "BroBot Core",
+  "agentVersion": "0.2",
+  "agentDisplayName": "BroBot Core 0.2",
+  "versionNote": "Core0.2 includes resource discovery, workstation egress, observation/scouting and retry fixes; a software-agent release, not a foundation model.",
+  "previousCore01Evaluation": {
+    "status": "completed",
+    "passed": 10,
+    "scheduled": 20,
+    "sourceCommit": "69d36c2033118932f1b6f016a1aa4f9ff44efe2f",
+    "note": "All20 ran once without interruption or replacement. Three gains/one loss versus305; not held-out reliability."
+  },
+  "previousCore01OriginalWorlds": {
     "passed": 2,
     "scheduled": 3,
     "sourceCommit": "ee5084117f8ca492549759b2ec78ef41a18a2b38"
   },
-  "testedFileManifest": "benchmarks/results/pickup-budget-2026-10-03/tested-files.json",
-  "agentName": "BroBot Core",
-  "agentVersion": "0.1",
-  "agentDisplayName": "BroBot Core 0.1",
-  "versionNote": "First named agent release; existing tested application and ZIP unchanged. Automated check count is not a version number."
+  "previousCore01SelectedEvaluation": {
+    "passed": 2,
+    "scheduled": 2,
+    "sourceCommit": "ee5084117f8ca492549759b2ec78ef41a18a2b38",
+    "note": "Separate targeted recovery cases355620996 and1244186709; not substituted into fullcohort."
+  }
 }

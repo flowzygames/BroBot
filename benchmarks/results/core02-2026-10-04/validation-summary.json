@@ -1,0 +1,33 @@
+{
+  "source": "1a7dc58dbcbd9ff3c42fb2829745f92c2d9f5a78",
+  "started": "2026-10-04T08:26:46.187311+00:00",
+  "originalCases": [
+    {
+      "benchmark": "Trailhead",
+      "seed": "718224",
+      "status": "passed",
+      "elapsedMs": 99256,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start."
+    },
+    {
+      "benchmark": "Trailhead",
+      "seed": "42",
+      "status": "failed",
+      "elapsedMs": 144774,
+      "reason": "A hostile mob is too close for unarmored starter gathering."
+    },
+    {
+      "benchmark": "Trailhead",
+      "seed": "20260930",
+      "status": "failed",
+      "elapsedMs": 43573,
+      "reason": "Health is too low to continue gathering safely."
+    }
+  ],
+  "prepared": {
+    "passed": true,
+    "phases": 17,
+    "returnCode": 0
+  },
+  "finished": "2026-10-04T08:35:20.537164+00:00"
+}
