@@ -83,7 +83,7 @@ test('hostile-hit interruption is scoped and never guesses an unavailable source
  }
 });
 
-test('real runtime wiring reacts to its own hostile hit and ignores retired connections', async()=>{
+test('real runtime wiring reacts to observed attackers and ignores retired connections', async()=>{
  const {EventEmitter}=await import('node:events'),{mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
  const {default:mineflayer}=await import('mineflayer'),{default:minecraftData}=await import('minecraft-data'),{Vec3}=await import('vec3'),{loadConfig}=await import('../src/config.js');
  const directory=await mkdtemp(join(tmpdir(),'brobot-hostile-')),runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory}));
@@ -94,10 +94,46 @@ test('real runtime wiring reacts to its own hostile hit and ignores retired conn
   runtime.runner.active={name:'collect',controller:new AbortController(),cleanup(){}};
   runtime.stop=()=>{stops++;runtime.runner.active.controller.abort()};
   bot.emit('entityHurt',{id:8},{name:'zombie',type:'hostile'});assert.equal(stops,0);
-  bot.emit('entityHurt',bot.entity,{id:175,name:'zombie',type:'hostile'});assert.equal(stops,1);assert.equal(bot.health,20);
+  for(const source of [{id:175,name:'zombie',type:'hostile'},{id:681,name:'polar_bear',type:'animal'}]){
+    runtime.runner.active={name:'collect',controller:new AbortController(),cleanup(){}};
+    bot.emit('entityHurt',bot.entity,source);assert.equal(bot.health,20);
+  }
+  assert.equal(stops,2);
   runtime.runner.active={name:'collect',controller:new AbortController(),cleanup(){}};
-  runtime.bot={...bot,quit(){}};bot.emit('entityHurt',bot.entity,{name:'zombie',type:'hostile'});assert.equal(stops,1);
+  runtime.bot={...bot,quit(){}};bot.emit('entityHurt',bot.entity,{id:681,name:'polar_bear',type:'animal'});assert.equal(stops,2);
  }finally{
   mineflayer.createBot=create;runtime.runner.active=null;runtime.survival.active=null;runtime.stop=oldStop;await runtime.close();await rm(directory,{recursive:true,force:true});
  }
 });
+
+test('explicit polar bear attack pauses starter work before a low-health packet without zombie recovery',()=>{
+ const {runtime,stops}=fixture(20);let recovery=0
+ runtime.survival.requestHostileRecovery=()=>{recovery++;return true}
+ runtime.checkHostileHurt({id:681,name:'polar_bear',type:'animal'})
+ assert.equal(stops.length,1);assert.match(stops[0],/polar_bear.*no supported automatic retreat.*world keeps running/)
+ assert.equal(runtime.runner.active.controller.signal.aborted,true);assert.equal(recovery,0)
+})
+test('observed animal interruption preserves manual, eating, inactive and cancelled scopes',()=>{
+ for(const options of [{starter:false},{action:'eat'},{action:null},{aborted:true}]){
+  const {runtime,stops}=fixture(20,options)
+  runtime.checkHostileHurt({id:681,name:'polar_bear',type:'animal'});assert.equal(stops.length,0)
+ }
+})
+test('animal interruption requires an identified observed source and never guesses from proximity',()=>{
+ for(const source of [null,{name:'polar_bear'},{type:'animal',name:'polar_bear'},{type:'animal',id:-1,name:'polar_bear'},{type:'animal',id:2},{type:'animal',id:2,name:''},{type:'player',id:2,name:'polar_bear'}]){
+  const {runtime,stops}=fixture(20);runtime.checkHostileHurt(source);assert.equal(stops.length,0)
+ }
+})
+
+test('animal guard rejects dead or retired runtimes and malformed IDs but handles other observed animals',()=>{
+ for(const state of ['dead','disconnected','closed','fractional','nonfinite']){
+  const {runtime,stops}=fixture(state==='dead'?0:20)
+  if(state==='disconnected')runtime.connection='disconnected'
+  if(state==='closed')runtime.closed=true
+  const id=state==='fractional'?1.5:state==='nonfinite'?NaN:681
+  runtime.checkHostileHurt({id,name:'polar_bear',type:'animal'});assert.equal(stops.length,0,state)
+ }
+ const {runtime,stops}=fixture(20)
+ runtime.checkHostileHurt({id:22,name:'wolf',type:'animal'})
+ assert.equal(stops.length,1);assert.match(stops[0],/Observed wolf attack/)
+})
