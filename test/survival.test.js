@@ -4,6 +4,27 @@ import { SurvivalJob, nextStarterStep } from '../src/survival.js';
 import { parseCommand } from '../src/commands.js';
 import { STARTER_MIN_HEALTH } from '../src/starter-limits.js';
 
+test('explicit resume invalidates only legacy unverified scout goals once',async()=>{
+ const f=fixture();f.job.start();f.job.stop('fixture setup');await f.job.promise;
+ delete f.job.job.scoutGoalPolicy;f.job.job.steps=4;f.job.job.scouts=5;
+ const success={status:'verified',completed:true,novel:false,origin:{x:0,y:64,z:0},endpoint:{x:8,y:64,z:0},direction:'east',distance:8};
+ const current={status:'unverified',goalPolicy:1,direction:'west',distance:8};
+ f.job.job.scoutAttempts=[{status:'unverified',direction:'north',distance:8},success,current];
+ f.job.job.observedPositions=[{x:0,y:64,z:0}];f.job.job.lastScoutSuccess={...success};f.job.job.excluded={oak_log:[{x:2,y:64,z:0}]};
+ for(let i=0;i<2;i++){
+  let finish;f.job.observe=()=>new Promise(r=>{finish=r});f.job.start({resume:true});
+  const state=f.job.state();assert.equal(state.scoutGoalPolicy,1);assert.deepEqual(state.scoutAttempts,[success,current]);
+  assert.equal(state.steps,4);assert.equal(state.scouts,5);assert.deepEqual(state.lastScoutSuccess,success);assert.deepEqual(state.excluded,{oak_log:[{x:2,y:64,z:0}]});
+  f.job.stop('fixture done');finish({wood:'oak'});await f.job.promise;
+ }
+});
+test('unknown persisted scout goal policy is rejected rather than silently reset',async()=>{
+  const f=fixture();f.job.start();f.job.stop('fixture');
+  await f.job.promise;
+ const saved=f.job.state();saved.status='paused';saved.scoutGoalPolicy=99;
+ assert.throws(()=>new SurvivalJob({memory:{get:()=>saved,set(){}},context:'test'}),/goal policy/);
+});
+
 test('starter passes one monotonic deadline and pauses without retry after mining admission refusal',async()=>{
  let now=100,calls=0;const f=fixture({now:()=>now,maxDurationMs:10000});
  f.job.execute=async(name,args,signal,context)=>{calls++;assert.equal(context.jobDeadline,10100);throw Object.assign(Error('Not enough remaining mining time'),{code:'MINING_DEADLINE_INSUFFICIENT',result:{mined:1,inventory_changes:{oak_log:1}}})};

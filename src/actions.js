@@ -55,6 +55,10 @@ export class BlockFaceGoal extends goals.Goal {
 export class InteractionGoal extends BlockFaceGoal {
   isEnd(node){return visibleInteractionFace(this.world,node.offset(.5,this.eyeHeight,.5),this.target,this.reach)}
 }
+export class StarterScoutGoal extends goals.GoalNearXZ {
+  constructor(target,accept){super(target.x,target.z,1);this.accept=accept}
+  isEnd(node){return super.isEnd(node)&&this.accept(node)}
+}
 
 const str = description => ({ type: 'string', description })
 const number = (description, minimum, maximum, integer = false) => ({ type: integer ? 'integer' : 'number', description, minimum, maximum })
@@ -222,7 +226,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
-  async function returnableGoal (ctx, goal, fixedEndpoint = null, planningBudget = 1600) {
+  async function returnableGoal (ctx, goal, fixedEndpoint = null, planningBudget = 1600, validateNode = null) {
     checked(ctx)
     configureMovement()
     const used = ctx.planningUsed ?? 0
@@ -233,8 +237,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // Requiring the floored center as a reverse endpoint invents an impossible
       // standing cell. Verify a real walking route back within one block instead.
       const home = ctx.origin.floored()
-      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, yieldControl: () => pause(ctx, 0) })
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, validateNode, yieldControl: () => pause(ctx, 0) })
       checked(ctx)
+      assert(!validateNode||validateNode(planned.endpoint),'Verified route endpoint is outside the starter scout boundary')
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
     } catch (error) {
       if (used + performance.now() - start >= 7000) error.code = 'COLLECTION_PLANNING_LIMIT'
@@ -1250,29 +1255,35 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       assert(!alternatives.length || (Object.hasOwn(vectors, args.direction) && args.returnable === true), 'Exploration alternatives require an explicit direction and verified return route')
       assert(new Set([args.direction, ...alternatives]).size === alternatives.length + 1, 'Exploration directions must be distinct')
       const start = bot.entity.position.clone()
+      const boundedScout=Boolean(ctx.starterScope)&&args.returnable===true
+      const scoutNodeAllowed=node=>node&&['x','y','z'].every(k=>Number.isFinite(node[k]))
+        &&Math.abs(node.x)<29999984&&Math.abs(node.z)<29999984
+        &&insideBoundary(new Vec3(node.x,node.y,node.z))&&insideBoundary(new Vec3(node.x+.5,node.y,node.z+.5))
       const targetFor = direction => {
         const [dx, dz] = direction == null ? [-Math.sin(bot.entity.yaw ?? 0), -Math.cos(bot.entity.yaw ?? 0)] : vectors[direction]
         const target = start.offset(dx * distance, 0, dz * distance).floored()
         assert(Math.abs(target.x) < 29999984 && Math.abs(target.z) < 29999984, 'Exploration exceeds world bounds')
         assert(insideBoundary(target), 'Exploration target is outside the current job movement boundary')
-        return new goals.GoalXZ(target.x, target.z)
+        return boundedScout?new StarterScoutGoal(target,scoutNodeAllowed):new goals.GoalXZ(target.x, target.z)
       }
       configureMovement()
       let direction = args.direction, tried = [direction], routeAttempts = [], goal
       if (args.returnable === true && args.direction != null) {
         const selected = await planRankedRoutes([direction, ...alternatives], async (candidate, budget) => {
           checked(ctx)
-          return returnableGoal(ctx, targetFor(candidate), null, budget)
+          return returnableGoal(ctx, targetFor(candidate), null, budget,boundedScout?scoutNodeAllowed:null)
         }, { signal: ctx.signal })
         goal = selected.route; direction = selected.candidate; tried = selected.tried; routeAttempts = selected.outcomes
       } else {
         goal = targetFor(direction)
-        if (args.returnable === true) goal = await returnableGoal(ctx, goal)
+        if (args.returnable === true) goal = await returnableGoal(ctx, goal,null,1600,boundedScout?scoutNodeAllowed:null)
       }
       // Never switch candidates after movement starts: a walking failure ends
       // this scout and the controller must inspect the real position again.
       try {
+        if(boundedScout)assert(scoutNodeAllowed(goal),'Selected starter scout landing is outside its boundary')
         await step(ctx, () => bot.pathfinder.goto(goal))
+        if(boundedScout)assert(insideBoundary(bot.entity.position),'Starter scout ended outside its movement boundary')
         const actual = Math.hypot(bot.entity.position.x - start.x, bot.entity.position.z - start.z)
         assert(actual >= distance - 2, 'Exploration ended before requested distance')
         return { explored: true, direction, directions_tried: tried, route_attempts: routeAttempts, distance: Math.round(actual * 10) / 10, position: plainPos(bot.entity.position) }

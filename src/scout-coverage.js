@@ -1,4 +1,5 @@
 import { STARTER_MOVEMENT_RADIUS, STARTER_SCOUT_LIMIT } from './starter-limits.js';
+export const SCOUT_GOAL_POLICY=1;
 // A coverage heuristic, not a claim that chunks or routes are loaded. Only
 // positions where an observation actually finished enter the coverage history.
 const directions = ['north', 'east', 'south', 'west'];
@@ -40,7 +41,11 @@ export function rankScouts({ position, home, index, observations = [], attempts 
       || !Number.isInteger(a.distance) || a.distance < 4 || a.distance > 64) return false;
     const [dx,dz] = offsets[direction];
     // Reject malformed claimed endpoints before they can suppress a target.
-    if (Math.hypot(a.endpoint.x-a.origin.x-dx*a.distance,a.endpoint.z-a.origin.z-dz*a.distance) > 2) return false;
+    if(a.goalPolicy===SCOUT_GOAL_POLICY){
+      const tx=Math.floor(a.origin.x+dx*a.distance),tz=Math.floor(a.origin.z+dz*a.distance);
+      if(Math.hypot(Math.floor(a.endpoint.x)-tx,Math.floor(a.endpoint.z)-tz)>1
+        ||Math.hypot(a.endpoint.x-a.origin.x,a.endpoint.z-a.origin.z)<a.distance-2)return false;
+    }else if (Math.hypot(a.endpoint.x-a.origin.x-dx*a.distance,a.endpoint.z-a.origin.z-dz*a.distance) > 2) return false;
     // The executor targets X/Z; terrain determines actual Y. A nearby length
     // variant must not reopen a destination already confirmed non-novel.
     return Math.hypot(position.x+dx*length-a.endpoint.x,position.z+dz*length-a.endpoint.z) <= 4;

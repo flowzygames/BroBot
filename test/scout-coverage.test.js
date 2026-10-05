@@ -1,8 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { recordScoutObservation, selectScout } from '../src/scout-coverage.js';
+import { recordScoutObservation, selectScout, rankScouts } from '../src/scout-coverage.js';
 const home = { x: 0, y: 64, z: 0 };
 const pick = overrides => selectScout({ position: home, home, index: 0, radius: 90, maxScouts: 8, ...overrides });
+test('new landing-region successes keep their non-novel suppression across fractional poses',()=>{
+ const origin={x:.99,y:64,z:.99},endpoint={x:11.01,y:64,z:.01};
+ const attempt={goalPolicy:1,origin,endpoint,direction:'east',distance:12,status:'verified',completed:true,novel:false};
+ assert.ok(Math.hypot(endpoint.x-origin.x-12,endpoint.z-origin.z)>2);
+ const choices=rankScouts({position:origin,home:origin,index:0,attempts:[attempt]});
+ assert.ok(!choices.some(c=>c.direction==='east'&&c.distance===12));
+ const malformed=rankScouts({position:origin,home:origin,index:0,attempts:[{...attempt,endpoint:{x:10.01,y:64,z:.01}}]});
+ assert.ok(malformed.some(c=>c.direction==='east'&&c.distance===12));
+});
 
 test('scouting keeps eight attempts, original distances, and returnable walking', () => {
   for (let index = 0; index < 8; index++) {

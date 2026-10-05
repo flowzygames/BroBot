@@ -7,6 +7,47 @@ import { createActions, definitions } from '../src/actions.js'
 
 const registry = minecraftData('1.21.8')
 
+test('starter returnable scouts accept a nearby certified landing while direct scouts stay exact',async()=>{
+ for(const starter of [false,true]){
+  const bot=fakeBot();let moves=0;
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){
+    const endpoint=goal.y===undefined?new Vec3(7,64,0):new Vec3(0,64,0);
+    yield{result:{status:goal.isEnd(endpoint)?'success':'noPath',path:[endpoint]}};
+  };
+  bot.pathfinder.goto=async goal=>{moves++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5)};
+  const actions=createActions(bot,{movementBoundary:()=>({center:new Vec3(.5,64,.5),radius:256})});
+  const pending=actions.execute('explore',{direction:'east',distance:8,returnable:true},undefined,starter?{starterScope:'job/landing'}:{});
+  if(starter){const result=await pending;assert.equal(result.explored,true);assert.equal(result.distance,7);assert.equal(moves,1)}
+  else{await assert.rejects(pending,/No verified returnable/);assert.equal(moves,0)}
+ }
+})
+test('starter scout goal rejects outside nodes and outside standing centers',async()=>{
+ const {StarterScoutGoal}=await import('../src/actions.js'),home=new Vec3(.5,64,.5);
+ const allowed=p=>p.distanceTo(home)<=10&&p.offset(.5,0,.5).distanceTo(home)<=10;
+ const goal=new StarterScoutGoal(new Vec3(10,64,0),allowed);
+ assert.equal(goal.isEnd(new Vec3(11,64,0)),false);
+ assert.equal(goal.isEnd(new Vec3(10,64,1)),false);
+ assert.equal(goal.isEnd(new Vec3(9,64,0)),true);
+})
+test('starter scouts reject an out-of-bound node in either certified path without moving',async()=>{
+ for(const badDirection of ['forward','reverse']){
+  const bot=fakeBot();let moved=false;
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){
+    const forward=goal.y===undefined,endpoint=forward?new Vec3(9,64,0):new Vec3(0,64,0);
+    yield{result:{status:'success',path:[...(forward===(badDirection==='forward')?[new Vec3(11,63,0)]:[]),endpoint]}};
+  };
+  bot.pathfinder.goto=async()=>{moved=true};
+  await assert.rejects(createActions(bot,{movementBoundary:()=>({center:new Vec3(.5,64,.5),radius:10})}).execute('explore',{direction:'east',distance:10,returnable:true},undefined,{starterScope:'job/boundary'}),/unsafe node/);
+  assert.equal(moved,false);
+ }
+})
+test('starter scout cannot report success outside its actual movement boundary',async()=>{
+ const bot=fakeBot();bot.entity.position=new Vec3(248.5,64,.5);
+ bot.pathfinder.getPathFromTo=function*(m,start,goal){yield{result:{status:'success',path:[goal.y===undefined?new Vec3(255,64,0):new Vec3(248,64,0)]}}};
+ bot.pathfinder.goto=async()=>{bot.entity.position=new Vec3(257.5,64,.5)};
+ await assert.rejects(createActions(bot,{movementBoundary:()=>({center:new Vec3(.5,64,.5),radius:256})}).execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/boundary'}),/ended outside/);
+})
+
 test('mining uses the earliest internal deadline and rechecks the final tool estimate after aiming',async()=>{
  for(const mode of ['job','action','aim-cost']){
   const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('oak_log',p);let digs=0,aimed=false;bot.dig=async()=>{digs++};
