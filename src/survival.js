@@ -1,4 +1,5 @@
 import { STARTER_SUPPORT_PROTECTED } from './starter-leaf-support.js';
+import { MINING_NO_GOAL_SPACE } from './mining-goal-space.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
 import { recordScoutObservation, rankScouts, SCOUT_GOAL_POLICY } from './scout-coverage.js';
@@ -280,7 +281,7 @@ export class SurvivalJob {
       if (decision.name !== 'collect' || !result?.failures) return;
       this.job.excluded ??= {};
       const old = this.job.excluded[decision.args.block] ?? [];
-      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && (f.code === STARTER_SUPPORT_PROTECTED || /route|reach|planning|obstruct/i.test(f.error ?? ''))).map(f => f.position);
+      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && (f.code === STARTER_SUPPORT_PROTECTED || f.code === MINING_NO_GOAL_SPACE || /route|reach|planning|obstruct/i.test(f.error ?? ''))).map(f => f.position);
       const unique = new Map([...old, ...positions].map(p => [JSON.stringify(p), p]));
       this.job.excluded[decision.args.block] = [...unique.values()].slice(-128);
     };

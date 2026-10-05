@@ -16,6 +16,7 @@ import { configureCollisionMargin } from './collision-margin.js'
 import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
 import { planLeafNotch } from './canopy-descent.js'
+import { inspectMiningGoalSpace, MINING_NO_GOAL_SPACE } from './mining-goal-space.js'
 import { retainedLeafAnchor } from './construction-guards.js'
 import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES, STARTER_AVOID_BLOCK_NAMES } from './navigation-guards.js'
 
@@ -227,7 +228,17 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     configureMovement()
     const FaceGoal=interaction?InteractionGoal:BlockFaceGoal
     let goal = lookAt ? new FaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
-    if (returnable) goal = await returnableGoal(ctx, goal)
+    let legPlanningBudget=1600
+    if (ctx.starterScope && returnable && lookAt && !interaction) {
+      const used=ctx.planningUsed??0,started=performance.now()
+      if(used>=7000)throw Object.assign(Error('Collection return-path planning budget exhausted'),{code:'COLLECTION_PLANNING_LIMIT'})
+      let space
+      try { space=inspectMiningGoalSpace(bot,movements,goal,{budgetMs:Math.min(20,7000-used),signal:ctx.signal}) }
+      finally {const elapsed=performance.now()-started;ctx.planningUsed=used+elapsed;legPlanningBudget=Math.max(0,legPlanningBudget-elapsed)}
+      checked(ctx)
+      if(space.status==='none')throw Object.assign(Error('No possible dry interaction stance in fully observed target neighborhood'),{code:MINING_NO_GOAL_SPACE})
+    }
+    if (returnable) goal = await returnableGoal(ctx, goal, null, legPlanningBudget)
     await step(ctx, () => returnable ? walkToGoal(bot, goal, { signal: ctx.signal, timeoutMs: walkingTimeoutMs }) : bot.pathfinder.goto(goal))
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }

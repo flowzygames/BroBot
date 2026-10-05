@@ -9,6 +9,24 @@ import { ActionRunner } from '../src/runner.js'
 
 const registry = minecraftData('1.21.8')
 
+test('starter collection skips a proven sealed goal pocket before global path search',async()=>{
+ const {default:loadBlock}=await import('prismarine-block'),{default:WorldSync}=await import('prismarine-world/src/worldsync.js');
+ const Block=loadBlock(registry),target=new Vec3(8,64,0),cells=new Map();
+ for(let x=-2;x<=14;x++)for(let y=56;y<=71;y++)for(let z=-6;z<=6;z++){
+  const p=new Vec3(x,y,z),air=p.equals(target.offset(0,1,0))||(x===0&&z===0&&(y===64||y===65));
+  const b=Block.fromStateId(registry.blocksByName[air?'air':'stone'].defaultState,0);b.position=p;cells.set(p.toString(),b);
+ }
+ for(const starter of [false,true]){
+  const bot=fakeBot();let probes=0;bot.blockAt=p=>cells.get(p.floored().toString())??null;
+  bot.world={getBlock:bot.blockAt,raycast:WorldSync.prototype.raycast};
+  bot.findBlocks=options=>{const b=bot.blockAt(target);if(options.useExtraInfo)options.useExtraInfo(b);return[target]};
+  bot.pathfinder.getPathFromTo=function*(){probes++;yield{result:{status:'noPath',path:[]}}};
+  const actions=createActions(bot,{movementBoundary:()=>({center:new Vec3(.5,64,.5),radius:256})});
+  await assert.rejects(actions.execute('collect',{block:'stone',count:1,radius:12},undefined,starter?{starterScope:'fixture/stance'}:{}));
+  assert.equal(probes,starter?0:1);
+ }
+});
+
 test('placement refuses every replacement play session after aiming',async()=>{
  for(const mode of ['dimension','entity','client','respawn','spawn','end','round-trip']){
   const bot=fakeBot();bot.addItem('oak_planks');bot.putBlock('dirt',new Vec3(2,63,0));let packets=0;

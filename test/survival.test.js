@@ -1169,13 +1169,13 @@ test('malformed persistent return aliases fail closed when loading a job',async(
  }
 });
 
-test('typed support refusals exclude collection targets and choose scouting instead of foliage clearing',async()=>{
+for(const code of ['STARTER_SUPPORT_PROTECTED','MINING_NO_GOAL_SPACE'])test(`typed ${code} refusals exclude collection targets and choose scouting instead of foliage clearing`,async()=>{
  const f=fixture({maxSteps:5}),position={x:2,y:64,z:0};let scouts=0,digs=0,collects=0;
- f.job.observe=async()=>({wood:'oak',foliage:{x:1,y:65,z:0,expected_block:'oak_leaves'}});
+ f.job.observe=async()=>({wood:'oak',foliage:code==='STARTER_SUPPORT_PROTECTED'?{x:1,y:65,z:0,expected_block:'oak_leaves'}:null});
  f.job.execute=async(name,args,signal)=>{
   if(name==='collect'){
    collects++;if(collects>1)assert.ok(args.skip_positions.some(p=>p.x===2&&p.y===64&&p.z===0));
-   throw Object.assign(Error('Protected support blocks collection'),{result:{failures:[{position,error:'Retained leaf anchor required',code:'STARTER_SUPPORT_PROTECTED'}]}});
+   throw Object.assign(Error('Stationary collection target refused'),{result:{failures:[{position,error:'Locally ruled out',code}]}});
   }
   if(name==='dig_at'){digs++;throw Error('Must not turn anchor refusal into leaf clearance');}
   if(name==='explore')scouts++;
