@@ -1,5 +1,6 @@
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
+import { pickupRouteBudget, PICKUP_ROUTE_BUDGET } from './pickup-route-budget.js'
 import { PickupProbeLedger } from './pickup-probe-ledger.js'
 import { runStarterRetreat } from './starter-retreat.js'
 import { interactionSession, prepareObservedActivation, confirmSleep, confirmWake, interactionVisible, visibleInteractionFace } from './guarded-activation.js'
@@ -252,7 +253,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
   }
 
-  async function returnableGoal (ctx, goal, fixedEndpoint = null, planningBudget = 1600, validateNode = null) {
+  async function returnableGoal (ctx, goal, fixedEndpoint = null, planningBudget = 1600, validateNode = null, onCertifiedPaths = null) {
     checked(ctx)
     configureMovement()
     const used = ctx.planningUsed ?? 0
@@ -263,7 +264,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // Requiring the floored center as a reverse endpoint invents an impossible
       // standing cell. Verify a real walking route back within one block instead.
       const home = ctx.origin.floored()
-      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, validateNode, yieldControl: () => pause(ctx, 0) })
+      const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, validateNode, onCertifiedPaths, yieldControl: () => pause(ctx, 0) })
       checked(ctx)
       assert(!validateNode||validateNode(planned.endpoint),'Verified route endpoint is outside the starter scout boundary')
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
@@ -345,7 +346,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const attempts = ctx.pickupAttempts ??= new Map()
     const failures = []
     let planningLimited = (ctx.planningUsed ?? 0) >= 7000
-    let pickupLimited = false
+    let pickupLimited = false, routeBudgetLimited = false
     // Shared soft allowance for all pickup passes in this physical action.
     // Yield partial evidence before repeated local pursuits consume the runner timeout.
     const started = performance.now()
@@ -389,8 +390,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         // neighbor. One unreachable item must not monopolize the shared budget.
         const p = next
         destination = p
-        let goal
-        try { goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, navigationRemaining())) }
+        let goal, certifiedPath
+        try { goal = await returnableGoal(ctx, new goals.GoalBlock(p.x, p.y, p.z), p, Math.min(1600, navigationRemaining()), null, paths => { certifiedPath=paths.forward }) }
         catch(error){
           if(error.name!=='AbortError' && /^(No verified returnable walking route|Return-path planning budget exhausted|Collection return-path planning budget exhausted)/.test(error.message))probes.failed(target,probeContext,p)
           throw error
@@ -398,6 +399,20 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         checked(ctx)
         assert(safeDestination(p), 'Pickup leaf landing lost its retained log anchor')
         if (navigationRemaining() <= 0) { pickupLimited = drops().length > 0; break }
+        if (ctx.starterScope) {
+          const admission=pickupRouteBudget(bot.entity.position,certifiedPath,Math.min(6000,navigationRemaining()))
+          if (!admission.admitted) {
+            const failure={id:target.id,error:admission.reason,code:PICKUP_ROUTE_BUDGET,destination:plainPos(p),...admission}
+            failures.push(failure)
+            ctx.pickupFailures=[...(ctx.pickupFailures??[]),failure].slice(-64)
+            routeBudgetLimited=true
+            log('pickup',`Drop ${target.id} route refused before movement`,failure)
+            // No pursuit occurred, so this is neither an unsafe landing nor
+            // durable evidence that the item is unreachable. Rotate bounded
+            // alternatives without poisoning the cross-action retry cache.
+            continue
+          }
+        }
         pursuitStarted = true
         const outcome = await pursueDroppedItem(bot, goal, target, { signal: ctx.signal, timeoutMs: Math.min(6000, navigationRemaining()), waitForLanding: true, safeToStop: safeLanding, atDestination: () => isAtPickupStandingCell(bot,p) })
         if (outcome.landingVerified && !ctx.pickupSettledFailure) ctx.pickupUnverified = false
@@ -437,7 +452,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (!planningLimited && remaining() > 0) await pause(ctx, Math.min(150, remaining()))
       } finally { bot.removeListener('playerCollect', observedCollection) }
     }
-    pickupLimited ||= remaining() <= 0 && drops().length > 0
+    pickupLimited ||= (remaining() <= 0 || routeBudgetLimited) && drops().length > 0
     if (!safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
     return { deferred_drops:drops().map(e=>dropRetryCache.deferred(e,ctx.starterScope)).filter(Boolean), passive_settlement:Boolean(ctx.pickupSettledFailure), pursuit_unverified:Boolean(ctx.pickupUnverified), landing_verified:!ctx.pickupUnverified, inventory_changes: changes(before), remaining_drops: drops().map(e => ({ id: e.id, position: plainPos(e.position) })), unreachable: [...(ctx.pickupFailures ?? failures)], planning_limited: planningLimited, pickup_limited: pickupLimited }
     } finally { probes.dispose();ctx.pickupUsed = (ctx.pickupUsed ?? 0) + Math.max(0, performance.now() - started) }

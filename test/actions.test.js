@@ -2364,3 +2364,56 @@ test('continued empty scan discovers later exposed ore and freshly rejects its r
   assert.ok(routeChecks>0);assert.equal(digs,0)
   actions.stop()
 })
+
+function budgetPickupFixture () {
+ const bot=fakeBot();bot.putBlock('stone',new Vec3(0,63,0));bot.putBlock('stone',new Vec3(2,63,0))
+ bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)}
+ let moves=0,long=true
+ bot.pathfinder.getPathFromTo=function*(m,start,goal){
+  const path=goal.x===2&&long?[...Array.from({length:12},(_,i)=>new Vec3(i+1,65+i,0)),...Array.from({length:9},(_,i)=>new Vec3(13+i,75-i,0)),new Vec3(2,64,0)]:[new Vec3(goal.x,goal.y,goal.z)]
+  yield{result:{status:'success',path}}
+ }
+ bot.pathfinder.goto=async goal=>{moves++;bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5);delete bot.entities[2];bot.addItem('cobblestone')}
+ return{bot,moves:()=>moves,short:()=>{long=false}}
+}
+test('starter pickup refuses a long certified detour before motion and preserves fresh retry',async()=>{
+ const f=budgetPickupFixture(),actions=createActions(f.bot),context={starterScope:'budget/job'}
+ const result=await actions.execute('pickup',{radius:8},undefined,context)
+ assert.equal(f.bot.listenerCount('playerCollect'),0)
+ assert.equal(f.moves(),0);assert.equal(result.pickup_limited,true);assert.equal(result.pursuit_unverified,false)
+ assert.equal(result.remaining_drops.length,1);assert.equal(result.deferred_drops.length,0)
+ assert.ok(result.unreachable.every(x=>x.code==='PICKUP_ROUTE_BUDGET'))
+ assert.deepEqual(f.bot.entity.position,new Vec3(.5,64,.5))
+ f.short();const retry=await actions.execute('pickup',{radius:8},undefined,context)
+ assert.equal(f.moves(),1);assert.equal(retry.inventory_changes.cobblestone,1);assert.equal(retry.pickup_limited,false)
+})
+test('direct pickup preserves its existing travel policy for a long certified path',async()=>{
+ const f=budgetPickupFixture();const result=await createActions(f.bot).execute('pickup',{radius:8})
+ assert.equal(f.moves(),1);assert.equal(result.inventory_changes.cobblestone,1)
+})
+test('budget refusal rotates to an affordable alternative destination',async()=>{
+ const f=budgetPickupFixture();f.bot.putBlock('stone',new Vec3(1,63,0))
+ const result=await createActions(f.bot).execute('pickup',{radius:8},undefined,{starterScope:'budget/alternate'})
+ assert.equal(f.moves(),1);assert.equal(result.inventory_changes.cobblestone,1);assert.equal(result.remaining_drops.length,0)
+ assert.equal(result.pickup_limited,false);assert.equal(result.pursuit_unverified,false)
+ assert.equal(result.unreachable[0].code,'PICKUP_ROUTE_BUDGET')
+})
+test('starter pickup admission uses allowance left after repeated route planning',async t=>{
+ let now=1000,forward=0,moved=0
+ t.mock.method(performance,'now',()=>now)
+ const bot=fakeBot();bot.putBlock('stone',new Vec3(0,63,0));bot.putBlock('stone',new Vec3(8,63,0))
+ bot.entities[2]={id:2,name:'item',position:new Vec3(8.5,64,.5)}
+ bot.pathfinder.getPathFromTo=function*(m,start,goal){
+  now+=700
+  if(goal.x===8)forward++
+  const long=goal.x===8&&forward<3
+  yield{result:{status:'success',path:long?[new Vec3(16,76,0),new Vec3(8,64,0)]:[new Vec3(goal.x,goal.y,goal.z)]}}
+ }
+ bot.pathfinder.setGoal=goal=>{if(goal)moved++}
+ const result=await createActions(bot).execute('pickup',{radius:12},undefined,{starterScope:'budget/planning-cost'})
+ assert.equal(moved,0);assert.equal(forward,3);assert.equal(result.unreachable.length,3)
+ const last=result.unreachable.at(-1)
+ assert.equal(last.code,'PICKUP_ROUTE_BUDGET');assert.equal(last.nodes,1)
+ assert.ok(last.estimated_ms<6000);assert.ok(last.estimated_ms>last.available_ms)
+ assert.equal(result.deferred_drops.length,0);assert.equal(bot.listenerCount('playerCollect'),0)
+})
