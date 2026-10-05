@@ -12,6 +12,12 @@ test('runner supplies its unchanged monotonic timeout deadline to the operation'
  await runner.run('probe',async(signal,limits)=>{assert.ok(limits.deadline>=before+1000);assert.ok(limits.deadline<=performance.now()+1000);assert.equal(signal.aborted,false)});
  assert.equal(runner.active,null);
 });
+
+test('wake and wake up are explicit offline commands',()=>{
+ for(const phrase of ['wake','wake up','!bro wake up'])assert.deepEqual(parseCommand(phrase),{kind:'action',name:'wake',args:{}});
+ assert.throws(()=>parseCommand('wake somebody'),/Use wake/);
+
+});
 import { authorizedChat, parseCommand } from '../src/commands.js';
 
 test('config rejects malformed ports/budgets and never exposes key in public state', () => {

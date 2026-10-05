@@ -8,6 +8,10 @@ export function parseCommand(input, owner = '') {
   const rest = parts.join(' ');
   switch (word.toLowerCase()) {
     case 'stop': case 'pause': return { kind: 'stop' };
+    case 'wake': {
+      if(rest&&rest.toLowerCase()!=='up')throw Error('Use wake, or wake up.');
+      return {kind:'action',name:'wake',args:{}};
+    }
     case 'status': case 'inventory': case 'help': return { kind: word.toLowerCase() };
     case 'follow': return { kind: 'follow', player: rest.toLowerCase() === 'me' || !rest ? owner : rest };
     case 'come': return { kind: 'come', player: rest.toLowerCase() === 'here' || rest.toLowerCase() === 'me' || !rest ? owner : rest };
@@ -40,4 +44,4 @@ export function authorizedChat(username, message, owner, botName) {
   return Boolean(owner && username.toLowerCase() === owner.toLowerCase() && username.toLowerCase() !== botName.toLowerCase() && /^(?:!bro\b|@?brobot\b)/i.test(message));
 }
 
-export const HELP = 'Chat naturally with AI, or use stop, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, survive starter, survive resume, collect 4 oak logs, craft a furnace, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';
+export const HELP = 'Chat naturally with AI, or use stop, wake up, status, inventory, follow NAME, come NAME, goto X Y Z, remember home, home, survive starter, survive resume, collect 4 oak logs, craft a furnace, or action NAME {JSON}. In-game: !bro <message>. Follow lasts one minute; use an AI goal for longer companionship. Actions and their arguments are listed in the dashboard.';

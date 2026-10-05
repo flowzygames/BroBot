@@ -14,7 +14,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 > **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
-> **Source versus download:** GitHub `main` includes development fixes newer than the downloadable Core 0.2 package. The current development source passes **606 automated checks** and **17/17 prepared Minecraft phases**. Recent fixes refuse mining without enough remaining job/action time, prevent late block interactions after Stop or session changes and enable visible noncolliding controls, alongside one bounded experimental melee retreat that pauses afterward, plus server-confirmed mining, retained leaf supports, pickup landing anchors, furnace/menu handling, component-aware inventory storage, custom stack limits, accurate crafting counts, suppression of duplicate unchanged route failures and malformed dashboard URLs. [Mining deadline evidence](benchmarks/results/mining-deadline-2026-10-05/README.md) · [Guarded activation evidence](benchmarks/results/guarded-activation-2026-10-04/README.md) · [Bounded melee retreat evidence](benchmarks/results/bounded-melee-retreat-2026-10-04/README.md) · [Latest pickup-probe evidence](benchmarks/results/pickup-probes-2026-10-04/README.md) · [Inventory receipt evidence](benchmarks/results/inventory-receipts-2026-10-04/README.md) · [Component-storage evidence](benchmarks/results/component-stacks-2026-10-04/README.md) · [Pickup-landing evidence](benchmarks/results/pickup-leaf-landings-2026-10-04/README.md) · [Window-safety evidence](benchmarks/results/window-safety-2026-10-04/README.md) · [Mining receipt proof](benchmarks/results/confirmed-mining-2026-10-04/README.md) · [Leaf-support evidence and targeted-world limits](benchmarks/results/retained-leaf-support-2026-10-04/README.md). Earlier placement and pickup-progress verification remains [retained separately](benchmarks/results/pickup-material-progress-2026-10-04/README.md). The full **13/20** world result belongs to the earlier frozen `5b66f11` snapshot and is not relabeled as a complete evaluation of every later patch.
+> **Source versus download:** Development source passes **617 automated checks** and **17/17 prepared Minecraft phases**. Latest changes correct sprint commands, add explicit server-acknowledged `wake up`, and guard mining deadlines and late block interactions. [Latest protocol evidence](benchmarks/results/protocol-controls-2026-10-05/README.md) · [All verification records](benchmarks/results/README.md). The downloadable Core 0.2 package is unchanged. The full **13/20** world result belongs to older frozen source `5b66f11`, not a complete evaluation of every later patch.
 
 ## New in Core 0.2
 
@@ -129,6 +129,8 @@ These are exact supported command patterns, not general language understanding.
 Use a specific wood species and a count from 1 to 64. BroBot still checks tools,
 materials and reachable terrain. Compound requests and explicit `goal`/`ask`
 commands use the optional paid planner.
+
+With a reachable bed at night, `action sleep {}` enters the bed. Use `wake up` to leave it and wait for the server to confirm waking.
 
 For the experimental offline starter:
 
