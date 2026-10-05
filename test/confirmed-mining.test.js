@@ -5,6 +5,19 @@ import { Vec3 } from 'vec3';
 import { confirmedMining } from '../src/experimental/confirmed-mining.js';
 import { terrainTrustStatus } from '../src/terrain-trust.js';
 const sleep = ms => new Promise(resolve => setTimeout(resolve,ms));
+test('mining rejects insufficient or malformed deadlines before any attempted edit',async()=>{
+ for(const deadline of [0,1099,NaN,Infinity,null]){
+  const f=fixture();await assert.rejects(confirmedMining({...f,receiptMs:100,operationDeadline:deadline,now:()=>0}),{code:'MINING_DEADLINE_INSUFFICIENT'});
+  assert.equal(f.calls(),0);assert.equal(f.quits(),0);assert.equal(terrainTrustStatus(f.bot).trusted,true);assert.equal(f.bot._client.listenerCount('packet'),0);
+ }
+});
+test('mining admits an exact complete allowance and refuses time lost during observer setup',async()=>{
+ const f=fixture();f.bot.dig=async()=>{f.packet(0)};
+ assert.equal((await confirmedMining({...f,receiptMs:100,operationDeadline:1100,now:()=>0})).serverObservedAir,true);
+ const later=fixture();let reads=0;
+ await assert.rejects(confirmedMining({...later,receiptMs:100,operationDeadline:1200,now:()=>reads++===0?0:101}),{code:'MINING_DEADLINE_INSUFFICIENT'});
+ assert.equal(later.calls(),0);assert.equal(later.quits(),0);assert.equal(terrainTrustStatus(later.bot).trusted,true);assert.equal(later.bot._client.listenerCount('packet'),0);
+});
 function fixture() {
   const bot = new EventEmitter(), position = new Vec3(2,64,0);
   const block = { name:'oak_log', stateId:137, position };

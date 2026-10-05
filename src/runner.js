@@ -20,7 +20,7 @@ export class ActionRunner {
     if (this.active) throw new Error(`Still ${this.active.controller.signal.aborted ? 'stopping' : 'running'} ${this.active.name}. Wait for it to settle.`);
     externalSignal?.throwIfAborted();
     const controller = new AbortController();
-    const active = { name, controller, cleanup, started: Date.now() };
+    const active = { name, controller, cleanup, started: Date.now(),deadline:performance.now()+this.timeoutMs };
     this.active = active;
     const cancel = reason => { controller.abort(new Error(reason)); cleanup(); };
     const abort = () => cancel(externalSignal.reason?.message || 'Cancelled');
@@ -30,7 +30,7 @@ export class ActionRunner {
     this.log('action', `Started ${name}`);
     // The lock is released only after the underlying operation settles, even after Stop.
     try {
-      const result = await operation(controller.signal);
+      const result = await operation(controller.signal,{deadline:active.deadline});
       controller.signal.throwIfAborted();
       this.log('result', `${name} completed`, result);
       return result;

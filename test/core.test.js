@@ -6,6 +6,12 @@ import { join } from 'node:path';
 import { loadConfig, publicConfig } from '../src/config.js';
 import { Memory } from '../src/memory.js';
 import { ActionRunner } from '../src/runner.js';
+
+test('runner supplies its unchanged monotonic timeout deadline to the operation',async()=>{
+ const runner=new ActionRunner({timeoutMs:1000}),before=performance.now();
+ await runner.run('probe',async(signal,limits)=>{assert.ok(limits.deadline>=before+1000);assert.ok(limits.deadline<=performance.now()+1000);assert.equal(signal.aborted,false)});
+ assert.equal(runner.active,null);
+});
 import { authorizedChat, parseCommand } from '../src/commands.js';
 
 test('config rejects malformed ports/budgets and never exposes key in public state', () => {

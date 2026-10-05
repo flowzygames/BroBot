@@ -94,7 +94,7 @@ export class Runtime {
         const foliage = findTreeFoliage(this.bot, observedLogs.filter(block => block.name === wood?.name));
         return { ...(canopyGrounded ? {canopyGrounded:true} : {}), ...(nextStep?.name === 'craft' ? {craftGeometry:craftGeometryKey(this.bot)} : {}), terrainRevision:this.terrainRevision, localTerrain:seen.local_blocks ?? [], resourceEvidence:blocks.map(b=>({name:b.name,position:b.position})), powderSnowContact, lavaContact, wood: wood?.name.replace(/_log$/, ''), foliage, pickupClearance: findPickupClearance(this.bot, this.survival.job?.recoverDropIds) ?? ((this.survival.job?.clearanceDigs ?? 0) < 8 ? findTransitPickupClearance(this.bot, this.survival.job?.recoverDropIds) : null), tables, tableInReach };
       },
-      execute: (name, args, signal) => this.execute(name, args, signal, { starterScope:`${this.playSession}/${this.survival.job.id}` }),
+      execute: (name, args, signal, context={}) => this.execute(name, args, signal, { jobDeadline:context.jobDeadline,starterScope:`${this.playSession}/${this.survival.job.id}` }),
       recoverFromHostile: (request,signal) => this.recoverFromHostile(request,signal),
       stopActions: reason => this.runner.stop(reason), log: this.log.bind(this)
     });
@@ -260,7 +260,7 @@ export class Runtime {
     }
     const actions = this.actions;
     const progression = this.progression;
-    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : s => actions.execute(name, args, s, executionContext);
+    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : (s,limits) => actions.execute(name, args, s, {...executionContext,actionDeadline:limits?.deadline});
     return this.runner.run(name, run, () => actions.stop(), signal);
   }
   async command(input, speaker = this.owner) {

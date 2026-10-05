@@ -7,6 +7,26 @@ import { createActions, definitions } from '../src/actions.js'
 
 const registry = minecraftData('1.21.8')
 
+test('mining uses the earliest internal deadline and rechecks the final tool estimate after aiming',async()=>{
+ for(const mode of ['job','action','aim-cost']){
+  const bot=fakeBot(),p=new Vec3(2,64,0);bot.putBlock('oak_log',p);let digs=0,aimed=false;bot.dig=async()=>{digs++};
+  bot.lookAt=async()=>{aimed=true;if(mode==='aim-cost')bot.digTime=()=>10000};
+  const soon=performance.now()+1000,later=performance.now()+30000;
+  const context=mode==='job'?{jobDeadline:soon,actionDeadline:later}:mode==='action'?{jobDeadline:later,actionDeadline:soon}:{jobDeadline:performance.now()+6500};
+  await assert.rejects(createActions(bot).execute('dig_at',{x:2,y:64,z:0},undefined,context),{code:'MINING_DEADLINE_INSUFFICIENT'});
+  assert.equal(aimed,true);assert.equal(digs,0);
+ }
+})
+
+test('collection propagates mining admission refusal with earlier confirmed progress',async()=>{
+ const bot=fakeBot();bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));let digs=0;
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('oak_log');bot.digTime=()=>10000};
+ await assert.rejects(createActions(bot).execute('collect',{block:'oak_log',count:2,radius:8},undefined,{jobDeadline:performance.now()+6500}),error=>{
+  assert.equal(error.code,'MINING_DEADLINE_INSUFFICIENT');assert.equal(error.result.mined,1);assert.equal(error.result.inventory_changes.oak_log,1);return true;
+ });
+ assert.equal(digs,1);
+})
+
 test('pickup avoids duplicate failed destination probes while other drops still get a turn', async () => {
   const bot = fakeBot()
   for (const x of [0,1,2,5]) bot.putBlock('stone',new Vec3(x,63,0))
