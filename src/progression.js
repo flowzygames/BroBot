@@ -199,7 +199,9 @@ function pause(ms, signal) {
 
 export function createProgression(bot, { actions, memory, log = () => {} }) {
   const checkSignal = checked;
-  const checkedBot = signal => { assertTerrainTrusted(bot); checkSignal(signal); };
+  let executionSession = null;
+  const sessionStale = () => executionSession && (executionSession.changed || executionSession.entity !== bot.entity || executionSession.client !== bot._client || executionSession.dimension !== bot.game?.dimension);
+  const checkedBot = signal => { assertTerrainTrusted(bot); if(sessionStale())throw Error('Progression cancelled: play session changed'); checkSignal(signal); };
   const state = new Map();
   const get = (key, fallback) => memory?.get ? memory.get(key, fallback) : (state.get(key) ?? fallback);
   const set = (key, value) => memory?.set ? memory.set(key, value) : state.set(key, value);
@@ -386,7 +388,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       if (!tracked) throw new Error('No newly thrown eye entity was observed. Check that there is open space above; do not assume a bearing.');
       await pause(1800, signal);
       sample(tracked);
-    } finally { bot.removeListener('entitySpawn', sample); bot.removeListener('entityMoved', sample); bot.deactivateItem(); }
+    } finally { bot.removeListener('entitySpawn', sample); bot.removeListener('entityMoved', sample); if(!sessionStale())bot.deactivateItem(); }
     if (samples.length < 2) throw new Error('Insufficient eye movement packets were observed.');
     const first = samples[0], last = samples[samples.length - 1];
     const travel = Math.hypot(last.x - first.x, last.z - first.z);
@@ -465,7 +467,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       await pause(Math.min(3500, Math.max(700, shot.ticks * 50 + 300)), signal);
       return { fired: true, targetPresent: Boolean(bot.entities[entity.id]) };
     } finally {
-      if (!fired && bot.usingHeldItem) {
+      if (!fired && !sessionStale() && bot.usingHeldItem) {
         // Switching away cancels a bow draw without releasing an un-aimed arrow.
         bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9);
         bot.deactivateItem();
@@ -587,11 +589,20 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       checkedBot(signal);
       if (running) throw new Error('A progression action is already running. Cancel it before starting another.');
       running = true;
-      const stop = () => { if (bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9); actions.stop(); };
-      signal?.addEventListener('abort', stop, { once: true });
-      try { return await handlers[name](args, signal); }
+      // Only explicit portal entry is allowed to cross play sessions. Other
+      // multi-step plans must not retry old coordinates in a replacement world.
+      executionSession = name === 'enter_portal' ? null : {entity:bot.entity,client:bot._client,dimension:bot.game?.dimension,changed:false};
+      const controller = new AbortController();
+      const stop = () => { const stale=Boolean(sessionStale()); if (!stale && bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9); actions.stop({sessionChanged:stale}); };
+      const forwardAbort = () => controller.abort(signal.reason);
+      const sessionChanged = () => { executionSession.changed=true;controller.abort(Error('Progression cancelled: play session changed')); };
+      const events=executionSession?['respawn','spawn','end']:[];
+      controller.signal.addEventListener('abort',stop,{once:true});
+      signal?.addEventListener('abort', forwardAbort, { once: true });
+      for(const event of events)bot.on?.(event,sessionChanged);
+      try { const result=await handlers[name](args, controller.signal);checkedBot(controller.signal);return result; }
       catch (error) { if (typeof log === 'function') log('progression_error', `${name}: ${error.message}`); throw error; }
-      finally { signal?.removeEventListener('abort', stop); running = false; }
+      finally { signal?.removeEventListener('abort', forwardAbort);controller.signal.removeEventListener('abort',stop);for(const event of events)bot.removeListener?.(event,sessionChanged);executionSession=null;running = false; }
     }
   };
 }

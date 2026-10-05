@@ -163,6 +163,13 @@ export class Runtime {
       this.actions?.stop();
       this.log('error', 'Mining confirmation failed; disconnecting before terrain can be reused. Resume explicitly after reconnecting.');
     });
+    bot.on('respawn', () => {
+      if (this.bot !== bot || !terrainTrustStatus(bot).trusted) return;
+      // Do not admit new work against half-loaded replacement-world state.
+      // The active core action owns cancellation; intentional portal entry
+      // must retain its parent signal so it can verify the transition.
+      this.connection = 'respawning';
+    });
     bot.on('spawn', () => {
       if (!terrainTrustStatus(bot).trusted) { bot.quit('Unverified terrain requires a fresh connection'); return; }
       if (this.bot !== bot) return;

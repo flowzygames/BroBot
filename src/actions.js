@@ -111,6 +111,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   configureCollisionMargin(bot)
   configureCollisionContact(bot)
   let active = null
+  let lastSession = null
   let movements = null
   const dropRetryCache = new DropRetryCache(bot)
   const items = () => bot.inventory?.items() ?? []
@@ -142,18 +143,23 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const positions = bot.findBlocks({ matching: id, maxDistance: sectionSearchDistance(radius), count: 256 }).filter(p => p.distanceTo(origin) <= radius && accept(bot.blockAt(p))).sort((a, b) => a.distanceTo(origin) - b.distanceTo(origin))
     return positions.length ? bot.blockAt(positions[0]) : null
   }
-  const checked = ctx => { assertTerrainTrusted(bot); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
+  const staleSession = session => session && (session.changed || bot.entity !== session.entity || bot._client !== session.client || dimension() !== session.dimension)
+  const checked = ctx => { assertTerrainTrusted(bot); if (staleSession(ctx?.session)) throw new Error('Action cancelled: play session changed'); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
   const step = async (ctx, fn) => { checked(ctx); const result = await fn(); checked(ctx); return result }
 
-  function stop () {
+  function stop ({ sessionChanged = false } = {}) {
+    if (sessionChanged && lastSession) lastSession.changed = true
+    // Runner cleanup can call the retired facade again after its active lock
+    // was released. Its last admitted session still owns inventory cleanup.
+    sessionChanged ||= Boolean(staleSession(lastSession))
     if (active) { active.cancelled = true; active.controller.abort() }
     try { bot.pathfinder?.setGoal(null) } catch {}
     try { bot.stopDigging?.() } catch {}
     // Switching slots cancels a drawn bow without releasing an unintended arrow.
-    try { if (bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot?.(((bot.quickBarSlot ?? 0) + 1) % 9) } catch {}
-    try { bot.deactivateItem?.() } catch {}
+    try { if (!sessionChanged && bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot?.(((bot.quickBarSlot ?? 0) + 1) % 9) } catch {}
+    try { if (!sessionChanged) bot.deactivateItem?.() } catch {}
     try { bot.clearControlStates?.() } catch {}
-    try { if (bot.currentWindow) Promise.resolve(bot.closeWindow(bot.currentWindow)).catch(() => {}) } catch {}
+    try { if (!sessionChanged && bot.currentWindow) Promise.resolve(bot.closeWindow(bot.currentWindow)).catch(() => {}) } catch {}
   }
 
   async function pause (ctx, ms) {
@@ -983,7 +989,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       completed = true
       return outputCount
     } finally {
-      if (window && (table || !completed)) { try { await bot.closeWindow(window) } catch {} }
+      if (!staleSession(ctx.session) && window && (table || !completed)) { try { await bot.closeWindow(window) } catch {} }
     }
   }
 
@@ -1052,7 +1058,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const produced = itemCount(output) - before
       assert(produced >= count, `Furnace output was taken but inventory confirmation received only ${produced}/${count} ${output}`)
       return { input: name, output, smelted: produced, furnace: plainPos(block.position), fuel_added: { item: fuelName, count: fuelCount }, existing_heat_seconds: existingSeconds }
-    } finally { if (furnace && !closed) { try { await furnace.close() } catch {} } }
+    } finally { if (!staleSession(ctx.session) && furnace && !closed) { try { await furnace.close() } catch {} } }
   }
 
   async function build (args, ctx) {
@@ -1243,7 +1249,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       await step(ctx, () => bot.look(yaw, pitch, true))
       checked(ctx)
       bot.activateItem()
-      try { await pause(ctx, duration * 1000) } finally { bot.deactivateItem() }
+      try { await pause(ctx, duration * 1000) } finally { if (!staleSession(ctx.session)) bot.deactivateItem() }
       return { used: name, seconds: duration, inventory_changes: changes(before) }
     },
     explore: async (args, ctx) => {
@@ -1303,8 +1309,16 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const deadlines=[executionContext.jobDeadline,executionContext.actionDeadline].filter(value=>value!==undefined)
     assert(deadlines.every(Number.isFinite),'Operation deadlines must be finite monotonic timestamps')
     const operationDeadline=deadlines.length?Math.min(...deadlines):undefined
-    const ctx = { operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const session = { entity: bot.entity, client: bot._client, dimension: dimension(), changed: false }
+    lastSession = session
+    const ctx = { session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
+    // A coordinate is meaningful only in the play session that admitted it.
+    // Latch transitions even if the dimension later changes back. Stop promptly,
+    // but retain the physical lock until the old operation has fully drained.
+    const sessionEvents = ['respawn', 'spawn', 'end']
+    const sessionChanged = () => { session.changed = true; stop({ sessionChanged: true }) }
+    for (const event of sessionEvents) bot.on(event, sessionChanged)
     const cancel = () => stop()
     signal?.addEventListener('abort', cancel, { once: true })
     try {
@@ -1312,7 +1326,13 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const result = await handlers[name](args, ctx)
       checked(ctx)
       return result
+    } catch (error) {
+      // Cancellation may reject inside an awaited helper before its next check.
+      // Preserve the session failure instead of hiding it behind that rejection.
+      if (staleSession(ctx.session)) checked(ctx)
+      throw error
     } finally {
+      for (const event of sessionEvents) bot.removeListener(event, sessionChanged)
       signal?.removeEventListener('abort', cancel)
       try { bot.pathfinder?.setGoal(null) } catch {}
       try { bot.clearControlStates?.() } catch {}
