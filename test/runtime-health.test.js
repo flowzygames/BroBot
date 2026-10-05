@@ -114,7 +114,7 @@ test('explicit polar bear attack pauses starter work before a low-health packet 
  assert.equal(runtime.runner.active.controller.signal.aborted,true);assert.equal(recovery,0)
 })
 test('observed animal interruption preserves manual, eating, inactive and cancelled scopes',()=>{
- for(const options of [{starter:false},{action:'eat'},{action:null},{aborted:true}]){
+ for(const options of [{starter:false},{action:'eat'},{aborted:true}]){
   const {runtime,stops}=fixture(20,options)
   runtime.checkHostileHurt({id:681,name:'polar_bear',type:'animal'});assert.equal(stops.length,0)
  }
@@ -136,4 +136,24 @@ test('animal guard rejects dead or retired runtimes and malformed IDs but handle
  const {runtime,stops}=fixture(20)
  runtime.checkHostileHurt({id:22,name:'wolf',type:'animal'})
  assert.equal(stops.length,1);assert.match(stops[0],/Observed wolf attack/)
+})
+
+test('observed attacks between starter actions abort the parent before more work starts',()=>{
+ for(const source of [{id:681,name:'polar_bear',type:'animal'},{id:175,name:'zombie',type:'hostile'}]){
+  const {runtime,stops}=fixture(20,{action:null});const parent=new AbortController();runtime.survival.active=parent
+  runtime.stop=reason=>{stops.push(reason);parent.abort(Error(reason))}
+  runtime.checkHostileHurt(source)
+  assert.equal(parent.signal.aborted,true);assert.equal(stops.length,1)
+  assert.match(stops[0],/between starter actions/)
+  runtime.checkHostileHurt(source);assert.equal(stops.length,1)
+ }
+})
+test('idle attack guard leaves absent, stopped and unidentified jobs alone',()=>{
+ for(const options of [{starter:false,action:null},{action:null}]){
+  const {runtime,stops}=fixture(20,options)
+  runtime.checkHostileHurt({type:'hostile'})
+  assert.equal(stops.length,0)
+ }
+ const {runtime,stops}=fixture(20,{action:null});const parent=new AbortController();parent.abort();runtime.survival.active=parent
+ runtime.checkHostileHurt({id:1,name:'polar_bear',type:'animal'});assert.equal(stops.length,0)
 })

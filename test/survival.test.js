@@ -1197,3 +1197,24 @@ test('protected pickup-clearance connector ends the job after one refused dig',a
  assert.equal(collects,1);assert.equal(digs,1);assert.equal(f.job.state().status,'blocked');
  assert.equal(f.job.state().history.at(-1).code,'STARTER_SUPPORT_PROTECTED');
 });
+
+test('an observed animal attack during the real starter interval prevents the next observation',async()=>{
+ const {Runtime}=await import('../src/runtime.js'),{ActionRunner}=await import('../src/runner.js')
+ const f=fixture({intervalMs:1000,maxSteps:3}),runtime=Object.create(Runtime.prototype)
+ runtime.bot={health:20};runtime.connection='connected';runtime.closed=false
+ runtime.survival=f.job;runtime.runner=new ActionRunner();runtime.brain={stop(){}};runtime.actions={stop(){runtime.runner.stop()}};runtime.log=()=>{}
+ f.job.stopActions=()=>runtime.runner.stop()
+ let observed=0,executed=0,gap
+ f.job.observe=async()=>{observed++;return{wood:'oak'}}
+ const inGap=new Promise(resolve=>{gap=resolve})
+ f.job.execute=async(name,args,signal)=>{
+  const value=await runtime.runner.run(name,async()=>{executed++;return{completed:true}},()=>{},signal)
+  setImmediate(()=>{assert.equal(runtime.runner.active,null);gap()})
+  return value
+ }
+ f.job.start();await inGap
+ runtime.checkHostileHurt({id:681,name:'polar_bear',type:'animal'})
+ await f.job.promise
+ assert.equal(executed,1);assert.equal(observed,1)
+ assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/Attack observed between starter actions/)
+})
