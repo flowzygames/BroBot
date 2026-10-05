@@ -1,3 +1,6 @@
+import { serialize, deserialize } from 'node:v8';
+import { sameItemIdentity } from './item-identity.js';
+
 // App-owned interaction seam for the pinned Java protocol. Mineflayer's
 // activateBlock awaits aiming internally without a cancellation check before
 // sending; its sleep helper also does not await that activation promise.
@@ -35,28 +38,34 @@ export function interactionSession(bot,check,{overworldOnly=false}={}) {
   };
 }
 
-export async function prepareObservedActivation(bot,block,{check,requireBed=false}={}) {
+export async function prepareObservedActivation(bot,block,{check,requireBed=false,cursor={x:.5,y:.5,z:.5},isVisible=interactionVisible,expectedItemName=null}={}) {
   if(bot.version!=='1.21.8')throw Error('Guarded block activation is verified only for Minecraft Java 1.21.8');
   if(typeof check!=='function'||typeof bot._client?.write!=='function')throw Error('Guarded activation requires a live checked client');
+  if(!cursor||!['x','y','z'].every(k=>Number.isFinite(cursor[k])&&cursor[k]>=0&&cursor[k]<=1)||typeof isVisible!=='function')throw Error('Invalid guarded interaction geometry');
+  cursor={x:cursor.x,y:cursor.y,z:cursor.z};
+  const held=bot.heldItem;
+  if(expectedItemName!==null&&(typeof expectedItemName!=='string'||!held||held.name!==expectedItemName||!Number.isSafeInteger(held.count)||held.count<=0||!sameItemIdentity(held,held)))throw Error('Expected interaction item is not held');
+  const identity=expectedItemName===null?null:deserialize(serialize({type:held.type,metadata:held.metadata,nbt:held.nbt,components:held.components,removedComponents:held.removedComponents}));
   const position=block.position.clone(),stateId=block.stateId,type=block.type;
   const validate=()=>{
     check();
+    if(identity&&(!bot.heldItem||bot.heldItem.name!==expectedItemName||!Number.isSafeInteger(bot.heldItem.count)||bot.heldItem.count<=0||!sameItemIdentity(bot.heldItem,identity)))throw Error('Held interaction item changed while aiming');
     const current=bot.blockAt(position);
     if(!current||current.stateId!==stateId||current.type!==type)throw Error('Interaction target changed while aiming');
     if(requireBed&&!bot.isABed(current))throw Error('Sleep target is no longer a bed');
     if(requireBed&&current.getProperties?.().occupied===true)throw Error('The bed is occupied');
-    if(!interactionVisible(bot,current))throw Error('Interaction target is no longer visibly in reach');
+    if(!isVisible(bot,current))throw Error('Interaction target is no longer visibly in reach');
   };
   validate();
   // Await to completion even after Stop. No interaction packet is queued here.
-  await bot.lookAt(position.offset(.5,.5,.5),false);
+  await bot.lookAt(position.offset(cursor.x,cursor.y,cursor.z),false);
   let sent=false;
   return ()=>{
     if(sent)throw Error('Block interaction has already been sent');
     validate();sent=true;
-    // Exact pinned Mineflayer4.39 / Java1.21.8 empty-hand interaction shape.
+    // Exact pinned Mineflayer4.39 / Java1.21.8 main-hand interaction shape.
     // No await may be inserted between final validation and this write.
-    bot._client.write('block_place',{location:position,direction:1,hand:0,cursorX:.5,cursorY:.5,cursorZ:.5,insideBlock:false,sequence:0,worldBorderHit:false});
+    bot._client.write('block_place',{location:position,direction:1,hand:0,cursorX:cursor.x,cursorY:cursor.y,cursorZ:cursor.z,insideBlock:false,sequence:0,worldBorderHit:false});
     bot.swingArm();
   };
 }

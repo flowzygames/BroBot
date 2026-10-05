@@ -1,4 +1,5 @@
 import { assertTerrainTrusted } from './terrain-trust.js';
+import { prepareObservedActivation } from './guarded-activation.js';
 import { Vec3 } from 'vec3';
 
 const AIR = new Set(['air', 'cave_air', 'void_air']);
@@ -230,13 +231,24 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
   };
   const eyes = () => bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
 
+  async function activateHeldTop(reference, cursorY, expectedItemName, signal) {
+    const isVisible=(_bot,current)=>{
+      const eye=eyes(),target=current.position.offset(.5,cursorY,.5),delta=target.minus(eye),distance=delta.norm();
+      if(!Number.isFinite(distance)||distance<.001||distance>4.5)return false;
+      const hit=bot.world.raycast(eye,delta.scaled(1/distance),distance+.01);
+      return hit?.position?.equals(current.position)===true&&hit.face===1;
+    };
+    const send=await prepareObservedActivation(bot,reference,{check:()=>checkedBot(signal),cursor:{x:.5,y:cursorY,z:.5},expectedItemName,isVisible});
+    send();checkedBot(signal);
+  }
+
   async function clickTop(reference, signal) {
     checkedBot(signal);
     const eye = eyes(), target = reference.position.offset(0.5, 0.81, 0.5), delta = target.minus(eye);
     if (delta.norm() > 4.5) throw new Error('Top face is outside interaction reach.');
     const hit = bot.world.raycast(eye, delta.normalize(), 4.5);
     if (!hit?.position.equals(reference.position) || hit.face !== 1) throw new Error('Top face is obstructed. Approach from above the frame, outside the portal opening.');
-    await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 0.8125, 0.5));
+    await activateHeldTop(reference,.8125,'ender_eye',signal);
     checkedBot(signal);
   }
 
@@ -295,7 +307,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
         if (distance > 4.5) throw new Error('Cannot reach the bottom interior frame block to ignite it.');
         const hit = bot.world.raycast(eye, delta.scaled(1 / distance), distance + 0.1);
         if (hit && !hit.position.equals(reference.position)) throw new Error('Ignition face is obstructed.');
-        await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 1, 0.5));
+        await activateHeldTop(reference,1,'flint_and_steel',signal);
         checkedBot(signal);
       }
       const active = await waitUntil(() => blueprint.interior.some(p => block(p)?.name === 'nether_portal'), 3000, signal);

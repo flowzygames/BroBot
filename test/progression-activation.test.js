@@ -1,0 +1,66 @@
+import test from 'node:test';
+import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+import {EventEmitter} from 'node:events';
+import assert from 'node:assert/strict';
+const root=fileURLToPath(new URL('..',import.meta.url));
+const require=createRequire(root+'/package.json');
+const {Vec3}=require('vec3');
+const inject=require('mineflayer/lib/plugins/inventory');
+const {createProgression,portalBlueprint}=await import(root+'/src/progression.js');
+const registry=require('prismarine-registry')('1.21.8');
+const key=p=>`${p.x},${p.y},${p.z}`;
+for(const action of ['build_nether_portal','activate_end_portal'])for(const interruption of ['stop','dimension-respawn','dimension-roundtrip-respawn','client-replacement','held-swap','held-components','held-empty','target-change','obstruction','none'])test(`${action} guards top-face interaction (${interruption})`,async()=>{
+  const bot=new EventEmitter(), writes=[], stops=[];
+  Object.assign(bot,{version:'1.21.8',registry,game:{dimension:'overworld'},entity:{id:1,position:new Vec3(0,65,0),eyeHeight:1.62},health:20});
+  bot.supportFeature=registry.supportFeature.bind(registry);
+  let onWrite=()=>{};
+  const client=()=>Object.assign(new EventEmitter(),{write(name,packet){writes.push({name,packet,dimension:bot.game.dimension,afterInterruption:interruption!=='none'});onWrite(name,packet);}});
+  bot._client=client();
+  inject(bot,{hideErrors:true});
+  bot.QUICK_BAR_START=36;
+  bot.swingArm=()=>{};
+  let release,entered;
+  const reached=new Promise(r=>entered=r);
+  bot.lookAt=()=>{entered();return new Promise(r=>release=r);};
+  const cells=new Map();
+  const put=(p,name,props={})=>{const b={name,position:new Vec3(p.x,p.y,p.z),type:registry.blocksByName[name].id,stateId:registry.blocksByName[name].defaultState,boundingBox:name==='air'?'empty':'block',getProperties:()=>props};cells.set(key(p),b);return b;};
+  let target;
+  if(action==='build_nether_portal'){
+    const bp=portalBlueprint(0,64,0,'x');bp.frame.forEach(p=>put(p,'obsidian'));bp.interior.forEach(p=>put(p,'air'));
+    bp.frame.slice(0,4).forEach(p=>put({...p,y:63},'stone'));
+    target=cells.get(key(bp.igniteOn));
+    onWrite=name=>{if(name==='block_place')put(bp.interior[0],'nether_portal')};
+  }else{
+    const frames=[];
+    for(let k=-1;k<=1;k++)for(const [x,z,facing] of [[k,-2,'south'],[k,2,'north'],[-2,k,'east'],[2,k,'west']])frames.push(put({x,y:64,z},'end_portal_frame',{facing,eye:false}));
+    bot.findBlocks=()=>frames.map(f=>f.position);
+    target=frames[0];
+    if(interruption==='none')for(const f of frames.slice(1))f.getProperties().eye=true;
+    onWrite=name=>{if(name==='block_place'){target.getProperties().eye=true;bot.heldItem.count--;put(new Vec3(0,64,0),'end_portal')}};
+  }
+  bot.blockAt=p=>cells.get(key(p))??put(p,'air');
+  let obstructed=false;bot.world={raycast:()=>({position:obstructed?target.position.offset(1,0,0):target.position,face:1})};
+  bot.inventory.items=()=>[{name:'flint_and_steel',count:1},{name:'ender_eye',count:12}];
+  const actions={stop(options){stops.push(options);},async execute(name,args){if(name==='go_to')bot.entity.position=new Vec3(args.x+.5,args.y,args.z+.5);if(name==='equip'){bot.quickBarSlot=0;bot.inventory.slots[36]={name:args.item,type:registry.itemsByName[args.item].id,count:args.item==='ender_eye'?12:1,metadata:0};}}};
+  const progression=createProgression(bot,{actions}),controller=new AbortController();
+  const args=action==='build_nether_portal'?{x:0,y:64,z:0,axis:'x'}:{radius:8};
+  const result=progression.execute(action,args,controller.signal).then(value=>({value}),e=>({error:e.message}));
+  await Promise.race([reached,result.then(value=>{throw Error('Action ended before aim: '+JSON.stringify(value))})]);
+  assert.equal(writes.length,0);
+  if(interruption==='stop')controller.abort(Error('Owner pressed Stop'));
+  if(interruption.includes('dimension')){bot.game.dimension='the_nether';bot.emit('respawn');if(interruption.includes('roundtrip')){bot.game.dimension='overworld';bot.emit('respawn');}}
+  if(interruption==='client-replacement')bot._client=client();
+  if(interruption==='held-swap')bot.inventory.slots[36]={...bot.heldItem,name:'stone',type:registry.itemsByName.stone.id};
+  if(interruption==='held-components')bot.heldItem.components=[{type:'custom_name',data:'changed after aim'}];
+  if(interruption==='held-empty')bot.heldItem.count=0;
+  if(interruption==='target-change')target.stateId++;
+  if(interruption==='obstruction')obstructed=true;
+  assert.equal(writes.length,0);
+  release();
+  const outcome=await result;
+  const packets=writes.filter(w=>w.name==='block_place');
+  assert.equal(packets.length,interruption==='none'?1:0);
+  if(interruption==='none'){assert.equal(outcome.value.active,true);assert.equal(packets[0].packet.cursorY,action==='build_nether_portal'?1:.8125);assert.equal(packets[0].packet.direction,1);assert.equal(packets[0].packet.hand,0)}else assert.ok(outcome.error);
+  assert.equal(controller.signal.aborted,interruption==='stop');
+});
