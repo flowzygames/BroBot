@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {EventEmitter} from 'node:events';
-import {confirmSleep} from '../src/guarded-activation.js';
+import {confirmSleep,confirmWake} from '../src/guarded-activation.js';
 import {visibleInteractionFace,interactionVisible} from '../src/guarded-activation.js';
 import {InteractionGoal,visibleBlockFace} from '../src/actions.js';
 import WorldSync from 'prismarine-world/src/worldsync.js';
@@ -31,4 +31,19 @@ test('sleep acknowledgement cleans up after timeout, abort, session change and s
   if(['respawn','spawn','end'].includes(mode))bot.emit(mode);
   await rejected;for(const e of ['sleep','respawn','spawn','end'])assert.equal(bot.listenerCount(e),0,mode);
  }
+});
+test('wake confirmation requires observed awake state and cleans every termination',async()=>{
+ for(const mode of ['success','wrong-state','timeout','abort','respawn','spawn','end','send']){
+  const bot=Object.assign(new EventEmitter(),{isSleeping:true}),controller=new AbortController();
+  const pending=confirmWake(bot,()=>{if(mode==='send')throw Error('send failed');},{signal:controller.signal,check:()=>{},timeoutMs:20});
+  const outcome=mode==='success'?pending:assert.rejects(pending);
+  if(mode==='success'){bot.isSleeping=false;bot.emit('wake');}
+  if(mode==='wrong-state')bot.emit('wake');
+  if(mode==='abort')controller.abort();
+  if(['respawn','spawn','end'].includes(mode))bot.emit(mode);
+  await outcome;for(const e of ['wake','sleep','respawn','spawn','end'])assert.equal(bot.listenerCount(e),0,mode);
+ }
+});
+test('invalid sleep-state confirmation inputs install no listeners',()=>{
+ const bot=new EventEmitter();assert.throws(()=>confirmWake(bot,()=>{},{signal:{},check:()=>{}}),/Invalid/);assert.equal(bot.eventNames().length,0);
 });

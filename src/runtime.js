@@ -3,6 +3,7 @@ import { assertTerrainTrusted, terrainTrustStatus } from './terrain-trust.js';
 import { isFluidBearingBlock } from './navigation-guards.js';
 import { craftGeometryKey } from './craft-retry-evidence.js';
 import { observeOwnInjuries } from './injury-observer.js';
+import { pinnedSprintCompatibility } from './protocol-compatibility.js';
 import { sectionSearchDistance } from './block-search.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import mineflayer from 'mineflayer';
@@ -137,6 +138,7 @@ export class Runtime {
     try {
       bot = mineflayer.createBot({ ...connection, profilesFolder: join(this.config.dataDir, 'auth'), hideErrors: true, respawn: true, checkTimeoutInterval: 30000 });
       this.bot = bot;
+      bot.loadPlugin(pinnedSprintCompatibility);
       bot.loadPlugin(pathfinderModule.pathfinder);
       bot.loadPlugin(toolModule.plugin);
     } catch (error) {

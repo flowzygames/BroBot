@@ -61,22 +61,26 @@ export async function prepareObservedActivation(bot,block,{check,requireBed=fals
   };
 }
 
-export function confirmSleep(bot,send,{signal,check,timeoutMs=3000}={}) {
+export function confirmSleep(bot,send,options={}) { return confirmSleepState(bot,send,options,true); }
+export function confirmWake(bot,send,options={}) { return confirmSleepState(bot,send,options,false); }
+function confirmSleepState(bot,send,{signal,check,timeoutMs=3000}={},sleeping) {
+  const event=sleeping?'sleep':'wake';
+  if(typeof send!=='function'||typeof check!=='function'||(signal!==undefined&&!(signal instanceof AbortSignal)))throw Error('Invalid sleep-state confirmation inputs');
   if(!Number.isFinite(timeoutMs)||timeoutMs<=0||timeoutMs>3000)throw Error('Invalid sleep confirmation budget');
   return new Promise((resolve,reject)=>{
     let finished=false,timer;
     const finish=error=>{
       if(finished)return;finished=true;clearTimeout(timer);
-      bot.removeListener('sleep',sleep);bot.removeListener('end',ended);bot.removeListener('respawn',ended);bot.removeListener('spawn',ended);
+      bot.removeListener(event,sleep);bot.removeListener('end',ended);bot.removeListener('respawn',ended);bot.removeListener('spawn',ended);
       signal?.removeEventListener('abort',aborted);
       error?reject(error):resolve();
     };
-    const sleep=()=>{try{check();if(bot.isSleeping!==true)throw Error('Server did not confirm sleep');finish();}catch(error){finish(error);}};
-    const ended=()=>finish(Error('Sleep interrupted by a session change'));
+    const sleep=()=>{try{check();if(bot.isSleeping!==sleeping)throw Error(`Server did not confirm ${event}`);finish();}catch(error){finish(error);}};
+    const ended=()=>finish(Error(`${event} interrupted by a session change`));
     const aborted=()=>finish(Object.assign(Error('Action cancelled'),{name:'AbortError'}));
-    bot.on('sleep',sleep);bot.on('end',ended);bot.on('respawn',ended);bot.on('spawn',ended);
+    bot.on(event,sleep);bot.on('end',ended);bot.on('respawn',ended);bot.on('spawn',ended);
     signal?.addEventListener('abort',aborted,{once:true});
-    timer=setTimeout(()=>finish(Error('Server did not confirm sleep')),timeoutMs);
+    timer=setTimeout(()=>finish(Error(`Server did not confirm ${event}`)),timeoutMs);
     try{if(signal?.aborted)return aborted();check();send();}catch(error){finish(error);}
   });
 }

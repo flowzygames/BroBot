@@ -27,6 +27,33 @@ test('collection propagates mining admission refusal with earlier confirmed prog
  assert.equal(digs,1);
 })
 
+test('explicit wake emits the correct pinned protocol meaning and waits for acknowledgement',async()=>{
+  const {default:protocol}=await import('minecraft-protocol');
+  const serializer=protocol.createSerializer({state:'play',isServer:false,version:'1.21.8'}),deserializer=protocol.createDeserializer({state:'play',isServer:true,version:'1.21.8'});
+  const bot=fakeBot();bot.isSleeping=true;let sent=0;
+  bot._client.write=(name,params)=>{assert.equal(deserializer.parsePacketBuffer(serializer.createPacketBuffer({name,params})).data.params.actionId,'stop_sleeping');sent++;bot.isSleeping=false;bot.emit('wake')};
+  assert.deepEqual(await createActions(bot).execute('wake',{}),{awake:true});assert.equal(sent,1);
+  for(const e of ['wake','respawn','spawn','end'])assert.equal(bot.listenerCount(e),0);
+})
+test('wake refuses awake, unsupported and cancelled contexts without sending',async()=>{
+  for(const mode of ['awake','version','cancel']){
+    const bot=fakeBot();bot.isSleeping=mode!=='awake';if(mode==='version')bot.version='1.20.1';let sent=0;bot._client.write=()=>{sent++};
+    await assert.rejects(createActions(bot).execute('wake',{},mode==='cancel'?AbortSignal.abort():undefined));assert.equal(sent,0);
+  }
+})
+test('wake rejects a session change after its acknowledgement',async()=>{
+  const bot=fakeBot();bot.isSleeping=true;bot._client.write=()=>{bot.isSleeping=false;bot.emit('wake');bot.emit('respawn')};
+  await assert.rejects(createActions(bot).execute('wake',{}),/session changed/);
+})
+test('wake retains the action lock while waiting for its server acknowledgement',async()=>{
+  const bot=fakeBot();bot.isSleeping=true;let sent=0;bot._client.write=()=>{sent++};
+  const actions=createActions(bot),pending=actions.execute('wake',{});
+  assert.equal(sent,1);await assert.rejects(actions.execute('inspect',{}),/Another physical action/);
+  bot.isSleeping=false;bot.emit('wake');assert.deepEqual(await pending,{awake:true});
+  assert.equal((await actions.execute('inspect',{})).sleeping,false);
+
+})
+
 test('pickup avoids duplicate failed destination probes while other drops still get a turn', async () => {
   const bot = fakeBot()
   for (const x of [0,1,2,5]) bot.putBlock('stone',new Vec3(x,63,0))

@@ -1,0 +1,338 @@
+{
+  "kind": "prepared-custom-sprint-protocol",
+  "started": "2026-10-05T00:28:41.306Z",
+  "minecraft": "1.21.8",
+  "fixture": "Prepared peaceful flat lane. Actual Runtime go_to must produce server-confirmed sprinting and explicit Stop must produce server-confirmed not-sprinting. Server-side entity predicates are the primary state evidence; this is not a speed benchmark.",
+  "sourceHashes": {
+    "src/actions.js": "45590062380a237c003a807693d39e0b0101b745a487e153c6017c95ef4682e2",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "b6572e18b4de2593964cb0335b28261efc78ea1b9b1340ed5576e0e668239261",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "a38287edc31bd5611284c8b88f1704e7f5acfec075250ac655012bfb8168aef7",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/guarded-activation.js": "71b6004afb666d2b8c052c39ff04688f792c97d574394703602de0de5f6e4e4a",
+    "src/hostile-ground-observation.js": "3d3a063e608121665a2d9e1e2ff951b62cec5ad84b9c8735b1acbd5d67473e76",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "2a2114ff9b51c580f330048391c0301725891576a539bf7e769be415b6613606",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "5f7e437bb561664037438d10f74c147ef4fca9679e1850dfc59b51d4f543c9ee",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-probe-ledger.js": "56fbe13f88dac72df9cb0127bf6119382c048c2a9b83eb1ea4676586b5ad7c38",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "src/protocol-compatibility.js": "1f7d880bc98d7b4fc2aefba4643eab31271e8ea92d971531e27d328d055cce2f",
+    "src/runner.js": "b1efc6d1456648752558889f001c16e899cb58ea84fa73b6eb36592218477cc4",
+    "src/runtime.js": "927e29acdb19dfacba71c9ad6d2bc8cc879a7a055a285fa55c3f8cdba092c3ea",
+    "src/scout-coverage.js": "13c4047e2756ab280a1140ba45355032b06ff5a3db79477b60293e07ecb07a66",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/starter-retreat.js": "b10605cb98bc812c5ceb11be296a544e8bd0c5e2fc507b91acf61ae9b13e9ad9",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "aaf091f19d64f378bc3af0d717db42712bec070e3fe7f21b36247a60cc153ed0",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "3f8e5c423f93d49a451985fa4f678548252ceb9505f4a65b07e24b984ed2d18f",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-sprint-protocol.js": "f3980e963a6f4e69d6b39a0c64c2576f8da5a7da9a27e7735340bb5bded8f5f5"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "commit": "8f3e30cc646aeb39e9325c4ae0bf8e29d5e97f26",
+  "dirty": false,
+  "commands": [
+    {
+      "at": "2026-10-05T00:29:01.832Z",
+      "line": "execute as BroBotHome if predicate {condition:\"minecraft:entity_properties\",entity:\"this\",predicate:{flags:{is_sprinting:false}}} run say SPRINT_false_b3ff0718-1971-4853-a714-46bc9346d3ce",
+      "reply": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_false_b3ff0718-1971-4853-a714-46bc9346d3ce\n[20:29:01 INFO]: [Not Secure] [Server] 474e545b-f060-46f4-8bea-0c0f9d53395c\n"
+    },
+    {
+      "at": "2026-10-05T00:29:01.940Z",
+      "line": "execute as BroBotHome if predicate {condition:\"minecraft:entity_properties\",entity:\"this\",predicate:{flags:{is_sprinting:true}}} run say SPRINT_true_f8efcfba-18d2-43a1-8d68-56f422c62617",
+      "reply": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_true_f8efcfba-18d2-43a1-8d68-56f422c62617\n[20:29:01 INFO]: [Not Secure] [Server] aca7b424-ad2b-4504-bae4-49d3abd87e27\n"
+    },
+    {
+      "at": "2026-10-05T00:29:01.984Z",
+      "line": "execute as BroBotHome if predicate {condition:\"minecraft:entity_properties\",entity:\"this\",predicate:{flags:{is_sprinting:false}}} run say SPRINT_false_d70657dd-e340-4c9e-90b9-ed38464030c2",
+      "reply": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_false_d70657dd-e340-4c9e-90b9-ed38464030c2\n[20:29:01 INFO]: [Not Secure] [Server] 2a617522-5bd8-413a-a995-436a61f5dcea\n"
+    }
+  ],
+  "packets": [
+    {
+      "at": "2026-10-05T00:29:01.894Z",
+      "packet": {
+        "entityId": 21,
+        "actionId": "start_sprinting",
+        "jumpBoost": 0
+      }
+    },
+    {
+      "at": "2026-10-05T00:29:01.941Z",
+      "packet": {
+        "entityId": 21,
+        "actionId": "stop_sprinting",
+        "jumpBoost": 0
+      }
+    }
+  ],
+  "before": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "feature": true,
+  "initialFlag": {
+    "value": false,
+    "marker": "SPRINT_false_b3ff0718-1971-4853-a714-46bc9346d3ce",
+    "serverSayLine": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_false_b3ff0718-1971-4853-a714-46bc9346d3ce",
+    "at": "2026-10-05T00:29:01.833Z"
+  },
+  "movingFlag": {
+    "value": true,
+    "marker": "SPRINT_true_f8efcfba-18d2-43a1-8d68-56f422c62617",
+    "serverSayLine": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_true_f8efcfba-18d2-43a1-8d68-56f422c62617",
+    "at": "2026-10-05T00:29:01.940Z"
+  },
+  "during": {
+    "connected": true,
+    "position": {
+      "x": 0.63,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": {
+      "name": "go_to",
+      "started": 1791160141833,
+      "stopping": false
+    },
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "stopped": {
+    "error": "Prepared explicit Stop"
+  },
+  "finalFlag": {
+    "value": false,
+    "marker": "SPRINT_false_d70657dd-e340-4c9e-90b9-ed38464030c2",
+    "serverSayLine": "[20:29:01 INFO]: [Not Secure] [BroBotHome] SPRINT_false_d70657dd-e340-4c9e-90b9-ed38464030c2",
+    "at": "2026-10-05T00:29:01.984Z"
+  },
+  "controls": {
+    "forward": false,
+    "back": false,
+    "left": false,
+    "right": false,
+    "jump": false,
+    "sprint": false,
+    "sneak": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.7,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.7,
+      "y": 64,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastJob": null,
+  "finished": "2026-10-05T00:29:03.430Z"
+}

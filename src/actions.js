@@ -2,7 +2,7 @@ import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { PickupProbeLedger } from './pickup-probe-ledger.js'
 import { runStarterRetreat } from './starter-retreat.js'
-import { interactionSession, prepareObservedActivation, confirmSleep, interactionVisible, visibleInteractionFace } from './guarded-activation.js'
+import { interactionSession, prepareObservedActivation, confirmSleep, confirmWake, interactionVisible, visibleInteractionFace } from './guarded-activation.js'
 import { confirmedMining, MINING_DEADLINE_INSUFFICIENT } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -78,6 +78,7 @@ export const definitions = [
   def('attack', 'Attack one visible non-player mob with a suitable owned melee weapon for at most duration seconds. Never attacks players, pets with a known owner, or non-living entities. Stops at low health.', { entity_id: optional(number('Specific visible mob entity id', 0, 2147483647, true)), mob: optional(str('Mob registry name if no entity id')), duration: optional(number('Maximum seconds; default 15', 1, 45)) }),
   def('give', 'Walk to a visible player and drop a requested number of owned items toward them. Verifies inventory removal; cannot guarantee which player collects dropped items.', { player: str('Visible player username'), item: str('Owned item name'), count: number('Number of items', 1, 256, true) }),
   def('sleep', 'Find and enter a nearby bed. Reports failure if the server refuses sleep.', {}),
+  def('wake', 'Explicitly leave the current bed and wait for the server to confirm waking. Requires the bot to be sleeping.', {}),
   def('activate', 'Right-click a loaded reachable block, such as a door, button, lever, or workstation. Reports observed block/window change, not unverified mechanism results.', { ...posSchema }),
   def('use_item', 'Use an owned/current held item in a chosen direction for a bounded time, then release it. Yaw/pitch are radians. Useful for bow, shield, fishing, eyes of ender, or other right-click items. Reports actual item use and inventory changes, not guessed hits.', { item: optional(str('Item to equip, or null for current held item')), yaw: optional(number('Yaw radians; null keeps current direction', -Math.PI, Math.PI)), pitch: optional(number('Pitch radians; positive looks up', -Math.PI / 2, Math.PI / 2)), duration: optional(number('Hold seconds before release; default 1', 0, 10)) }),
   def('pickup', 'Walk over nearby dropped item entities and report verified inventory gains.', { radius: optional(number('Maximum radius; default 12', 1, 32, true)), entity_ids: optional({ type: 'array', maxItems: 64, items: number('Observed item entity id', 0, 2147483647, true), description: 'Only recover these observed item ids; null chooses all nearby drops, an empty list chooses none' }) }),
@@ -1189,6 +1190,23 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         await confirmSleep(bot,send,{signal:ctx.signal,check:()=>session.check()})
         session.check()
         return {sleeping:true,bed:plainPos(bed.position)}
+      } finally {session.dispose()}
+    },
+    wake: async (args,ctx) => {
+      const session=interactionSession(bot,()=>checked(ctx))
+      try {
+        session.check()
+        assert(bot.version==='1.21.8','Explicit waking is verified only for Minecraft Java 1.21.8')
+        assert(bot.isSleeping===true,'Bot is already awake')
+        const send=()=>{
+          session.check()
+          assert(bot.isSleeping===true,'Sleeping state changed before wake request')
+          assert(Number.isSafeInteger(bot.entity.id)&&bot.entity.id>=0,'Wake requires a valid player entity')
+          bot._client.write('entity_action',{entityId:bot.entity.id,actionId:'stop_sleeping',jumpBoost:0})
+        }
+        await confirmWake(bot,send,{signal:ctx.signal,check:()=>session.check()})
+        session.check()
+        return {awake:true}
       } finally {session.dispose()}
     },
     activate: async (args, ctx) => {
