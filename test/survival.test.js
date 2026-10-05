@@ -1218,3 +1218,39 @@ test('an observed animal attack during the real starter interval prevents the ne
  assert.equal(executed,1);assert.equal(observed,1)
  assert.equal(f.job.state().status,'paused');assert.match(f.job.state().reason,/Attack observed between starter actions/)
 })
+
+test('delayed logs supersede queued leaf clearance with the newly available craft',async()=>{
+ const f=fixture({maxSteps:3});let observations=0;const executed=[]
+ f.job.observe=async()=>{
+  if(++observations===4)f.add('oak_log',3)
+  return{wood:'oak',foliage:{x:2,y:65,z:0,expected_block:'oak_leaves'}}
+ }
+ f.job.execute=async(name,args)=>{
+  executed.push(name)
+  if(name==='collect')throw Error('Blocked tree approach')
+  if(name==='dig_at')throw Object.assign(Error('Protected leaf support'),{code:'STARTER_SUPPORT_PROTECTED'})
+  return f.execute(name,args)
+ }
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','craft'])
+ assert.ok(f.counts().oak_planks>0)
+})
+for(const change of ['foliage','position','unrelated inventory'])test(`queued tree clearance is discarded after changed ${change}`,async()=>{
+ const f=fixture({maxSteps:3});let observations=0;const executed=[]
+ f.job.observe=async()=>{
+  const stale=++observations<4
+  if(!stale&&change==='position')f.state.position.x=1.5
+  if(!stale&&change==='unrelated inventory')f.add('dirt',1)
+  return{wood:'oak',foliage:!stale&&change==='foliage'?null:{x:2,y:65,z:0,expected_block:'oak_leaves'}}
+ }
+ f.job.execute=async(name)=>{executed.push(name);if(name==='collect')throw Error('Blocked tree approach');return{}}
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','collect'])
+})
+test('unchanged tree obstruction still receives its bounded queued clearance',async()=>{
+ const f=fixture({maxSteps:3}),executed=[]
+ f.job.observe=async()=>({wood:'oak',foliage:{x:2,y:65,z:0,expected_block:'oak_leaves'}})
+ f.job.execute=async(name)=>{executed.push(name);if(name==='collect')throw Error('Blocked tree approach');return{}}
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','dig_at'])
+})

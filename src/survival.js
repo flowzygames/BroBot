@@ -326,6 +326,8 @@ export class SurvivalJob {
         const current=this.snapshot();
         if(!(decision.scout || ['collect','craft'].includes(decision.name)) || intendedAction!==recovery.sourceIntent || !sameContext(recovery,current,observation)) recovery=null;
       }
+      if (recovery?.name === 'dig_at' && Object.hasOwn(recovery,'sourceIntent')
+        && (intendedAction !== recovery.sourceIntent || !sameContext(recovery,this.snapshot(),observation))) recovery = null;
       if (recovery?.name === 'descend_notch' && (observation.canopyGrounded !== true
         || intendedAction !== recovery.sourceIntent || !sameContext(recovery,this.snapshot(),observation))) recovery = null;
       if (recovery?.name === 'pickup') {
@@ -382,7 +384,7 @@ export class SurvivalJob {
           recovery = {...action('descend_notch', {}, 'Try one certified leaf step after repeated blocked workstation crafting.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,'craft')};
         } else if (decision.name === 'collect' && !supportRefused && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
           this.job.clearings = (this.job.clearings ?? 0) + 1;
-          recovery = action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.');
+          recovery = {...action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,decision.name)};
         } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation,decision.name) };
         // Scout decisions are resolved on the next pass; keep a bounded retry cap
         // even when environment changes, instead of silently clearing failures.
