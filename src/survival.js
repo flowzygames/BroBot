@@ -270,7 +270,9 @@ export class SurvivalJob {
   }
   async loop(signal,deadline) {
     const failures = new Map(), craftFailureContexts = new Map(), travelFailurePositions = new Map(), blockedWorkstations = new Map();
-    const observationKey = (observation, retryKind) => JSON.stringify(retryKind === 'craft'
+    const observationKey = (observation, retryKind) => JSON.stringify(retryKind === 'tree-clearance'
+      ? { foliage: observation.foliage ?? null, powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
+      : retryKind === 'craft'
       ? { tableInReach: observation.tableInReach, tables: (observation.tables ?? []).map(p=>[p.x,p.y,p.z]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]), craftGeometry: observation.craftGeometry ?? observation.localTerrain ?? [], powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
       : observation);
     const retryContext = (state, observation, retryKind = null) => ({retryKind,inventoryKey:inventoryKey(state),observationKey:observationKey(observation,retryKind),position:{...state.position}});
@@ -383,8 +385,7 @@ export class SurvivalJob {
           && canopyAttempts.length < 4 && !canopyAttempts.some(p=>distance(p,canopyCell)<.1)) {
           recovery = {...action('descend_notch', {}, 'Try one certified leaf step after repeated blocked workstation crafting.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,'craft')};
         } else if (decision.name === 'collect' && !supportRefused && /_log$/.test(decision.args.block) && observation.foliage && (this.job.clearings ?? 0) < 4) {
-          this.job.clearings = (this.job.clearings ?? 0) + 1;
-          recovery = {...action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.'),sourceIntent:signature,...retryContext(this.snapshot(),observation,decision.name)};
+          recovery = {...action('dig_at', observation.foliage, 'Clear one observed leaf obstruction in front of a needed tree.'),treeClearance:true,sourceIntent:signature,...retryContext(this.snapshot(),observation,'tree-clearance')};
         } else recovery = { scout: `Repeated ${decision.name} failure. Look for a different approach.`, sourceIntent:signature, ...retryContext(this.snapshot(),observation,decision.name) };
         // Scout decisions are resolved on the next pass; keep a bounded retry cap
         // even when environment changes, instead of silently clearing failures.
@@ -423,6 +424,7 @@ export class SurvivalJob {
         this.job.canopyDescentAttempts = [...attempts,cell];
       }
       if(this.now()>=deadline)throw Error('Starter job time budget reached. Review progress before resuming.');
+      if (decision.treeClearance === true) this.job.clearings = (this.job.clearings ?? 0) + 1;
       this.job.steps++; this.save();
       const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
       try {

@@ -1233,6 +1233,7 @@ test('delayed logs supersede queued leaf clearance with the newly available craf
  }
  f.job.start();await f.job.promise
  assert.deepEqual(executed,['collect','collect','craft'])
+ assert.equal(f.job.state().clearings??0,0)
  assert.ok(f.counts().oak_planks>0)
 })
 for(const change of ['foliage','position','unrelated inventory'])test(`queued tree clearance is discarded after changed ${change}`,async()=>{
@@ -1246,6 +1247,7 @@ for(const change of ['foliage','position','unrelated inventory'])test(`queued tr
  f.job.execute=async(name)=>{executed.push(name);if(name==='collect')throw Error('Blocked tree approach');return{}}
  f.job.start();await f.job.promise
  assert.deepEqual(executed,['collect','collect','collect'])
+ assert.equal(f.job.state().clearings??0,0)
 })
 test('unchanged tree obstruction still receives its bounded queued clearance',async()=>{
  const f=fixture({maxSteps:3}),executed=[]
@@ -1253,4 +1255,12 @@ test('unchanged tree obstruction still receives its bounded queued clearance',as
  f.job.execute=async(name)=>{executed.push(name);if(name==='collect')throw Error('Blocked tree approach');return{}}
  f.job.start();await f.job.promise
  assert.deepEqual(executed,['collect','collect','dig_at'])
+})
+
+test('unrelated terrain revisions do not suppress or spend a valid tree clearance',async()=>{
+ const f=fixture({maxSteps:3}),executed=[];let revision=0
+ f.job.observe=async()=>({wood:'oak',terrainRevision:++revision,resourceEvidence:[{name:'stone',position:{x:revision,y:60,z:0}}],foliage:{x:2,y:65,z:0,expected_block:'oak_leaves'}})
+ f.job.execute=async(name)=>{executed.push(name);if(name==='collect')throw Error('Blocked tree approach');return{}}
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','dig_at']);assert.equal(f.job.state().clearings,1)
 })
