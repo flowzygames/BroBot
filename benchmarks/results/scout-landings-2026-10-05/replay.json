@@ -1,0 +1,784 @@
+{
+  "kind": "prepared-custom-scout-landing-replay",
+  "started": "2026-10-05T01:01:45.813Z",
+  "minecraft": "1.21.8",
+  "fixture": "Copy of a completed natural-world snapshot, with exact saved starting pose and random ticks frozen. Compare exact-column preflight with the new starter landing region, execute one scout and return to its origin. No terrain is prepared or edited. Not a fresh natural-world completion benchmark.",
+  "sourceHashes": {
+    "src/actions.js": "0b7396a81e35a30f4674385228f4fc39e3dae11b29df93f15353441a472dedf2",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "b6572e18b4de2593964cb0335b28261efc78ea1b9b1340ed5576e0e668239261",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "64505b7c2260fc2543d267d11333f0c0e114e02cf350a4b8257a82e02ca4ce2b",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/guarded-activation.js": "b5c272d94762c633aeb255d2efc5bfae6dcff35641952129f1fe101f964200fc",
+    "src/hostile-ground-observation.js": "3d3a063e608121665a2d9e1e2ff951b62cec5ad84b9c8735b1acbd5d67473e76",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "2a2114ff9b51c580f330048391c0301725891576a539bf7e769be415b6613606",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/navigation-guards.js": "5f7e437bb561664037438d10f74c147ef4fca9679e1850dfc59b51d4f543c9ee",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-probe-ledger.js": "56fbe13f88dac72df9cb0127bf6119382c048c2a9b83eb1ea4676586b5ad7c38",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "e9f3e1b0ebd38fd5fac88791c28c5af5b609f9a0d5f8fd2bf80b29209a6cfda6",
+    "src/protocol-compatibility.js": "1f7d880bc98d7b4fc2aefba4643eab31271e8ea92d971531e27d328d055cce2f",
+    "src/runner.js": "b1efc6d1456648752558889f001c16e899cb58ea84fa73b6eb36592218477cc4",
+    "src/runtime.js": "927e29acdb19dfacba71c9ad6d2bc8cc879a7a055a285fa55c3f8cdba092c3ea",
+    "src/scout-coverage.js": "70824df26cc60848c47971429650daf43c453b03c9d4a32a4b092e9c4a6f592b",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/starter-retreat.js": "b10605cb98bc812c5ceb11be296a544e8bd0c5e2fc507b91acf61ae9b13e9ad9",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "405b8220750bfa5aa34a6d854793ccf57414c4524a56a1418b967922e5f76092",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "3f8e5c423f93d49a451985fa4f678548252ceb9505f4a65b07e24b984ed2d18f",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-scout-landing-replay.js": "617c2c7289749af144a7053197f9e11b331bdf4e99f35247e5f71425808f6e1e"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "commit": "2b5345bb38cdf809497b6b335f0c21695488f8c4",
+  "dirty": false,
+  "originalSnapshot": {
+    "benchmarkRun": "2026-10-04T23-22-49-828Z-250e9310",
+    "seed": "924242050",
+    "label": "retreat589-selected-tree-start",
+    "sourceCommit": "68bc28ae21b4c91bcf8b57186deff72378cb4704",
+    "originalResultSha256": "f3cdbb1dab58b8dbb2ad15058c199742aecffbe5302b7e25f25e82fb6dbe5178",
+    "originalWorldReadOnly": true,
+    "extraction": "Only block-state cells queried by offline exact/near route probes or their leaf-anchor checks were retained. States come from the saved final world, not generated terrain. All unlisted cells remain unknown.",
+    "regions": [
+      {
+        "file": "world/region/r.0.-1.mca",
+        "sha256": "5d7cc0d18d2f04f3c799846748afe1286b4e46aec36586c6cd2dae300df433a8"
+      }
+    ],
+    "dependencies": {
+      "mineflayer": "4.39.0",
+      "mineflayer-pathfinder": "2.4.5",
+      "prismarine-block": "1.23.0",
+      "prismarine-registry": "1.12.0",
+      "minecraft-data": "3.117.0"
+    },
+    "originSource": "Saved player NBT final position and OnGround, rather than the rounded result snapshot",
+    "playerData": {
+      "file": "world/playerdata/29cdac31-f5ab-3456-834a-ca814e36c114.dat",
+      "sha256": "f05ccf35ce7e6c191c00cbf5b1000f8633751c6af89045d0ad7a7b35f1ff01d8"
+    }
+  },
+  "fixtureDifferences": [],
+  "digs": [],
+  "placements": [],
+  "before": {
+    "connected": true,
+    "position": {
+      "x": 224.5,
+      "y": 85,
+      "z": -34.54
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1447,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 50,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 193.5,
+          "y": 60.04,
+          "z": -33.5
+        },
+        "distance": 39.8
+      },
+      {
+        "id": 23,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 196.6,
+          "y": 55.03,
+          "z": -29.3
+        },
+        "distance": 41.3
+      },
+      {
+        "id": 47,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 201.88,
+          "y": 57.77,
+          "z": -60.82
+        },
+        "distance": 44.1
+      },
+      {
+        "id": 46,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 201.16,
+          "y": 58.15,
+          "z": -60.93
+        },
+        "distance": 44.3
+      },
+      {
+        "id": 72,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 207.14,
+          "y": 58.78,
+          "z": -66.41
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 48,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 201.7,
+          "y": 57.27,
+          "z": -61.41
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 49,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 201.77,
+          "y": 55.87,
+          "z": -60.05
+        },
+        "distance": 44.9
+      },
+      {
+        "id": 22,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 193.71,
+          "y": 51.24,
+          "z": -27.4
+        },
+        "distance": 46.2
+      },
+      {
+        "id": 69,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 235.41,
+          "y": 65,
+          "z": -75.17
+        },
+        "distance": 46.6
+      },
+      {
+        "id": 71,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 206.67,
+          "y": 59.57,
+          "z": -69.48
+        },
+        "distance": 46.7
+      },
+      {
+        "id": 53,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 187.7,
+          "y": 60.96,
+          "z": -18.26
+        },
+        "distance": 46.9
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "exact": {
+    "error": "No verified scout route: No verified returnable walking route (noPath)",
+    "result": {
+      "directions_tried": [
+        "east"
+      ],
+      "route_attempts": [
+        {
+          "direction": "east",
+          "status": "unverified",
+          "reason": "No verified returnable walking route (noPath)"
+        }
+      ]
+    }
+  },
+  "scout": {
+    "explored": true,
+    "direction": "east",
+    "directions_tried": [
+      "east"
+    ],
+    "route_attempts": [
+      {
+        "direction": "east",
+        "status": "verified"
+      }
+    ],
+    "distance": 7,
+    "position": {
+      "x": 231.54,
+      "y": 85,
+      "z": -34.69
+    }
+  },
+  "afterScout": {
+    "connected": true,
+    "position": {
+      "x": 231.54,
+      "y": 85,
+      "z": -34.69
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1447,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 50,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 193.49,
+          "y": 60.31,
+          "z": -33.5
+        },
+        "distance": 45.4
+      },
+      {
+        "id": 69,
+        "name": "bat",
+        "type": "ambient",
+        "username": null,
+        "position": {
+          "x": 237.45,
+          "y": 63.65,
+          "z": -76.11
+        },
+        "distance": 47
+      },
+      {
+        "id": 47,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 201.63,
+          "y": 58.02,
+          "z": -60.78
+        },
+        "distance": 48
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "returned": {
+    "arrived": true,
+    "position": {
+      "x": 224.47,
+      "y": 85,
+      "z": -35.5
+    },
+    "target": {
+      "x": 224,
+      "y": 85,
+      "z": -35
+    },
+    "radius": 1
+  },
+  "controls": {
+    "forward": false,
+    "back": false,
+    "left": false,
+    "right": false,
+    "jump": false,
+    "sprint": false,
+    "sneak": false
+  },
+  "originalUnchanged": true,
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 224.47,
+      "y": 85,
+      "z": -35.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1447,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 50,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 191.41,
+          "y": 60.04,
+          "z": -33.91
+        },
+        "distance": 41.5
+      },
+      {
+        "id": 23,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 195.09,
+          "y": 54.73,
+          "z": -28.19
+        },
+        "distance": 42.8
+      },
+      {
+        "id": 47,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 199.23,
+          "y": 57.96,
+          "z": -59.14
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 71,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 207.36,
+          "y": 60.13,
+          "z": -68.63
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 49,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 205.35,
+          "y": 56.08,
+          "z": -64.3
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 22,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 195.6,
+          "y": 50.19,
+          "z": -27.4
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 52,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 189.41,
+          "y": 55.35,
+          "z": -24.43
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 72,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 210.54,
+          "y": 57.46,
+          "z": -71.46
+        },
+        "distance": 47.4
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 224.47,
+      "y": 85,
+      "z": -35.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1447,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [
+      {
+        "name": "wooden_pickaxe",
+        "count": 1,
+        "durability_used": 0
+      },
+      {
+        "name": "spruce_planks",
+        "count": 3,
+        "durability_used": null
+      },
+      {
+        "name": "stick",
+        "count": 2,
+        "durability_used": null
+      }
+    ],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [
+      {
+        "id": 50,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 191.41,
+          "y": 60.04,
+          "z": -33.91
+        },
+        "distance": 41.5
+      },
+      {
+        "id": 23,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 195.09,
+          "y": 54.73,
+          "z": -28.19
+        },
+        "distance": 42.8
+      },
+      {
+        "id": 47,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 199.23,
+          "y": 57.96,
+          "z": -59.14
+        },
+        "distance": 43.9
+      },
+      {
+        "id": 71,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 207.36,
+          "y": 60.13,
+          "z": -68.63
+        },
+        "distance": 44.8
+      },
+      {
+        "id": 49,
+        "name": "cod",
+        "type": "water_creature",
+        "username": null,
+        "position": {
+          "x": 205.35,
+          "y": 56.08,
+          "z": -64.3
+        },
+        "distance": 45.1
+      },
+      {
+        "id": 22,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 195.6,
+          "y": 50.19,
+          "z": -27.4
+        },
+        "distance": 45.9
+      },
+      {
+        "id": 52,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 189.41,
+          "y": 55.35,
+          "z": -24.43
+        },
+        "distance": 47.2
+      },
+      {
+        "id": 72,
+        "name": "squid",
+        "type": "passive",
+        "username": null,
+        "position": {
+          "x": 210.54,
+          "y": 57.46,
+          "z": -71.46
+        },
+        "distance": 47.4
+      }
+    ],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastJob": null,
+  "finished": "2026-10-05T01:02:07.763Z"
+}

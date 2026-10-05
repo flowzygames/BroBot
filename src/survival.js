@@ -1,7 +1,7 @@
 import { STARTER_SUPPORT_PROTECTED } from './starter-leaf-support.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
-import { recordScoutObservation, rankScouts } from './scout-coverage.js';
+import { recordScoutObservation, rankScouts, SCOUT_GOAL_POLICY } from './scout-coverage.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 export const STARTER_LOG_RADIUS = 48;
@@ -148,6 +148,7 @@ export class SurvivalJob {
     if (Object.hasOwn(this.job ?? {}, 'canopyDescentAttempts') && (!Array.isArray(this.job.canopyDescentAttempts)
       || this.job.canopyDescentAttempts.length > 4 || this.job.canopyDescentAttempts.some(p=>!p || !['x','y','z'].every(k=>Number.isSafeInteger(p[k]))))) throw new Error('Saved canopy recovery history is invalid.');
     if (Object.hasOwn(this.job ?? {},'travelArrivals') && (!Array.isArray(this.job.travelArrivals) || this.job.travelArrivals.length>64 || this.job.travelArrivals.some(a=>!validTravelArrival(a,this.job.home.position)))) throw new Error('Saved travel arrival evidence is invalid.');
+    if(Object.hasOwn(this.job??{},'scoutGoalPolicy')&&![0,SCOUT_GOAL_POLICY].includes(this.job.scoutGoalPolicy))throw Error('Saved scout goal policy is unsupported');
     if (this.job?.status === 'running') { this.job.status = 'paused'; this.job.reason = 'Process restarted. Resume explicitly after checking the world.'; this.save(); }
   }
   save() {
@@ -235,7 +236,13 @@ export class SurvivalJob {
       if (!this.job || !['paused', 'blocked'].includes(this.job.status)) throw new Error('No paused starter job to resume.');
       if (this.job.context !== this.context || dimension(state.dimension) !== dimension(this.job.home.dimension)) throw new Error('Saved job belongs to another connection or dimension. Start a new job.');
     } else {
-      this.job = { version: 1, id: randomUUID(), goal: 'starter', context: this.context, home: { position: { ...state.position }, dimension: state.dimension }, steps: 0, scouts: 0, clearings: 0, excluded: {}, history: [], started: new Date().toISOString() };
+      this.job = { version: 1, scoutGoalPolicy:SCOUT_GOAL_POLICY,id: randomUUID(), goal: 'starter', context: this.context, home: { position: { ...state.position }, dimension: state.dimension }, steps: 0, scouts: 0, clearings: 0, excluded: {}, history: [], started: new Date().toISOString() };
+    }
+    // An exact-column failure does not prove the new bounded landing region
+    // unreachable. Preserve successes, observations and every work counter.
+    if(resume&&this.job.scoutGoalPolicy!==SCOUT_GOAL_POLICY){
+      this.job.scoutAttempts=(Array.isArray(this.job.scoutAttempts)?this.job.scoutAttempts:[]).filter(a=>a?.status!=='unverified'||a?.goalPolicy===SCOUT_GOAL_POLICY);
+      this.job.scoutGoalPolicy=SCOUT_GOAL_POLICY;
     }
     // Resume is explicit: re-inspect and certify the route instead of treating
     // earlier unverified graph edges as permanent world geometry.
@@ -401,7 +408,7 @@ export class SurvivalJob {
         const exhausted = allowed.every(direction => outcomes.some(a => a.direction === direction && a.status === 'unverified'))
           && !outcomes.some(a => a.status === 'verified' || a.status === 'cancelled');
         this.job.scoutAttempts = [...(Array.isArray(this.job.scoutAttempts) ? this.job.scoutAttempts : []),
-          ...tried.map(direction => ({ origin: { ...(decision.scoutOrigin ?? before.position) }, direction,
+          ...tried.map(direction => ({ goalPolicy:SCOUT_GOAL_POLICY,origin: { ...(decision.scoutOrigin ?? before.position) }, direction,
             distance: decision.args.distance, status: outcomes.find(a => a.direction === direction)?.status ?? 'unknown', exhausted,
             ...(completedEndpoint && direction === (result.direction ?? decision.args.direction) ? {completed:true,novel:completedNovel,endpoint:completedEndpoint} : {}) }))].slice(-STARTER_SCOUT_LIMIT * 4);
       };
