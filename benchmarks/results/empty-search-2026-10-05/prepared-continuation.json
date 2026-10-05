@@ -1,0 +1,409 @@
+{
+  "kind": "prepared-custom-empty-search",
+  "started": "2026-10-05T03:52:40.730Z",
+  "minecraft": "1.21.8",
+  "fixture": "Console-prepared enclosed ore volume: verify an empty bounded search resumes its geometry across inspect/runner cleanup, and block updates and Stop invalidate it. No natural gathering or pass-rate claim.",
+  "sourceHashes": {
+    "src/actions.js": "6b80b48592badd7120a6139ab55c40d725b57f2d9c52eb9cc5374bdcf2b80089",
+    "src/block-search-cursor.js": "24ae3d7ee5a5419a620e00a3e83bbc5e68cc790e3acfc66b996407d541214718",
+    "src/block-search.js": "ca3ea6d02694f9fe59244b10aa92a6881b416a19ef235ec02ac36f8b6ad04e10",
+    "src/body-hazards.js": "b6572e18b4de2593964cb0335b28261efc78ea1b9b1340ed5576e0e668239261",
+    "src/brain.js": "1a04714c0100674de79c523767aa27f666d558bf414329b163631e86a72bd153",
+    "src/canopy-descent.js": "406c80b9a92237dbf1311d4230ef17335c24ca23baa980a13aefd89b3022f04a",
+    "src/collision-contact.js": "9d6818a26ab8344dfab5ee70931d9600cb646ecda0238598a793469d0e29aa7c",
+    "src/collision-margin.js": "3b6e99bcaf1bb7ae7257b5ece46865a58d91b6ae0fd7192f0dcbc1a4b35ef882",
+    "src/commands.js": "64505b7c2260fc2543d267d11333f0c0e114e02cf350a4b8257a82e02ca4ce2b",
+    "src/config.js": "a023369aaaa5f0df83a2dfebdd7ffbd6c87d146eb3f386e8c288611a8f61a252",
+    "src/construction-guards.js": "941af34fa54a7f358b28b43080d95623f8f5e922d2b33f99c40b6f649e2c9f2a",
+    "src/craft-retry-evidence.js": "969d2a4b1e7189ede5adcb34aab0871d1eb5c0fa2d118cee44382133bd1091c5",
+    "src/drop-retry-cache.js": "6e2957ce747fdb4dbb524ca80fe37a66192d93d697e7c1a068ea43097cc99b7b",
+    "src/empty-search-continuation.js": "e15633b919ea12d2a0b33aeb394736233704db9406a5d779360f9a8c1696c4f7",
+    "src/guarded-activation.js": "5e0ed997a3b23cd5c4ba1da106e09a956a1ee572dc9471d9437c1ed682acc2b4",
+    "src/hostile-ground-observation.js": "3d3a063e608121665a2d9e1e2ff951b62cec5ad84b9c8735b1acbd5d67473e76",
+    "src/index.js": "c611832dd730d9bc284699e505cc01f369ba12c607fb44f38197643166423c85",
+    "src/injury-observer.js": "2a2114ff9b51c580f330048391c0301725891576a539bf7e769be415b6613606",
+    "src/item-identity.js": "605cddab37763d5af51ddb7fcbf880115342cc938f87974669e6349539b24244",
+    "src/memory.js": "542276ea937789d40709edaefd5e38af015b2606a79ca0e2502b40ad5daefe16",
+    "src/mining-goal-space.js": "caa6e091f0e0fe839ab2e9faf0ba06dd9f366633112193b28965d3d123b2795a",
+    "src/navigation-guards.js": "5f7e437bb561664037438d10f74c147ef4fca9679e1850dfc59b51d4f543c9ee",
+    "src/offline-commands.js": "38225ca449146fdc681a6d4f51605e9e04c5f157851307f379f72f290e1671fc",
+    "src/oxygen.js": "ccc6f1435172292b75cc9994772c316cd4d32d2235362133380610314a2b9e41",
+    "src/passive-settlement.js": "a4d11ee382222925f9e52349d5ea13b4439c6e8efee002d01845aa7cf5c53236",
+    "src/pickup-probe-ledger.js": "56fbe13f88dac72df9cb0127bf6119382c048c2a9b83eb1ea4676586b5ad7c38",
+    "src/pickup-transit.js": "bb758f9904bcf6b342b2a1a8eca55dd73dc054331e7faa702fecee95a6b16a47",
+    "src/planner-guards.js": "15d09fdc3516459535f6f5475fdba54b3b2cdc2fb065eefdb9e33df3e34eb862",
+    "src/progression.js": "d289ced11f098496829ccf8ed3b4acce5ecc426190f90f38efd0576352f032fe",
+    "src/protocol-compatibility.js": "1f7d880bc98d7b4fc2aefba4643eab31271e8ea92d971531e27d328d055cce2f",
+    "src/runner.js": "b1efc6d1456648752558889f001c16e899cb58ea84fa73b6eb36592218477cc4",
+    "src/runtime.js": "2c1b9a8f9786881f2edc99135106eeaea883c01feb3ebeda6afb8e6f41a89d5e",
+    "src/scout-coverage.js": "70824df26cc60848c47971429650daf43c453b03c9d4a32a4b092e9c4a6f592b",
+    "src/starter-foods.js": "85ddadae4e2b1051108e5415e382101598bb5311e9f04ff8bd88a058d0ea8a8b",
+    "src/starter-leaf-support.js": "492c8a855737333b3abd0c12289f4530842c241b16627c925fb9d2cf37537f13",
+    "src/starter-limits.js": "e8cc6242b0b78d5c5157fe1e644ea126d8000239bd8191c5bb61631d3edf1f42",
+    "src/starter-retreat.js": "b10605cb98bc812c5ceb11be296a544e8bd0c5e2fc507b91acf61ae9b13e9ad9",
+    "src/survival-observation.js": "03e862709b1afbbaec04dc5c9270bc06c204b1c79356c2b4d130ceaa45258436",
+    "src/survival.js": "4edb1c6764a29086545c40ad47f51fd4e9fcccedfe7447a241cf85c8e5816458",
+    "src/terrain-trust.js": "b6c7751d05914c68f0977b870fec9d0b42567826694278ed9aaa5eb4243dfc52",
+    "src/web.js": "3f8e5c423f93d49a451985fa4f678548252ceb9505f4a65b07e24b984ed2d18f",
+    "src/workstation-egress.js": "ab2da857420bb2480e4aa5357f1d3f8d16bf60aa259c5c9e419d0947f71fe2fe",
+    "scripts/diagnostic-empty-search.js": "d5c94cc5b1a45c4afd6625f6d82d47b3521513a4325cd4a5baaacdd8baa1e457"
+  },
+  "passed": true,
+  "frames": [],
+  "actions": [
+    {
+      "label": "initial empty bounded page",
+      "milliseconds": 506.83323799999926,
+      "outcome": {
+        "error": "Could not collect iron_ore: bounded search exhausted; try moving closer or a smaller radius",
+        "result": {
+          "search_continued": false,
+          "search_continuation_saved": true,
+          "search_scans": 1,
+          "search_reuses": 0,
+          "deferred_drops": [],
+          "passive_settlement": false,
+          "pickup_landing_verified": true,
+          "pickup_pursuit_unverified": false,
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false,
+          "pickup_limited": false
+        }
+      },
+      "visits": 102678,
+      "first": "(0, 80, 0)",
+      "last": "(-47, 81, 5)",
+      "pose": {
+        "x": 0.5,
+        "y": 80,
+        "z": 0.5
+      }
+    },
+    {
+      "label": "continued after inspect",
+      "milliseconds": 501.3052659999994,
+      "outcome": {
+        "error": "Could not collect iron_ore: bounded search exhausted; try moving closer or a smaller radius",
+        "result": {
+          "search_continued": true,
+          "search_continuation_saved": true,
+          "search_scans": 1,
+          "search_reuses": 0,
+          "deferred_drops": [],
+          "passive_settlement": false,
+          "pickup_landing_verified": true,
+          "pickup_pursuit_unverified": false,
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false,
+          "pickup_limited": false
+        }
+      },
+      "visits": 170441,
+      "first": "(-47, 81, 6)",
+      "last": "(-6, 93, -34)",
+      "pose": {
+        "x": 0.5,
+        "y": 80,
+        "z": 0.5
+      }
+    },
+    {
+      "label": "fresh after server terrain change",
+      "milliseconds": 496.23288700000194,
+      "outcome": {
+        "error": "Could not collect iron_ore: bounded search exhausted; try moving closer or a smaller radius",
+        "result": {
+          "search_continued": false,
+          "search_continuation_saved": true,
+          "search_scans": 1,
+          "search_reuses": 0,
+          "deferred_drops": [],
+          "passive_settlement": false,
+          "pickup_landing_verified": true,
+          "pickup_pursuit_unverified": false,
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false,
+          "pickup_limited": false
+        }
+      },
+      "visits": 108138,
+      "first": "(0, 80, 0)",
+      "last": "(-26, 86, -7)",
+      "pose": {
+        "x": 0.5,
+        "y": 80,
+        "z": 0.5
+      }
+    },
+    {
+      "label": "fresh after explicit Stop",
+      "milliseconds": 502.2721270000002,
+      "outcome": {
+        "error": "Could not collect iron_ore: bounded search exhausted; try moving closer or a smaller radius",
+        "result": {
+          "search_continued": false,
+          "search_continuation_saved": true,
+          "search_scans": 1,
+          "search_reuses": 0,
+          "deferred_drops": [],
+          "passive_settlement": false,
+          "pickup_landing_verified": true,
+          "pickup_pursuit_unverified": false,
+          "completed": false,
+          "requested": 4,
+          "mined": 0,
+          "inventory_changes": {},
+          "remaining_drops": [],
+          "pickup_failures": [],
+          "failures": [],
+          "search_limited": true,
+          "planning_limited": false,
+          "pickup_limited": false
+        }
+      },
+      "visits": 107532,
+      "first": "(0, 80, 0)",
+      "last": "(-28, 80, -5)",
+      "pose": {
+        "x": 0.5,
+        "y": 80,
+        "z": 0.5
+      }
+    }
+  ],
+  "healthEvents": [],
+  "cleanupErrors": [],
+  "commit": "aa84fa3b7c2bf57d6f7d189aa3a3007763921768",
+  "dirty": false,
+  "packets": [
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    },
+    {
+      "name": "block_dig",
+      "packet": {
+        "status": 5,
+        "location": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "face": 0,
+        "sequence": 0
+      }
+    }
+  ],
+  "controls": {
+    "forward": false,
+    "back": false,
+    "left": false,
+    "right": false,
+    "jump": false,
+    "sprint": false,
+    "sneak": false
+  },
+  "final": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 80,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastObserved": {
+    "connected": true,
+    "position": {
+      "x": 0.5,
+      "y": 80,
+      "z": 0.5
+    },
+    "dimension": "overworld",
+    "health": 20,
+    "food": 20,
+    "oxygen": null,
+    "time": 1000,
+    "is_raining": false,
+    "sleeping": false,
+    "inventory": [],
+    "equipment": {
+      "helmet": null,
+      "chestplate": null,
+      "leggings": null,
+      "boots": null,
+      "off_hand": null
+    },
+    "held_item": null,
+    "entities": [],
+    "players": [],
+    "terrainTrust": {
+      "trusted": true
+    },
+    "connection": "connected",
+    "owner": "",
+    "action": null,
+    "memory": {
+      "waypoints": {},
+      "notes": []
+    },
+    "progression": {
+      "dimension": "overworld",
+      "tools": false,
+      "armorPiecesCarriedOrObserved": 0,
+      "obsidian": 0,
+      "canBuildFullNetherPortal": false,
+      "blazeRods": 0,
+      "enderPearls": 0,
+      "eyes": 0,
+      "potentialEyes": 0,
+      "hasBowAndArrows": false,
+      "next": "Gather logs, craft planks, sticks, a crafting table and wooden pickaxe, then collect cobblestone and make stone tools. Secure renewable food and shelter before exploring.",
+      "completion": "unverified",
+      "note": "Readiness inferred from current inventory; it does not certify survival progression or game completion."
+    },
+    "survival": null,
+    "recentInjuries": []
+  },
+  "lastJob": null,
+  "finished": "2026-10-05T03:53:03.954Z"
+}
