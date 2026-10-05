@@ -14,6 +14,8 @@ Both now use the app-owned guarded seam. It captures the target state, deep item
 - All 17 normal prepared phases passed on the final frozen source, including actual Nether construction/lighting, End-frame activation and End traversal.
 - The two initial fixture attempts are retained: one support platform overwrote the Nether frame; after separation, the initial view was obstructed. Both were refused before aiming or interaction. The final fixture changed only the test layout/start pose, not application code.
 
+A Windows CI failure exposed an absolute-path ESM import in the new test fixture. Publication uses module-relative imports; this test-only portability correction leaves the physically tested application and harness unchanged. The manifest records the adjustment and final CI validates it.
+
 ## Scope
 
 Prepared peaceful arenas use supplied items, complete frames, console teleportation and artificial aim holds. This proves the tested final-packet safeguards and normal server acceptance, not autonomous acquisition of portal materials, full-game completion or rollback of packets already sent. Earlier integrated652 natural diagnostics remain separate, with their original source identity.

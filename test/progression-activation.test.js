@@ -1,13 +1,11 @@
 import test from 'node:test';
-import {fileURLToPath} from 'node:url';
 import {createRequire} from 'node:module';
 import {EventEmitter} from 'node:events';
 import assert from 'node:assert/strict';
-const root=fileURLToPath(new URL('..',import.meta.url));
-const require=createRequire(root+'/package.json');
+const require=createRequire(import.meta.url);
 const {Vec3}=require('vec3');
 const inject=require('mineflayer/lib/plugins/inventory');
-const {createProgression,portalBlueprint}=await import(root+'/src/progression.js');
+import {createProgression,portalBlueprint} from '../src/progression.js';
 const registry=require('prismarine-registry')('1.21.8');
 const key=p=>`${p.x},${p.y},${p.z}`;
 for(const action of ['build_nether_portal','activate_end_portal'])for(const interruption of ['stop','dimension-respawn','dimension-roundtrip-respawn','client-replacement','held-swap','held-components','held-empty','target-change','obstruction','none'])test(`${action} guards top-face interaction (${interruption})`,async()=>{
