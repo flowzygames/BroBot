@@ -2,6 +2,7 @@ import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { PickupProbeLedger } from './pickup-probe-ledger.js'
 import { runStarterRetreat } from './starter-retreat.js'
+import { interactionSession, prepareObservedActivation, confirmSleep, interactionVisible, visibleInteractionFace } from './guarded-activation.js'
 import { confirmedMining } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
@@ -49,6 +50,10 @@ export class BlockFaceGoal extends goals.Goal {
 
   heuristic (node) { return Math.max(0, node.offset(0.5, this.eyeHeight, 0.5).distanceTo(this.target.offset(0.5, 0.5, 0.5)) - this.reach) }
   isEnd (node) { return visibleBlockFace(this.world, node.offset(0.5, this.eyeHeight, 0.5), this.target, this.reach) }
+}
+
+export class InteractionGoal extends BlockFaceGoal {
+  isEnd(node){return visibleInteractionFace(this.world,node.offset(.5,this.eyeHeight,.5),this.target,this.reach)}
 }
 
 const str = description => ({ type: 'string', description })
@@ -203,13 +208,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return p
   }
 
-  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false, walkingTimeoutMs = 15000 } = {}) {
+  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false, walkingTimeoutMs = 15000, interaction = false } = {}) {
     checked(ctx)
     assert(target.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start')
     assert(insideBoundary(target), 'Target is outside the current job movement boundary')
     if (requireLoaded) loaded(target)
     configureMovement()
-    let goal = lookAt ? new BlockFaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
+    const FaceGoal=interaction?InteractionGoal:BlockFaceGoal
+    let goal = lookAt ? new FaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
     if (returnable) goal = await returnableGoal(ctx, goal)
     await step(ctx, () => returnable ? walkToGoal(bot, goal, { signal: ctx.signal, timeoutMs: walkingTimeoutMs }) : bot.pathfinder.goto(goal))
     if (!lookAt) assert(radius === 0 ? bot.entity.position.floored().equals(target.floored()) : bot.entity.position.distanceTo(target.offset(0.5, 0, 0.5)) <= radius + 1.2, 'Navigation ended before reaching the requested location')
@@ -242,10 +248,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return eye.distanceTo(block.position.offset(0.5, 0.5, 0.5)) <= 4.5 && (!bot.canSeeBlock || bot.canSeeBlock(block))
   }
 
-  async function approachBlock (ctx, p, { returnable = false } = {}) {
+  async function approachBlock (ctx, p, { returnable = false, interaction = false } = {}) {
     loaded(p)
-    const visible = () => visibleHere(loaded(p))
-    if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable })
+    const visible = () => interaction?interactionVisible(bot,loaded(p)):visibleHere(loaded(p))
+    if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable, interaction })
     assert(visible(), 'Target block remains out of reach or behind an obstruction')
   }
 
@@ -1163,24 +1169,40 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       return { dropped_for: args.player, item: name, count, delivery: 'dropped nearby; recipient pickup unverified' }
     },
     sleep: async (args, ctx) => {
-      assert(dimension() === 'overworld' || dimension() === 'minecraft:overworld', 'Beds can explode outside the overworld; sleep is restricted to the overworld')
-      const bed = bot.findBlock({ matching: block => bot.isABed(block), maxDistance: 32 })
-      assert(bed, 'No loaded nearby bed')
-      await approachBlock(ctx, bed.position)
-      await step(ctx, () => bot.sleep(loaded(bed.position)))
-      assert(bot.isSleeping, 'Server did not confirm sleep')
-      return { sleeping: true, bed: plainPos(bed.position) }
+      const session=interactionSession(bot,()=>checked(ctx),{overworldOnly:true})
+      try {
+        const ready=()=>{
+          session.check()
+          assert(!bot.isSleeping,'Already sleeping')
+          assert((bot.isRaining&&bot.thunderState>0)||(bot.time?.timeOfDay>=12541&&bot.time.timeOfDay<=23458),'It is not night or a thunderstorm')
+        }
+        ready()
+        const bed=bot.findBlock({matching:block=>bot.isABed(block),maxDistance:32})
+        assert(bed,'No loaded nearby bed')
+        await approachBlock(ctx,bed.position,{interaction:true})
+        session.check()
+        const send=await prepareObservedActivation(bot,loaded(bed.position),{check:ready,requireBed:true})
+        await confirmSleep(bot,send,{signal:ctx.signal,check:()=>session.check()})
+        session.check()
+        return {sleeping:true,bed:plainPos(bed.position)}
+      } finally {session.dispose()}
     },
     activate: async (args, ctx) => {
+      const session=interactionSession(bot,()=>checked(ctx))
+      try {
       const p = coordinates(args, ctx)
-      await approachBlock(ctx, p)
+      await approachBlock(ctx, p,{interaction:true})
       const block = loaded(p)
       const before = block.stateId
-      await step(ctx, () => bot.activateBlock(block))
+      const send=await prepareObservedActivation(bot,block,{check:()=>session.check()})
+      send()
       await pause(ctx, 150)
+      session.check()
       const result = { activated: block.name, position: plainPos(p), block_changed: loaded(p).stateId !== before, opened_window: bot.currentWindow?.type ?? null }
       if (bot.currentWindow) await step(ctx, () => bot.closeWindow(bot.currentWindow))
+      session.check()
       return result
+      } finally {session.dispose()}
     },
     use_item: async (args, ctx) => {
       const duration = numeric(args.duration, 1, 0, 10)
