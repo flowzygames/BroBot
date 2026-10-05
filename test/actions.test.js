@@ -9,7 +9,10 @@ import { ActionRunner } from '../src/runner.js'
 
 const registry = minecraftData('1.21.8')
 
-test('starter collection skips a proven sealed goal pocket before global path search',async()=>{
+test('starter collection skips a proven sealed goal pocket before global path search',async t=>{
+ // Test the integration decision deterministically. Slow CI must not turn this
+ // into a timing race with the production20ms unknown/fallback policy.
+ t.mock.method(performance,'now',()=>1000)
  const {default:loadBlock}=await import('prismarine-block'),{default:WorldSync}=await import('prismarine-world/src/worldsync.js');
  const Block=loadBlock(registry),target=new Vec3(8,64,0),cells=new Map();
  for(let x=-2;x<=14;x++)for(let y=56;y<=71;y++)for(let z=-6;z<=6;z++){
