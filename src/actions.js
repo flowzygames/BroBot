@@ -17,6 +17,8 @@ import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
 import { planLeafNotch } from './canopy-descent.js'
 import { inspectMiningGoalSpace, MINING_NO_GOAL_SPACE } from './mining-goal-space.js'
+import { BlockSearchCursor } from './block-search-cursor.js'
+import { EmptySearchContinuation } from './empty-search-continuation.js'
 import { hasStarterFood } from './starter-foods.js'
 import { retainedLeafAnchor } from './construction-guards.js'
 import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES, STARTER_AVOID_BLOCK_NAMES } from './navigation-guards.js'
@@ -115,6 +117,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   let active = null
   let lastSession = null
   let movements = null
+  const emptySearch = new EmptySearchContinuation(bot)
   const dropRetryCache = new DropRetryCache(bot)
   const items = () => bot.inventory?.items() ?? []
   const itemCount = name => items().filter(i => i.name === name).reduce((n, i) => n + i.count, 0)
@@ -149,7 +152,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   const checked = ctx => { assertTerrainTrusted(bot); if (staleSession(ctx?.session)) throw new Error('Action cancelled: play session changed'); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
   const step = async (ctx, fn) => { checked(ctx); const result = await fn(); checked(ctx); return result }
 
-  function stop ({ sessionChanged = false } = {}) {
+  function stop ({ sessionChanged = false, finishedCleanup = false } = {}) {
+    if (finishedCleanup && !active && !sessionChanged && !staleSession(lastSession)) emptySearch.finishedCleanup()
+    else emptySearch.clear()
     if (sessionChanged && lastSession) lastSession.changed = true
     // Runner cleanup can call the retired facade again after its active lock
     // was released. Its last admitted session still owns inventory cleanup.
@@ -458,6 +463,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let planningLimited = false
     let candidateCache = null, candidateRevision = 0
     let searchScans = 0, searchReuses = 0
+    let searchLease = null, searchContinued = false, continuationSaved = false
     const invalidateCandidates = () => { candidateRevision++; candidateCache = null }
     const invalidateOnMovement = () => {
       if (candidateCache && !bot.entity?.position?.equals(candidateCache.position)) invalidateCandidates()
@@ -504,18 +510,33 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const searchLimit = Symbol('collection search limit')
       const deadline = performance.now() + 500
       let inspected = 0
-      try {
-        bot.findBlocks({ matching: definition.id, maxDistance: sectionSearchDistance(radius), count: 512, useExtraInfo: block => {
+      const accept = block => {
+        checked(ctx)
+        const p = block.position
+        if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || !insideBoundary(p) || skipped.has(p.toString())) return false
+        if (!DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d))))) return false
+        if (miningEnvironmentIssue(block)) return false
+        candidates.push(p)
+        return true
+      }
+      // Only the first, completely empty search may cross an action boundary.
+      // No route, candidate verdict, or previous action callback is retained.
+      if (searchScans === 1 && ctx.starterScope && ctx.parentSignal instanceof AbortSignal && ctx.runnerSignal instanceof AbortSignal
+        && typeof bot.world?.getColumn === 'function' && Number.isSafeInteger(bot.game?.minY) && Number.isSafeInteger(bot.game?.height)) {
+        const key = JSON.stringify([ctx.starterScope, definition.id, radius, count, [...skipped].sort(), boundaryKey])
+        searchLease = emptySearch.begin({ key, parentSignal:ctx.parentSignal, actionSignal:ctx.runnerSignal,
+          createCursor:() => new BlockSearchCursor(bot, { matching:definition.id, point:searchOrigin, maxDistance:sectionSearchDistance(radius), count:512 }) })
+      }
+      if (searchLease) {
+        searchContinued = searchLease.resumed
+        const page = searchLease.cursor.scan({ accept, check:() => checked(ctx) })
+        searchLimited ||= page.limited
+        if (candidates.length || !page.resumable) { emptySearch.release(searchLease); searchLease = null }
+      } else try {
+        bot.findBlocks({ matching:definition.id, maxDistance:sectionSearchDistance(radius), count:512, useExtraInfo:block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
-          const p = block.position
-          if (!p || p.distanceTo(searchOrigin) > radius || p.distanceTo(ctx.origin) > 128 || !insideBoundary(p) || skipped.has(p.toString())) return false
-          if (!DIRECTIONS.some(d => isAir(bot.blockAt(p.plus(d))))) return false
-          // Pose-independent vetoes belong before the candidate cap and any
-          // route planning. Recompute every search; terrain may change later.
-          if (miningEnvironmentIssue(block)) return false
-          candidates.push(p)
-          return true
+          return accept(block)
         } })
       } catch (error) {
         if (error !== searchLimit) throw error
@@ -569,10 +590,13 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         throw error
       }
     }
-    const result = { search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    if (!mined && !failures.length && searchLimited && searchLease) continuationSaved = emptySearch.retain(searchLease)
+    ctx.searchContinuationSaved = continuationSaved
+    const result = { search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
     } finally {
+      if (!continuationSaved && searchLease) emptySearch.release(searchLease)
       for (const event of worldEvents) bot.removeListener(event, invalidateCandidates)
       bot.removeListener('blockUpdate', invalidateOnBlockUpdate)
       bot.removeListener('physicsTick', invalidateOnMovement)
@@ -1314,20 +1338,24 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   async function execute (name, args = {}, signal, executionContext = {}) {
+    let operationDeadline
+    try {
+    emptySearch.dispatch(name, executionContext.parentSignal)
     assertTerrainTrusted(bot)
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
     assert(args && typeof args === 'object' && !Array.isArray(args), 'Action arguments must be an object')
     assert(!active, 'Another physical action is running or draining after cancellation')
     if (signal?.aborted) throw abortError()
     assert(bot.entity?.position, 'Bot has not spawned')
-    const controller = new AbortController()
     const deadlines=[executionContext.jobDeadline,executionContext.actionDeadline].filter(value=>value!==undefined)
     assert(deadlines.every(Number.isFinite),'Operation deadlines must be finite monotonic timestamps')
-    const operationDeadline=deadlines.length?Math.min(...deadlines):undefined
+    operationDeadline=deadlines.length?Math.min(...deadlines):undefined
+    } catch (error) { emptySearch.clear(); throw error }
+    const controller = new AbortController()
     const session = { entity: bot.entity, client: bot._client, dimension: dimension(), changed: false }
     lastSession = session
     const allowSprinting = !(executionContext.starterScope && name === 'explore' && args.returnable === true && !hasStarterFood(items()))
-    const ctx = { allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const ctx = { parentSignal:executionContext.parentSignal, runnerSignal:signal, allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     // A coordinate is meaningful only in the play session that admitted it.
     // Latch transitions even if the dimension later changes back. Stop promptly,
@@ -1343,6 +1371,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       checked(ctx)
       return result
     } catch (error) {
+      if (!ctx.searchContinuationSaved) emptySearch.clear()
       // Cancellation may reject inside an awaited helper before its next check.
       // Preserve the session failure instead of hiding it behind that rejection.
       if (staleSession(ctx.session)) checked(ctx)
@@ -1356,5 +1385,5 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  return { execute, stop, snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
+  return { execute, stop, invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
 }

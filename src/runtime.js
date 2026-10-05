@@ -248,6 +248,7 @@ export class Runtime {
     this.log('config', `In-game controller: ${this.owner || 'disabled'}`);
   }
   async execute(name, args, signal, executionContext = {}) {
+    if (!['inspect','collect'].includes(name)) this.actions?.invalidateSearch?.();
     assertTerrainTrusted(this.bot);
     if (this.connection !== 'connected' || !this.actions) throw new Error('BroBot is not connected to Minecraft yet. Start npm run server.');
     signal?.throwIfAborted();
@@ -269,8 +270,13 @@ export class Runtime {
     }
     const actions = this.actions;
     const progression = this.progression;
-    const run = progression.definitions.some(tool => tool.name === name) ? s => progression.execute(name, args, s) : (s,limits) => actions.execute(name, args, s, {...executionContext,actionDeadline:limits?.deadline});
-    return this.runner.run(name, run, () => actions.stop(), signal);
+    let runnerSignal;
+    const run = (s,limits) => {
+      runnerSignal = s;
+      return progression.definitions.some(tool => tool.name === name) ? progression.execute(name,args,s)
+        : actions.execute(name,args,s,{...executionContext,parentSignal:signal,actionDeadline:limits?.deadline});
+    };
+    return this.runner.run(name, run, () => actions.stop({finishedCleanup:Boolean(runnerSignal && !runnerSignal.aborted)}), signal);
   }
   async command(input, speaker = this.owner) {
     const command = parseCommand(input, speaker);
