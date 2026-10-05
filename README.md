@@ -14,7 +14,7 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 
 > **Development preview:** BroBot can execute useful Minecraft actions today. Autonomous starter mode remains experimental: the released Core 0.2 package completed 11 of 20 known worlds. Every failed run is retained. Reliable survival across arbitrary terrain and beating the game remain unproved.
 
-> **Source versus download:** Development source passes **722 automated checks**. New safeguards stop stale-session work and late portal interactions; foodless starter scouts walk rather than sprint. Empty resource searches can continue past an unchanged capped prefix instead of repeatedly starting over. [Latest scan evidence](benchmarks/results/empty-search-2026-10-05/README.md) · [Guarded progression evidence](benchmarks/results/progression-activation-2026-10-05/README.md) · [All verification records](benchmarks/results/README.md). The downloadable Core 0.2 package is unchanged. The full **13/20** world result belongs to older frozen source `5b66f11`, not a complete evaluation of these later changes. The later 625-check cohort was interrupted in one world and is explicitly incomplete.
+> **Source versus download:** Development source passes **736 automated checks**. New safeguards stop stale-session work and late portal interactions; foodless starter scouts walk rather than sprint. Empty resource searches can continue past an unchanged capped prefix instead of repeatedly starting over. Starter pickup now rejects lengthy detours before moving when their estimated cost exceeds the remaining allowance. [Pickup-route evidence](benchmarks/results/pickup-route-budget-2026-10-05/README.md) · [Scan evidence](benchmarks/results/empty-search-2026-10-05/README.md) · [Guarded progression evidence](benchmarks/results/progression-activation-2026-10-05/README.md) · [All verification records](benchmarks/results/README.md). The downloadable Core 0.2 package is unchanged. The full **13/20** world result belongs to older frozen source `5b66f11`, not a complete evaluation of these later changes. The later 625-check cohort was interrupted in one world and is explicitly incomplete.
 
 ## New in Core 0.2
 
@@ -27,6 +27,8 @@ Explore together. Gather materials. Craft a starter kit. See exactly what happen
 Core names identify the software agent release, not a newly trained foundation model. These changes are covered by 346 automated checks. Natural-world success remains limited: 11/20 on the same known development seeds, with no failed run replaced. The earlier automatic canopy-recovery experiment is excluded from the public Core 0.2 package; the newer development hook below is a separate, narrowly bounded implementation.
 
 ## New in the development source
+
+- Checks the estimated cost of certified starter pickup routes before moving, preserving affordable alternatives and fresh retries without relaxing grounded-stop safeguards
 
 - Continues a capped, completely empty starter resource scan only while the same job, exact pose, world and live cancellation signals remain unchanged; terrain updates, movement, Stop and other actions discard it
 - Rechecks every newly discovered candidate and its route normally; continuation retains search geometry, never a previous safety decision
