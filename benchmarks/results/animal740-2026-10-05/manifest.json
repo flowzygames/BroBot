@@ -1,0 +1,30 @@
+{
+  "testedSource": "513abb43c80c2acbaa6b59e005f9250f9bc34819",
+  "publishedHead": "662db2cd12bd5b3d4a11aa4a0b0a55303ab989f4",
+  "tree": "369a8a3dcceb4dcff72657020d022c8e0159ff25",
+  "automatedChecks": 740,
+  "files": {
+    "failed-peaceful/result.json": {
+      "sha256": "62f58a0862d4bf8baad7e3d24549e024515329ca072cda80de70e50beacfeac3",
+      "bytes": 11702
+    },
+    "failed-peaceful/server.log": {
+      "sha256": "37ed763fe75fe44735dda7aba78921ba67f05cc833caa44306700247b39844ed",
+      "bytes": 14241
+    },
+    "passed-normal/result.json": {
+      "sha256": "c6e9714c15ab294853613d5ce136223cddcdfc912601fd1c1229b0c1e02e5edd",
+      "bytes": 17855
+    },
+    "passed-normal/server.log": {
+      "sha256": "69e7e522219869d0d1fdb9310eb5ff6ea02b6dcddb1110dd1145a0bf79096a9a",
+      "bytes": 14202
+    },
+    "normal17/result.json": {
+      "sha256": "b73e175a3bc27c1b6eaafeaffad0e55ae29760d0af502a0a5c7a6f65eaa7b664",
+      "bytes": 8707
+    }
+  },
+  "archiveSha256": "337cbfdf547b99eb283b0430cca7a1d01848ca51e8ef87fe3a67822abee949cd",
+  "archiveBytes": 18341
+}
