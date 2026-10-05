@@ -2279,3 +2279,88 @@ for(const kind of ['craft','smelt'])test(`cancelled ${kind} closes a window acqu
  assert.equal(closed,1);assert.equal(bot.currentWindow,null);
  assert.equal((await actions.execute('inspect',{radius:1})).connected,true);
 });
+
+test('empty starter scans advance across real runner cleanup and inspect', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { Runtime } = await import('../src/runtime.js')
+  const bot = fakeBot(), stone = registry.blocksByName.stone, visits = []
+  bot.entity.velocity = new Vec3(0, 0, 0)
+  bot.world = { getColumn: () => ({ sections: Array(24).fill({ palette:[stone.defaultState] }) }) }
+  bot.blockAt = (p, extra) => {
+    if (extra) visits.push(p.toString())
+    return { name:'stone', type:stone.id, position:p.floored(), boundingBox:'block' }
+  }
+  const actions = createActions(bot)
+  const runtime = { bot, actions, connection:'connected', progression:{definitions:[]}, runner:new ActionRunner(), definitions:() => definitions }
+  const parent = new AbortController()
+  const collect = async () => {
+    visits.length = 0
+    let result
+    await assert.rejects(Runtime.prototype.execute.call(runtime,'collect',{block:'stone',count:4,radius:32},parent.signal,{starterScope:'job/cursor'}), e => { result=e.result; return Boolean(result) })
+    assert.equal(result.mined,0); assert.equal(result.failures.length,0); assert.equal(result.search_continuation_saved,true)
+    return { result, visits:[...visits] }
+  }
+  const first = await collect()
+  assert.equal(first.result.search_continued,false); assert.equal(first.visits.length,65537)
+  await Runtime.prototype.execute.call(runtime,'inspect',{radius:1},parent.signal)
+  const second = await collect()
+  assert.equal(second.result.search_continued,true)
+  assert.equal(second.visits[0],first.visits.at(-1))
+  assert.notDeepEqual(second.visits,first.visits)
+  actions.stop()
+  const third = await collect()
+  assert.equal(third.result.search_continued,false); assert.deepEqual(third.visits,first.visits)
+  parent.abort(); actions.stop()
+})
+
+for (const event of ['blockUpdate','chunkColumnLoad','respawn','stop','mutate','parent','move','invalid-inspect']) test(`empty starter cursor invalidates before retry: ${event}`, async t => {
+  t.mock.method(performance,'now',()=>1000)
+  const bot=fakeBot(),stone=registry.blocksByName.stone
+  bot.entity.velocity=new Vec3(0,0,0)
+  bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState]})})}
+  bot.blockAt=p=>({name:'stone',type:stone.id,position:p.floored(),boundingBox:'block'})
+  const actions=createActions(bot), runner=new ActionRunner()
+  let parent=new AbortController()
+  const collect=async()=>{
+    let s,result
+    await assert.rejects(runner.run('collect',signal=>{s=signal;return actions.execute('collect',{block:'stone',count:1,radius:32},signal,{parentSignal:parent.signal,starterScope:'job'})},()=>actions.stop({finishedCleanup:Boolean(s&&!s.aborted)}),parent.signal),e=>{result=e.result;return Boolean(result)})
+    return result
+  }
+  assert.equal((await collect()).search_continuation_saved,true)
+  if(event==='invalid-inspect')await assert.rejects(actions.execute('inspect',{},new AbortController().signal,{parentSignal:parent.signal,jobDeadline:NaN}),/deadlines/)
+  else if(event==='stop')actions.stop()
+  else if(event==='mutate')actions.invalidateSearch()
+  else if(event==='parent'){parent.abort();parent=new AbortController()}
+  else if(event==='move'){bot.entity.position.x++;bot.emit('move');bot.entity.position.x--}
+  else bot.emit(event)
+  assert.equal((await collect()).search_continued,false)
+  actions.stop()
+})
+
+test('continued empty scan discovers later exposed ore and freshly rejects its route',async t=>{
+  t.mock.method(performance,'now',()=>1000)
+  const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air
+  bot.entity.velocity=new Vec3(0,0,0)
+  bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState,air.defaultState]})})}
+  const opening=new Vec3(-17,81,0)
+  bot.blockAt=p=>{p=p.floored();const empty=p.equals(opening);return{name:empty?'air':'stone',type:empty?air.id:stone.id,position:p,boundingBox:empty?'empty':'block'}}
+  let routeChecks=0,digs=0
+  bot.pathfinder.getPathFromTo=function*(){routeChecks++;yield{result:{status:'noPath',path:[]}}}
+  bot.dig=async()=>{digs++}
+  const actions=createActions(bot),parent=new AbortController(),runner=new ActionRunner()
+  const outcomes=[]
+  for(let page=0;page<8;page++){
+    let s,result
+    await assert.rejects(runner.run('collect',signal=>{s=signal;return actions.execute('collect',{block:'stone',count:1,radius:32},signal,{parentSignal:parent.signal,starterScope:'later-candidate'})},()=>actions.stop({finishedCleanup:Boolean(s&&!s.aborted)}),parent.signal),e=>{result=e.result;return Boolean(result)})
+    outcomes.push(result)
+    if(result.failures.length)break
+    assert.equal(result.search_continuation_saved,true)
+  }
+  assert.equal(outcomes[0].failures.length,0)
+  const found=outcomes.at(-1)
+  assert.equal(found.search_continued,true)
+  assert.ok(found.failures.length>0)
+  assert.equal(found.search_continuation_saved,false)
+  assert.ok(routeChecks>0);assert.equal(digs,0)
+  actions.stop()
+})
