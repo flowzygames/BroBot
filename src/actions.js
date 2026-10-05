@@ -17,6 +17,7 @@ import { configureCollisionContact } from './collision-contact.js'
 import { ownOxygenLevel } from './oxygen.js'
 import { planLeafNotch } from './canopy-descent.js'
 import { inspectMiningGoalSpace, MINING_NO_GOAL_SPACE } from './mining-goal-space.js'
+import { hasStarterFood } from './starter-foods.js'
 import { retainedLeafAnchor } from './construction-guards.js'
 import { planReturnablePath, planRankedRoutes, pursueDroppedItem, walkToGoal, isFluidBearingBlock, WATER_BEARING_BLOCK_NAMES, STARTER_AVOID_BLOCK_NAMES } from './navigation-guards.js'
 
@@ -207,6 +208,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         else movements.blocksToAvoid.delete(id)
       }
     }
+    // Reapply on every preparation, including reverse-route certification.
+    // A cached foodless scout must never disable a later direct action/retreat.
+    movements.allowSprinting = active?.allowSprinting !== false
     bot.pathfinder.setMovements(movements)
   }
 
@@ -1322,7 +1326,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const operationDeadline=deadlines.length?Math.min(...deadlines):undefined
     const session = { entity: bot.entity, client: bot._client, dimension: dimension(), changed: false }
     lastSession = session
-    const ctx = { session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const allowSprinting = !(executionContext.starterScope && name === 'explore' && args.returnable === true && !hasStarterFood(items()))
+    const ctx = { allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     // A coordinate is meaningful only in the play session that admitted it.
     // Latch transitions even if the dimension later changes back. Stop promptly,

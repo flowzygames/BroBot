@@ -9,6 +9,41 @@ import { ActionRunner } from '../src/runner.js'
 
 const registry = minecraftData('1.21.8')
 
+test('foodless automatic scouting disables sprint throughout planning and execution',async()=>{
+ for(const food of [20,11,undefined]){
+  const bot=fakeBot();bot.food=food;const seen=[];let current;
+  bot.pathfinder.setMovements=m=>{current=m;seen.push(m.allowSprinting)};
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){seen.push(m.allowSprinting);yield{result:{status:'success',path:[new Vec3(goal.x,goal.y??start.y,goal.z)]}}};
+  bot.pathfinder.goto=async goal=>{seen.push(current.allowSprinting);bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5)};
+  await createActions(bot).execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/foodless'});
+  assert.ok(seen.length>=4);assert.ok(seen.every(value=>value===false));
+ }
+});
+test('only positive controller-supported food enables automatic scout sprinting',async()=>{
+ for(const [name,count,expected] of [['bread',1,true],['apple',1,true],['bread',0,false],['rotten_flesh',2,false],['melon_slice',2,false],['sweet_berries',2,false]]){
+  const bot=fakeBot();bot.addItem(name,count);let sprint;
+  bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+  await createActions(bot).execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/rations'});
+  assert.equal(sprint,expected,name);
+ }
+});
+test('cached movement policy restores direct actions and recomputes food on every scout',async()=>{
+ const bot=fakeBot();let sprint;bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+ const actions=createActions(bot),scout=()=>actions.execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/rations'});
+ await scout();assert.equal(sprint,false);
+ await actions.execute('go_to',{x:0,y:64,z:0,radius:1});assert.equal(sprint,true);
+ await actions.execute('explore',{direction:'east',distance:8,returnable:true});assert.equal(sprint,true);
+ const bread=bot.addItem('bread');await scout();assert.equal(sprint,true);bread.count=0;await scout();assert.equal(sprint,false);
+ await actions.execute('go_to',{x:0,y:64,z:0,radius:1},undefined,{starterScope:'job/return'});assert.equal(sprint,true);
+});
+test('failed foodless scouting cannot leak sprint suppression into a later direct action',async()=>{
+ const bot=fakeBot();let sprint;bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+ const original=bot.pathfinder.getPathFromTo;bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}}};
+ const actions=createActions(bot);
+ await assert.rejects(actions.execute('explore',{direction:'east',distance:8,returnable:true,alternatives:['north','west']},undefined,{starterScope:'job/blocked'}));assert.equal(sprint,false);
+ bot.pathfinder.getPathFromTo=original;await actions.execute('go_to',{x:1,y:64,z:0,radius:1});assert.equal(sprint,true);
+});
+
 test('starter collection skips a proven sealed goal pocket before global path search',async t=>{
  // Test the integration decision deterministically. Slow CI must not turn this
  // into a timing race with the production20ms unknown/fallback policy.

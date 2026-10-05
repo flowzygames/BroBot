@@ -24,6 +24,16 @@ function fixture(){
 }
 async function ticking(bot,operation){const timer=setInterval(()=>bot.emit('physicsTick'),10);try{return await operation();}finally{clearInterval(timer);}}
 
+test('foodless scout policy cannot disable later emergency retreat sprint eligibility',async()=>{
+ const f=fixture(),hostile=f.bot.entities[22],planner=f.bot.pathfinder.getPathFromTo;delete f.bot.entities[22];
+ f.bot.pathfinder.getPathFromTo=function*(m,start,goal){yield{result:{status:'success',path:[new Vec3(goal.x,goal.y??64,goal.z)]}}};
+ f.bot.pathfinder.goto=async goal=>{f.bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5)};
+ await f.actions.execute('explore',{direction:'east',distance:4,returnable:true},undefined,{starterScope:'job/foodless'});
+ assert.equal(f.bot.pathfinder.movements.allowSprinting,false);
+ f.bot.entity.position=new Vec3(.5,64,.5);f.bot.entities[22]=hostile;f.bot.pathfinder.getPathFromTo=planner;
+ const result=await ticking(f.bot,()=>f.run());assert.equal(result.separated,true);assert.equal(f.bot.pathfinder.movements.allowSprinting,true);
+});
+
 test('private retreat makes one bounded terrain-preserving leg and verifies supported separation',async()=>{
  const f=fixture();const result=await ticking(f.bot,()=>f.run());
  assert.equal(result.separated,true);assert.equal(f.moves(),1);assert.ok(result.observedSeparation>=4);assert.ok(f.bot.entity.position.distanceTo(new Vec3(.5,64,.5))<=8);
