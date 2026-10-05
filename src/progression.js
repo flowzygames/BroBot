@@ -1,4 +1,5 @@
 import { assertTerrainTrusted } from './terrain-trust.js';
+import { prepareObservedActivation } from './guarded-activation.js';
 import { Vec3 } from 'vec3';
 
 const AIR = new Set(['air', 'cave_air', 'void_air']);
@@ -199,7 +200,9 @@ function pause(ms, signal) {
 
 export function createProgression(bot, { actions, memory, log = () => {} }) {
   const checkSignal = checked;
-  const checkedBot = signal => { assertTerrainTrusted(bot); checkSignal(signal); };
+  let executionSession = null;
+  const sessionStale = () => executionSession && (executionSession.changed || executionSession.entity !== bot.entity || executionSession.client !== bot._client || executionSession.dimension !== bot.game?.dimension);
+  const checkedBot = signal => { assertTerrainTrusted(bot); if(sessionStale())throw Error('Progression cancelled: play session changed'); checkSignal(signal); };
   const state = new Map();
   const get = (key, fallback) => memory?.get ? memory.get(key, fallback) : (state.get(key) ?? fallback);
   const set = (key, value) => memory?.set ? memory.set(key, value) : state.set(key, value);
@@ -228,13 +231,24 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
   };
   const eyes = () => bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0);
 
+  async function activateHeldTop(reference, cursorY, expectedItemName, signal) {
+    const isVisible=(_bot,current)=>{
+      const eye=eyes(),target=current.position.offset(.5,cursorY,.5),delta=target.minus(eye),distance=delta.norm();
+      if(!Number.isFinite(distance)||distance<.001||distance>4.5)return false;
+      const hit=bot.world.raycast(eye,delta.scaled(1/distance),distance+.01);
+      return hit?.position?.equals(current.position)===true&&hit.face===1;
+    };
+    const send=await prepareObservedActivation(bot,reference,{check:()=>checkedBot(signal),cursor:{x:.5,y:cursorY,z:.5},expectedItemName,isVisible});
+    send();checkedBot(signal);
+  }
+
   async function clickTop(reference, signal) {
     checkedBot(signal);
     const eye = eyes(), target = reference.position.offset(0.5, 0.81, 0.5), delta = target.minus(eye);
     if (delta.norm() > 4.5) throw new Error('Top face is outside interaction reach.');
     const hit = bot.world.raycast(eye, delta.normalize(), 4.5);
     if (!hit?.position.equals(reference.position) || hit.face !== 1) throw new Error('Top face is obstructed. Approach from above the frame, outside the portal opening.');
-    await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 0.8125, 0.5));
+    await activateHeldTop(reference,.8125,'ender_eye',signal);
     checkedBot(signal);
   }
 
@@ -293,7 +307,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
         if (distance > 4.5) throw new Error('Cannot reach the bottom interior frame block to ignite it.');
         const hit = bot.world.raycast(eye, delta.scaled(1 / distance), distance + 0.1);
         if (hit && !hit.position.equals(reference.position)) throw new Error('Ignition face is obstructed.');
-        await bot.activateBlock(reference, new Vec3(0, 1, 0), new Vec3(0.5, 1, 0.5));
+        await activateHeldTop(reference,1,'flint_and_steel',signal);
         checkedBot(signal);
       }
       const active = await waitUntil(() => blueprint.interior.some(p => block(p)?.name === 'nether_portal'), 3000, signal);
@@ -386,7 +400,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       if (!tracked) throw new Error('No newly thrown eye entity was observed. Check that there is open space above; do not assume a bearing.');
       await pause(1800, signal);
       sample(tracked);
-    } finally { bot.removeListener('entitySpawn', sample); bot.removeListener('entityMoved', sample); bot.deactivateItem(); }
+    } finally { bot.removeListener('entitySpawn', sample); bot.removeListener('entityMoved', sample); if(!sessionStale())bot.deactivateItem(); }
     if (samples.length < 2) throw new Error('Insufficient eye movement packets were observed.');
     const first = samples[0], last = samples[samples.length - 1];
     const travel = Math.hypot(last.x - first.x, last.z - first.z);
@@ -465,7 +479,7 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       await pause(Math.min(3500, Math.max(700, shot.ticks * 50 + 300)), signal);
       return { fired: true, targetPresent: Boolean(bot.entities[entity.id]) };
     } finally {
-      if (!fired && bot.usingHeldItem) {
+      if (!fired && !sessionStale() && bot.usingHeldItem) {
         // Switching away cancels a bow draw without releasing an un-aimed arrow.
         bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9);
         bot.deactivateItem();
@@ -587,11 +601,20 @@ export function createProgression(bot, { actions, memory, log = () => {} }) {
       checkedBot(signal);
       if (running) throw new Error('A progression action is already running. Cancel it before starting another.');
       running = true;
-      const stop = () => { if (bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9); actions.stop(); };
-      signal?.addEventListener('abort', stop, { once: true });
-      try { return await handlers[name](args, signal); }
+      // Only explicit portal entry is allowed to cross play sessions. Other
+      // multi-step plans must not retry old coordinates in a replacement world.
+      executionSession = name === 'enter_portal' ? null : {entity:bot.entity,client:bot._client,dimension:bot.game?.dimension,changed:false};
+      const controller = new AbortController();
+      const stop = () => { const stale=Boolean(sessionStale()); if (!stale && bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot((bot.quickBarSlot + 1) % 9); actions.stop({sessionChanged:stale}); };
+      const forwardAbort = () => controller.abort(signal.reason);
+      const sessionChanged = () => { executionSession.changed=true;controller.abort(Error('Progression cancelled: play session changed')); };
+      const events=executionSession?['respawn','spawn','end']:[];
+      controller.signal.addEventListener('abort',stop,{once:true});
+      signal?.addEventListener('abort', forwardAbort, { once: true });
+      for(const event of events)bot.on?.(event,sessionChanged);
+      try { const result=await handlers[name](args, controller.signal);checkedBot(controller.signal);return result; }
       catch (error) { if (typeof log === 'function') log('progression_error', `${name}: ${error.message}`); throw error; }
-      finally { signal?.removeEventListener('abort', stop); running = false; }
+      finally { signal?.removeEventListener('abort', forwardAbort);controller.signal.removeEventListener('abort',stop);for(const event of events)bot.removeListener?.(event,sessionChanged);executionSession=null;running = false; }
     }
   };
 }

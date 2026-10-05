@@ -2,12 +2,19 @@
 
 Automated check counts, prepared controls, and natural-world completion scores measure different things. They are not interchangeable.
 
-- Current development source: 625 checks and 17 prepared phases, plus controlled sprint/wake and copied-world scout evidence. This is not a new full-world score.
+- Current development source: 672 checks and 17 prepared phases, plus guarded progression-interaction evidence. This is not a new full-world score.
+- Latest qualified 625-check source attempt: 9 known passes, 10 failures, 1 infrastructure-interrupted unknown; separate originals 3/3. It is not a complete 20-world score.
 - Latest complete known-world suite: 13/20 plus 3/3 separate original worlds on frozen 5b66f11.
 - Selected 589-check compatibility run: 0/3 known worlds; these selected failures remain retained and do not replace the full cohort.
 - Public Core 0.2 download remains 346 checks, 11/20 known worlds and 1/3 original worlds.
 
 ## Evidence index
+
+- [Guarded progression interactions](progression-activation-2026-10-05/README.md)
+- [Integrated652 selected natural diagnostics](integrated652-selected-2026-10-05/README.md)
+
+- [Integrated 652-check prepared safeguards](integrated652-2026-10-05/README.md)
+- [Qualified 625-check world results, including interruption](scout625-2026-10-05/README.md)
 
 - [Bounded adjacent starter scout landings — October 5, 2026 UTC](scout-landings-2026-10-05/README.md)
 

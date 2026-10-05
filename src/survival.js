@@ -1,4 +1,6 @@
 import { STARTER_SUPPORT_PROTECTED } from './starter-leaf-support.js';
+import { MINING_NO_GOAL_SPACE } from './mining-goal-space.js';
+import { STARTER_FOODS } from './starter-foods.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
 import { recordScoutObservation, rankScouts, SCOUT_GOAL_POLICY } from './scout-coverage.js';
@@ -7,7 +9,6 @@ import { setTimeout as sleep } from 'node:timers/promises';
 export const STARTER_LOG_RADIUS = 48;
 const LOW_AIR_MESSAGE = 'Air is low. Work stopped, but the world keeps running. Bring BroBot above water before resuming.';
 const WOODS = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry', 'pale_oak'];
-const FOODS = ['cooked_beef', 'cooked_porkchop', 'cooked_mutton', 'cooked_chicken', 'cooked_salmon', 'cooked_cod', 'bread', 'baked_potato', 'carrot', 'apple'];
 const countItems = state => Object.fromEntries((state.inventory ?? []).map(i => [i.name, (state.inventory ?? []).filter(j => j.name === i.name).reduce((n, j) => n + j.count, 0)]));
 const inventoryKey = state => JSON.stringify(Object.entries(countItems(state)).sort(([a],[b])=>a.localeCompare(b)));
 const distance = (a, b) => a && b ? Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) : Infinity;
@@ -85,7 +86,7 @@ export function nextStarterStep(state, job, observation = {}) {
   if (state.health <= STARTER_MIN_HEALTH) return { blocked: 'Health is too low to continue gathering safely.' };
   if (distance(state.position, job.home.position) > STARTER_STOP_RADIUS) return { blocked: `The starter job reached its ${STARTER_STOP_RADIUS}-block travel boundary.` };
   if (state.food != null && state.food <= 10) {
-    const food = FOODS.find(has);
+    const food = STARTER_FOODS.find(has);
     return food ? action('eat', { item: food }, 'Recover hunger before working.') : { blocked: 'Food is low and no supported safe food is carried.' };
   }
   if ((state.entities ?? []).some(e => e.type === 'hostile' && e.distance < 6)) return { blocked: 'A hostile mob is too close for unarmored starter gathering.' };
@@ -280,7 +281,7 @@ export class SurvivalJob {
       if (decision.name !== 'collect' || !result?.failures) return;
       this.job.excluded ??= {};
       const old = this.job.excluded[decision.args.block] ?? [];
-      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && (f.code === STARTER_SUPPORT_PROTECTED || /route|reach|planning|obstruct/i.test(f.error ?? ''))).map(f => f.position);
+      const positions = result.failures.filter(f => f.position && f.code !== 'COLLECTION_PLANNING_LIMIT' && (f.code === STARTER_SUPPORT_PROTECTED || f.code === MINING_NO_GOAL_SPACE || /route|reach|planning|obstruct/i.test(f.error ?? ''))).map(f => f.position);
       const unique = new Map([...old, ...positions].map(p => [JSON.stringify(p), p]));
       this.job.excluded[decision.args.block] = [...unique.values()].slice(-128);
     };

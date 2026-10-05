@@ -4,8 +4,163 @@ import { EventEmitter } from 'node:events'
 import minecraftData from 'minecraft-data'
 import { Vec3 } from 'vec3'
 import { createActions, definitions } from '../src/actions.js'
+import { createProgression, portalBlueprint } from '../src/progression.js'
+import { ActionRunner } from '../src/runner.js'
 
 const registry = minecraftData('1.21.8')
+
+test('foodless automatic scouting disables sprint throughout planning and execution',async()=>{
+ for(const food of [20,11,undefined]){
+  const bot=fakeBot();bot.food=food;const seen=[];let current;
+  bot.pathfinder.setMovements=m=>{current=m;seen.push(m.allowSprinting)};
+  bot.pathfinder.getPathFromTo=function*(m,start,goal){seen.push(m.allowSprinting);yield{result:{status:'success',path:[new Vec3(goal.x,goal.y??start.y,goal.z)]}}};
+  bot.pathfinder.goto=async goal=>{seen.push(current.allowSprinting);bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5)};
+  await createActions(bot).execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/foodless'});
+  assert.ok(seen.length>=4);assert.ok(seen.every(value=>value===false));
+ }
+});
+test('only positive controller-supported food enables automatic scout sprinting',async()=>{
+ for(const [name,count,expected] of [['bread',1,true],['apple',1,true],['bread',0,false],['rotten_flesh',2,false],['melon_slice',2,false],['sweet_berries',2,false]]){
+  const bot=fakeBot();bot.addItem(name,count);let sprint;
+  bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+  await createActions(bot).execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/rations'});
+  assert.equal(sprint,expected,name);
+ }
+});
+test('cached movement policy restores direct actions and recomputes food on every scout',async()=>{
+ const bot=fakeBot();let sprint;bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+ const actions=createActions(bot),scout=()=>actions.execute('explore',{direction:'east',distance:8,returnable:true},undefined,{starterScope:'job/rations'});
+ await scout();assert.equal(sprint,false);
+ await actions.execute('go_to',{x:0,y:64,z:0,radius:1});assert.equal(sprint,true);
+ await actions.execute('explore',{direction:'east',distance:8,returnable:true});assert.equal(sprint,true);
+ const bread=bot.addItem('bread');await scout();assert.equal(sprint,true);bread.count=0;await scout();assert.equal(sprint,false);
+ await actions.execute('go_to',{x:0,y:64,z:0,radius:1},undefined,{starterScope:'job/return'});assert.equal(sprint,true);
+});
+test('failed foodless scouting cannot leak sprint suppression into a later direct action',async()=>{
+ const bot=fakeBot();let sprint;bot.pathfinder.setMovements=m=>{sprint=m.allowSprinting};
+ const original=bot.pathfinder.getPathFromTo;bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}}};
+ const actions=createActions(bot);
+ await assert.rejects(actions.execute('explore',{direction:'east',distance:8,returnable:true,alternatives:['north','west']},undefined,{starterScope:'job/blocked'}));assert.equal(sprint,false);
+ bot.pathfinder.getPathFromTo=original;await actions.execute('go_to',{x:1,y:64,z:0,radius:1});assert.equal(sprint,true);
+});
+
+test('starter collection skips a proven sealed goal pocket before global path search',async t=>{
+ // Test the integration decision deterministically. Slow CI must not turn this
+ // into a timing race with the production20ms unknown/fallback policy.
+ t.mock.method(performance,'now',()=>1000)
+ const {default:loadBlock}=await import('prismarine-block'),{default:WorldSync}=await import('prismarine-world/src/worldsync.js');
+ const Block=loadBlock(registry),target=new Vec3(8,64,0),cells=new Map();
+ for(let x=-2;x<=14;x++)for(let y=56;y<=71;y++)for(let z=-6;z<=6;z++){
+  const p=new Vec3(x,y,z),air=p.equals(target.offset(0,1,0))||(x===0&&z===0&&(y===64||y===65));
+  const b=Block.fromStateId(registry.blocksByName[air?'air':'stone'].defaultState,0);b.position=p;cells.set(p.toString(),b);
+ }
+ for(const starter of [false,true]){
+  const bot=fakeBot();let probes=0;bot.blockAt=p=>cells.get(p.floored().toString())??null;
+  bot.world={getBlock:bot.blockAt,raycast:WorldSync.prototype.raycast};
+  bot.findBlocks=options=>{const b=bot.blockAt(target);if(options.useExtraInfo)options.useExtraInfo(b);return[target]};
+  bot.pathfinder.getPathFromTo=function*(){probes++;yield{result:{status:'noPath',path:[]}}};
+  const actions=createActions(bot,{movementBoundary:()=>({center:new Vec3(.5,64,.5),radius:256})});
+  await assert.rejects(actions.execute('collect',{block:'stone',count:1,radius:12},undefined,starter?{starterScope:'fixture/stance'}:{}));
+  assert.equal(probes,starter?0:1);
+ }
+});
+
+test('placement refuses every replacement play session after aiming',async()=>{
+ for(const mode of ['dimension','entity','client','respawn','spawn','end','round-trip']){
+  const bot=fakeBot();bot.addItem('oak_planks');bot.putBlock('dirt',new Vec3(2,63,0));let packets=0;
+  const counts=Object.fromEntries(['respawn','spawn','end'].map(e=>[e,bot.listenerCount(e)]));
+  bot._placeBlockWithOptions=async()=>{packets++};
+  bot.lookAt=async()=>{
+   if(mode==='dimension')bot.game.dimension='the_nether';
+   else if(mode==='entity')bot.entity={...bot.entity};
+   else if(mode==='client')bot._client=new EventEmitter();
+   else if(mode==='round-trip'){bot.game.dimension='the_nether';bot.emit('respawn');bot.game.dimension='overworld'}
+   else bot.emit(mode);
+  };
+  await assert.rejects(createActions(bot).execute('place',{block:'oak_planks',x:2,y:64,z:0}),/play session changed/);
+  assert.equal(packets,0);
+  for(const event of Object.keys(counts))assert.equal(bot.listenerCount(event),counts[event]);
+ }
+});
+test('navigation cannot report arrival in a replacement dimension',async()=>{
+ const bot=fakeBot();bot.pathfinder.goto=async goal=>{bot.game.dimension='the_nether';bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5)};
+ await assert.rejects(createActions(bot).execute('go_to',{x:3,y:64,z:0,radius:1}),/play session changed/);
+});
+test('session invalidation stops immediately but holds the physical lock until draining',async()=>{
+ const bot=fakeBot();let release,clears=0;bot.clearControlStates=()=>{clears++};
+ bot.pathfinder.goto=()=>new Promise(resolve=>{release=resolve});
+ const actions=createActions(bot),pending=actions.execute('go_to',{x:3,y:64,z:0,radius:1});
+ while(!release)await new Promise(resolve=>setImmediate(resolve));
+ bot.emit('respawn');assert.ok(clears>0);
+ await assert.rejects(actions.execute('go_to',{x:3,y:64,z:0,radius:1}),/physical action is running/);
+ release();await assert.rejects(pending,/play session changed/);
+ bot.pathfinder.goto=async goal=>{bot.entity.position=new Vec3(goal.x+.5,goal.y,goal.z+.5)};
+ assert.equal((await actions.execute('go_to',{x:3,y:64,z:0,radius:1})).arrived,true);
+ for(const event of ['respawn','spawn','end'])assert.equal(bot.listenerCount(event),0);
+});
+test('intentional portal entry survives child session cancellation while owner Stop wins',async()=>{
+ for(const stop of [false,true]){
+  const bot=fakeBot(),owner=new AbortController();bot.putBlock('nether_portal',new Vec3(2,64,0));
+  bot.pathfinder.goto=async()=>{bot.game.dimension='the_nether';bot.emit('respawn');bot.emit('spawn');if(stop)owner.abort(new Error('Owner stopped entry'))};
+  const progression=createProgression(bot,{actions:createActions(bot)});
+  const pending=progression.execute('enter_portal',{kind:'nether',radius:8,timeout:10},owner.signal);
+  if(stop)await assert.rejects(pending,/Owner stopped entry/);
+  else {const result=await pending;assert.equal(result.transitioned,true);assert.equal(result.from,'overworld');assert.equal(result.to,'nether');assert.equal(owner.signal.aborted,false)}
+  for(const event of ['respawn','spawn','end'])assert.equal(bot.listenerCount(event),0);
+ }
+});
+test('late runner cleanup cannot close replacement-session inventory or release its item',async()=>{
+ const bot=fakeBot();let closed=0,released=0,slots=0;
+ bot.closeWindow=async()=>{closed++};bot.deactivateItem=()=>{released++};bot.setQuickBarSlot=()=>{slots++};
+ bot.pathfinder.goto=async()=>{bot.game.dimension='the_nether';bot.currentWindow={id:99};bot.heldItem={name:'bow'};bot.usingHeldItem=true;bot.emit('respawn');bot.emit('spawn')};
+ const actions=createActions(bot),runner=new ActionRunner();
+ await assert.rejects(runner.run('go_to',signal=>actions.execute('go_to',{x:3,y:64,z:0,radius:1},signal),()=>actions.stop()),/play session changed/);
+ actions.stop();assert.equal(closed,0);assert.equal(released,0);assert.equal(slots,0);assert.equal(runner.active,null);
+});
+test('multi-step portal construction cannot retry its old site after a world replacement',async()=>{
+ const bot=fakeBot(),blueprint=portalBlueprint(0,64,0,'x'),missing=blueprint.frame.find(p=>p.y===68);
+ for(let x=-3;x<8;x++)for(let z=-3;z<4;z++)bot.putBlock('stone',new Vec3(x,63,z));
+ for(const p of blueprint.frame)if(p!==missing)bot.putBlock('obsidian',new Vec3(p.x,p.y,p.z));
+ bot.addItem('obsidian');bot.addItem('flint_and_steel');let walks=0,edits=0;
+ bot.pathfinder.goto=async goal=>{walks++;bot.entity.position=new Vec3(goal.x+.5,goal.y??64,goal.z+.5);if(walks===1){bot.game.dimension='the_nether';bot.emit('respawn');bot.emit('spawn')}};
+ bot._placeBlockWithOptions=async()=>{edits++};bot.activateBlock=async()=>{edits++};
+ const parent=new AbortController(),progression=createProgression(bot,{actions:createActions(bot)});
+ await assert.rejects(progression.execute('build_nether_portal',{x:0,y:64,z:0,axis:'x'},parent.signal),/play session changed/);
+ assert.equal(walks,1);assert.equal(edits,0);assert.equal(parent.signal.aborted,false);
+ for(const event of ['respawn','spawn','end'])assert.equal(bot.listenerCount(event),0);
+});
+test('progression propagates same-dimension retirement between children and before child listeners',async()=>{
+ for(const stage of ['equipping','drawing']){
+  const bot=fakeBot();bot.addItem('bow');bot.addItem('arrow');bot.entities[2]={id:2,name:'zombie',type:'hostile',position:new Vec3(10,64,0),height:1.8};
+  let closed=0,released=0,slots=0,transitioned=false;const equip=bot.equip;
+  const replace=()=>{transitioned=true;bot.currentWindow={id:99};bot.usingHeldItem=true;bot.emit('respawn');bot.emit('spawn')};
+  bot.closeWindow=async()=>{if(transitioned)closed++};bot.deactivateItem=()=>{if(transitioned)released++};bot.setQuickBarSlot=()=>{if(transitioned)slots++};
+  bot.equip=async item=>{await equip(item);if(stage==='equipping')replace()};bot.activateItem=()=>{if(stage==='drawing')replace()};
+  const actions=createActions(bot),progression=createProgression(bot,{actions}),runner=new ActionRunner();
+  await assert.rejects(runner.run('shoot',signal=>progression.execute('shoot',{entity_id:2,shots:1},signal),()=>actions.stop()),/session changed/);
+  actions.stop();assert.equal(closed,0,stage);assert.equal(released,0,stage);assert.equal(slots,0,stage);
+  for(const event of ['respawn','spawn','end','entityDead'])assert.equal(bot.listenerCount(event),0);
+ }
+});
+test('item-use cleanup does not release a replacement session item',async()=>{
+ const bot=fakeBot();bot.heldItem=bot.addItem('bow');let releases=0;
+ bot.deactivateItem=()=>{releases++};bot.activateItem=()=>{bot.game.dimension='the_nether';bot.emit('respawn');bot.emit('spawn')};
+ const actions=createActions(bot);
+ await assert.rejects(actions.execute('use_item',{duration:1}),/session changed/);actions.stop();assert.equal(releases,0);
+});
+for(const kind of ['craft','smelt'])test(`${kind} does not close a window acquired in a replacement session`,async()=>{
+ const bot=fakeBot();let closed=0,clicks=0;
+ const window={id:99,slots:Array(46).fill(null),inventoryStart:10,inventoryEnd:46,selectedItem:null,close:async()=>{closed++}};
+ const open=async()=>{bot.currentWindow=window;bot.emit('respawn');bot.emit('spawn');return window};
+ bot.closeWindow=async()=>{closed++};bot.clickWindow=async()=>{clicks++};bot._syncWindow=async()=>{};
+ let args;
+ if(kind==='craft'){
+  bot.putBlock('crafting_table',new Vec3(2,64,0));bot.addItem('oak_planks',3);bot.addItem('stick',2);
+  bot.recipesFor=()=>[{requiresTable:true,result:{id:registry.itemsByName.wooden_pickaxe.id,count:1}}];bot.openBlock=open;args={item:'wooden_pickaxe',count:1};
+ }else{bot.putBlock('furnace',new Vec3(2,64,0));bot.addItem('sand');bot.addItem('coal');bot.openFurnace=open;args={item:'sand',count:1,fuel:'coal'}}
+ const actions=createActions(bot);await assert.rejects(actions.execute(kind,args),/session changed/);actions.stop();
+ assert.equal(closed,0);assert.equal(clicks,0);
+});
 
 test('starter returnable scouts accept a nearby certified landing while direct scouts stay exact',async()=>{
  for(const starter of [false,true]){
@@ -1820,8 +1975,14 @@ test('collection candidate reuse invalidates on observed world changes or moveme
       }
       yield { result: { status: 'noPath', path: [] } }
     }
-    await assert.rejects(createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 24 }))
-    assert.ok(scans >= 2, change)
+    const pending=createActions(bot).execute('collect', { block: 'stone', count: 1, radius: 24 })
+    if(change==='dimension'){
+      await assert.rejects(pending,/play session changed/)
+      assert.equal(scans,1);assert.equal(probes,1)
+    }else{
+      await assert.rejects(pending)
+      assert.ok(scans >= 2, change)
+    }
     for (const event of ['blockUpdate', 'chunkColumnLoad', 'chunkColumnUnload', 'physicsTick']) assert.equal(bot.listenerCount(event), 0, change)
   }
 })

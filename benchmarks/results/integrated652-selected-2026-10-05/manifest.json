@@ -1,0 +1,103 @@
+{
+  "source": "f466593ab23a3a0b5ca8a6ffe324486fcfb2591d",
+  "classification": "Five predeclared selected known-world diagnostics, one300s attempt each; not a full cohort rate or controlled causal comparison",
+  "passed": 2,
+  "total": 5,
+  "cases": [
+    {
+      "seed": "1542908414",
+      "status": "failed",
+      "elapsedMs": 300006,
+      "reason": "Starter job time budget reached.",
+      "rawSha256": "9642a5d6d21f219aed89e93bb3ed49f82d4371efb5ad966611f173dc0dc13e7b"
+    },
+    {
+      "seed": "113919219",
+      "status": "passed",
+      "elapsedMs": 263820,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "rawSha256": "341beedf74331fa1686af8381bd453c283b8b69f7b29ccbf12842f93dff77325"
+    },
+    {
+      "seed": "386690312",
+      "status": "passed",
+      "elapsedMs": 269509,
+      "reason": "Observed a stone pickaxe and furnace in inventory, alive and back at the start.",
+      "rawSha256": "49c78ff5020678a6eb1dbfecc49bd7049ceeb478827e439504467d40bdc042f4"
+    },
+    {
+      "seed": "61544722",
+      "status": "failed",
+      "elapsedMs": 300005,
+      "reason": "Starter job time budget reached.",
+      "rawSha256": "120e3e221094807a78bfa46e56f5f99f91c6ba71b9218af29369c35babefae37"
+    },
+    {
+      "seed": "1041160109",
+      "status": "failed",
+      "elapsedMs": 267752,
+      "reason": "Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.",
+      "rawSha256": "1bf838e3e51dd55ed5843b9d9cddf407d3aa561098e17aa72f164f9b53ed9143"
+    }
+  ],
+  "files": {
+    "plan.json": {
+      "bytes": 5769,
+      "sha256": "cc4b4a26cb3b1d174929f24652f790089de170baf8893f8ba74124e241d5f470"
+    },
+    "predeclaration.json": {
+      "bytes": 1022,
+      "sha256": "2250449dcd42891a816dbb12bb59275e68315f2d7eb02668ec53c4f3a89ba1fb"
+    },
+    "tested-files.json": {
+      "bytes": 13495,
+      "sha256": "649a40dde890b14a36a8e209cb4ebbc702442ce5763ab1a916f95daf7b031f84"
+    },
+    "driver.py": {
+      "bytes": 4735,
+      "sha256": "ce9abc1761045cd6603047be5dc70a9446616dc9bbb8ab9c83d3529e8c0c1797"
+    },
+    "1542908414/result.json": {
+      "bytes": 246840,
+      "sha256": "9642a5d6d21f219aed89e93bb3ed49f82d4371efb5ad966611f173dc0dc13e7b"
+    },
+    "1542908414/memory/events.jsonl": {
+      "bytes": 537130,
+      "sha256": "ae23340ede504c57c1c361ad7a25beab7fbeabc18671512b6a749df11db5c09c"
+    },
+    "113919219/result.json": {
+      "bytes": 181771,
+      "sha256": "341beedf74331fa1686af8381bd453c283b8b69f7b29ccbf12842f93dff77325"
+    },
+    "113919219/memory/events.jsonl": {
+      "bytes": 365672,
+      "sha256": "6620a2e0ddf179e309abf1765f2fb294ca1f409a345dca2d76577ff193256006"
+    },
+    "386690312/result.json": {
+      "bytes": 168598,
+      "sha256": "49c78ff5020678a6eb1dbfecc49bd7049ceeb478827e439504467d40bdc042f4"
+    },
+    "386690312/memory/events.jsonl": {
+      "bytes": 438471,
+      "sha256": "ed17870306110474e8da922b5509a36a57ee66cb299fd7758a74e49976c94583"
+    },
+    "61544722/result.json": {
+      "bytes": 133602,
+      "sha256": "120e3e221094807a78bfa46e56f5f99f91c6ba71b9218af29369c35babefae37"
+    },
+    "61544722/memory/events.jsonl": {
+      "bytes": 197248,
+      "sha256": "19b7ca0d915f6ec0e82433130fb6edfa38e509ac92a37d8bcb6538de6bc634b9"
+    },
+    "1041160109/result.json": {
+      "bytes": 176778,
+      "sha256": "1bf838e3e51dd55ed5843b9d9cddf407d3aa561098e17aa72f164f9b53ed9143"
+    },
+    "1041160109/memory/events.jsonl": {
+      "bytes": 350383,
+      "sha256": "c83781ea12bc5e1f219f7d840070a7bdd13693d93a5837e3bab02754a7a0ac6e"
+    }
+  },
+  "archiveBytes": 150115,
+  "archiveSha256": "6e1fc0174c5a357b22f9eae6ac50d8737a23bcb4feefb326b2f6c156d1cc6a77"
+}

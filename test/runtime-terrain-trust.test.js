@@ -17,6 +17,22 @@ function fakeBot() {
     entity:{ position:new Vec3(.5,64,.5) }, game:{ dimension:'overworld' },loadPlugin(){},quit(){},clearControlStates(){},stopDigging(){}, inventory:{items:()=>[]} });
 }
 
+test('replacement world refuses new actions until spawn without aborting a portal parent',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'brobot-transition-'));
+ const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),bot=fakeBot();
+ bot.pathfinder={setMovements(){},setGoal(){}};
+ const create=mineflayer.createBot;mineflayer.createBot=()=>bot;
+ try {
+  runtime.connect();bot.emit('spawn');assert.equal(runtime.connection,'connected');
+  const controller=new AbortController();runtime.runner.active={name:'enter_portal',controller,cleanup(){}};
+  bot.game.dimension='the_nether';bot.emit('respawn');
+  assert.equal(runtime.connection,'respawning');assert.equal(controller.signal.aborted,false);
+  await assert.rejects(runtime.execute('inspect',{}),/not connected/);
+  bot.emit('spawn');assert.equal(runtime.connection,'connected');assert.equal(controller.signal.aborted,false);
+  runtime.bot=fakeBot();bot.emit('respawn');assert.equal(runtime.connection,'connected');
+ }finally{mineflayer.createBot=create;runtime.runner.active=null;await runtime.close();await rm(directory,{recursive:true,force:true})}
+});
+
 test('quarantine synchronously pauses runtime work and cannot be reset by spawn', async () => {
   const directory=await mkdtemp(join(tmpdir(),'brobot-trust-'));
   const runtime=new Runtime(loadConfig({BROBOT_DATA_DIR:directory})),bot=fakeBot();
