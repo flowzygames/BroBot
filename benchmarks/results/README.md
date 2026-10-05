@@ -2,7 +2,7 @@
 
 Automated check counts, prepared controls, and natural-world completion scores measure different things. They are not interchangeable.
 
-- Current development source: 722 checks and 17 prepared phases, plus guarded empty-search continuation evidence. This is not a new full-world score.
+- Current development source: 736 checks and 17 prepared phases, plus prepared pickup-route admission evidence. This is not a new full-world score.
 - Latest qualified 625-check source attempt: 9 known passes, 10 failures, 1 infrastructure-interrupted unknown; separate originals 3/3. It is not a complete 20-world score.
 - Latest complete known-world suite: 13/20 plus 3/3 separate original worlds on frozen 5b66f11.
 - Selected 589-check compatibility run: 0/3 known worlds; these selected failures remain retained and do not replace the full cohort.
@@ -10,6 +10,7 @@ Automated check counts, prepared controls, and natural-world completion scores m
 
 ## Evidence index
 
+- [Admit starter pickup routes before movement](pickup-route-budget-2026-10-05/README.md)
 - [Continue unchanged empty resource searches](empty-search-2026-10-05/README.md)
 - [Guarded progression interactions](progression-activation-2026-10-05/README.md)
 - [Integrated652 selected natural diagnostics](integrated652-selected-2026-10-05/README.md)
