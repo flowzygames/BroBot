@@ -64,7 +64,7 @@ try {
     output = (output + chunk.toString()).slice(-200000); log.write(chunk);
   });
   await waitFor(() => output.includes('Done ('), 300000, 'server startup');
-  await command(['difficulty peaceful','gamerule doMobSpawning false','gamerule doDaylightCycle false','time set day',
+  await command(['difficulty normal','gamerule doMobSpawning false','gamerule doDaylightCycle false','time set day',
     'fill -4 62 -4 16 63 16 stone','fill -4 64 -4 16 70 16 air','setblock 2 64 0 oak_log','setworldspawn 0 64 0','gamerule spawnRadius 0',
     'summon polar_bear 12.5 64 12.5 {NoAI:1b,Silent:1b}']);
   runtime = new Runtime(loadConfig({MC_HOST:'127.0.0.1',MC_PORT:String(port),MC_VERSION:VERSION,MC_USERNAME:'BroBotHome',BROBOT_DATA_DIR:join(directory,'memory')}));
