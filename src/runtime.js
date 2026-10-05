@@ -309,11 +309,21 @@ export class Runtime {
   checkHostileHurt(source) {
     const bot = this.bot, active = this.runner.active;
     if (this.connection !== 'connected' || !bot || this.closed || !this.survival.active || !active
-      || active.controller.signal.aborted || active.name === 'eat' || source?.type !== 'hostile') return;
+      || active.controller.signal.aborted || active.name === 'eat') return;
+    const observedAnimal = source?.type === 'animal' && Number.isSafeInteger(source.id) && source.id >= 0
+      && typeof source.name === 'string' && source.name.length > 0;
+    if (source?.type !== 'hostile' && !observedAnimal) return;
     // This responds to an explicit observed attacker, without joining separate
     // health packets or guessing a missing source. Recovery may attempt one
     // bounded melee retreat; it does not pause the world or prevent another hit.
     if (Number.isFinite(bot.health) && bot.health <= 0) return;
+    if (observedAnimal) {
+      // Neutral animals can become attackers (for example a polar bear near
+      // its cub). An observed hit must interrupt work even though the registry
+      // classifies it as animal. Do not route it through zombie-only recovery.
+      this.stop(`Observed ${source.name} attack: starter work paused. This attacker has no supported automatic retreat. The world keeps running; reach safety before resuming.`);
+      return;
+    }
     if(!this.survival.requestHostileRecovery?.(source))this.stop('Hostile attack observed: starter work paused. The world keeps running; reach safety before resuming.');
   }
   async recoverFromHostile(request,signal) {
