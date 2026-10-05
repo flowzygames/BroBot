@@ -3,7 +3,7 @@ import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { PickupProbeLedger } from './pickup-probe-ledger.js'
 import { runStarterRetreat } from './starter-retreat.js'
 import { interactionSession, prepareObservedActivation, confirmSleep, interactionVisible, visibleInteractionFace } from './guarded-activation.js'
-import { confirmedMining } from './experimental/confirmed-mining.js'
+import { confirmedMining, MINING_DEADLINE_INSUFFICIENT } from './experimental/confirmed-mining.js'
 import { assertTerrainTrusted } from './terrain-trust.js'
 import { DropRetryCache } from './drop-retry-cache.js'
 import { awaitPassiveLanding } from './passive-settlement.js'
@@ -527,6 +527,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (ctx.pickupSettledFailure || pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; break }
       } catch (error) {
         checked(ctx)
+        if(error.code===MINING_DEADLINE_INSUFFICIENT){error.result={...error.result,completed:false,mined,inventory_changes:changes(before),remaining_drops:pickup.remaining_drops};throw error}
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') { error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }; throw error }
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null })
@@ -597,7 +598,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const current = validateTarget()
       assert(!current.canHarvest || current.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${current.name}; refusing to destroy it without drops`)
       beforeDig?.()
-      return confirmedMining({ bot, block: current, signal: ctx.signal })
+      return confirmedMining({ bot, block: current, signal: ctx.signal, operationDeadline:ctx.operationDeadline })
     })
     assert(isAir(loaded(p)), `Confirmed mining target is no longer air`)
     return block.name
@@ -622,6 +623,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
 
   async function descendNotch (args, ctx) {
     assert(bot.health >= 12 && bot.food >= 10, 'Descent requires health 12+ and food 10+')
+    const priorDeadline=ctx.operationDeadline,localDeadline=performance.now()+20000
+    ctx.operationDeadline=priorDeadline===undefined?localDeadline:Math.min(priorDeadline,localDeadline)
     const deadline = setTimeout(() => stop(), 20000)
     const dryStep = block => isFluidBearingBlock(block) ? 1000 : 0
     let onCorridorChange = null, constrained = null
@@ -690,6 +693,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       return { completed: true, mined: 1, descended_blocks: 1, position: plainPos(bot.entity.position), return_home: plainPos(home), experimental: true }
     } finally {
       clearTimeout(deadline)
+      ctx.operationDeadline=priorDeadline
       if (onCorridorChange) bot.removeListener('blockUpdate', onCorridorChange)
       if (constrained && bot.pathfinder.movements === constrained) bot.pathfinder.setMovements(movements)
       if (movements) movements.exclusionAreasStep = movements.exclusionAreasStep.filter(guard => guard !== dryStep)
@@ -1267,7 +1271,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     if (signal?.aborted) throw abortError()
     assert(bot.entity?.position, 'Bot has not spawned')
     const controller = new AbortController()
-    const ctx = { starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const deadlines=[executionContext.jobDeadline,executionContext.actionDeadline].filter(value=>value!==undefined)
+    assert(deadlines.every(Number.isFinite),'Operation deadlines must be finite monotonic timestamps')
+    const operationDeadline=deadlines.length?Math.min(...deadlines):undefined
+    const ctx = { operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     const cancel = () => stop()
     signal?.addEventListener('abort', cancel, { once: true })

@@ -3,7 +3,9 @@
 import { observeServerBlock } from './block-receipts.js';
 import { assertTerrainTrusted, quarantineTerrain } from '../terrain-trust.js';
 
-export async function confirmedMining({ bot, block, signal, receiptMs = 5000 }) {
+export const MINING_DEADLINE_INSUFFICIENT='MINING_DEADLINE_INSUFFICIENT';
+
+export async function confirmedMining({ bot, block, signal, receiptMs = 5000, operationDeadline, now=()=>performance.now() }) {
   assertTerrainTrusted(bot);
   signal?.throwIfAborted();
   if (!Number.isFinite(receiptMs) || receiptMs <= 0 || receiptMs > 5000) throw new Error('Receipt budget must be 1–5000ms');
@@ -12,6 +14,13 @@ export async function confirmedMining({ bot, block, signal, receiptMs = 5000 }) 
   if (!Number.isFinite(digMs) || digMs < 0 || digMs > 24000) throw new Error('Cannot confirm this mining duration within the supported operation budget');
   // Includes a fixed scheduling allowance, without extending after packets.
   const lifetimeMs = Math.ceil(digMs) + receiptMs + 1000;
+  const admit=()=>{
+    if(operationDeadline===undefined)return;
+    const current=now();
+    if(!Number.isFinite(operationDeadline)||!Number.isFinite(current)||operationDeadline-current<lifetimeMs)
+      throw Object.assign(Error('Not enough remaining time to confirm another mining operation; stopped before digging'),{code:MINING_DEADLINE_INSUFFICIENT});
+  };
+  admit();
   let attempted = false, failure = null, watch, receiptDeadline = null;
   const fail = reason => {
     if (!failure) failure = Object.assign(new Error(`Mining not confirmed: ${reason}`), { code: 'MINING_UNCONFIRMED' });
@@ -37,6 +46,7 @@ export async function confirmedMining({ bot, block, signal, receiptMs = 5000 }) 
     },20);
     signal?.addEventListener('abort',abort,{ once:true });
     check();
+    admit();
     attempted = true;
     await bot.dig(block,'ignore');
     check();

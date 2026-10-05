@@ -243,9 +243,11 @@ export class SurvivalJob {
     if (!resume || this.dropRecoverySession !== this.session()) this.job.recoverDropIds = [];
     this.job.status = 'running'; this.job.reason = null; this.save();
     this.log('survival', `${resume ? 'Resuming' : 'Starting'} offline starter kit: stone pickaxe, furnace, then return to start.`);
+    const deadline=this.now()+this.maxDurationMs;
+    if(!Number.isFinite(deadline))throw Error('Starter job deadline is invalid');
     const controller = new AbortController(); this.active = controller;
     const timer = setTimeout(() => { controller.abort(new Error('Starter job time budget reached.')); this.stopActions('Starter job time budget reached.'); }, this.maxDurationMs); timer.unref?.();
-    this.promise = this.loop(controller.signal).catch(async error => {
+    this.promise = this.loop(controller.signal,deadline).catch(async error => {
       if(await this.finishHostileRecovery(controller))return;
       this.job.status = controller.signal.aborted ? 'paused' : 'blocked'; this.job.reason = controller.signal.aborted ? (controller.signal.reason?.message || error.message) : error.message;
       this.log('survival', `Starter job ${this.job.status}: ${this.job.reason}`);
@@ -258,8 +260,7 @@ export class SurvivalJob {
     });
     return { started: true, mode: 'offline-observation-driven', goal: 'stone pickaxe and furnace, then return to start', id: this.job.id };
   }
-  async loop(signal) {
-    const deadline = Date.now() + this.maxDurationMs;
+  async loop(signal,deadline) {
     const failures = new Map(), craftFailureContexts = new Map(), travelFailurePositions = new Map(), blockedWorkstations = new Map();
     const observationKey = (observation, retryKind) => JSON.stringify(retryKind === 'craft'
       ? { tableInReach: observation.tableInReach, tables: (observation.tables ?? []).map(p=>[p.x,p.y,p.z]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]), craftGeometry: observation.craftGeometry ?? observation.localTerrain ?? [], powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
@@ -280,7 +281,7 @@ export class SurvivalJob {
     while (this.job.steps - firstStep < this.maxSteps) {
       signal.throwIfAborted();
       this.checkHostileRecovery();
-      if (Date.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
+      if (this.now() >= deadline) throw new Error('Starter job time budget reached. Review progress before resuming.');
       const arrivals = retainedTravelArrivals(this.job);
       if(arrivals.length || this.job.travelArrivals)this.job.travelArrivals=arrivals;
       const before = this.snapshot();
@@ -411,10 +412,11 @@ export class SurvivalJob {
         if (attempts.length >= 4 || attempts.some(previous=>distance(previous,cell)<.1)) throw new Error('Canopy recovery attempt budget reached at this position.');
         this.job.canopyDescentAttempts = [...attempts,cell];
       }
+      if(this.now()>=deadline)throw Error('Starter job time budget reached. Review progress before resuming.');
       this.job.steps++; this.save();
       const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
       try {
-        const result = await this.execute(decision.name, decision.args, signal);
+        const result = await this.execute(decision.name, decision.args, signal,{jobDeadline:deadline});
         if(!signal.aborted)this.checkHostileRecovery();
         rememberScout(result);
         signal.throwIfAborted();
@@ -448,6 +450,10 @@ export class SurvivalJob {
         if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
         if(!signal.aborted)this.checkHostileRecovery();
+        if(error.code==='MINING_DEADLINE_INSUFFICIENT'){
+          remember({action:decision.name,args:decision.args,error:error.message,code:error.code,result:error.result});
+          this.stop(error.message);throw error;
+        }
         rememberScout(error.result);
         signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);

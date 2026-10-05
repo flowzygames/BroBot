@@ -48,6 +48,11 @@ function actionFixture(){
  const item={name:'shears',type:bot.registry.itemsByName.shears.id,count:1};bot.inventory.items=()=>[item];bot.equip=async i=>{bot.heldItem=i;};bot.canDigBlock=()=>true;
  return{bot,cells};
 }
+test('descent admits mining against its local twenty-second deadline too',async()=>{
+ const {bot}=actionFixture();let digs=0;bot.digTime=()=>15000;bot.dig=async()=>{digs++};
+ await assert.rejects(createActions(bot).execute('descend_notch',{},undefined,{jobDeadline:performance.now()+60000,actionDeadline:performance.now()+60000}),{code:'MINING_DEADLINE_INSUFFICIENT'});
+ assert.equal(digs,0);assert.equal(terrainTrustStatus(bot).trusted,true);
+});
 // Drift away from the leaf so the stage guard is exercised independently of the footprint guard.
 test('descent rechecks stage after equipping and never digs from a drifting pose',async()=>{
  const {bot}=actionFixture(),listeners=bot.listenerCount('blockUpdate');let digs=0;bot.dig=async()=>{digs++;};bot.equip=async i=>{bot.heldItem=i;bot.entity.position=bot.entity.position.offset(-.3,0,0);};

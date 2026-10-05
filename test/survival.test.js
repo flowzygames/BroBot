@@ -4,6 +4,18 @@ import { SurvivalJob, nextStarterStep } from '../src/survival.js';
 import { parseCommand } from '../src/commands.js';
 import { STARTER_MIN_HEALTH } from '../src/starter-limits.js';
 
+test('starter passes one monotonic deadline and pauses without retry after mining admission refusal',async()=>{
+ let now=100,calls=0;const f=fixture({now:()=>now,maxDurationMs:10000});
+ f.job.execute=async(name,args,signal,context)=>{calls++;assert.equal(context.jobDeadline,10100);throw Object.assign(Error('Not enough remaining mining time'),{code:'MINING_DEADLINE_INSUFFICIENT',result:{mined:1,inventory_changes:{oak_log:1}}})};
+ f.job.start();await f.job.promise;assert.equal(calls,1);assert.equal(f.job.state().status,'paused');assert.deepEqual(f.job.state().excluded,{});assert.equal(f.job.state().history.at(-1).result.mined,1);
+ now=500;f.job.execute=async(name,args,signal,context)=>{assert.equal(context.jobDeadline,10500);f.job.stop('stop resumed fixture');signal.throwIfAborted()};
+ f.job.start({resume:true});await f.job.promise;assert.equal(Object.hasOwn(f.memory.get('survivalJob'),'jobDeadline'),false);
+});
+test('starter cannot start work when observation consumes its remaining deadline',async()=>{
+ let now=0,calls=0;const f=fixture({now:()=>now,maxDurationMs:1000});f.job.observe=async()=>{now=1001;return{wood:'oak'}};
+ f.job.execute=async()=>{calls++};f.job.start();await f.job.promise;assert.equal(calls,0);assert.match(f.job.state().reason,/time budget/);
+});
+
 test('hostile recovery waits for the interrupted action to drain and pauses afterward',async()=>{
  let began,drain;const started=new Promise(r=>{began=r});let recoveries=0,stops=0;
  const f=recoveryFixture({recoverFromHostile:async()=>{recoveries++;assert.ok(f.job.active);assert.equal(f.job.active.signal.aborted,false);return{separated:true};}});
