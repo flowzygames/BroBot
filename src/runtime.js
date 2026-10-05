@@ -308,8 +308,8 @@ export class Runtime {
   }
   checkHostileHurt(source) {
     const bot = this.bot, active = this.runner.active;
-    if (this.connection !== 'connected' || !bot || this.closed || !this.survival.active || !active
-      || active.controller.signal.aborted || active.name === 'eat') return;
+    if (this.connection !== 'connected' || !bot || this.closed || !this.survival.active
+      || this.survival.active.signal?.aborted || active?.controller.signal.aborted || active?.name === 'eat') return;
     const observedAnimal = source?.type === 'animal' && Number.isSafeInteger(source.id) && source.id >= 0
       && typeof source.name === 'string' && source.name.length > 0;
     if (source?.type !== 'hostile' && !observedAnimal) return;
@@ -317,6 +317,14 @@ export class Runtime {
     // health packets or guessing a missing source. Recovery may attempt one
     // bounded melee retreat; it does not pause the world or prevent another hit.
     if (Number.isFinite(bot.health) && bot.health <= 0) return;
+    if (!active) {
+      // The starter remains live while asynchronous observation settles between
+      // actions. An observed attack must not disappear through that idle gap.
+      // Pause the parent job; do not create a retreat without an active action.
+      if (!Number.isSafeInteger(source.id) || source.id < 0) return;
+      this.stop('Attack observed between starter actions: work paused. The world keeps running; reach safety before resuming.');
+      return;
+    }
     if (observedAnimal) {
       // Neutral animals can become attackers (for example a polar bear near
       // its cub). An observed hit must interrupt work even though the registry
