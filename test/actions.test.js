@@ -2538,3 +2538,25 @@ test('private soil action has no public definition and refuses unowned entry wit
   await assert.rejects(actions.excavateSoil(), /owned internal invocation/)
   assert.equal(writes, 0)
 })
+
+for(const mode of ['stable empty','missing column','skipped history','native fallback','changed context','away and back'])test(`ordinary search evidence stays conservative for ${mode}`,async t=>{
+  t.mock.method(performance,'now',()=>1000)
+  const bot=fakeBot(),air=registry.blocksByName.air
+  bot.entity.velocity=new Vec3(0,0,0)
+  let emitted=false
+  bot.world=mode==='native fallback'?{}:{getColumn:()=>{
+    if(mode==='changed context'&&!emitted){emitted=true;const p=new Vec3(0,64,0);bot.emit('blockUpdate',{position:p},{position:p})}
+    if(mode==='away and back'&&!emitted){emitted=true;const p=bot.entity.position.clone();bot.entity.position=p.offset(1,0,0);bot.emit('move');bot.entity.position=p;bot.emit('move')}
+    return mode==='missing column'?null:{sections:Array(24).fill({palette:[air.defaultState]})}
+  }}
+  const actions=createActions(bot),runner=new ActionRunner(),parent=new AbortController()
+  const args={block:'stone',count:1,radius:4,...(mode==='skipped history'?{skip_positions:[{x:1,y:63,z:0}]}:{})}
+  let result
+  await assert.rejects(runner.run('collect',signal=>actions.execute('collect',args,signal,{parentSignal:parent.signal,starterScope:'evidence-fixture'}),()=>actions.stop(),parent.signal),error=>{result=error.result;return Boolean(result)})
+  assert.equal(result.ordinary_search.complete_empty,mode==='stable empty')
+  assert.equal(result.ordinary_search.collection_loop_stop,'no_ranked_candidates')
+  assert.equal(result.mined,0)
+  if(mode==='native fallback')assert.equal(result.ordinary_search.coverage_complete,false)
+  if(mode==='missing column')assert.ok(result.ordinary_search.unloaded_columns>0)
+  if(['changed context','away and back'].includes(mode))assert.equal(result.ordinary_search.context_stable,false)
+})
