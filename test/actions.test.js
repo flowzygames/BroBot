@@ -2417,3 +2417,33 @@ test('starter pickup admission uses allowance left after repeated route planning
  assert.ok(last.estimated_ms<6000);assert.ok(last.estimated_ms>last.available_ms)
  assert.equal(result.deferred_drops.length,0);assert.equal(bot.listenerCount('playerCollect'),0)
 })
+
+test('real controller keeps a dense collection cursor through five pages and still verifies routes',async t=>{
+ t.mock.method(performance,'now',()=>1000)
+ const {Runtime}=await import('../src/runtime.js'),{SurvivalJob}=await import('../src/survival.js')
+ const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air,opening=new Vec3(-25,48,-4)
+ bot.addItem('wooden_pickaxe',1);bot.addItem('stick',2);bot.food=20;bot.entity.velocity=new Vec3(0,0,0)
+ bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState,air.defaultState]})})}
+ bot.blockAt=p=>{p=p.floored();const empty=p.equals(opening);return{name:empty?'air':'stone',type:empty?air.id:stone.id,position:p,boundingBox:empty?'empty':'block'}}
+ let routes=0,digs=0
+ bot.pathfinder.getPathFromTo=function*(){routes++;yield{result:{status:'noPath',path:[]}}}
+ bot.dig=async()=>{digs++}
+ const actions=createActions(bot),runner=new ActionRunner(),runtime={bot,actions,runner,connection:'connected',progression:{definitions:[]},definitions:()=>definitions}
+ const saved={},executed=[],outcomes=[]
+ const execute=async(name,args,signal,context={})=>{
+  if(name!=='inspect')executed.push(name)
+  try{return await Runtime.prototype.execute.call(runtime,name,args,signal,{...context,starterScope:'integration/search-pages'})}
+  catch(error){if(name==='collect')outcomes.push(error.result);throw error}
+ }
+ const job=new SurvivalJob({memory:{get:(k,d)=>saved[k]??d,set:(k,v)=>{saved[k]=structuredClone(v)}},snapshot:()=>actions.snapshot(),
+  observe:async signal=>{await execute('inspect',{radius:1},signal);return{wood:'oak'}},execute,stopActions:()=>runner.stop(),context:'dense-pages',maxSteps:5,intervalMs:0})
+ try{
+  job.start();await job.promise
+  assert.deepEqual(executed,Array(5).fill('collect'))
+  assert.ok(outcomes.slice(0,4).every(r=>r.search_continuation_saved&&r.failures.length===0))
+  assert.equal(outcomes[0].search_continued,false)
+  assert.ok(outcomes.slice(1).every(r=>r.search_continued))
+  assert.ok(outcomes.at(-1).failures.length>0)
+  assert.ok(routes>0);assert.equal(digs,0);assert.equal(job.state().scouts,0)
+ }finally{job.stop('fixture done');actions.stop()}
+})

@@ -1264,3 +1264,64 @@ test('unrelated terrain revisions do not suppress or spend a valid tree clearanc
  f.job.start();await f.job.promise
  assert.deepEqual(executed,['collect','collect','dig_at']);assert.equal(f.job.state().clearings,1)
 })
+
+function emptySearchPage(continued, overrides={}) {
+ return Object.assign(Error('Bounded search has another page'),{result:{completed:false,mined:0,failures:[],search_limited:true,search_continued:continued,search_continuation_saved:true,planning_limited:false,pickup_limited:false,...overrides}})
+}
+test('starter continues five resource-search pages before scouting and records no false progress',async()=>{
+ const f=fixture({maxSteps:5}),executed=[];let pages=0
+ f.add('wooden_pickaxe',1);f.add('stick',2)
+ f.job.execute=async(name)=>{
+  executed.push(name)
+  if(name==='collect'&&++pages<5)throw emptySearchPage(pages>1)
+  if(name==='collect'){f.add('cobblestone',3);return{mined:3,inventory_changes:{cobblestone:3}}}
+  return{}
+ }
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,Array(5).fill('collect'));assert.equal(f.job.state().scouts,0)
+ assert.equal(f.counts().cobblestone,3)
+ assert.ok(f.job.state().history.slice(0,4).every(h=>h.error&&!h.progress))
+})
+for(const kind of ['fresh restarts','exhausted','planning failure','mining failure','typed refusal'])test(`search continuation does not suppress recovery for ${kind}`,async()=>{
+ const f=fixture({maxSteps:3}),executed=[];let pages=0
+ f.add('wooden_pickaxe',1);f.add('stick',2)
+ f.job.execute=async(name)=>{
+  executed.push(name)
+  if(name==='collect'){
+   pages++;const error=emptySearchPage(pages>1)
+   if(kind==='fresh restarts')error.result.search_continued=false
+   if(kind==='exhausted')error.result.search_continuation_saved=false
+   if(kind==='planning failure')error.result.planning_limited=true
+   if(kind==='mining failure')error.result.failures=[{error:'No safe route'}]
+   if(kind==='typed refusal')error.code='COLLECTION_PLANNING_LIMIT'
+   throw error
+  }
+  return{}
+ }
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','explore'])
+})
+test('fresh crafting inventory supersedes a saved resource-search continuation',async()=>{
+ const f=fixture({maxSteps:3}),executed=[];let observations=0,pages=0
+ f.add('wooden_pickaxe',1);f.add('stick',2);f.add('crafting_table',1)
+ f.job.observe=async()=>{if(++observations===3)f.add('cobblestone',3);return{wood:'oak'}}
+ f.job.execute=async(name,args)=>{executed.push(name);if(name==='collect')throw emptySearchPage(++pages>1);return f.execute(name,args)}
+ f.job.start();await f.job.promise
+ assert.deepEqual(executed,['collect','collect','craft']);assert.equal(f.counts().stone_pickaxe,1)
+})
+test('resumable search pages still obey the starter step budget',async()=>{
+ const f=fixture({maxSteps:3});let pages=0
+ f.add('wooden_pickaxe',1);f.add('stick',2)
+ f.job.execute=async()=>{throw emptySearchPage(++pages>1)}
+ f.job.start();await f.job.promise
+ assert.equal(pages,3);assert.equal(f.job.state().steps,3);assert.equal(f.job.state().status,'blocked')
+})
+test('cancellation and the time budget still stop saved search pages',async()=>{
+ for(const stop of ['cancel','deadline']){
+  let now=0,pages=0;const f=fixture({now:()=>now,maxDurationMs:1000})
+  f.add('wooden_pickaxe',1);f.add('stick',2)
+  f.job.execute=async()=>{pages++;if(pages===2){if(stop==='cancel')f.job.stop('Player stopped search');else now=1001}throw emptySearchPage(pages>1)}
+  f.job.start();await f.job.promise;assert.equal(pages,2)
+  assert.match(f.job.state().reason,stop==='cancel'?/Player stopped search/:/time budget/)
+ }
+})
