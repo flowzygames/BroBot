@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "archive": "brobot-candidate-9b3a070f539a.zip",
+  "sha256": "d55097c56626605046d74122639df33f9e720707c10a5868f76f33252f5e839d",
+  "bytes": 1851722,
+  "sourceCommit": "9b3a070f539a68015eb50ae367a86f0f1a29df7b",
+  "sourceTree": "4bed6c62a78079aaf4db837c3714dd3a89b96574",
+  "manifestSha256": "5ca6283756deda56750d8b8b2b6a974a4a7febc9fcffe55dd84a8bee3bfff34c"
+}
