@@ -2470,3 +2470,71 @@ for(const event of ['blockUpdate','chunkColumnLoad'])test(`scoped empty cursor r
   assert.equal(digs,0)
  }finally{actions.stop()}
 })
+
+for (const mode of ['false', 'throw', 'invalid']) test(`physical ownership admission fails closed for ${mode}`, async () => {
+  const bot = fakeBot(); let writes = 0
+  bot.pathfinder.goto = async () => { writes++ }
+  bot.pathfinder.setGoal = () => { writes++ }
+  bot.clearControlStates = () => { writes++ }
+  const ownershipGuard = mode === 'invalid' ? true : () => { if (mode === 'throw') throw Error('retired'); return false }
+  await assert.rejects(createActions(bot).execute('go_to', { x: 2, y: 64, z: 0 }, undefined, { ownershipGuard }), /ownership/i)
+  assert.equal(writes, 0)
+})
+
+test('retired private action drains without clearing successor controls in finally or late cleanup', async () => {
+  const bot = fakeBot(); let current = true, release, writes = 0
+  const actions = createActions(bot)
+  bot.pathfinder.goto = () => new Promise(resolve => { release = resolve })
+  const pending = actions.execute('go_to', { x: 2, y: 64, z: 0 }, undefined, { ownershipGuard: () => current })
+  while (!release) await new Promise(resolve => setImmediate(resolve))
+  current = false
+  bot.pathfinder.setGoal = () => { writes++ }
+  bot.clearControlStates = () => { writes++ }
+  bot.stopDigging = () => { writes++ }
+  bot.deactivateItem = () => { writes++ }
+  actions.stop()
+  assert.equal(writes, 0)
+  await assert.rejects(actions.execute('go_to', { x: 2, y: 64, z: 0 }), /physical action is running/)
+  release()
+  await assert.rejects(pending, /physical ownership changed/)
+  actions.stop()
+  assert.equal(writes, 0)
+})
+
+test('owned private cancellation still stops controls immediately', async () => {
+  const bot = fakeBot(); let release, clears = 0, goals = 0
+  bot.pathfinder.goto = () => new Promise(resolve => { release = resolve })
+  bot.pathfinder.setGoal = () => { goals++ }
+  bot.clearControlStates = () => { clears++ }
+  const actions = createActions(bot), pending = actions.execute('go_to', { x: 2, y: 64, z: 0 }, undefined, { ownershipGuard: () => true })
+  while (!release) await new Promise(resolve => setImmediate(resolve))
+  actions.stop()
+  assert.ok(goals > 0 && clears > 0)
+  release()
+  await assert.rejects(pending, /cancelled/i)
+})
+
+test('private stop rechecks ownership between reentrant physical cleanup hooks', async () => {
+  const bot = fakeBot(); let current = true, release, successorWrites = 0
+  bot.pathfinder.goto = () => new Promise(resolve => { release = resolve })
+  const actions = createActions(bot), pending = actions.execute('go_to', { x: 2, y: 64, z: 0 }, undefined, { ownershipGuard: () => current })
+  while (!release) await new Promise(resolve => setImmediate(resolve))
+  bot.pathfinder.setGoal = () => { current = false }
+  bot.stopDigging = () => { successorWrites++ }
+  bot.clearControlStates = () => { successorWrites++ }
+  bot.deactivateItem = () => { successorWrites++ }
+  actions.stop()
+  release()
+  await assert.rejects(pending, /physical ownership changed/)
+  assert.equal(successorWrites, 0)
+})
+
+test('private soil action has no public definition and refuses unowned entry without controls', async () => {
+  const bot = fakeBot(), actions = createActions(bot); let writes = 0
+  bot.pathfinder.setGoal = () => { writes++ }
+  bot.clearControlStates = () => { writes++ }
+  assert.equal(definitions.some(def => def.name === 'private_soil_stair' || def.function?.name === 'private_soil_stair'), false)
+  await assert.rejects(actions.execute('private_soil_stair', {}), /owned internal invocation/)
+  await assert.rejects(actions.excavateSoil(), /owned internal invocation/)
+  assert.equal(writes, 0)
+})

@@ -1,3 +1,4 @@
+import { executeSoilStair } from './experimental/soil-stair-execute.js'
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { pickupRouteBudget, PICKUP_ROUTE_BUDGET } from './pickup-route-budget.js'
@@ -112,11 +113,14 @@ function matchesPlacedBlock (actual, item) {
 }
 
 /** One serialized physical action at a time. In-flight inventory operations drain before reuse. */
+const PRIVATE_SOIL = Symbol('private soil executor')
 export function createActions (bot, { memory, log = () => {}, movementBoundary = () => null, starterProtectedPositions = () => [] } = {}) {
   configureCollisionMargin(bot)
   configureCollisionContact(bot)
   let active = null
   let lastSession = null
+  let lastOwnershipGuard = null
+  const owns = guard => { try { return guard == null || guard() === true } catch { return false } }
   let movements = null
   const emptySearch = new EmptySearchContinuation(bot)
   const dropRetryCache = new DropRetryCache(bot)
@@ -150,7 +154,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return positions.length ? bot.blockAt(positions[0]) : null
   }
   const staleSession = session => session && (session.changed || bot.entity !== session.entity || bot._client !== session.client || dimension() !== session.dimension)
-  const checked = ctx => { assertTerrainTrusted(bot); if (staleSession(ctx?.session)) throw new Error('Action cancelled: play session changed'); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
+  const checked = ctx => { assertTerrainTrusted(bot); assert(owns(ctx?.ownershipGuard), 'Action cancelled: physical ownership changed'); if (staleSession(ctx?.session)) throw new Error('Action cancelled: play session changed'); if (ctx?.signal?.aborted || ctx?.cancelled) throw abortError(); assert(bot.entity?.position, 'Bot has not spawned'); if (bot.health != null) assert(bot.health > 0, 'Bot is dead') }
   const step = async (ctx, fn) => { checked(ctx); const result = await fn(); checked(ctx); return result }
 
   function stop ({ sessionChanged = false, finishedCleanup = false } = {}) {
@@ -160,14 +164,15 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     // Runner cleanup can call the retired facade again after its active lock
     // was released. Its last admitted session still owns inventory cleanup.
     sessionChanged ||= Boolean(staleSession(lastSession))
+    const ownershipGuard = active?.ownershipGuard ?? lastOwnershipGuard
     if (active) { active.cancelled = true; active.controller.abort() }
-    try { bot.pathfinder?.setGoal(null) } catch {}
-    try { bot.stopDigging?.() } catch {}
+    try { if (owns(ownershipGuard)) bot.pathfinder?.setGoal(null) } catch {}
+    try { if (owns(ownershipGuard)) bot.stopDigging?.() } catch {}
     // Switching slots cancels a drawn bow without releasing an unintended arrow.
-    try { if (!sessionChanged && bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot?.(((bot.quickBarSlot ?? 0) + 1) % 9) } catch {}
-    try { if (!sessionChanged) bot.deactivateItem?.() } catch {}
-    try { bot.clearControlStates?.() } catch {}
-    try { if (!sessionChanged && bot.currentWindow) Promise.resolve(bot.closeWindow(bot.currentWindow)).catch(() => {}) } catch {}
+    try { if (owns(ownershipGuard) && !sessionChanged && bot.usingHeldItem && bot.heldItem?.name === 'bow') bot.setQuickBarSlot?.(((bot.quickBarSlot ?? 0) + 1) % 9) } catch {}
+    try { if (owns(ownershipGuard) && !sessionChanged) bot.deactivateItem?.() } catch {}
+    try { if (owns(ownershipGuard)) bot.clearControlStates?.() } catch {}
+    try { if (owns(ownershipGuard) && !sessionChanged && bot.currentWindow) Promise.resolve(bot.closeWindow(bot.currentWindow)).catch(() => {}) } catch {}
   }
 
   async function pause (ctx, ms) {
@@ -767,6 +772,72 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
+  async function privateSoilStair (args, ctx) {
+    assert(ctx.privateSoil === PRIVATE_SOIL && typeof ctx.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
+    const pathfinder = bot.pathfinder, parentGuard = ctx.ownershipGuard
+    let expectedMovement = null, expectedNeighbors = null
+    const ownedControl = () => owns(parentGuard) && bot.pathfinder === pathfinder
+      && (expectedMovement === null || pathfinder.movements === expectedMovement)
+    ctx.ownershipGuard = ownedControl
+    lastOwnershipGuard = ownedControl
+    configureMovement()
+    checked(ctx)
+    const base = pathfinder.movements
+    expectedMovement = base
+    expectedNeighbors = base.getNeighbors
+    const policyKeys = Object.keys(base).filter(key => !['bot', 'entityIntersections'].includes(key))
+    const copy = value => value instanceof Set ? new Set(value) : Array.isArray(value) ? [...value] : value
+    const policy = Object.fromEntries(policyKeys.map(key => [key, copy(base[key])]))
+    const validPolicy = () => ownedControl() && expectedMovement.getNeighbors === expectedNeighbors && policyKeys.every(key => {
+      const current = expectedMovement[key], expected = policy[key]
+      if (expected instanceof Set) return current instanceof Set && current.size === expected.size && [...expected].every(value => current.has(value))
+      if (Array.isArray(expected)) return Array.isArray(current) && current.length === expected.length && current.every((value, i) => value === expected[i])
+      return current === expected
+    })
+    const bound = movementBoundary()
+    assert(bound?.center, 'Private soil execution requires an explicit home boundary')
+    const home = new Vec3(bound.center.x, bound.center.y, bound.center.z)
+    const priorDeadline = ctx.operationDeadline
+    return executeSoilStair({
+      bot, home, signal: ctx.signal, operationDeadline: ctx.operationDeadline,
+      ownershipGuard: ownedControl, validatePolicy: validPolicy, protectedPositions: starterProtectedPositions,
+      halt: () => stop(),
+      mine: async (target, expectedBlock, validate, signal, deadline) => {
+        ctx.operationDeadline = Math.min(priorDeadline, deadline)
+        try { return await harvestBlock(ctx, target, { expectedBlock, requireCurrentReach: true, beforeDig: validate }) }
+        finally { ctx.operationDeadline = priorDeadline }
+      },
+      walk: async (route, stage, signal, deadline) => {
+        checked(ctx)
+        assert(ownedControl(), 'Private soil movement owner changed')
+        const edges = new Set()
+        for (let i = 1; i < route.length; i++) edges.add(`${route[i - 1].join(',')}>${route[i].join(',')}`)
+        const constrained = Object.create(base)
+        constrained.entityIntersections = { ...base.entityIntersections }
+        constrained.getNeighbors = function (node) {
+          return base.getNeighbors.call(this, node).filter(next => !next.toBreak?.length && !next.toPlace?.length && !next.parkour
+            && edges.has(`${node.x},${node.y},${node.z}>${next.x},${next.y},${next.z}`))
+        }
+        try {
+          expectedMovement = constrained
+          expectedNeighbors = constrained.getNeighbors
+          pathfinder.setMovements(constrained)
+          checked(ctx)
+          const target = new Vec3(...stage).floored()
+          const timeoutMs = Math.min(10000, deadline - performance.now())
+          assert(timeoutMs > 0, 'Private soil movement deadline reached')
+          await step(ctx, () => walkToGoal(bot, new goals.GoalBlock(target.x, target.y, target.z), { signal, timeoutMs, ownershipGuard: ownedControl }))
+        } finally {
+          if (ownedControl() && pathfinder.movements === constrained) {
+            expectedMovement = base
+            expectedNeighbors = base.getNeighbors
+            pathfinder.setMovements(base)
+          }
+        }
+      }
+    })
+  }
+
   async function moveOutOfBlock (ctx, p) {
     const feet = bot.entity.position.floored()
     const position = bot.entity.position
@@ -1202,6 +1273,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   }
 
   const handlers = {
+    private_soil_stair: privateSoilStair,
     starter_retreat: (args,ctx) => runStarterRetreat(bot,args,{signal:ctx.signal,check:()=>checked(ctx),guard:ctx.recoveryGuard,abort:error=>{ctx.controller.abort(error);stop()},prepareMovement:()=>{configureMovement();return movements}}),
     inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt, descend_notch: descendNotch,
     go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius, { returnable: args.returnable === true, walkingTimeoutMs: 45000 }); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
@@ -1359,7 +1431,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     emptySearch.dispatch(name, executionContext.parentSignal)
     assertTerrainTrusted(bot)
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
+    if (name === 'private_soil_stair') assert(executionContext.privateSoil === PRIVATE_SOIL && typeof executionContext.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
     assert(args && typeof args === 'object' && !Array.isArray(args), 'Action arguments must be an object')
+    assert(executionContext.ownershipGuard == null || typeof executionContext.ownershipGuard === 'function', 'Physical ownership guard must be a function')
+    assert(owns(executionContext.ownershipGuard), 'Action cancelled: physical ownership changed')
     assert(!active, 'Another physical action is running or draining after cancellation')
     if (signal?.aborted) throw abortError()
     assert(bot.entity?.position, 'Bot has not spawned')
@@ -1370,8 +1445,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const controller = new AbortController()
     const session = { entity: bot.entity, client: bot._client, dimension: dimension(), changed: false }
     lastSession = session
+    lastOwnershipGuard = executionContext.ownershipGuard ?? null
     const allowSprinting = !(executionContext.starterScope && name === 'explore' && args.returnable === true && !hasStarterFood(items()))
-    const ctx = { parentSignal:executionContext.parentSignal, runnerSignal:signal, allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const ctx = { privateSoil: executionContext.privateSoil, ownershipGuard: lastOwnershipGuard, parentSignal:executionContext.parentSignal, runnerSignal:signal, allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     // A coordinate is meaningful only in the play session that admitted it.
     // Latch transitions even if the dimension later changes back. Stop promptly,
@@ -1395,11 +1471,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     } finally {
       for (const event of sessionEvents) bot.removeListener(event, sessionChanged)
       signal?.removeEventListener('abort', cancel)
-      try { bot.pathfinder?.setGoal(null) } catch {}
-      try { bot.clearControlStates?.() } catch {}
+      try { if (owns(ctx.ownershipGuard)) bot.pathfinder?.setGoal(null) } catch {}
+      try { if (owns(ctx.ownershipGuard)) bot.clearControlStates?.() } catch {}
       active = null
     }
   }
 
-  return { execute, stop, invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
+  return { execute, stop, excavateSoil:(signal,context={})=>execute('private_soil_stair',{},signal,{...context,privateSoil:PRIVATE_SOIL}), invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
 }

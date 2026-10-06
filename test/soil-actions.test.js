@@ -1,0 +1,51 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { soilActions } from './helpers/soil-actions.js'
+import { terrainTrustStatus } from '../src/terrain-trust.js'
+
+const until = async predicate => { const deadline = Date.now() + 4000; while (!predicate()) { assert.ok(Date.now() < deadline, 'fixture wait expired'); await new Promise(resolve => setImmediate(resolve)) } }
+
+test('private facade runs real mining receipt protocol and preserves stone', async () => {
+  const f = soilActions(), result = await f.run()
+  assert.equal(result.confirmed_soil_edits, 5)
+  assert.equal(result.verified_descents, 2)
+  assert.equal(f.counters().digs, 5)
+  assert.equal(result.stone_mined, false)
+  assert.equal(terrainTrustStatus(f.bot).trusted, true)
+  assert.equal(f.runner.active, null)
+})
+
+test('private facade refuses changed policy during final mining aim without digging', async () => {
+  const f = soilActions()
+  f.bot.lookAt = async () => { f.bot.pathfinder.movements.canDig = true }
+  await assert.rejects(f.run(), /movement policy changed/)
+  assert.equal(f.counters().digs, 0)
+  assert.equal(terrainTrustStatus(f.bot).trusted, true)
+})
+
+test('private facade pathfinder takeover during aim survives outer and late cleanup', async () => {
+  const f = soilActions(); let writes = 0
+  f.bot.lookAt = async () => {
+    f.bot.pathfinder = { setGoal() { writes++ }, movements: {} }
+    f.bot.clearControlStates = () => { writes++ }
+    f.bot.stopDigging = () => { writes++ }
+  }
+  await assert.rejects(f.run(), /ownership changed/)
+  f.actions.stop()
+  assert.equal(writes, 0)
+  assert.equal(f.counters().digs, 0)
+})
+
+test('cancelling an attempted private dig quarantines terrain and retains the runner lock through drain', async () => {
+  const f = soilActions(); let release, entered = false
+  f.bot.dig = () => new Promise(resolve => { entered = true; release = resolve })
+  const pending = f.run()
+  await until(() => entered)
+  f.runner.stop('owner cancelled fixture')
+  assert.equal(terrainTrustStatus(f.bot).trusted, false)
+  assert.ok(f.runner.active)
+  await assert.rejects(f.runner.run('other', async () => {}), /Still stopping/)
+  release()
+  await assert.rejects(pending, /owner cancelled fixture/)
+  assert.equal(f.runner.active, null)
+})

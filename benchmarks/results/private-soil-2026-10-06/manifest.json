@@ -1,0 +1,12 @@
+{
+  "kind": "prepared-private-soil-flat",
+  "testedCommit": "dc315dbc96d94f200e5c441046b0325b45246197",
+  "testedTree": "dc5f04e0263f32793568bca74ab1cfd9984cce31",
+  "archive": "prepared-flat.tar.gz",
+  "archiveSha256": "eb6ae3401f82ce1b6169341a20078c393b78361dbef1a4294378a5c31b2efab8",
+  "resultSha256": "2986857d50ca84feacb7aea4b6bd91239e737e0ff446cd0ae651d01fd1fcd964",
+  "passed": true,
+  "serverStopped": true,
+  "sourceChanged": false,
+  "limits": "Console-prepared flat Java1.21.8 geometry, fixed inventory and peaceful conditions. Private executor only. Not autonomous selection, a natural survival score, Bedrock play, or a public tool."
+}
