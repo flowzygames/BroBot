@@ -30,18 +30,22 @@ export class BlockSearchCursor {
     this.cell = 0
     this.done = false
     this.resumable = true
+    this.termination = null
+    this.unloadedColumns = new Set()
+    this.unknownCells = 0
   }
 
   finishSection (acceptedCount) {
     if (this.startedLayer !== this.iterator.apothem && acceptedCount >= this.count) {
       this.done = true
+      this.termination = 'candidate_cap'
       return
     }
     this.startedLayer = this.iterator.apothem
     this.section = this.iterator.next()
     this.begin = null
     this.cell = 0
-    if (!this.section) this.done = true
+    if (!this.section) { this.done = true; this.termination = 'traversal_complete' }
   }
 
   scan ({ accept, check = () => {}, now = () => performance.now(), budgetMs = 500, matchLimit = 65536 } = {}) {
@@ -49,17 +53,18 @@ export class BlockSearchCursor {
     if (typeof accept !== 'function' || typeof check !== 'function' || !Number.isFinite(budgetMs) || budgetMs <= 0 || budgetMs > 500 || !Number.isSafeInteger(matchLimit) || matchLimit < 1 || matchLimit > 65536) throw Error('Invalid block search page')
     const deadline = now() + budgetMs
     const positions = []
-    let inspected = 0, accepted = 0, limited = false
+    let inspected = 0, accepted = 0, limited = false, pauseReason = null
     try { while (!this.done) {
       check()
       // Unlike native findBlocks, also bound time spent on nonmatching cells.
       // The next unevaluated geometry remains available to a safe continuation.
-      if (now() >= deadline) { limited = true; break }
+      if (now() >= deadline) { limited = true; pauseReason = 'time_budget'; break }
       if (!this.begin) {
         const next = this.section
         const column = this.bot.world.getColumn(next.x, next.z)
         const sectionY = next.y + Math.abs(this.minY >> 4)
         const totalSections = this.height >> 4
+        if (sectionY >= 0 && sectionY < totalSections && !column) this.unloadedColumns.add(`${next.x},${next.z}`)
         if (sectionY < 0 || sectionY >= totalSections || !column || this.visited.has(next.toString())) {
           this.finishSection(positions.length)
           continue
@@ -72,10 +77,12 @@ export class BlockSearchCursor {
       }
       const point = this.begin.offset(this.cell >> 8, (this.cell >> 4) & 15, this.cell & 15)
       const block = this.bot.blockAt(point, true)
+      if (!block) this.unknownCells++
       if (block?.type === this.matching) {
         // Native's 65,537th matching callback is stopped before evaluation.
         // Leave this cell unconsumed so the next page retries that boundary.
-        if (++inspected > matchLimit || now() >= deadline) { limited = true; break }
+        if (++inspected > matchLimit) { limited = true; pauseReason = 'match_limit'; break }
+        if (now() >= deadline) { limited = true; pauseReason = 'time_budget'; break }
         if (accept(block)) {
           accepted++
           if (point.distanceTo(this.point) <= this.maxDistance) positions.push(point)
@@ -86,6 +93,9 @@ export class BlockSearchCursor {
     } } catch (error) { this.resumable = false; throw error }
     this.resumable = limited && accepted === 0
     positions.sort((a, b) => a.distanceTo(this.point) - b.distanceTo(this.point))
-    return { positions: positions.slice(0, this.count), limited, inspected, accepted, done: this.done, resumable: this.resumable }
+    return { positions: positions.slice(0, this.count), limited, inspected, accepted, done: this.done, resumable: this.resumable,
+      termination: this.termination ?? pauseReason,
+      coverageComplete: this.done && this.termination === 'traversal_complete' && this.unloadedColumns.size === 0 && this.unknownCells === 0,
+      unloadedColumns: this.unloadedColumns.size, unknownCells: this.unknownCells }
   }
 }

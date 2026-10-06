@@ -68,7 +68,7 @@ test('time limits preserve an unprocessed cell and exceptions invalidate the cur
   const bot = fixture({ dense: true }), make = () => new BlockSearchCursor(bot, { matching: registry.blocksByName.stone.id, point: bot.entity.position, maxDistance: 20 })
   const cursor = make(); let clock = 0, calls = 0
   const page = cursor.scan({ now: () => clock++, budgetMs: 2, accept: () => { calls++; return false } })
-  assert.equal(page.limited, true); assert.equal(calls, 0); assert.equal(cursor.cell, 0)
+  assert.equal(page.limited, true); assert.equal(page.termination,'time_budget'); assert.equal(page.coverageComplete,false); assert.equal(calls, 0); assert.equal(cursor.cell, 0)
   const next = cursor.scan({ now: () => 0, matchLimit: 1, accept: b => { assert.equal(b.position.toString(), '(0, 64, 0)'); return true } })
   assert.equal(next.accepted, 1)
   const failed = make()
@@ -79,4 +79,40 @@ test('time limits preserve an unprocessed cell and exceptions invalidate the cur
 for (const radius of [61,62,63,64]) test(`cursor admits widened maximum collection radius ${radius}`, async () => {
   const { sectionSearchDistance } = await import('../src/block-search.js')
   assert.doesNotThrow(() => new BlockSearchCursor(fixture(), {matching:registry.blocksByName.stone.id,point:new Vec3(0,64,0),maxDistance:sectionSearchDistance(radius)}))
+})
+
+test('completed traversal is distinguished from reaching the candidate count cap',()=>{
+  const bot=fixture({dense:true}), options={matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:20,count:9}
+  const capped=new BlockSearchCursor(bot,options).scan({now:()=>0,accept:()=>true})
+  assert.equal(capped.done,true);assert.equal(capped.termination,'candidate_cap');assert.equal(capped.coverageComplete,false)
+  // Continue until traversal is complete; no page may claim completion early.
+  const cursor=new BlockSearchCursor(bot,options);let page
+  do {page=cursor.scan({now:()=>0,accept:()=>false});if(page.limited)assert.equal(page.coverageComplete,false)} while(page.resumable)
+  assert.equal(page.termination,'traversal_complete');assert.equal(page.coverageComplete,true)
+})
+
+test('completed loaded traversal retains explicit missing-column uncertainty',()=>{
+  const bot=fixture({missing:true}),cursor=new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:20})
+  let page;do{page=cursor.scan({now:()=>0,accept:()=>false})}while(page.resumable)
+  assert.equal(page.termination,'traversal_complete');assert.ok(page.unloadedColumns>0);assert.equal(page.coverageComplete,false)
+})
+
+test('unknown cells and page-budget reasons never become complete coverage',()=>{
+  const bot=fixture({dense:true}),read=bot.blockAt
+  bot.blockAt=p=>p.x===0&&p.y===64&&p.z===0?null:read(p)
+  const cursor=new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:20})
+  let page;do{page=cursor.scan({now:()=>0,accept:()=>false})}while(page.resumable)
+  assert.equal(page.unknownCells,1);assert.equal(page.coverageComplete,false)
+  const limited=new BlockSearchCursor(fixture({dense:true}),{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:20})
+  const cap=limited.scan({now:()=>0,matchLimit:1,accept:()=>false})
+  assert.equal(cap.termination,'match_limit');assert.equal(cap.coverageComplete,false)
+})
+
+
+test('empty continuation pages retain uncertainty until traversal actually completes',()=>{
+  const bot=fixture({dense:true}),cursor=new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:4})
+  const first=cursor.scan({now:()=>0,matchLimit:1,accept:()=>false})
+  assert.equal(first.resumable,true);assert.equal(first.coverageComplete,false)
+  const final=cursor.scan({now:()=>0,accept:()=>false})
+  assert.equal(final.termination,'traversal_complete');assert.equal(final.coverageComplete,true)
 })
