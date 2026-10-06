@@ -45,7 +45,7 @@ test('private modeled executor makes five soil edits and two landings without mi
   assert.ok(result.landing_observations.every(sample => sample.onGround && sample.position[1] === sample.target[1]))
   assert.equal(result.stone_mined, false)
   assert.equal(f.digs.length, 5)
-  assert.equal(f.walks.length, 3)
+  assert.equal(f.walks.length, 4)
   assert.equal(f.bot.blockAt(new Vec3(...result.exposed_stone)).name, 'stone')
   assert.equal(f.bot.listenerCount('blockUpdate'), before)
 })
@@ -131,4 +131,52 @@ test('landing-only changed dependency is checked before the descent walk', async
   await assert.rejects(executeSoilStair(f.options), /dependency changed/)
   assert.equal(f.digs.length, index + 1)
   assert.equal(f.walks.length, 1 + plan.edits.slice(0, index).filter(edit => edit.landing).length)
+})
+
+
+test('final mining stage backs away from an offset second landing without weakening support guards', async () => {
+  const f = fixture(), walk = f.options.walk
+  f.options.walk = async (...args) => {
+    await walk(...args)
+    if (f.walks.length === 3) f.bot.entity.position.x += .19999997
+  }
+  const result = await executeSoilStair(f.options)
+  assert.equal(result.verified_descents, 2)
+  assert.equal(result.confirmed_soil_edits, 5)
+  assert.equal(result.mining_stage.onGround, true)
+  assert.equal(result.mining_stage.position[1], result.exposed_stone[1] + 2)
+  assert.equal(result.stone_mined, false)
+})
+
+for (const mode of ['cancel', 'owner', 'terrain', 'visibility']) test(`final climb ${mode} failure retains five edits without completed access`, async () => {
+  const f = fixture(), walk = f.options.walk
+  f.options.walk = async (...args) => {
+    await walk(...args)
+    if (f.walks.length !== 4) return
+    if (mode === 'cancel') f.controller.abort(Error('cancel final climb'))
+    if (mode === 'owner') f.retire()
+    if (mode === 'terrain') f.overrides.set('1,63,0', 'air')
+    if (mode === 'visibility') f.bot.world.raycast = () => null
+  }
+  await assert.rejects(executeSoilStair(f.options), error => {
+    assert.equal(error.result.completed, false)
+    assert.equal(error.result.confirmed_soil_edits, 5)
+    assert.equal(error.result.verified_descents, 2)
+    return true
+  })
+  assert.equal(f.digs.length, 5)
+})
+
+test('changed final-climb support after the fifth edit stops before the fourth walk', async () => {
+  const f = fixture(), mine = f.options.mine
+  f.options.mine = async (...args) => {
+    await mine(...args)
+    if (f.digs.length === 5) f.overrides.set('1,63,0', 'air')
+  }
+  await assert.rejects(executeSoilStair(f.options), error => {
+    assert.equal(error.result.confirmed_soil_edits, 5)
+    assert.equal(error.result.completed, false)
+    return true
+  })
+  assert.equal(f.walks.length, 3)
 })
