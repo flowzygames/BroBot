@@ -32,3 +32,17 @@ test('trace separates parent cancellation from action cancellation and records c
  const clear=events.find(e=>e.event==='clear');assert.equal(clear.parentAborted,kind==='parent');assert.equal(clear.actionAborted,kind==='action');if(kind==='column')assert.deepEqual(clear.trigger.column,{x:-16,y:0,z:32})
  }finally{f.state.clear();restore()}}
 })
+
+test('diagnostic records distant events that preserve a scoped pending lease',()=>{
+ const events=[],restore=installSearchTrace(EmptySearchContinuation,e=>events.push(e)),f=fixture()
+ try{
+  const options={key:'same',parentSignal:f.parent.signal,actionSignal:f.action.signal,createCursor:()=>({resumable:true}),terrainDependency:{origin:new Vec3(0,64,0),radius:33}}
+  f.state.retain(f.state.begin(options));const far={position:new Vec3(190,61,153)};f.bot.emit('blockUpdate',far,far)
+  const seen=events.find(e=>e.event==='terrain_observed');assert.equal(seen.leaseStillOwned,true);assert.equal(seen.terrainDependency.radius,33)
+  assert.equal(f.state.begin(options).resumed,true)
+ }finally{f.state.clear();restore()}
+})
+test('malformed event getters cannot make diagnostic wrapping suppress invalidation',()=>{
+ const restore=installSearchTrace(EmptySearchContinuation,()=>{}),f=fixture()
+ try{f.state.retain(f.begin());const bad={get position(){throw Error('unreadable')}};assert.doesNotThrow(()=>f.bot.emit('blockUpdate',bad,bad));assert.equal(f.state.lease,null)}finally{f.state.clear();restore()}
+})

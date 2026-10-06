@@ -50,3 +50,54 @@ test('expiry and aborted settlement cannot resurrect a cursor', async () => {
   const other = fixture(), active = other.begin(); other.parent.abort()
   assert.equal(other.state.retain(active), false); assert.equal(other.state.lease, null)
 })
+
+const scope = (radius=33,origin=new Vec3(0,64,0)) => ({origin,radius})
+const block = p => ({position:p})
+function scopedStage(f,dependency=scope()) {
+ const lease=f.begin({terrainDependency:dependency});assert.ok(lease);assert.equal(f.state.retain(lease),true);return lease
+}
+for(const [label,event,args,retained] of [
+ ['far block update','blockUpdate',[block(new Vec3(190,61,153)),block(new Vec3(190,61,153))],true],
+ ['boundary neighbor','blockUpdate',[block(new Vec3(33,64,0)),block(new Vec3(33,64,0))],false],
+ ['outside boundary','blockUpdate',[block(new Vec3(34,64,0)),block(new Vec3(34,64,0))],true],
+ ['old outside new inside','blockUpdate',[block(new Vec3(100,64,0)),block(new Vec3(0,64,0))],false],
+ ['missing old block','blockUpdate',[null,block(new Vec3(100,64,0))],false],
+ ['fractional event position','blockUpdate',[block(new Vec3(100.5,64,0)),block(new Vec3(100,64,0))],false],
+ ['far loaded column','chunkColumnLoad',[new Vec3(64,0,32)],true],
+ ['far negative unloaded column','chunkColumnUnload',[new Vec3(-64,0,-32)],true],
+ ['intersecting loaded column','chunkColumnLoad',[new Vec3(32,0,0)],false],
+ ['intersecting negative column','chunkColumnUnload',[new Vec3(-48,0,0)],false],
+ ['nonaligned column','chunkColumnLoad',[new Vec3(1,0,0)],false],
+ ['malformed column height','chunkColumnUnload',[new Vec3(64,1,32)],false],
+ ['global trust loss','terrainUntrusted',[Error('uncertain terrain')],false]
+])test(`collection dependency scope handles ${label}`,()=>{
+ const f=fixture(),lease=scopedStage(f)
+ try{f.bot.emit(event,...args);assert.equal(f.state.lease===lease,retained);if(retained){const next=f.begin({terrainDependency:scope()});assert.equal(next.resumed,true);assert.equal(next.cursor,lease.cursor)}}finally{f.state.clear()}
+})
+test('column tangency is relevant at both positive and negative boundaries',()=>{
+ for(const x of [32,-48]){const f=fixture();scopedStage(f,scope(32));f.bot.emit('chunkColumnLoad',new Vec3(x,0,0));assert.equal(f.state.lease,null)}
+})
+test('caller scope mutation cannot alter the retained dependency boundary',()=>{
+ const f=fixture(),dependency=scope(),lease=scopedStage(f,dependency)
+ dependency.origin.x=1000;dependency.radius=1
+ f.bot.emit('blockUpdate',block(new Vec3(0,64,0)),block(new Vec3(0,64,0)))
+ assert.equal(f.state.lease,null);assert.equal(lease.terrainDependency.origin.x,0);assert.equal(lease.terrainDependency.radius,33)
+})
+for(const kind of ['radius','origin','remove','add'])test(`changed ${kind} scope cannot reuse a cursor`,()=>{
+ const f=fixture(),old=kind==='add'?f.stage():scopedStage(f)
+ const dependency=kind==='radius'?scope(34):kind==='origin'?scope(33,new Vec3(1,64,0)):kind==='remove'?null:scope()
+ const next=f.begin({terrainDependency:dependency});assert.equal(next.resumed,false);assert.notEqual(next.cursor,old.cursor);f.state.clear()
+})
+for(const dependency of [{},{origin:new Vec3(0,64,0),radius:66},{origin:new Vec3(.5,64,0),radius:33},{origin:new Vec3(0,64,0),radius:NaN}])test(`malformed dependency clears an old lease: ${JSON.stringify(dependency)}`,()=>{
+ const f=fixture();scopedStage(f);assert.equal(f.begin({terrainDependency:dependency}),null);assert.equal(f.state.lease,null)
+})
+test('scoped cursors preserve all exact pose and parent cancellation guards',()=>{
+ for(const kind of ['yaw','velocity','parent']){const f=fixture();scopedStage(f)
+ if(kind==='parent')f.parent.abort();else{if(kind==='yaw')f.bot.entity.yaw+=.001;else f.bot.entity.velocity.y=-.001;f.bot.emit('physicsTick')}
+ assert.equal(f.state.lease,null)
+ }
+})
+test('a throwing terrain event geometry fails closed',()=>{
+ const f=fixture();scopedStage(f);const bad={get position(){throw Error('bad geometry')}}
+ assert.doesNotThrow(()=>f.bot.emit('blockUpdate',bad,bad));assert.equal(f.state.lease,null)
+})

@@ -2418,7 +2418,7 @@ test('starter pickup admission uses allowance left after repeated route planning
  assert.equal(result.deferred_drops.length,0);assert.equal(bot.listenerCount('playerCollect'),0)
 })
 
-test('real controller keeps a dense collection cursor through five pages and still verifies routes',async t=>{
+for(const farEvents of [false,true])test(`real controller keeps a dense collection cursor through five pages with distant events=${farEvents}`,async t=>{
  t.mock.method(performance,'now',()=>1000)
  const {Runtime}=await import('../src/runtime.js'),{SurvivalJob}=await import('../src/survival.js')
  const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air,opening=new Vec3(-25,48,-4)
@@ -2436,7 +2436,7 @@ test('real controller keeps a dense collection cursor through five pages and sti
   catch(error){if(name==='collect')outcomes.push(error.result);throw error}
  }
  const job=new SurvivalJob({memory:{get:(k,d)=>saved[k]??d,set:(k,v)=>{saved[k]=structuredClone(v)}},snapshot:()=>actions.snapshot(),
-  observe:async signal=>{await execute('inspect',{radius:1},signal);return{wood:'oak'}},execute,stopActions:()=>runner.stop(),context:'dense-pages',maxSteps:5,intervalMs:0})
+  observe:async signal=>{await execute('inspect',{radius:1},signal);if(farEvents){const p=new Vec3(190,61,153);bot.emit('blockUpdate',{position:p},{position:p});bot.emit('chunkColumnLoad',new Vec3(64,0,32))}return{wood:'oak'}},execute,stopActions:()=>runner.stop(),context:'dense-pages',maxSteps:5,intervalMs:0})
  try{
   job.start();await job.promise
   assert.deepEqual(executed,Array(5).fill('collect'))
@@ -2446,4 +2446,27 @@ test('real controller keeps a dense collection cursor through five pages and sti
   assert.ok(outcomes.at(-1).failures.length>0)
   assert.ok(routes>0);assert.equal(digs,0);assert.equal(job.state().scouts,0)
  }finally{job.stop('fixture done');actions.stop()}
+})
+
+for(const event of ['blockUpdate','chunkColumnLoad'])test(`scoped empty cursor revisits a skipped palette section after local ${event}`,async t=>{
+ t.mock.method(performance,'now',()=>1000)
+ const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air,dirt=registry.blocksByName.dirt,target=new Vec3(1,64,0),opening=target.offset(0,1,0)
+ bot.entity.velocity=new Vec3(0,0,0);let changed=false,routes=0,digs=0
+ bot.world={getColumn:(x,z)=>({sections:Array.from({length:24},(_,i)=>({palette:x===0&&z===0&&i===8?(changed?[dirt.defaultState,stone.defaultState,air.defaultState]:[dirt.defaultState]):[stone.defaultState]}))})}
+ bot.blockAt=p=>{
+  p=p.floored();const inSection=p.x>=0&&p.x<16&&p.y>=64&&p.y<80&&p.z>=0&&p.z<16
+  const type=changed&&p.equals(opening)?air:changed&&p.equals(target)?stone:inSection?dirt:stone
+  return{name:type.name,type:type.id,position:p,boundingBox:type===air?'empty':'block'}
+ }
+ bot.pathfinder.getPathFromTo=function*(){routes++;yield{result:{status:'noPath',path:[]}}};bot.dig=async()=>{digs++}
+ const actions=createActions(bot),parent=new AbortController(),runner=new ActionRunner()
+ const collect=async()=>{let signal,outcome;await assert.rejects(runner.run('collect',s=>{signal=s;return actions.execute('collect',{block:'stone',count:1,radius:32},s,{parentSignal:parent.signal,starterScope:'scope/palette'})},()=>actions.stop({finishedCleanup:Boolean(signal&&!signal.aborted)}),parent.signal),e=>{outcome=e.result;return Boolean(outcome)});return outcome}
+ try{
+  assert.equal((await collect()).search_continuation_saved,true)
+  changed=true
+  if(event==='blockUpdate')bot.emit(event,{position:target,name:'dirt'},bot.blockAt(target));else bot.emit(event,new Vec3(0,0,0))
+  const result=await collect();assert.equal(result.search_continued,false)
+  assert.ok(result.failures.some(f=>f.position.x===target.x&&f.position.y===target.y&&f.position.z===target.z&&/Cannot dig/.test(f.error)))
+  assert.equal(digs,0)
+ }finally{actions.stop()}
 })
