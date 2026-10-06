@@ -1,0 +1,12 @@
+{
+  "kind": "prepared-private-owned-stone-collection",
+  "source": "00d6ddfd602b4e542188c252eb4cb9cc6fbe8fe0",
+  "archive": "prepared-owned-collection.tar.gz",
+  "archiveSha256": "9818537ab85fbb4311a6b57d4235c9577553ef89c85de50e9266465cd094349d",
+  "resultSha256": "8daef442b29277b531ef459793eb970f7cdd2a422539fb252967ea2745dd7ab7",
+  "passed": true,
+  "serverStopped": true,
+  "sourceChanged": false,
+  "cleanupErrors": [],
+  "limits": "Console-prepared Java 1.21.8 gate with supplied equipment, peaceful conditions, removed entities and random ticks disabled. Terrain is a copy of known failed seed 1542908414, with a specified early workstation pose and original home. Private executor only; not autonomous selection, a natural survival score, Bedrock play, or a public tool."
+}

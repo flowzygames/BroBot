@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { retainOperationResult } from './action-error-result.js'
 import { executeSoilStair } from './experimental/soil-stair-execute.js'
+import { collectExposedSoilStone } from './experimental/soil-stone-collect.js'
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
 import { pickupRouteBudget, PICKUP_ROUTE_BUDGET } from './pickup-route-budget.js'
@@ -661,7 +662,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return null
   }
 
-  async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null, dependentBlocks = [] } = {}) {
+  async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null, dependentBlocks = [], onConfirmed = null } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
     else await approachBlock(ctx, p)
     const original = loaded(p)
@@ -696,7 +697,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const current = validateTarget()
       assert(!current.canHarvest || current.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${current.name}; refusing to destroy it without drops`)
       beforeDig?.()
-      return confirmedMining({ bot, block: current, signal: ctx.signal, operationDeadline:ctx.operationDeadline, dependentBlocks })
+      const pending = confirmedMining({ bot, block: current, signal: ctx.signal, operationDeadline:ctx.operationDeadline, dependentBlocks })
+      return onConfirmed ? pending.then(receipt => { onConfirmed(receipt); return receipt }) : pending
     })
     assert(isAir(loaded(p)), `Confirmed mining target is no longer air`)
     return block.name
@@ -798,7 +800,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  async function privateSoilStair (args, ctx) {
+  async function privateSoilStair (args, ctx, collectStone = false) {
     assert(ctx.privateSoil === PRIVATE_SOIL && typeof ctx.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
     const pathfinder = bot.pathfinder, parentGuard = ctx.ownershipGuard
     let expectedMovement = null, expectedNeighbors = null
@@ -824,13 +826,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     assert(bound?.center, 'Private soil execution requires an explicit home boundary')
     const home = new Vec3(bound.center.x, bound.center.y, bound.center.z)
     const priorDeadline = ctx.operationDeadline
-    return executeSoilStair({
+    return (collectStone ? collectExposedSoilStone : executeSoilStair)({
+      ...(collectStone ? { exposure: args.exposure } : {}),
       bot, home, signal: ctx.signal, operationDeadline: ctx.operationDeadline,
       ownershipGuard: ownedControl, validatePolicy: validPolicy, protectedPositions: starterProtectedPositions,
       halt: () => stop(),
-      mine: async (target, expectedBlock, validate, signal, deadline, dependents) => {
+      mine: async (target, expectedBlock, validate, signal, deadline, dependents = [], onConfirmed = null) => {
         ctx.operationDeadline = Math.min(priorDeadline, deadline)
-        try { return await harvestBlock(ctx, target, { expectedBlock, requireCurrentReach: true, beforeDig: validate, dependentBlocks: dependents.map(cell=>loaded(new Vec3(...cell.position))) }) }
+        try { return await harvestBlock(ctx, target, { expectedBlock, requireCurrentReach: true, beforeDig: validate, onConfirmed, dependentBlocks: dependents.map(cell=>loaded(new Vec3(...cell.position))) }) }
         finally { ctx.operationDeadline = priorDeadline }
       },
       walk: async (route, stage, signal, deadline) => {
@@ -1300,6 +1303,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
 
   const handlers = {
     private_soil_stair: privateSoilStair,
+    private_soil_collect: (args,ctx) => privateSoilStair(args,ctx,true),
     starter_retreat: (args,ctx) => runStarterRetreat(bot,args,{signal:ctx.signal,check:()=>checked(ctx),guard:ctx.recoveryGuard,abort:error=>{ctx.controller.abort(error);stop()},prepareMovement:()=>{configureMovement();return movements}}),
     inspect, collect, craft, smelt, build, eat, attack, dig_at: digAt, descend_notch: descendNotch,
     go_to: async (args, ctx) => { const target = coordinates(args, ctx); const radius = numeric(args.radius, 1, 0, 8); await navigate(ctx, target, radius, { returnable: args.returnable === true, walkingTimeoutMs: 45000 }); return { arrived: true, position: plainPos(bot.entity.position), target: plainPos(target), radius } },
@@ -1457,7 +1461,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     emptySearch.dispatch(name, executionContext.parentSignal)
     assertTerrainTrusted(bot)
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
-    if (name === 'private_soil_stair') assert(executionContext.privateSoil === PRIVATE_SOIL && typeof executionContext.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
+    if (name === 'private_soil_stair' || name === 'private_soil_collect') assert(executionContext.privateSoil === PRIVATE_SOIL && typeof executionContext.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
     assert(args && typeof args === 'object' && !Array.isArray(args), 'Action arguments must be an object')
     assert(executionContext.ownershipGuard == null || typeof executionContext.ownershipGuard === 'function', 'Physical ownership guard must be a function')
     assert(owns(executionContext.ownershipGuard), 'Action cancelled: physical ownership changed')
@@ -1505,5 +1509,5 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  return { execute, stop, excavateSoil:(signal,context={})=>execute('private_soil_stair',{},signal,{...context,privateSoil:PRIVATE_SOIL}), invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
+  return { execute, stop, collectExposedStone:(exposure,signal,context={})=>execute('private_soil_collect',{exposure},signal,{...context,privateSoil:PRIVATE_SOIL}), excavateSoil:(signal,context={})=>execute('private_soil_stair',{},signal,{...context,privateSoil:PRIVATE_SOIL}), invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
 }

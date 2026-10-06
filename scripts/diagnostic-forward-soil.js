@@ -19,12 +19,13 @@ import { pingTcp } from './doctor.js'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 const savedWorld = process.argv.includes('--saved-world')
-const collectStone = process.argv.includes('--collect-stone')
+const privateCollect = process.argv.includes('--private-collect')
+const collectStone = privateCollect || process.argv.includes('--collect-stone')
 const sourceWorld = join(SERVER_DIR, 'benchmarks/2026-10-06T01-33-41-866Z-81d28177')
 const directory = join(SERVER_DIR, 'smoke', `forward-soil-${new Date().toISOString().replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`)
 const result = { kind: savedWorld ? 'prepared-private-forward-soil-saved-world' : 'prepared-private-forward-soil', started: new Date().toISOString(), passed: false,
   limits: 'Console-prepared Java 1.21.8 gate with supplied equipment, peaceful conditions, removed entities and random ticks disabled. Terrain is ' + (savedWorld ? 'a copy of known failed seed 1542908414, with a specified early workstation pose and original home.' : 'a flat constructed arena.') + ' Private executor only; not autonomous selection, a natural survival score, Bedrock play, or a public tool.',
-  collectStone, phases: [], packets: [], movementSamples: [], pathUpdates: [], serverPositions: [], forcedMoves: [], commands: [], sourceHashes: {}, cleanupErrors: [] }
+  privateCollect, collectStone, phases: [], packets: [], movementSamples: [], pathUpdates: [], serverPositions: [], forcedMoves: [], commands: [], sourceHashes: {}, cleanupErrors: [] }
 const runner = new ActionRunner({ timeoutMs: 60000 })
 const home = savedWorld ? new Vec3(112.5, 68, 96.5) : new Vec3(-3.5, 65, .5)
 const origin = savedWorld ? new Vec3(129.7, 64, 81.5) : new Vec3(.5, 65, .5)
@@ -164,15 +165,17 @@ try {
     assert.equal(terrainTrustStatus(bot).trusted, true)
     return value
   })
-  if (collectStone) await phase('Mine exposed stone and verify actual cobblestone inventory', async () => {
+  if (collectStone) await phase(privateCollect ? 'Private owned stone collection and home return' : 'Mine exposed stone and verify actual cobblestone inventory', async () => {
     const excavation = result.phases[0].detail
-    protectedFeet.push(...excavation.landing_observations.map(sample => new Vec3(...sample.position)))
+    if (!privateCollect) protectedFeet.push(...excavation.landing_observations.map(sample => new Vec3(...sample.position)))
     const before = bot.inventory.items().filter(item => item.name === 'cobblestone').reduce((sum, item) => sum + item.count, 0)
-    const value = await runner.run('collect exposed stone', (signal, context) => actions.execute('dig_at',
+    const value = privateCollect ? await runner.run('private stone collection', (signal, context) => actions.collectExposedStone(excavation, signal,
+      { actionDeadline: context.deadline, ownershipGuard, starterScope: 'prepared/forward-soil' }), () => actions.stop()) : await runner.run('collect exposed stone', (signal, context) => actions.execute('dig_at',
       { x: expectedStone[0], y: expectedStone[1], z: expectedStone[2], expected_block: 'stone' }, signal,
       { actionDeadline: context.deadline, ownershipGuard, starterScope: 'prepared/forward-soil' }), () => actions.stop())
     const after = bot.inventory.items().filter(item => item.name === 'cobblestone').reduce((sum, item) => sum + item.count, 0)
     assert.ok(after > before, 'Stone removal must produce observed cobblestone inventory')
+    if (privateCollect) { assert.equal(value.confirmed_stone_edits,1); assert.equal(value.returned_home,true); assert.equal(value.completed,true); assert.equal(value.stone_receipt.serverObservedAir,true) }
     assert.equal(terrainTrustStatus(bot).trusted, true)
     assert.ok(result.packets.some(packet => packet.changes?.some(change => change.position.x === expectedStone[0] && change.position.y === expectedStone[1] && change.position.z === expectedStone[2] && change.stateId === bot.registry.blocksByName.air.defaultState)), 'Missing exposed stone raw air receipt')
     supportChecks[0].name = 'air'
