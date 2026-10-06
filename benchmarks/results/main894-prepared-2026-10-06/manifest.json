@@ -1,0 +1,11 @@
+{
+  "source": "1435d70d1f6c29469679cf3c6618165fc1c4f615",
+  "archive": "prepared-skills.tar.gz",
+  "archiveSha256": "e2bc5a9f64668825da333ded7e6fef0ec8767980ee6d4b20823807db0895a28f",
+  "resultSha256": "2bffea0ca4b712e5525ac9dcd8255399a51c3641c1e3d1014d3fbf157e2253bb",
+  "passed": true,
+  "phases": 17,
+  "sourceUnchanged": true,
+  "serverStopped": true,
+  "limits": "Prepared normal skills regression gate after merged navigation, collision and mining changes; not autonomous survival, Bedrock play or a release."
+}

@@ -14,8 +14,19 @@ test('saved-world fixture certifies a bounded forward stair without mutating the
   assert.ok(plan)
   assert.equal(plan.experimental, true)
   assert.equal(plan.edits.length, 5)
-  assert.deepEqual(plan.stage, [130.5, 63, 81.5])
-  assert.deepEqual(plan.stone, [133, 60, 81])
+  // Individual route searches are bounded. A slower machine may reject the
+  // first candidate and certify a different valid nearby staircase instead.
+  // Check the complete staircase geometry, not one timing-dependent choice.
+  const stage = new Vec3(...plan.stage), p = stage.floored(), stone = new Vec3(...plan.stone)
+  assert.ok(stage.distanceTo(position) <= 3)
+  const delta = stone.minus(p), dx = delta.x / 3, dz = delta.z / 3
+  assert.equal(delta.y, -3)
+  assert.ok([[1,0],[-1,0],[0,1],[0,-1]].some(([x,z]) => dx === x && dz === z))
+  assert.deepEqual(plan.edits.map(edit => edit.target), [p.offset(dx,-1,dz),p.offset(2*dx,-1,2*dz),
+    p.offset(2*dx,-2,2*dz),p.offset(3*dx,-1,3*dz),p.offset(3*dx,-2,3*dz)].map(cell => cell.toArray()))
+  assert.equal(bot.blockAt(stone).name, 'stone')
+  assert.deepEqual(plan.stoneStaging.stage,p.offset(dx+.5,-1,dz+.5).toArray())
+  assert.equal(plan.edits.filter(edit => edit.landing).length,2)
   assert.ok(plan.edits.every(edit => edit.before.dependencies.length && edit.after.dependencies.length))
   assert.deepEqual(bot.entity.position, position)
   assert.equal(bot.pathfinder.movements, movement)

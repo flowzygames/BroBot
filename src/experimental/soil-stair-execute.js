@@ -2,6 +2,7 @@
 // Call only under the existing Actions/ActionRunner physical lock. The hooks
 // are trusted in-process operations, never JSON-supplied callbacks or receipts.
 import { Vec3 } from 'vec3'
+import { recordSoilExposure } from './soil-exposure-record.js'
 import { planSoilStair } from './soil-stair-plan.js'
 import { assertTerrainTrusted, terrainTrustStatus } from '../terrain-trust.js'
 import { isDryLanding, isHazardFreeBody, hasObservedStandingSupport } from '../body-hazards.js'
@@ -37,7 +38,7 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
   const owner = { entity: bot.entity, client: bot._client, world: bot.world, registry: bot.registry, pathfinder: bot.pathfinder }
   const deadline = Math.min(operationDeadline, performance.now() + 60000)
   let failure = null, inFlight = null, confirmed = 0, dependentClears = 0, landings = 0, timer, monitor, stationary = null
-  const listeners = [], retained = [], landingObservations = [], planningDiagnostics = []
+  const listeners = [], retained = [], externalSeen = [], landingObservations = [], planningDiagnostics = []
   const progress = () => ({ experimental: true, completed: false, planning_diagnostics: [...planningDiagnostics], confirmed_soil_edits: confirmed, confirmed_dependent_clears: dependentClears, unfinished_soil_target: inFlight ? [...inFlight.target] : null, terrain_trusted: terrainTrustStatus(bot).trusted, verified_descents: landings, landing_observations: landingObservations.map(sample => ({ ...sample, position: [...sample.position], velocity: [...sample.velocity], target: [...sample.target] })) })
   const check = () => {
     if (failure) throw failure
@@ -71,7 +72,9 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
   const feet = () => {
     const fresh = protectedPositions()
     if (!Array.isArray(fresh) || fresh.length > 128 || fresh.some(p => !finite(p))) throw Error('Private soil protected positions are invalid')
-    return [...retained, home, bot.entity.position, ...fresh]
+    for (const point of fresh) if (!externalSeen.some(p => p.x === point.x && p.y === point.y && p.z === point.z)) externalSeen.push(new Vec3(point.x, point.y, point.z))
+    if (externalSeen.length > 128) throw Error('Private soil accumulated protected positions exceed the bound')
+    return [...retained, home, bot.entity.position, ...externalSeen]
   }
   const waitSettled = async coordinates => {
     const until = Math.min(deadline, performance.now() + 2000)
@@ -179,13 +182,15 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
     stationary = stage
     dependencies(plan.stoneStaging)
     dependencies(plan.stoneAccess)
+    feet()
     atStage(stage)
     if (supports(new Vec3(...plan.stone), bot.entity.position)) throw Error('Exposed stone still supports the actual mining stage')
     const stone = bot.blockAt(new Vec3(...plan.stone))
     if (stone?.name !== 'stone') throw Error('Exposed stone changed before final inspection')
     if (!visibleStone(bot, new Vec3(...plan.stone))) throw Error('Exposed stone is not visible from the actual mining stage')
     check()
-    return { ...progress(), completed: true, exposed_stone: plan.stone, position: bot.entity.position.toArray(), mining_stage: { target: [...stage], position: bot.entity.position.toArray(), velocity: bot.entity.velocity.toArray(), onGround: bot.entity.onGround, health: bot.health, food: bot.food, observedAt: new Date().toISOString() }, stone_mined: false }
+    const result = { ...progress(), completed: true, exposed_stone: plan.stone, position: bot.entity.position.toArray(), mining_stage: { target: [...stage], position: bot.entity.position.toArray(), velocity: bot.entity.velocity.toArray(), onGround: bot.entity.onGround, health: bot.health, food: bot.food, observedAt: new Date().toISOString() }, stone_mined: false }
+    return recordSoilExposure(result, { bot, origin: plan.origin, home: plan.home, protectedPositions: externalSeen, temporaryLandings: retained.slice(1) })
   } catch (error) {
     const result = failure || (error instanceof Error ? error : new Error(String(error)))
     result.result = { ...result.result, ...progress() }
