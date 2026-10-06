@@ -106,7 +106,9 @@ test('protected support covering the forward stair is never proposed', async () 
 })
 
 test('each edit proof describes only the hypothetical removals already applied', async () => {
-  const { bot, home, protectedPositions } = soilWorld()
+  // This checks virtual-world bookkeeping, not saved-world planning speed.
+  // Keep the real saved-world integration above; use bounded geometry here.
+  const { bot, home, protectedPositions } = soilWorld({ flat: true })
   const plan = await planSoilStair(bot, home, { protectedPositions, budgetMs: 2000 })
   assert.ok(plan)
   const removed = new Set()

@@ -20,7 +20,10 @@
     "check": "node scripts/check.js",
     "benchmark:controls": "node scripts/benchmark-controls.js",
     "benchmark:skills": "node scripts/benchmark-skills.js",
-    "benchmark:survival": "node scripts/benchmark-survival.js"
+    "benchmark:survival": "node scripts/benchmark-survival.js",
+    "release:build": "node scripts/build-release.js",
+    "release:verify": "node scripts/verify-release.js",
+    "check:release": "node scripts/check-release.js"
   },
   "dependencies": {
     "mineflayer": "4.39.0",

@@ -22,3 +22,29 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+
+  release-artifact:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm run check:release -- ${{ github.sha }} candidate-check
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: candidate-${{ matrix.os }}-${{ github.sha }}
+          path: |
+            candidate-check/*.zip
+            candidate-check/*.zip.json
+            candidate-check/verification.json
+          if-no-files-found: warn
+          retention-days: 14
