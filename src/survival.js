@@ -16,6 +16,14 @@ const sameTravelCell = (a,b) => a && b && ['x','y','z'].every(k=>Number.isFinite
 const dimension = d => String(d).replace(/^minecraft:/, '');
 const action = (name, args, reason) => ({ name, args, reason });
 
+const validInterruptedAction = entry => entry && typeof entry === 'object' && !Array.isArray(entry)
+  && typeof entry.at === 'string' && Number.isFinite(Date.parse(entry.at))
+  && typeof entry.action === 'string' && entry.action.length > 0
+  && ['resolved', 'rejected'].includes(entry.outcome) && typeof entry.result_available === 'boolean'
+  && Object.hasOwn(entry, 'result')
+  && (entry.result_available ? entry.args && typeof entry.args === 'object' && !Array.isArray(entry.args)
+    : entry.result === null && typeof entry.capture_error === 'string' && entry.capture_error.length > 0);
+
 const travelCellKey = p => ['x','y','z'].map(k=>Math.floor(p[k])).join(',');
 const validTravelPoint = p => p && ['x','y','z'].every(k=>Number.isFinite(p[k]));
 const validTravelArrival = (arrival, home) => validTravelPoint(arrival?.target) && validTravelPoint(arrival?.position)
@@ -146,6 +154,7 @@ export class SurvivalJob {
     this.dropRecoverySession = null;
     this.job = memory.get('survivalJob', null);
     if (this.job && (this.job.version !== 1 || typeof this.job.context !== 'string' || !Array.isArray(this.job.history) || !Number.isSafeInteger(this.job.steps) || this.job.steps < 0 || !Number.isSafeInteger(this.job.scouts) || this.job.scouts < 0 || !this.job.home?.position || !['x', 'y', 'z'].every(k => Number.isFinite(this.job.home.position[k])) || !['running', 'paused', 'blocked', 'complete'].includes(this.job.status))) throw new Error('Saved starter job is invalid. Restore its record before resuming.');
+    if (Object.hasOwn(this.job ?? {}, 'interruptedActions') && (!Array.isArray(this.job.interruptedActions) || this.job.interruptedActions.length > 8 || this.job.interruptedActions.some(entry => !validInterruptedAction(entry)))) throw new Error('Saved interrupted action audit is invalid.');
     if (Object.hasOwn(this.job ?? {}, 'canopyDescentAttempts') && (!Array.isArray(this.job.canopyDescentAttempts)
       || this.job.canopyDescentAttempts.length > 4 || this.job.canopyDescentAttempts.some(p=>!p || !['x','y','z'].every(k=>Number.isSafeInteger(p[k]))))) throw new Error('Saved canopy recovery history is invalid.');
     if (Object.hasOwn(this.job ?? {},'travelArrivals') && (!Array.isArray(this.job.travelArrivals) || this.job.travelArrivals.length>64 || this.job.travelArrivals.some(a=>!validTravelArrival(a,this.job.home.position)))) throw new Error('Saved travel arrival evidence is invalid.');
@@ -427,8 +436,11 @@ export class SurvivalJob {
       if (decision.treeClearance === true) this.job.clearings = (this.job.clearings ?? 0) + 1;
       this.job.steps++; this.save();
       const actionStartContext = retryContext(this.snapshot(),observation,decision.name);
+      const actionJob = this.job, actionJobId = this.job.id, actionController = this.active;
+      let drainedResult, drainedOutcome = 'rejected';
       try {
         const result = await this.execute(decision.name, decision.args, signal,{jobDeadline:deadline});
+        drainedResult = result; drainedOutcome = 'resolved';
         if(!signal.aborted)this.checkHostileRecovery();
         rememberScout(result);
         signal.throwIfAborted();
@@ -461,6 +473,22 @@ export class SurvivalJob {
         }
         if (decision.name === 'collect' && result.remaining_drops?.length) recovery = action('pickup', { radius: 16, entity_ids: [...(this.job.recoverDropIds ?? [])] }, 'Recover observed dropped materials before mining more.');
       } catch (error) {
+        // Audit drained effects before Stop/recovery takes precedence. These
+        // receipts never enter history, route authority, progress or retries.
+        const interrupted = signal.aborted || this.hostileRecovery?.controller === actionController;
+        if (interrupted && this.job === actionJob && this.job.id === actionJobId && this.active === actionController && actionController?.signal === signal) {
+          const descriptor = drainedOutcome === 'rejected' && error ? Object.getOwnPropertyDescriptor(error, 'result') : null;
+          const result = drainedOutcome === 'resolved' ? drainedResult : descriptor && Object.hasOwn(descriptor, 'value') ? descriptor.value : undefined;
+          if (result !== undefined) {
+            const entry = { at: new Date().toISOString(), action: decision.name, outcome: drainedOutcome, result_available: true };
+            try { Object.assign(entry, structuredClone({ args: decision.args, result })); }
+            catch { entry.result = null; entry.result_available = false; entry.capture_error = 'Executor result could not be copied'; }
+            if (drainedOutcome === 'rejected') { entry.error = error.message; entry.code = error.code ?? null; }
+            this.job.interruptedActions = [...(this.job.interruptedActions ?? []), entry].slice(-8);
+            try { this.save(); }
+            catch (saveError) { this.stop(`Cannot persist interrupted action audit: ${saveError.message}`); throw saveError; }
+          }
+        }
         if(!signal.aborted)this.checkHostileRecovery();
         if(error.code==='MINING_DEADLINE_INSUFFICIENT'){
           remember({action:decision.name,args:decision.args,error:error.message,code:error.code,result:error.result});
