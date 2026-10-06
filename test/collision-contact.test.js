@@ -78,3 +78,48 @@ test('partial adapter installation failure restores methods already replaced', (
     assert.equal(AABB.prototype.computeOffsetZ, original.Z)
   } finally { Object.defineProperty(AABB.prototype, 'computeOffsetY', descriptor) }
 })
+
+test('expanded predictor clips inward motion at the recorded exact-edge leaf overhang', () => {
+  const p = { x: 129.7, y: 64, z: 81.5 }, half = .30000003
+  const leaf = new AABB(130, 65, 81, 131, 66, 82)
+  const body = new AABB(p.x - half, p.y, p.z - half, p.x + half, p.y + 1.80000018, p.z + half)
+  const overlap = body.maxX - leaf.minX
+  assert.ok(overlap > 2.9e-8 && overlap < 3.1e-8)
+  assert.equal(original.X.call(leaf, body, .05), .05)
+  assert.equal(clipContactOffset(leaf, body, .05, 'X', original.X), 0)
+  assert.equal(clipContactOffset(leaf, body, -.05, 'X', original.X), -.05)
+  assert.equal(clipContactOffset(leaf, body, -.05, 'Z', original.Z), -.05)
+})
+
+test('real predictor preserves wall sliding from the recorded expanded-body overhang contact', async () => {
+  const { default: physicsPackage } = await import('prismarine-physics')
+  const { default: minecraftData } = await import('minecraft-data')
+  const { default: loadBlock } = await import('prismarine-block')
+  const { Vec3 } = await import('vec3')
+  const registry = minecraftData('1.21.8'), Block = loadBlock('1.21.8')
+  const world = { getBlock(position) {
+    const p = position.floored()
+    const leaf = p.x === 130 && p.y === 65 && p.z === 81
+    const ground = p.y <= (p.x <= 129 ? 63 : 62)
+    const block = Block.fromStateId(registry.blocksByName[leaf ? 'spruce_leaves' : ground ? 'grass_block' : 'air'].defaultState, 0)
+    block.position = p
+    return block
+  } }
+  const physics = physicsPackage.Physics(registry, world)
+  physics.playerHalfWidth = .30000003; physics.playerHeight = 1.80000018
+  const bot = { version: '1.21.8', physics,
+    entity: { position: new Vec3(129.7, 64, 81.5), velocity: new Vec3(0, -.0784000015258789, 0), onGround: true,
+      yaw: Math.atan2(-.8, 1), pitch: 0, effects: {}, attributes: {} },
+    inventory: { slots: Array(46).fill(null) }, jumpTicks: 0, jumpQueued: false }
+  const controls = { forward: true, sprint: true, jump: false, back: false, left: false, right: false, sneak: false }
+  const predicted = new physicsPackage.PlayerState(bot, controls)
+  physics.simulatePlayer(predicted, world)
+  assert.ok(predicted.pos.x > 129.75, 'Uncorrected predictor moves into the leaf')
+  configureCollisionContact(bot)
+  const corrected = new physicsPackage.PlayerState(bot, controls)
+  physics.simulatePlayer(corrected, world)
+  assert.equal(corrected.pos.x, 129.7)
+  assert.equal(corrected.vel.x, 0)
+  assert.ok(corrected.pos.z < 81.45, 'Safe tangential movement remains available')
+  assert.deepEqual(bot.entity.position.toArray(), [129.7, 64, 81.5], 'Prediction never directly moves the live entity')
+})
