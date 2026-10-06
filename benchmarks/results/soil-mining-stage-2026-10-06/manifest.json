@@ -1,0 +1,279 @@
+{
+  "kind": "prepared-soil-final-mining-stage-comparison",
+  "archive": "before-after.tar.gz",
+  "archiveSha256": "0df4b66c08522d11e9def4d1916982705d4084140689b7450546f8fbf5e8f5cc",
+  "runs": [
+    {
+      "directory": "forward-soil-2026-10-06T04-10-48-374Z-4f6f258f",
+      "testedCommit": "2e2f91e66f91bfc33a8b1a2197fde2e9d25e7c1c",
+      "resultSha256": "13db47c02aa9c2f261fa1cc51f917bca1cfb2aeb97cd840c55fa0187490146a2",
+      "passed": false,
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": true,
+          "elapsedMs": 6989,
+          "detail": {
+            "experimental": true,
+            "completed": true,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 5,
+            "confirmed_dependent_clears": 1,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 2,
+            "landing_observations": [
+              {
+                "target": [
+                  131.5,
+                  62,
+                  81.5
+                ],
+                "position": [
+                  131.64422257234907,
+                  62,
+                  81.49999999999979
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T04:11:05.985Z"
+              },
+              {
+                "target": [
+                  132.5,
+                  61,
+                  81.5
+                ],
+                "position": [
+                  132.69999997,
+                  61,
+                  81.49999999999957
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T04:11:08.241Z"
+              }
+            ],
+            "exposed_stone": [
+              133,
+              60,
+              81
+            ],
+            "position": [
+              132.69999997,
+              61,
+              81.49999999999957
+            ],
+            "stone_mined": false
+          }
+        },
+        {
+          "name": "Mine exposed stone and verify actual cobblestone inventory",
+          "passed": false,
+          "elapsedMs": 1,
+          "error": "Will not dig the block supporting the bot"
+        }
+      ],
+      "serverStopped": true,
+      "cleanupErrors": [],
+      "sourceChanged": false,
+      "serverPositionPackets": 0
+    },
+    {
+      "directory": "forward-soil-2026-10-06T04-16-13-549Z-d788eafb",
+      "testedCommit": "1afb5ed2b5b75a5b0a3cd7f0b568667c909efaac",
+      "resultSha256": "bdd3feaadd20d5bfaad9f03a6c9beea5b70598f185aa57211e16075ba338978c",
+      "passed": true,
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": true,
+          "elapsedMs": 7536,
+          "detail": {
+            "experimental": true,
+            "completed": true,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 5,
+            "confirmed_dependent_clears": 1,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 2,
+            "landing_observations": [
+              {
+                "target": [
+                  131.5,
+                  62,
+                  81.5
+                ],
+                "position": [
+                  131.64422257234907,
+                  62,
+                  81.49999999999979
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T04:16:34.894Z"
+              },
+              {
+                "target": [
+                  132.5,
+                  61,
+                  81.5
+                ],
+                "position": [
+                  132.69999997,
+                  61,
+                  81.49999999999957
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T04:16:37.149Z"
+              }
+            ],
+            "exposed_stone": [
+              133,
+              60,
+              81
+            ],
+            "position": [
+              131.5,
+              62,
+              81.4999999999996
+            ],
+            "mining_stage": {
+              "target": [
+                131.5,
+                62,
+                81.5
+              ],
+              "position": [
+                131.5,
+                62,
+                81.4999999999996
+              ],
+              "velocity": [
+                0,
+                -0.0784000015258789,
+                0
+              ],
+              "onGround": true,
+              "health": 20,
+              "food": 20,
+              "observedAt": "2026-10-06T04:16:39.458Z"
+            },
+            "stone_mined": false
+          }
+        },
+        {
+          "name": "Mine exposed stone and verify actual cobblestone inventory",
+          "passed": true,
+          "elapsedMs": 3013,
+          "detail": {
+            "deferred_drops": [],
+            "passive_settlement": false,
+            "completed": true,
+            "pickup_landing_verified": true,
+            "mined": 1,
+            "block": "stone",
+            "position": [
+              133.66395707255208,
+              60,
+              81.49999999999918
+            ],
+            "inventory_changes": {
+              "dirt": 1,
+              "cobblestone": 1
+            },
+            "remaining_drops": [],
+            "pickup_failures": [],
+            "cobblestone_before": 0,
+            "cobblestone_after": 1
+          }
+        },
+        {
+          "name": "Actual guarded return to home",
+          "passed": true,
+          "elapsedMs": 7356,
+          "detail": {
+            "arrived": true,
+            "position": {
+              "x": 112.5,
+              "y": 68,
+              "z": 96.53
+            },
+            "target": {
+              "x": 112,
+              "y": 68,
+              "z": 96
+            },
+            "radius": 0,
+            "health": 20,
+            "food": 20,
+            "trusted": true
+          }
+        }
+      ],
+      "serverStopped": true,
+      "cleanupErrors": [],
+      "sourceChanged": false,
+      "serverPositionPackets": 0
+    }
+  ],
+  "limits": "Two iterative prepared replays of one known saved world, supplied equipment and peaceful conditions. Private excavation leaves stone unmined; separate ordinary dig_at probe acquires cobblestone. Does not prove autonomous selection or preservation of every historical actual landing footprint."
+}

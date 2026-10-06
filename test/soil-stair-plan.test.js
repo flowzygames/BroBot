@@ -216,3 +216,12 @@ test('a transient malformed entity policy is latched instead of authorizing an i
   }
   assert.equal(await planSoilStair(bot, home), null)
 })
+
+test('final mining certificate climbs to the prior landing and pickup starts there', async () => {
+  const f = soilWorld({ flat: true })
+  const plan = await planSoilStair(f.bot, f.home, { protectedPositions: f.protectedPositions })
+  assert.ok(plan)
+  assert.deepEqual(plan.stoneStaging.stage, [1.5,64,.5])
+  assert.deepEqual(plan.stoneStaging.routes.at(-1), [[2,63,0],[1,64,0]])
+  assert.deepEqual(plan.hypotheticalPickup.routes.at(-1)[0], [1,64,0])
+})

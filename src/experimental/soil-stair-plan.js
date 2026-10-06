@@ -267,6 +267,14 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
         edits.push(edit)
       }
       if (!ok) continue
+      // A settled pathfinder arrival may be offset within its block. Return
+      // one step up before exposing a mining stage, rather than accepting a
+      // nominal center whose actual footprint can overlap the stone support.
+      const miningStage=q.offset(.5,0,.5)
+      const reposition=await route(v,current,q)
+      const stoneStaging=reposition&&await certificate(v,miningStage,[reposition])
+      if (!stoneStaging) continue
+      current=miningStage
       const stoneAccess=await certificate(v,current,[],()=>visible(v,current,stone)&&!footprints.some(f=>supports(stone,f))
         && SIDES.every(d=>{const b=v.read(stone.offset(...d));return b&&!isFluidBearingBlock(b)&&!HAZARDS.has(b.name)})
         && !FALLING.test(v.read(stone.offset(0,1,0)).name))
@@ -277,7 +285,7 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
       if (!pickupProof) continue
       check(); if (!policyUnchanged()) throw unavailable()
       return {schemaVersion:1,experimental:true,origin:origin.toArray(),home:homePoint.toArray(),stage:stage.toArray(),
-        approach:initial,staged,edits,stone:stone.toArray(),stoneAccess,hypotheticalPickup:pickupProof,observedCells:cache.size}
+        approach:initial,staged,edits,stone:stone.toArray(),stoneStaging,stoneAccess,hypotheticalPickup:pickupProof,observedCells:cache.size}
     }
     report({kind:'refusal',reason:'no candidate certified',observedCells:cache.size}); return null
   } catch (error) {

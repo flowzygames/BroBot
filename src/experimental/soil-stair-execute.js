@@ -20,6 +20,16 @@ const matches = (block, expected) => block && block.name === expected.name
   && block.boundingBox === expected.boundingBox
   && JSON.stringify(block.shapes) === JSON.stringify(expected.shapes)
 
+// Recheck from the settled physical eyes, not the nominal planned cell center.
+const visibleStone = (bot, target) => {
+  const eye = bot.entity.position.offset(0, bot.entity.eyeHeight ?? 1.62, 0)
+  for (const [x,y,z] of [[0,0,0],[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]) {
+    const delta = target.offset(.5+x*.499,.5+y*.499,.5+z*.499).minus(eye), distance = delta.norm()
+    if (distance > .001 && distance <= 4.2 && bot.world.raycast(eye,delta.scaled(1/distance),Math.min(4.2,distance+.01))?.position?.equals(target)) return true
+  }
+  return false
+}
+
 export async function executeSoilStair({ bot, home, signal, operationDeadline,
   ownershipGuard, validatePolicy, protectedPositions, mine, walk, halt }) {
   if (![ownershipGuard, validatePolicy, protectedPositions, mine, walk, halt].every(fn => typeof fn === 'function')) throw Error('Private soil execution requires trusted ownership and operation hooks')
@@ -83,7 +93,7 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
     if (!plan) throw Error('No observed forward soil staircase is available')
     stationary = plan.origin
     retained.push(new Vec3(...plan.origin))
-    const proofs = [plan.approach, plan.staged, plan.stoneAccess,
+    const proofs = [plan.approach, plan.staged, plan.stoneStaging, plan.stoneAccess,
       ...plan.edits.flatMap(edit => [edit.before, edit.after, ...(edit.landing ? [edit.landing] : [])])]
     const watched = new Set(proofs.flatMap(proof => proof.dependencies.map(cell => cell.position.join(','))))
     const columns = new Set([...watched].map(k => columnKey(new Vec3(...k.split(',').map(Number)))))
@@ -161,11 +171,21 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
         landingObservations.push({ target: [...stage], position: bot.entity.position.toArray(), velocity: bot.entity.velocity.toArray(), onGround: bot.entity.onGround, health: bot.health, food: bot.food, observedAt: new Date().toISOString() })
       }
     }
+    dependencies(plan.stoneStaging)
+    stationary = null
+    await walk(plan.stoneStaging.routes.at(-1), plan.stoneStaging.stage, signal, deadline, ownershipGuard)
+    await waitSettled(plan.stoneStaging.stage)
+    stage = plan.stoneStaging.stage
+    stationary = stage
+    dependencies(plan.stoneStaging)
     dependencies(plan.stoneAccess)
     atStage(stage)
+    if (supports(new Vec3(...plan.stone), bot.entity.position)) throw Error('Exposed stone still supports the actual mining stage')
     const stone = bot.blockAt(new Vec3(...plan.stone))
     if (stone?.name !== 'stone') throw Error('Exposed stone changed before final inspection')
-    return { ...progress(), completed: true, exposed_stone: plan.stone, position: bot.entity.position.toArray(), stone_mined: false }
+    if (!visibleStone(bot, new Vec3(...plan.stone))) throw Error('Exposed stone is not visible from the actual mining stage')
+    check()
+    return { ...progress(), completed: true, exposed_stone: plan.stone, position: bot.entity.position.toArray(), mining_stage: { target: [...stage], position: bot.entity.position.toArray(), velocity: bot.entity.velocity.toArray(), onGround: bot.entity.onGround, health: bot.health, food: bot.food, observedAt: new Date().toISOString() }, stone_mined: false }
   } catch (error) {
     const result = failure || (error instanceof Error ? error : new Error(String(error)))
     result.result = { ...result.result, ...progress() }
