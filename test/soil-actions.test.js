@@ -46,6 +46,12 @@ test('cancelling an attempted private dig quarantines terrain and retains the ru
   assert.ok(f.runner.active)
   await assert.rejects(f.runner.run('other', async () => {}), /Still stopping/)
   release()
-  await assert.rejects(pending, /owner cancelled fixture/)
+  await assert.rejects(pending, error => {
+    assert.match(error.message, /owner cancelled fixture/)
+    assert.equal(error.result.confirmed_soil_edits, 0)
+    assert.ok(error.result.unfinished_soil_target)
+    assert.equal(error.result.terrain_trusted, false)
+    return true
+  })
   assert.equal(f.runner.active, null)
 })

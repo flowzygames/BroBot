@@ -6,7 +6,7 @@ import { ActionRunner } from '../../src/runner.js'
 // Real Actions/Runner/receipt observer, modeled movement and server transport.
 // No Minecraft process and no claim of physical proof.
 export function soilActions() {
-  const world = soilWorld(), { bot, home, protectedPositions, overrides } = world
+  const world = soilWorld({ flat: true }), { bot, home, protectedPositions, overrides } = world
   bot.game.dimension = 'overworld'
   bot.entity.id = 1
   bot.entity.velocity.y = -.0784

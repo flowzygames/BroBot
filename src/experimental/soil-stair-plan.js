@@ -29,13 +29,15 @@ const supports = (block,feet) => block.y < feet.y && block.y+1 >= feet.y-.03
   && feet.x+.31 > block.x && feet.x-.31 < block.x+1 && feet.z+.31 > block.z && feet.z-.31 < block.z+1
 const signature = b => ({ position:b.position.toArray(), name:b.name, stateId:b.stateId ?? null,
   type:b.type, waterlogged:Boolean(b.isWaterlogged), boundingBox:b.boundingBox, shapes:b.shapes.map(s => [...s]) })
-const unavailable = () => Object.assign(Error('Soil staircase cannot be certified from current observations'), {code:'SOIL_PLAN_UNAVAILABLE'})
+const unavailable = reason => Object.assign(Error('Soil staircase cannot be certified from current observations'), {code:'SOIL_PLAN_UNAVAILABLE', reason:reason??'observation or policy unavailable'})
 
-export async function planSoilStair(bot, home, { signal, protectedPositions = [], budgetMs = 1000 } = {}) {
+export async function planSoilStair(bot, home, { signal, protectedPositions = [], budgetMs = 1000, onDiagnostic = null } = {}) {
+  const report = detail => { try { if (typeof onDiagnostic === 'function') onDiagnostic(detail) } catch { /* Diagnostics cannot authorize or disrupt work. */ } }
   assertTerrainTrusted(bot)
   const entity = bot.entity, client = bot._client, world = bot.world, registry = bot.registry
   const pathfinder = bot.pathfinder, movement = pathfinder?.movements, initial = entity?.position
   const readBlock = bot.blockAt, searchPath = pathfinder?.getPathFromTo
+  report({kind:'start',position:finite(initial)?[initial.x,initial.y,initial.z]:null,velocity:finite(entity?.velocity)?[entity.velocity.x,entity.velocity.y,entity.velocity.z]:null,onGround:entity?.onGround,eyeHeight:entity?.eyeHeight})
   if (bot.version !== '1.21.8' || !finite(initial) || typeof initial.clone !== 'function' || !finite(home) || !entity.onGround || !finite(entity.velocity) || entity.velocity.y > 0
     || Math.abs(initial.y-Math.round(initial.y)) > .03 || initial.distanceTo(home) > STARTER_MOVEMENT_RADIUS
     || !client || !world || !registry || typeof pathfinder?.getPathFromTo !== 'function'
@@ -47,6 +49,7 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
     && movement.allowParkour === false && movement.allowFreeMotion === false && movement.allow1by1towers === false
     && movement.maxDropDown === 3 && movement.scafoldingBlocks?.length === 0
     && Array.isArray(movement.exclusionAreasStep) && movement.blocksToAvoid instanceof Set && movement.liquids instanceof Set
+    && movement.passableEntities instanceof Set && movement.entitiesToAvoid instanceof Set
     && STARTER_AVOID_BLOCK_NAMES.every(n => !registry.blocksByName[n] || movement.blocksToAvoid.has(registry.blocksByName[n].id))
     && (!policy || (sameSet(movement.blocksToAvoid,policy.avoid) && sameSet(movement.liquids,policy.liquids)
       && movement.exclusionAreasStep.length===policy.step.length && movement.exclusionAreasStep.every((fn,i)=>fn===policy.step[i])))
@@ -74,28 +77,42 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
     bot.game?.dimension,bot.game?.minY,bot.game?.height])
   const initialPose = pose(), deadline = performance.now()+budgetMs, cache = new Map(), columns = new Set(), listeners = []
   const Block = blockLoader(registry)
-  let changed = false, missing = 0, recorder = null
-  const invalidate = () => { changed = true }
+  let changed = false, missing = 0, recorder = null, invalidation = null
+  const invalidate = reason => { changed = true; invalidation ??= typeof reason === 'string' ? reason : 'observation event' }
   const check = () => {
     signal?.throwIfAborted(); assertTerrainTrusted(bot)
-    if (changed || performance.now() >= deadline || cache.size > 32768 || !validMovement() || !hasPickaxe()
+    if (changed) throw unavailable(invalidation)
+    if (performance.now() >= deadline) throw unavailable('planning budget exhausted')
+    if (cache.size > 32768 || !validMovement() || !hasPickaxe()
       || bot.entity !== entity || bot._client !== client || bot.world !== world || bot.registry !== registry
       || bot.pathfinder !== pathfinder || bot.blockAt !== readBlock || pathfinder.getPathFromTo !== searchPath || pose() !== initialPose || !healthy()) throw unavailable()
   }
-  const onPose = () => { try { if (pose()!==initialPose) invalidate() } catch { invalidate() } }
+  const onPose = () => { try { if (pose()!==initialPose) { report({kind:'pose-change',before:JSON.parse(initialPose),after:JSON.parse(pose())}); invalidate('own pose changed') } } catch { invalidate() } }
   const onBlock = (before,after) => {
     try {
       const positions = [before?.position,after?.position]
-      if (positions.some(p => !integer(p)) || positions.some(p => cache.has(key(p)))) invalidate()
+      if (positions.some(p => !integer(p)) || positions.some(p => cache.has(key(p)))) { report({kind:'block-event',positions:positions.map(p=>finite(p)?[p.x,p.y,p.z]:null)}); invalidate('local or malformed block event') }
     } catch { invalidate() }
   }
   const onColumn = p => {
     try {
-      if (!integer(p) || p.y !== 0 || p.x%16 !== 0 || p.z%16 !== 0 || columns.has(columnKey(p))) invalidate()
+      if (!integer(p) || p.y !== 0 || p.x%16 !== 0 || p.z%16 !== 0 || columns.has(columnKey(p))) invalidate('local or malformed column event')
     } catch { invalidate() }
   }
   listeners.push(['move',onPose],['physicsTick',onPose],['blockUpdate',onBlock],['chunkColumnLoad',onColumn],['chunkColumnUnload',onColumn])
-  for (const event of ['spawn','respawn','end','terrainUntrusted','entitySpawn','entityGone','entityMoved','entityUpdate']) listeners.push([event,invalidate])
+  for (const event of ['spawn','respawn','end','terrainUntrusted','entitySpawn','entityGone','entityMoved','entityUpdate']) listeners.push([event,entity=>{
+    if (event.startsWith('entity')) {
+      try {
+        if (!policyUnchanged()) { invalidate('movement policy changed during entity event'); return }
+        if (entity === bot.entity) { onPose(); return }
+        if (entity?.name === 'item' && Number.isSafeInteger(entity.id) && finite(entity.position)
+          && movementSnapshot.passableEntities.has('item') && !movementSnapshot.entitiesToAvoid.has('item')
+          && bot.entities?.[entity.id] === entity) return
+      } catch { invalidate('malformed entity event'); return }
+      try { report({kind:'entity-event',event,id:entity?.id,name:entity?.name,own:entity===bot.entity,position:finite(entity?.position)?[entity.position.x,entity.position.y,entity.position.z]:null}) } catch {}
+    }
+    invalidate(event)
+  }])
   for (const [event,fn] of listeners) bot.on(event,fn)
   const observed = position => {
     check()
@@ -204,7 +221,7 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
   }
   try {
     check();const initialView=view(new Set())
-    if (!dryStage(initialView,origin)) return null
+    if (!dryStage(initialView,origin)) { report({kind:'refusal',reason:'initial dry stage unavailable',footBlock:cache.get(key(origin.floored()))?.name}); return null }
     const starts=[]
     for (let x=-2;x<=2;x++) for (let z=-2;z<=2;z++) for (let y=-2;y<=1;y++) {
       const p=origin.floored().offset(x+.5,y,z+.5)
@@ -251,9 +268,9 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
       return {schemaVersion:1,experimental:true,origin:origin.toArray(),home:homePoint.toArray(),stage:stage.toArray(),
         approach:initial,staged,edits,stone:stone.toArray(),stoneAccess,hypotheticalPickup:pickupProof,observedCells:cache.size}
     }
-    return null
+    report({kind:'refusal',reason:'no candidate certified',observedCells:cache.size}); return null
   } catch (error) {
-    if (error?.code==='SOIL_PLAN_UNAVAILABLE') return null
+    if (error?.code==='SOIL_PLAN_UNAVAILABLE') { report({kind:'refusal',reason:error.reason,observedCells:cache.size}); return null }
     throw error
   } finally {
     for (const [event,fn] of listeners) bot.removeListener(event,fn)

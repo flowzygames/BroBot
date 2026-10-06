@@ -1,3 +1,4 @@
+import { retainOperationResult } from './action-error-result.js'
 import { executeSoilStair } from './experimental/soil-stair-execute.js'
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
 import { sameItemIdentity, itemStackCapacity } from './item-identity.js'
@@ -1460,13 +1461,15 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     try {
       checked(ctx)
       const result = await handlers[name](args, ctx)
-      checked(ctx)
+      try { checked(ctx) } catch (error) { throw retainOperationResult(error, { result }) }
       return result
     } catch (error) {
       if (!ctx.searchContinuationSaved) emptySearch.clear()
       // Cancellation may reject inside an awaited helper before its next check.
       // Preserve the session failure instead of hiding it behind that rejection.
-      if (staleSession(ctx.session)) checked(ctx)
+      if (staleSession(ctx.session)) {
+        try { checked(ctx) } catch (sessionError) { throw retainOperationResult(sessionError, error) }
+      }
       throw error
     } finally {
       for (const event of sessionEvents) bot.removeListener(event, sessionChanged)

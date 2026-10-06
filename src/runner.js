@@ -1,3 +1,4 @@
+import { retainOperationResult } from './action-error-result.js';
 export class ActionRunner {
   constructor({ timeoutMs = 120000, log = () => {} } = {}) {
     this.timeoutMs = timeoutMs;
@@ -31,13 +32,13 @@ export class ActionRunner {
     // The lock is released only after the underlying operation settles, even after Stop.
     try {
       const result = await operation(controller.signal,{deadline:active.deadline});
-      controller.signal.throwIfAborted();
+      if (controller.signal.aborted) throw retainOperationResult(controller.signal.reason, { result });
       this.log('result', `${name} completed`, result);
       return result;
     } catch (error) {
       // Pathfinder rejects its pending promise with GoalChanged when Stop
       // clears the goal. Preserve the initiating cancellation/timeout reason.
-      const failure = controller.signal.aborted ? controller.signal.reason : error;
+      const failure = controller.signal.aborted ? retainOperationResult(controller.signal.reason, error) : error;
       this.log('error', `${name}: ${failure.message}`);
       throw failure;
     } finally {

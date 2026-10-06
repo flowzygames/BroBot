@@ -138,3 +138,80 @@ test('private start nodes avoid raw reads for hypothetical standing cells', asyn
   assert.ok(await planSoilStair(bot, home, { protectedPositions, budgetMs: 2000 }))
   assert.ok(count > 10)
 })
+
+test('declared passable dropped-item motion does not invalidate terrain-only planning', async () => {
+  const { bot, home, protectedPositions } = soilWorld({ flat: true }), read = bot.blockAt
+  const item = { id: 77, name: 'item', position: new Vec3(1.5, 65, .5), width: .25, height: .25 }
+  bot.entities[item.id] = item
+  let emitted = false
+  bot.blockAt = p => { const block = read(p); if (!emitted) { emitted = true; bot.emit('entityMoved', item) } return block }
+  assert.ok(await planSoilStair(bot, home, { protectedPositions }))
+})
+
+for (const policy of ['not passable', 'explicitly avoided']) test(`item motion still invalidates when ${policy}`, async () => {
+  const { bot, home } = soilWorld({ flat: true }), read = bot.blockAt
+  const item = { id: 77, name: 'item', position: new Vec3(1.5, 65, .5), width: .25, height: .25 }
+  bot.entities[item.id] = item
+  if (policy === 'not passable') bot.pathfinder.movements.passableEntities.delete('item')
+  else bot.pathfinder.movements.entitiesToAvoid.add('item')
+  let emitted = false
+  bot.blockAt = p => { const block = read(p); if (!emitted) { emitted = true; bot.emit('entityMoved', item) } return block }
+  assert.equal(await planSoilStair(bot, home), null)
+})
+
+for (const moved of [false, true]) test(`own entity event preserves the existing exact pose guard, moved=${moved}`, async () => {
+  const { bot, home } = soilWorld({ flat: true }), read = bot.blockAt
+  let emitted = false
+  bot.blockAt = p => {
+    const block = read(p)
+    if (!emitted) {
+      emitted = true
+      const original = bot.entity.position
+      if (moved) bot.entity.position = original.offset(1, 0, 0)
+      bot.emit('entityMoved', bot.entity)
+      bot.entity.position = original
+    }
+    return block
+  }
+  const plan = await planSoilStair(bot, home)
+  if (moved) assert.equal(plan, null)
+  else assert.ok(plan)
+})
+
+for (const event of ['entityMoved', 'entityGone']) test(`unregistered item ${event} cannot bypass invalidation`, async () => {
+  const { bot, home } = soilWorld({ flat: true }), read = bot.blockAt
+  let emitted = false
+  bot.blockAt = p => {
+    const block = read(p)
+    if (!emitted) { emitted = true; bot.emit(event, { id: 77, name: 'item', position: new Vec3(1, 65, 0) }) }
+    return block
+  }
+  assert.equal(await planSoilStair(bot, home), null)
+})
+
+test('malformed registered item geometry fails closed without throwing through its event', async () => {
+  const { bot, home } = soilWorld({ flat: true }), read = bot.blockAt
+  const item = { id: 77, name: 'item', position: { get x() { throw Error('invalid geometry') } } }
+  bot.entities[item.id] = item
+  let emitted = false
+  bot.blockAt = p => { const block = read(p); if (!emitted) { emitted = true; bot.emit('entityMoved', item) } return block }
+  assert.equal(await planSoilStair(bot, home), null)
+})
+
+test('a transient malformed entity policy is latched instead of authorizing an ignored item', async () => {
+  const { bot, home } = soilWorld({ flat: true }), read = bot.blockAt
+  const item = { id: 77, name: 'item', position: new Vec3(1, 65, 0) }; bot.entities[item.id] = item
+  let emitted = false
+  bot.blockAt = p => {
+    const block = read(p)
+    if (!emitted) {
+      emitted = true
+      const saved = bot.pathfinder.movements.passableEntities
+      bot.pathfinder.movements.passableEntities = null
+      bot.emit('entityMoved', item)
+      bot.pathfinder.movements.passableEntities = saved
+    }
+    return block
+  }
+  assert.equal(await planSoilStair(bot, home), null)
+})

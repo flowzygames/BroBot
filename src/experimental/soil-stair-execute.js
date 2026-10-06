@@ -3,7 +3,7 @@
 // are trusted in-process operations, never JSON-supplied callbacks or receipts.
 import { Vec3 } from 'vec3'
 import { planSoilStair } from './soil-stair-plan.js'
-import { assertTerrainTrusted } from '../terrain-trust.js'
+import { assertTerrainTrusted, terrainTrustStatus } from '../terrain-trust.js'
 import { isDryLanding, isHazardFreeBody, hasObservedStandingSupport } from '../body-hazards.js'
 import { hasAnchoredLeafLanding } from '../starter-leaf-support.js'
 
@@ -27,8 +27,8 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
   const owner = { entity: bot.entity, client: bot._client, world: bot.world, registry: bot.registry, pathfinder: bot.pathfinder }
   const deadline = Math.min(operationDeadline, performance.now() + 60000)
   let failure = null, inFlight = null, confirmed = 0, landings = 0, timer, monitor, stationary = null
-  const listeners = [], retained = []
-  const progress = () => ({ experimental: true, completed: false, confirmed_soil_edits: confirmed, verified_descents: landings })
+  const listeners = [], retained = [], landingObservations = [], planningDiagnostics = []
+  const progress = () => ({ experimental: true, completed: false, planning_diagnostics: [...planningDiagnostics], confirmed_soil_edits: confirmed, unfinished_soil_target: inFlight ? [...inFlight.target] : null, terrain_trusted: terrainTrustStatus(bot).trusted, verified_descents: landings, landing_observations: landingObservations.map(sample => ({ ...sample, position: [...sample.position], velocity: [...sample.velocity], target: [...sample.target] })) })
   const check = () => {
     if (failure) throw failure
     signal?.throwIfAborted()
@@ -78,7 +78,7 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
   }
   try {
     check()
-    const plan = await planSoilStair(bot, home, { signal, protectedPositions: feet(), budgetMs: Math.min(1000, deadline - performance.now()) })
+    const plan = await planSoilStair(bot, home, { signal, protectedPositions: feet(), budgetMs: Math.min(1000, deadline - performance.now()), onDiagnostic: detail => { if (planningDiagnostics.length >= 8) planningDiagnostics.splice(1, 1); planningDiagnostics.push(detail) } })
     check()
     if (!plan) throw Error('No observed forward soil staircase is available')
     stationary = plan.origin
@@ -144,8 +144,8 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
       inFlight = edit
       await mine(new Vec3(...edit.target), edit.expected.name, validate, signal, deadline)
       confirmed++
-      check()
       inFlight = null
+      check()
       dependencies(edit.after)
       if (edit.landing) {
         dependencies(edit.landing)
@@ -157,6 +157,7 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
         stationary = stage
         retained.push(bot.entity.position.clone())
         landings++
+        landingObservations.push({ target: [...stage], position: bot.entity.position.toArray(), velocity: bot.entity.velocity.toArray(), onGround: bot.entity.onGround, health: bot.health, food: bot.food, observedAt: new Date().toISOString() })
       }
     }
     dependencies(plan.stoneAccess)

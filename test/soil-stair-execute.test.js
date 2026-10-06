@@ -2,10 +2,11 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { Vec3 } from 'vec3'
 import { executeSoilStair } from '../src/experimental/soil-stair-execute.js'
+import { planSoilStair } from '../src/experimental/soil-stair-plan.js'
 import { soilWorld } from './helpers/soil-world.js'
 
 function fixture() {
-  const world = soilWorld(), controller = new AbortController(), digs = [], walks = []
+  const world = soilWorld({ flat: true }), controller = new AbortController(), digs = [], walks = []
   world.bot.entity.velocity.y = -.0784 // Normal grounded prismarine-physics gravity/drag tail
   let owned = true
   const options = {
@@ -40,6 +41,8 @@ test('private modeled executor makes five soil edits and two landings without mi
   assert.equal(result.completed, true)
   assert.equal(result.confirmed_soil_edits, 5)
   assert.equal(result.verified_descents, 2)
+  assert.equal(result.landing_observations.length, 2)
+  assert.ok(result.landing_observations.every(sample => sample.onGround && sample.position[1] === sample.target[1]))
   assert.equal(result.stone_mined, false)
   assert.equal(f.digs.length, 5)
   assert.equal(f.walks.length, 3)
@@ -49,7 +52,7 @@ test('private modeled executor makes five soil edits and two landings without mi
 
 test('fresh protected footprint introduced after planning prevents the first dig', async () => {
   const f = fixture(), walk = f.options.walk
-  f.options.walk = async (...args) => { await walk(...args); f.protectedPositions.push(new Vec3(131.5, 63, 81.5)) }
+  f.options.walk = async (...args) => { await walk(...args); f.protectedPositions.push(new Vec3(1.5, 65, .5)) }
   await assert.rejects(executeSoilStair(f.options), /protected support/)
   assert.equal(f.digs.length, 0)
 })
@@ -63,7 +66,7 @@ test('private executor rejects a callback that reports arrival at the wrong heig
 
 test('target replacement after approach prevents mining', async () => {
   const f = fixture(), walk = f.options.walk
-  f.options.walk = async (...args) => { await walk(...args); f.overrides.set('131,62,81', 'stone') }
+  f.options.walk = async (...args) => { await walk(...args); f.overrides.set('1,64,0', 'stone') }
   await assert.rejects(executeSoilStair(f.options), /dependency changed/)
   assert.equal(f.digs.length, 0)
 })
@@ -115,11 +118,17 @@ for (const mode of ['health', 'displacement', 'policy']) test(`operational monit
 
 test('landing-only changed dependency is checked before the descent walk', async () => {
   const f = fixture(), mine = f.options.mine
+  const plan = await planSoilStair(f.bot, f.home, { protectedPositions: f.protectedPositions })
+  assert.ok(plan)
+  const index = plan.edits.findIndex(edit => edit.landing && edit.landing.dependencies.some(cell => !edit.after.dependencies.some(other => other.position.join(',') === cell.position.join(','))))
+  assert.ok(index >= 0, 'fixture must exercise a landing-only dependency')
+  const edit = plan.edits[index]
+  const extra = edit.landing.dependencies.find(cell => !edit.after.dependencies.some(other => other.position.join(',') === cell.position.join(',')))
   f.options.mine = async (...args) => {
     await mine(...args)
-    if (f.digs.length === 1) f.overrides.set('130,60,81', 'air')
+    if (f.digs.length === index + 1) f.overrides.set(extra.position.join(','), extra.name === 'air' ? 'stone' : 'air')
   }
   await assert.rejects(executeSoilStair(f.options), /dependency changed/)
-  assert.equal(f.digs.length, 1)
-  assert.equal(f.walks.length, 1)
+  assert.equal(f.digs.length, index + 1)
+  assert.equal(f.walks.length, 1 + plan.edits.slice(0, index).filter(edit => edit.landing).length)
 })

@@ -9,8 +9,17 @@ import { STARTER_AVOID_BLOCK_NAMES } from '../../src/navigation-guards.js'
 const require = createRequire(import.meta.url)
 const registry = require('prismarine-registry')('1.21.8')
 const Block = require('prismarine-block')(registry)
-export function soilWorld() {
-  const fixture = JSON.parse(zlib.gunzipSync(fs.readFileSync(new URL('../fixtures/forward-soil-saved-world.json.gz', import.meta.url))))
+export function soilWorld({ flat = false } = {}) {
+  let fixture = JSON.parse(zlib.gunzipSync(fs.readFileSync(new URL('../fixtures/forward-soil-saved-world.json.gz', import.meta.url))))
+  if (flat) {
+    const min = [-12, 48, -12], max = [12, 80, 12], states = []
+    for (let y = min[1]; y <= max[1]; y++) for (let z = min[2]; z <= max[2]; z++) for (let x = min[0]; x <= max[0]; x++) {
+      const name = y > 64 ? 'air' : y === 64 ? 'grass_block' : y === 63 ? 'dirt' : 'stone'
+      states.push(registry.blocksByName[name].defaultState)
+    }
+    fixture = { schemaVersion: 1, version: '1.21.8', source: { kind: 'constructed dry five-edit arena' }, min, max, states,
+      origin: [.5, 65, .5], home: [-3.5, 65, .5], protectedPositions: [[.5, 65, .5], [-3.5, 65, .5]] }
+  }
   const { min, max, states } = fixture
   const overrides = new Map()
   const blockAt = position => {
