@@ -2,12 +2,14 @@
 // Not routed to Runtime or the starter. A future executor must reconfirm every
 // edit, footprint, route dependency and physical landing before proceeding.
 import { Vec3 } from 'vec3'
+import { readSoilExposure, RETIRE_TEMPORARY_SOIL_LANDINGS } from './soil-exposure-record.js'
 import pathfinderPackage from 'mineflayer-pathfinder'
 import blockLoader from 'prismarine-block'
 import Move from 'mineflayer-pathfinder/lib/move.js'
 import WorldSync from 'prismarine-world/src/worldsync.js'
 import { assertTerrainTrusted } from '../terrain-trust.js'
 import { retainedLeafAnchor } from '../construction-guards.js'
+import { isDryLanding, hasObservedStandingSupport } from '../body-hazards.js'
 import { STARTER_MOVEMENT_RADIUS } from '../starter-limits.js'
 import { isFluidBearingBlock, STARTER_AVOID_BLOCK_NAMES } from '../navigation-guards.js'
 
@@ -31,7 +33,31 @@ const signature = b => ({ position:b.position.toArray(), name:b.name, stateId:b.
   type:b.type, waterlogged:Boolean(b.isWaterlogged), boundingBox:b.boundingBox, shapes:b.shapes.map(s => [...s]) })
 const unavailable = reason => Object.assign(Error('Soil staircase cannot be certified from current observations'), {code:'SOIL_PLAN_UNAVAILABLE', reason:reason??'observation or policy unavailable'})
 
-export async function planSoilStair(bot, home, { signal, protectedPositions = [], budgetMs = 1000, onDiagnostic = null } = {}) {
+export function planSoilStair(bot, home, options = {}) {
+  return planObservedTerrain(bot, home, options)
+}
+
+// Private read-only counterfactual. A result is evidence, never dig authority.
+// Only the exact in-process successful exposure result supplies provenance.
+export function planExposedStoneRemoval(bot, exposure, { signal, protectedPositions = [], budgetMs = 1000,
+  temporaryRetirement = null, onDiagnostic = null } = {}) {
+  const receipt = readSoilExposure(bot, exposure)
+  if (!receipt || !Array.isArray(protectedPositions) || protectedPositions.length > 128 || protectedPositions.some(p => !finite(p))) return Promise.resolve(null)
+  const protectionSnapshot = protectedPositions.map(p => [p.x,p.y,p.z])
+  const protectionsUnchanged = () => {
+    try { return protectedPositions.length === protectionSnapshot.length && protectedPositions.every((p,i) => finite(p) && [p.x,p.y,p.z].every((v,k) => v === protectionSnapshot[i][k])) } catch { return false }
+  }
+  const retired = temporaryRetirement === RETIRE_TEMPORARY_SOIL_LANDINGS
+  const durable = [receipt.origin, ...receipt.protectedPositions].map(p => new Vec3(...p))
+  if (!retired) durable.push(...receipt.temporaryLandings.map(p => new Vec3(...p)))
+  const unique = [...new Map([...durable, ...protectedPositions].map(p => [key(p),new Vec3(p.x,p.y,p.z)])).values()]
+  return planObservedTerrain(bot, new Vec3(...receipt.home), {
+    signal, budgetMs, onDiagnostic, protectedPositions: unique,
+    stoneRemoval: { receipt, retired, exposure, protectionsUnchanged }
+  })
+}
+
+async function planObservedTerrain(bot, home, { signal, protectedPositions = [], budgetMs = 1000, onDiagnostic = null, stoneRemoval = null } = {}) {
   const report = detail => { try { if (typeof onDiagnostic === 'function') onDiagnostic(detail) } catch { /* Diagnostics cannot authorize or disrupt work. */ } }
   assertTerrainTrusted(bot)
   const entity = bot.entity, client = bot._client, world = bot.world, registry = bot.registry
@@ -82,6 +108,7 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
   const check = () => {
     signal?.throwIfAborted(); assertTerrainTrusted(bot)
     if (changed) throw unavailable(invalidation)
+    if (stoneRemoval && !stoneRemoval.protectionsUnchanged()) throw unavailable('external protected positions changed')
     if (performance.now() >= deadline) throw unavailable('planning budget exhausted')
     if (cache.size > 32768 || !validMovement() || !hasPickaxe()
       || bot.entity !== entity || bot._client !== client || bot.world !== world || bot.registry !== registry
@@ -232,6 +259,32 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
   try {
     check();const initialView=view(new Set())
     if (!dryStage(initialView,origin)) { report({kind:'refusal',reason:'initial dry stage unavailable',footBlock:cache.get(key(origin.floored()))?.name}); return null }
+    if (stoneRemoval) {
+      if (!finite(entity.velocity) || entity.velocity.y < -.1 || entity.velocity.y > .03 || Math.hypot(entity.velocity.x,entity.velocity.z) > .08
+        || !isDryLanding(bot) || !hasObservedStandingSupport(bot)) return null
+      const { receipt, retired } = stoneRemoval, target = new Vec3(...receipt.target)
+      if (readSoilExposure(bot, stoneRemoval.exposure) !== receipt) return null
+      const targetBlock = observed(target)
+      if (targetBlock?.name !== 'stone' || !cube(targetBlock) || protectedFeet.some(p => supports(target,p))) return null
+      const before = await certificate(initialView, origin, [], () => visible(initialView, origin, target)
+        && SIDES.every(d => { const b=initialView.read(target.offset(...d)); return b && !isFluidBearingBlock(b) && !HAZARDS.has(b.name) })
+        && !FALLING.test(initialView.read(target.offset(0,1,0)).name))
+      if (!before) return null
+      const afterView = view(new Set([key(target)]))
+      if (!dryStage(afterView,origin)) return null
+      const after = await certificate(afterView,origin,[],()=>air(afterView.read(target)))
+      const pickup = target.offset(.5,0,.5)
+      if (!after || !dryStage(afterView,pickup)) return null
+      const pickupRoute = await route(afterView,origin,target)
+      const pickupProof = pickupRoute && await certificate(afterView,pickup,[pickupRoute])
+      if (!pickupProof) return null
+      check(); if (!policyUnchanged()) throw unavailable()
+      return { schemaVersion:1, experimental:true, readOnly:true, target:target.toArray(), expected:signature(targetBlock),
+        stage:origin.toArray(), home:homePoint.toArray(), originalOrigin:[...receipt.origin], before, after, pickup:pickupProof,
+        durableProtectedFeet:protectedFeet.map(p=>p.toArray()),
+        retiredTemporaryLandings:retired ? receipt.temporaryLandings.filter(p=>supports(target,new Vec3(...p))).map(p=>[...p]) : [],
+        observedCells:cache.size }
+    }
     const starts=[]
     for (let x=-2;x<=2;x++) for (let z=-2;z<=2;z++) for (let y=-2;y<=1;y++) {
       const p=origin.floored().offset(x+.5,y,z+.5)
