@@ -4,6 +4,7 @@ import { Vec3 } from 'vec3'
 import { soilActions } from './helpers/soil-actions.js'
 import { planExposedStoneRemoval } from '../src/experimental/soil-stair-plan.js'
 import { RETIRE_TEMPORARY_SOIL_LANDINGS } from '../src/experimental/soil-exposure-record.js'
+import { collectExposedSoilStone } from '../src/experimental/soil-stone-collect.js'
 import { terrainTrustStatus } from '../src/terrain-trust.js'
 
 async function fixture() {
@@ -69,18 +70,19 @@ test('changed future pickup dependency is detected before committing the stone e
   assert.equal(f.counters().digs,before)
 })
 
-test('cancellation after confirmed receipt retains the physical edit and inventory evidence',async()=>{
+for (const frozen of [false, true]) test(`cancellation after confirmed receipt retains evidence, frozen=${frozen}`,async()=>{
   const f=await fixture(),read=f.bot.blockAt,dig=f.bot.dig
   let ready=false,queued=false
   f.bot.dig=async block=>{await dig(block);if(block.name==='stone')ready=true}
   f.bot.blockAt=p=>{
     const block=read(p)
     if(ready&&!queued&&p.x===3&&p.y===62&&p.z===0&&block.name==='air'){
-      queued=true;queueMicrotask(()=>f.runner.stop('cancel after raw receipt'))
+      queued=true;queueMicrotask(()=>{f.runner.stop('cancel after raw receipt');if(frozen)Object.freeze(f.runner.active.controller.signal.reason)})
     }
     return block
   }
   await assert.rejects(f.collect(),error=>{
+    assert.equal(error.message,'cancel after raw receipt')
     assert.equal(error.result.confirmed_stone_edits,1)
     assert.equal(error.result.stone_receipt.serverObservedAir,true)
     assert.equal(error.result.unfinished_stone_target,null)
@@ -173,4 +175,33 @@ test('malformed movement policy on an item event halts without throwing through 
   await assert.rejects(f.collect(),/policy|cancelled/i)
   assert.equal(f.runner.active,null)
   assert.equal(terrainTrustStatus(f.bot).trusted,false)
+})
+
+test('private collector keeps confirmed effects when a walk hook throws a frozen error', async () => {
+  const f = await fixture(), reason = Object.freeze(Object.assign(Error('walk interrupted'), { code: 'WALK_STOP' }))
+  const before = f.bot.listenerCount('blockUpdate')
+  await assert.rejects(collectExposedSoilStone({
+    bot: f.bot, home: f.home, exposure: f.exposure,
+    operationDeadline: performance.now() + 30000,
+    ownershipGuard: () => true, validatePolicy: () => true,
+    protectedPositions: () => f.protectedPositions, halt: () => {},
+    mine: async (target, name, validate, signal, deadline, dependents, onConfirmed) => {
+      validate()
+      await f.bot.dig(f.bot.blockAt(target))
+      // Modeled trusted hook receipt; this test does not claim live-server proof.
+      onConfirmed({ serverObservedAir: true, stateId: f.bot.blockAt(target).stateId, packet: 'block_change' })
+    },
+    walk: async () => { throw reason }
+  }), error => {
+    assert.equal(error.message, reason.message)
+    assert.equal(error.code, 'WALK_STOP')
+    assert.equal(error.cause, reason)
+    assert.equal(error.result.confirmed_stone_edits, 1)
+    assert.equal(error.result.cobblestone_acquired, 1)
+    assert.equal(error.result.unfinished_stone_target, null)
+    assert.equal(error.result.completed, false)
+    assert.equal(error.result.returned_home, false)
+    return true
+  })
+  assert.equal(f.bot.listenerCount('blockUpdate'), before)
 })

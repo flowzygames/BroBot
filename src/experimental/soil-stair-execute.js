@@ -2,6 +2,7 @@
 // Call only under the existing Actions/ActionRunner physical lock. The hooks
 // are trusted in-process operations, never JSON-supplied callbacks or receipts.
 import { Vec3 } from 'vec3'
+import { retainOperationProgress } from '../action-error-result.js'
 import { recordSoilExposure } from './soil-exposure-record.js'
 import { planSoilStair } from './soil-stair-plan.js'
 import { assertTerrainTrusted, terrainTrustStatus } from '../terrain-trust.js'
@@ -193,8 +194,7 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
     return recordSoilExposure(result, { bot, origin: plan.origin, home: plan.home, protectedPositions: externalSeen, temporaryLandings: retained.slice(1) })
   } catch (error) {
     const result = failure || (error instanceof Error ? error : new Error(String(error)))
-    result.result = { ...result.result, ...progress() }
-    throw result
+    throw retainOperationProgress(result, progress())
   } finally {
     clearTimeout(timer)
     clearInterval(monitor)
