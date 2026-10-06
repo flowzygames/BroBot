@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { retainOperationResult } from './action-error-result.js'
 import { executeSoilStair } from './experimental/soil-stair-execute.js'
 import { assertStarterLeafSupport, hasAnchoredLeafLanding } from './starter-leaf-support.js'
@@ -484,9 +485,14 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let planningLimited = false
     let candidateCache = null, candidateRevision = 0
     let searchScans = 0, searchReuses = 0
+    let searchEvidence = null, searchEvidenceContext = null, stopReason = 'requested_count', rankingLimited = false
     let searchLease = null, searchContinued = false, continuationSaved = false
     const invalidateCandidates = () => { candidateRevision++; candidateCache = null }
+    const invalidateSearchPose = () => {
+      if (searchEvidenceContext && (!bot.entity?.position?.equals(searchEvidenceContext.position) || bot.world !== searchEvidenceContext.world || dimension() !== searchEvidenceContext.dimension)) searchEvidenceContext.invalidated = true
+    }
     const invalidateOnMovement = () => {
+      invalidateSearchPose()
       if (candidateCache && !bot.entity?.position?.equals(candidateCache.position)) invalidateCandidates()
     }
     const invalidateOnBlockUpdate = (oldBlock, newBlock) => {
@@ -501,6 +507,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     bot.on('blockUpdate', invalidateOnBlockUpdate)
     for (const event of worldEvents) bot.on(event, invalidateCandidates)
     bot.on('physicsTick', invalidateOnMovement)
+    bot.on('move', invalidateSearchPose)
     try {
     while (mined < count) {
       checked(ctx)
@@ -511,6 +518,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // for findBlocks itself; its fixed radius also bounds nonmatching scans.
       let candidates = []
       const scanRevision = candidateRevision
+      const scanPosition = bot.entity.position.clone(), scanWorld = bot.world, scanDimension = dimension()
       const boundaryKey = JSON.stringify(movementBoundary())
       const canReuse = candidateCache && candidateCache.position.equals(bot.entity.position)
         && candidateCache.dimension === dimension() && candidateCache.boundaryKey === boundaryKey
@@ -524,9 +532,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       }
       // Reuse only the already observed untried candidates. Exhaustion gets a
       // fresh bounded scan so an earlier count/time cap cannot hide later cells.
-      if (canReuse && candidates.length) searchReuses++
+      if (canReuse && candidates.length) { searchReuses++; searchEvidence = { source:'cached_candidates', coverage_complete:false, termination:'cached_candidates', observed_candidates:candidates.length, skipped_positions:skipped.size }; searchEvidenceContext=null }
       else {
       searchScans++
+      searchEvidenceContext={position:scanPosition,world:scanWorld,dimension:scanDimension,boundaryKey,revision:scanRevision}
       const searchOrigin = bot.entity.position.floored()
       const searchLimit = Symbol('collection search limit')
       const deadline = performance.now() + 500
@@ -552,17 +561,25 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       if (searchLease) {
         searchContinued = searchLease.resumed
         const page = searchLease.cursor.scan({ accept, check:() => checked(ctx) })
+        searchEvidence={source:'cursor',observation_id:randomUUID(),origin:plainPos(searchOrigin),radius,block:name,
+          filter:'exposed_environment_safe_in_bounds',termination:page.termination,coverage_complete:page.coverageComplete,observed_candidates:page.accepted,
+          unloaded_columns:page.unloadedColumns,unknown_cells:page.unknownCells,skipped_positions:skipped.size}
         searchLimited ||= page.limited
         if (candidates.length || !page.resumable) { emptySearch.release(searchLease); searchLease = null }
       } else try {
-        bot.findBlocks({ matching:definition.id, maxDistance:sectionSearchDistance(radius), count:512, useExtraInfo:block => {
+        searchEvidence={source:'native',observation_id:randomUUID(),origin:plainPos(searchOrigin),radius,block:name,
+          filter:'exposed_environment_safe_in_bounds',termination:'native_unverified',coverage_complete:false,observed_candidates:0,skipped_positions:skipped.size}
+        const found = bot.findBlocks({ matching:definition.id, maxDistance:sectionSearchDistance(radius), count:512, useExtraInfo:block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
           return accept(block)
         } })
+        searchEvidence.observed_candidates=candidates.length
+        if(Array.isArray(found)&&found.length>=512)searchEvidence.termination='native_result_cap'
       } catch (error) {
         if (error !== searchLimit) throw error
         searchLimited = true
+        if(searchEvidence){searchEvidence.termination='native_budget_or_match_limit';searchEvidence.observed_candidates=candidates.length}
       }
       }
       // Nearby depth can be a misleading shortcut: prefer surface-height resources
@@ -577,11 +594,12 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         const nearbyTrunk = /_log$/.test(name) && p.distanceTo(bot.entity.position) <= 4
         return p.distanceTo(bot.entity.position) + (nearbyTrunk ? 0 : 3 * Math.abs(p.y - bot.entity.position.y)) + (stableLanding || nearbyTrunk ? 0 : 32)
       }
+      rankingLimited ||= candidates.length > 128
       const choices = candidates.sort((a, b) => effort(a) - effort(b)).slice(0, 128)
       // Mineflayer may visit a whole section layer before its count cap. Cache
       // ranked choices, never the raw iteration prefix that can omit better cells.
       if (candidateRevision === scanRevision) candidateCache = { positions: choices.map(p => p.clone()), position: bot.entity.position.clone(), dimension: dimension(), boundaryKey }
-      if (!choices.length) break
+      if (!choices.length) { stopReason='no_ranked_candidates'; break }
       const p = choices[0]
       skipped.add(p.toString())
       try {
@@ -594,15 +612,15 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         consecutiveFailures = 0
         await pause(ctx, 300)
         pickup = await pickupInternal(ctx, 6)
-        if (ctx.pickupSettledFailure || pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; break }
+        if (ctx.pickupSettledFailure || pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; stopReason=ctx.pickupSettledFailure?'pickup_unverified':pickup.planning_limited?'planning_limit':'pickup_limit'; break }
       } catch (error) {
         checked(ctx)
         if(error.code===MINING_DEADLINE_INSUFFICIENT){error.result={...error.result,completed:false,mined,inventory_changes:changes(before),remaining_drops:pickup.remaining_drops};throw error}
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') { error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }; throw error }
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null })
-        if (planningLimited) break
-        if (++consecutiveFailures >= 8) break
+        if (planningLimited) { stopReason='planning_limit'; break }
+        if (++consecutiveFailures >= 8) { stopReason='candidate_failure_limit'; break }
       }
     }
     if (mined && !ctx.pickupSettledFailure && !planningLimited && !pickup.pickup_limited) {
@@ -614,7 +632,13 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
     if (!mined && !failures.length && searchLimited && searchLease) continuationSaved = emptySearch.retain(searchLease)
     ctx.searchContinuationSaved = continuationSaved
-    const result = { search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    const contextStable=Boolean(searchEvidenceContext && !searchEvidenceContext.invalidated && searchEvidenceContext.world===bot.world
+      && searchEvidenceContext.position.equals(bot.entity.position) && searchEvidenceContext.dimension===dimension()
+      && searchEvidenceContext.boundaryKey===JSON.stringify(movementBoundary()) && searchEvidenceContext.revision===candidateRevision)
+    const ordinarySearch=searchEvidence?{...searchEvidence,context_stable:contextStable,ranking_limited:rankingLimited,collection_loop_stop:stopReason,
+      complete_empty:searchEvidence.source==='cursor' && searchEvidence.coverage_complete===true && searchEvidence.termination==='traversal_complete'
+        && searchEvidence.observed_candidates===0 && searchEvidence.skipped_positions===0 && contextStable && mined===0 && failures.length===0 && !searchLimited && !rankingLimited}:null
+    const result = { ordinary_search:ordinarySearch, search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
     } finally {
@@ -622,6 +646,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       for (const event of worldEvents) bot.removeListener(event, invalidateCandidates)
       bot.removeListener('blockUpdate', invalidateOnBlockUpdate)
       bot.removeListener('physicsTick', invalidateOnMovement)
+      bot.removeListener('move', invalidateSearchPose)
     }
   }
 
