@@ -1,0 +1,32 @@
+{
+  "source": "0f445aeb4ca356c394b847eeb1625e64cff0542b",
+  "seed": "1542908414",
+  "passed": false,
+  "elapsedMs": 228004,
+  "reason": "Observed polar_bear attack: starter work paused. This attacker has no supported automatic retreat. The world keeps running; reach safety before resuming.",
+  "selection": "One selected previously known failing seed after standard prepared gate; not held-out, not full-cohort and not causal comparison. Keep every outcome; no replacement or retry of world attempt.",
+  "files": {
+    "result.json": {
+      "sha256": "8104046c856016633093f7c2b22b3d51afa486fe67193cb1e8b5233d924b0405",
+      "bytes": 190631
+    },
+    "events.jsonl": {
+      "sha256": "27402049ca8aee0682fee7f9b272cd0bd49fa1b32954593d1e764da17af41cd0",
+      "bytes": 475688
+    },
+    "server.log": {
+      "sha256": "d108e43c93fe751aa67e6a1d0be1a76aff6592f9f0cf7711b1e8bc853ec6b7e0",
+      "bytes": 13415
+    },
+    "driver.log": {
+      "sha256": "c1655ac68601f10f198a734a6bb7792ff35680d10b23eb80d26b260a1c54e997",
+      "bytes": 9891
+    },
+    "plan.json": {
+      "sha256": "9a5c6bca43aa32b4b958cfbc6acf8412f7661c8b4da6be7dfa06609b6184638f",
+      "bytes": 15901
+    }
+  },
+  "archiveSha256": "26a691c595a4ddc7a4003cdeada43c0685f388be6809428b4488e1498fdf892b",
+  "archiveBytes": 43494
+}
