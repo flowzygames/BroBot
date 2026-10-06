@@ -1,0 +1,46 @@
+{
+  "source": "4de9ef595e60efca1db67e9c020cf8eb804349f3",
+  "preparedPassed": true,
+  "selectedKnownPassed": false,
+  "selection": "One selected known failing seed after a prepared gate. Selection is informed by the prior 120-second instrumented diagnostic; this uninstrumented 300-second attempt is separate, not held-out, not full-cohort and not causal comparison. Keep the outcome; no world-attempt replacement.",
+  "files": {
+    "plan.json": {
+      "bytes": 16305,
+      "sha256": "c9777a1f15db183de0fdf8ee5609c3736779b85cd44dbc7c23422007781ef613"
+    },
+    "declaration.json": {
+      "bytes": 15170,
+      "sha256": "3d70af558e66e71d2ae32be126b038d686d7f2e2c59b1475fc5e5e80271b36f0"
+    },
+    "normal17.log": {
+      "bytes": 1560,
+      "sha256": "c0651fe9804e0eb0884ee302b02467975e13f79419e13ccbf46e89f358d0f30d"
+    },
+    "known154.log": {
+      "bytes": 12113,
+      "sha256": "f404b81251d4cbffbc5555b570c7facd149e5439d4e22fc57c0018da2ad1f9fc"
+    },
+    "normal17/result.json": {
+      "bytes": 8703,
+      "sha256": "66d11316a2ccb2db6b5f83d5f65967d6e960532cf55bea727c3f927c26ae06c0"
+    },
+    "known154/result.json": {
+      "bytes": 256085,
+      "sha256": "2191ad5b0d3e34fbedd8cf88ee2b44a0633a75e0de8e906752d3acd5340a1c66"
+    },
+    "known154/server.log": {
+      "bytes": 16614,
+      "sha256": "92e419c564bcab78b54e9d499ea492226487f07c8204a03403050d65e9ba1d81"
+    },
+    "known154/events.jsonl": {
+      "bytes": 605818,
+      "sha256": "d0f6faf20d784270a9b37dd5a4a6c41d1a011283f58b350e5b702f3a437c64d3"
+    },
+    "driver.py": {
+      "bytes": 3089,
+      "sha256": "5c827f75f46c9c0a7c6f8fb1ada59824887f0bd51d3113699abb77595afb6edf"
+    }
+  },
+  "archiveBytes": 59735,
+  "archiveSha256": "4f42075c30794ddb078a9271973469aafe1e466703b5a139f3e16c02d2498a77"
+}
