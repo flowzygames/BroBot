@@ -141,3 +141,75 @@ test('ActionRunner retains its lock through quarantined cancellation until dig d
   await assert.rejects(runner.run('next',async()=>true),/Still stopping/);
   assert.ok(runner.active);resolveDig();await rejection;assert.equal(runner.active,null);
 });
+
+function snowFixture() {
+  const f = fixture(); f.block.name = 'grass_block'; f.block.stateId = 9
+  f.bot.registry.blocksByName.snow = { defaultState: 5950 }
+  const snow = { name: 'snow', stateId: 5950, position: f.block.position.offset(0, 1, 0), boundingBox: 'empty', shapes: [] }
+  let cachedSnow = snow
+  const read = f.bot.blockAt
+  f.bot.blockAt = p => p.equals(snow.position) ? cachedSnow : read(p)
+  const snowPacket = (stateId = 0, raw = true) => {
+    cachedSnow = { ...snow, name: stateId === 0 ? 'air' : 'snow', stateId }
+    if (raw) f.bot._client.emit('packet', { location: snow.position, type: stateId }, { name: 'block_change' })
+  }
+  return { ...f, snow, snowPacket, dependentBlocks: [snow] }
+}
+
+test('soil mining requires matching raw receipts for both soil and its thin snow layer', async () => {
+  const f = snowFixture()
+  f.bot.dig = async () => { f.snowPacket(); f.packet(0) }
+  const result = await confirmedMining({ ...f, receiptMs: 100 })
+  assert.equal(result.serverObservedAir, true)
+  assert.equal(result.dependentReceipts.length, 1)
+  assert.deepEqual(result.dependentReceipts[0].position, { x: 2, y: 65, z: 0 })
+  assert.equal(terrainTrustStatus(f.bot).trusted, true)
+  assert.equal(f.bot._client.listenerCount('packet'), 0)
+})
+
+test('predicted snow air without its server receipt quarantines the whole attempted edit', async () => {
+  const f = snowFixture()
+  f.bot.dig = async () => { f.snowPacket(0, false); f.packet(0) }
+  await assert.rejects(confirmedMining({ ...f, receiptMs: 15 }), { code: 'MINING_UNCONFIRMED' })
+  assert.equal(terrainTrustStatus(f.bot).trusted, false)
+  assert.equal(f.bot._client.listenerCount('packet'), 0)
+})
+
+test('unsupported dependent geometry, depth or block types fail before any dig', async () => {
+  for (const mutate of [f => { f.snow.position = f.snow.position.offset(1, 0, 0) },
+    f => { f.snow.stateId++ }, f => { f.snow.name = 'short_grass' },
+    f => { f.dependentBlocks.push(f.snow) }, f => { f.block.position = {} }]) {
+    const f = snowFixture(); mutate(f)
+    await assert.rejects(confirmedMining({ ...f }))
+    assert.equal(f.calls(), 0)
+    assert.equal(terrainTrustStatus(f.bot).trusted, true)
+    assert.equal(f.bot._client.listenerCount('packet'), 0)
+  }
+})
+
+test('dependent replacement quarantines promptly and retains an undrained dig', async () => {
+  const f = snowFixture(); let release, settled = false
+  f.bot.dig = () => new Promise(resolve => { release = resolve })
+  const pending = confirmedMining({ ...f, receiptMs: 100 })
+  const rejection = assert.rejects(pending, { code: 'MINING_UNCONFIRMED' }).then(() => { settled = true })
+  f.snowPacket(5951)
+  assert.equal(terrainTrustStatus(f.bot).trusted, false)
+  await sleep(5); assert.equal(settled, false)
+  release(); await rejection
+  assert.equal(f.bot._client.listenerCount('packet'), 0)
+})
+
+test('joint snow receipts accept either record order in one server multi-block packet', async () => {
+  for (const records of [[512, 513], [513, 512]]) {
+    const f = snowFixture()
+    f.bot.dig = async () => {
+      f.snowPacket(0, false)
+      f.setCache({ ...f.block, name: 'air', stateId: 0 })
+      f.bot._client.emit('packet', { chunkCoordinates: { x: 0, y: 4, z: 0 }, records }, { name: 'multi_block_change' })
+    }
+    const receipt = await confirmedMining({ ...f, receiptMs: 100 })
+    assert.equal(receipt.packet, 'multi_block_change')
+    assert.equal(receipt.dependentReceipts[0].packet, 'multi_block_change')
+    assert.equal(f.bot._client.listenerCount('packet'), 0)
+  }
+})

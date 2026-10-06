@@ -1,15 +1,27 @@
 // Candidate mining transaction. Requires server observation before returning;
 // all unconfirmed attempted edits permanently quarantine this bot connection.
+import { Vec3 } from 'vec3';
 import { observeServerBlock } from './block-receipts.js';
 import { assertTerrainTrusted, quarantineTerrain } from '../terrain-trust.js';
 
 export const MINING_DEADLINE_INSUFFICIENT='MINING_DEADLINE_INSUFFICIENT';
 
-export async function confirmedMining({ bot, block, signal, receiptMs = 5000, operationDeadline, now=()=>performance.now() }) {
+export async function confirmedMining({ bot, block, signal, receiptMs = 5000, operationDeadline, now=()=>performance.now(), dependentBlocks=[] }) {
   assertTerrainTrusted(bot);
   signal?.throwIfAborted();
   if (!Number.isFinite(receiptMs) || receiptMs <= 0 || receiptMs > 5000) throw new Error('Receipt budget must be 1–5000ms');
-  if (!Number.isSafeInteger(block?.stateId) || block.stateId < 0 || !block.position || ['air','cave_air','void_air'].includes(block.name)) throw new Error('A loaded non-air target with a state ID is required');
+  if (!Number.isSafeInteger(block?.stateId) || block.stateId < 0 || !block.position || !['x','y','z'].every(key=>Number.isSafeInteger(block.position[key])) || ['air','cave_air','void_air'].includes(block.name)) throw new Error('A loaded non-air target with a state ID is required');
+  if (!Array.isArray(dependentBlocks) || dependentBlocks.length > 1) throw new Error('At most one thin-snow dependency is supported');
+  const dependents=[...dependentBlocks];
+  for (const dependent of dependents) {
+    const p=dependent?.position, target=block.position;
+    if (!['dirt','grass_block'].includes(block.name) || dependent?.name!=='snow'
+      || dependent.stateId!==bot.registry?.blocksByName?.snow?.defaultState
+      || dependent.boundingBox!=='empty' || !Array.isArray(dependent.shapes) || dependent.shapes.length
+      || !p || p.x!==target.x || p.y!==target.y+1 || p.z!==target.z
+      || bot.blockAt(p)?.stateId!==dependent.stateId || bot.blockAt(p)?.name!=='snow') throw new Error('Dependent change must be the observed single thin snow layer directly above soil');
+  }
+  const targets=[block,...dependents].map(target=>({position:new Vec3(target.position.x,target.position.y,target.position.z),stateId:target.stateId}));
   const digMs = bot.digTime?.(block);
   if (!Number.isFinite(digMs) || digMs < 0 || digMs > 24000) throw new Error('Cannot confirm this mining duration within the supported operation budget');
   // Includes a fixed scheduling allowance, without extending after packets.
@@ -27,14 +39,17 @@ export async function confirmedMining({ bot, block, signal, receiptMs = 5000, op
     if (attempted) quarantineTerrain(bot,failure);
     return failure;
   };
-  const observer = observeServerBlock({ bot, position: block.position, signal, timeoutMs: lifetimeMs, expectedStateId: block.stateId, onInvalidate: reason => fail(reason) });
+  const observers=[];
+  try {
+    for (const target of targets) observers.push(observeServerBlock({ bot, position: target.position, signal, timeoutMs: lifetimeMs, expectedStateId: target.stateId, onInvalidate: reason => fail(reason) }));
+  } catch (error) { for (const observer of observers) observer.dispose(); throw error; }
   const check = () => {
     if (failure) throw failure;
-    const observation = observer.snapshot();
-    if (!observation.active) throw fail(observation.invalidReason);
+    const observations=observers.map(observer=>observer.snapshot());
+    for (const observation of observations) if (!observation.active) throw fail(observation.invalidReason);
     if (signal?.aborted) throw fail('cancelled');
     assertTerrainTrusted(bot);
-    return observation;
+    return observations;
   };
   const abort = () => fail('cancelled');
   try {
@@ -52,14 +67,16 @@ export async function confirmedMining({ bot, block, signal, receiptMs = 5000, op
     check();
     receiptDeadline = performance.now() + receiptMs;
     while (true) {
-      const observation = check();
+      const observations = check();
       if (performance.now() >= receiptDeadline) throw fail('post-dig receipt deadline expired');
-      if (observation.serverObservedAir) {
-        const current = bot.blockAt(block.position);
-        if (!current || current.stateId !== observation.latest.stateId || !['air','cave_air','void_air'].includes(current.name)) {
-          throw fail('server receipt and loaded target disagree');
+      if (observations.every(observation=>observation.serverObservedAir)) {
+        for (let i=0;i<targets.length;i++) {
+          const current=bot.blockAt(targets[i].position),observation=observations[i];
+          if (!current || current.stateId!==observation.latest.stateId || !['air','cave_air','void_air'].includes(current.name)) throw fail('server receipt and loaded target disagree');
         }
-        return Object.freeze({ serverObservedAir:true, stateId:observation.latest.stateId, packet:observation.latest.packet });
+        const primary=observations[0],receipt={serverObservedAir:true,stateId:primary.latest.stateId,packet:primary.latest.packet};
+        if (dependents.length) receipt.dependentReceipts=Object.freeze(observations.slice(1).map(observation=>Object.freeze({position:observation.position,stateId:observation.latest.stateId,packet:observation.latest.packet})));
+        return Object.freeze(receipt);
       }
       await new Promise(resolve => setTimeout(resolve,10));
     }
@@ -69,6 +86,6 @@ export async function confirmedMining({ bot, block, signal, receiptMs = 5000, op
   } finally {
     clearInterval(watch);
     signal?.removeEventListener('abort',abort);
-    observer.dispose();
+    for (const observer of observers) observer.dispose();
   }
 }
