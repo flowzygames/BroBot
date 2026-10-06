@@ -467,7 +467,18 @@ export class SurvivalJob {
           this.stop(error.message);throw error;
         }
         rememberScout(error.result);
-        signal.throwIfAborted(); failures.set(signature, (failures.get(signature) ?? 0) + 1);
+        signal.throwIfAborted();
+        const searchPage = error.result;
+        const continuedEmptySearch = decision.name === 'collect' && error.code == null
+          && searchPage?.search_continued === true && searchPage.search_continuation_saved === true
+          && searchPage.search_limited === true && searchPage.mined === 0
+          && Array.isArray(searchPage.failures) && searchPage.failures.length === 0
+          && searchPage.planning_limited === false && searchPage.pickup_limited === false;
+        // A resumed empty page is unfinished search, not a second exhausted
+        // resource attempt. Fresh restarts still count; all step/time budgets
+        // and executor cursor invalidation remain in force. No material progress
+        // is claimed and unrelated failure evidence is not reset.
+        if (!continuedEmptySearch) failures.set(signature, (failures.get(signature) ?? 0) + 1);
         excludeFailures(decision, error.result);
         remember({ action: decision.name, args: decision.args, error: error.message, code: error.code ?? null, result: error.result });
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT' || error.code === STARTER_SUPPORT_PROTECTED) throw error;
