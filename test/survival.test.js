@@ -1325,3 +1325,89 @@ test('cancellation and the time budget still stop saved search pages',async()=>{
   assert.match(f.job.state().reason,stop==='cancel'?/Player stopped search/:/time budget/)
  }
 })
+
+for (const interruption of ['stop', 'hostile']) for (const outcome of ['resolved', 'rejected']) test(`interrupted action audit retains drained ${outcome} effects after ${interruption}`, async () => {
+  let recoveries = 0, executions = 0
+  const f = recoveryFixture({ recoverFromHostile: async () => { recoveries++; return { separated: false } } })
+  const result = { completed: false, mined: 1, inventory_changes: { oak_log: 1 }, remaining_drops: [{ id: 42 }] }
+  f.job.execute = async () => {
+    executions++; f.add('oak_log', 1)
+    if (interruption === 'stop') f.job.stop('Player stopped')
+    else f.job.requestHostileRecovery({ id: 22, type: 'hostile' })
+    if (outcome === 'rejected') throw Object.assign(Error('drained action'), { code: 'DRAINED', result })
+    return result
+  }
+  f.job.start(); await f.job.promise
+  const saved = f.job.state(), audit = saved.interruptedActions
+  assert.equal(audit?.length, 1)
+  assert.equal(audit[0].outcome, outcome)
+  assert.deepEqual(audit[0].result, result)
+  assert.equal(audit[0].action, 'collect')
+  assert.equal(audit[0].result_available, true)
+  assert.equal(saved.status, 'paused')
+  assert.equal(saved.history.length, 0)
+  assert.equal(saved.recoverDropIds.length, 0)
+  assert.equal(saved.travelArrivals?.length ?? 0, 0)
+  assert.equal(executions, 1)
+  assert.equal(recoveries, interruption === 'hostile' ? 1 : 0)
+  assert.deepEqual(f.data.survivalJob.interruptedActions, audit)
+  result.mined = 999
+  assert.equal(f.job.state().interruptedActions[0].result.mined, 1)
+})
+
+test('interrupted audit stays bounded and survives restart without replaying work', async () => {
+  const f = fixture(); let executions = 0
+  f.job.execute = async () => { executions++; f.job.stop('Pause'); return { mined: executions } }
+  for (let i = 0; i < 10; i++) { f.job.start({ resume: i > 0 }); await f.job.promise }
+  const saved = f.job.state()
+  assert.equal(saved.interruptedActions.length, 8)
+  assert.deepEqual(saved.interruptedActions.map(entry => entry.result.mined), [3,4,5,6,7,8,9,10])
+  const restored = new SurvivalJob({ memory: f.memory, snapshot: () => f.state, context: 'test' })
+  assert.deepEqual(restored.state().interruptedActions, saved.interruptedActions)
+  assert.equal(restored.state().history.length, 0)
+  assert.equal(executions, 10)
+})
+
+test('late interrupted result is not attached to a replacement job', async () => {
+  const f = fixture(); let release
+  f.job.execute = () => new Promise(resolve => { release = resolve })
+  f.job.start(); while (!release) await new Promise(resolve => setImmediate(resolve))
+  f.job.stop('Stop old work')
+  const replacement = structuredClone(f.job.job); replacement.id = 'replacement'
+  f.job.job = replacement
+  release({ mined: 1 }); await f.job.promise
+  assert.equal(replacement.interruptedActions, undefined)
+  assert.equal(replacement.history.length, 0)
+})
+
+test('uncopyable interrupted results are explicitly unavailable rather than zero effects', async () => {
+  const f = fixture()
+  f.job.execute = async () => { f.job.stop('Pause'); return { mined: 1, unsupported: () => {} } }
+  f.job.start(); await f.job.promise
+  const entry = f.job.state().interruptedActions[0]
+  assert.equal(entry.result_available, false)
+  assert.equal(entry.result, null)
+  assert.match(entry.capture_error, /could not be copied/)
+  assert.equal(f.job.state().history.length, 0)
+})
+
+test('interrupted audit save failure blocks hostile recovery', async () => {
+  let recoveries = 0, failed = false
+  const f = recoveryFixture({ recoverFromHostile: async () => { recoveries++; return { separated: true } } })
+  const save = f.memory.set
+  f.memory.set = (key, value) => {
+    if (value?.interruptedActions?.length && !failed) { failed = true; throw Error('audit write failed') }
+    save(key, value)
+  }
+  f.job.execute = async () => { f.job.requestHostileRecovery({ id: 22, type: 'hostile' }); return { mined: 1 } }
+  f.job.start(); await f.job.promise
+  assert.equal(recoveries, 0)
+  assert.equal(f.job.state().status, 'paused')
+  assert.match(f.job.state().reason, /Cannot persist interrupted action audit/)
+})
+
+for (const audit of [null, {}, [null], [{ outcome: 'success' }], [{ outcome: 'resolved' }], Array(9).fill({ outcome: 'resolved' })]) test(`malformed persisted interrupted audit is rejected: ${JSON.stringify(audit)}`, async () => {
+  const f = fixture(); f.job.start(); f.job.stop('Fixture setup'); await f.job.promise
+  f.data.survivalJob.interruptedActions = audit
+  assert.throws(() => new SurvivalJob({ memory: f.memory, context: 'test' }), /interrupted action audit is invalid/)
+})
