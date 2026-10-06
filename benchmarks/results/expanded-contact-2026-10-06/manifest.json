@@ -1,0 +1,30 @@
+{
+  "archive": "before-after.tar.gz",
+  "sha256": "101f9288e09b13ae65c89d4e63d208d3a0749b46571f12f85f0a2faf55bf1ed6",
+  "recordedSourceDifferences": [
+    "src/collision-contact.js"
+  ],
+  "samePreparedCommands": true,
+  "cases": {
+    "before": {
+      "commit": "9265ee5014d98dfa483f03144e2bd94d52a78626",
+      "resultSha256": "a555fbbc1827fd54fea9199512547d13d3d64465065bb1fcb3a87f6420c271e8",
+      "wholeGatePassed": false,
+      "serverCorrections": 59,
+      "confirmedSoilEdits": 0,
+      "verifiedDescents": 0,
+      "error": "Walking route made no movement progress",
+      "serverStopped": true
+    },
+    "after": {
+      "commit": "556fac2341a98e3e8c864f529754a60592e0e62f",
+      "resultSha256": "be289e31ac8805e59d4363ae9f1cc5613fe4850e8c094f297c02c20c29b1260c",
+      "wholeGatePassed": false,
+      "serverCorrections": 0,
+      "confirmedSoilEdits": 3,
+      "verifiedDescents": 2,
+      "error": "Observed soil route terrain changed",
+      "serverStopped": true
+    }
+  }
+}
