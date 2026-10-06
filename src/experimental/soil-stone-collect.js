@@ -1,5 +1,6 @@
 // Private owned transaction. No Runtime/public tool or automatic starter route.
 import { Vec3 } from 'vec3'
+import { retainOperationProgress } from '../action-error-result.js'
 import { planExposedStoneRemoval } from './soil-stair-plan.js'
 import { RETIRE_TEMPORARY_SOIL_LANDINGS, readSoilExposure } from './soil-exposure-record.js'
 import { assertTerrainTrusted, terrainTrustStatus } from '../terrain-trust.js'
@@ -102,6 +103,6 @@ export async function collectExposedSoilStone({bot,home,exposure,signal,operatio
     await waitSettled(proof.home);stationary=proof.home;dependencies(proof.after);dependencies(proof.pickup)
     returned=true;check();acquired=Math.max(0,cobble()-inventoryBefore);inventoryCurrent=true;if(acquired<1)throw Error('Private stone inventory gain was lost before returning home')
     return {...progress(),completed:true,target:[...proof.target],position:bot.entity.position.toArray(),health:bot.health,food:bot.food}
-  }catch(error){inventoryCurrent=false;if(inventoryBefore!==null&&sameInventorySession()){try{acquired=Math.max(0,cobble()-inventoryBefore);inventoryCurrent=true}catch{}}const result=failure||(error instanceof Error?error:Error(String(error)));result.result={...result.result,...progress()};throw result}
+  }catch(error){inventoryCurrent=false;if(inventoryBefore!==null&&sameInventorySession()){try{acquired=Math.max(0,cobble()-inventoryBefore);inventoryCurrent=true}catch{}}const result=failure||(error instanceof Error?error:Error(String(error)));throw retainOperationProgress(result,progress())}
   finally{clearTimeout(timer);clearInterval(monitor);for(const [event,fn]of listeners)bot.removeListener(event,fn)}
 }

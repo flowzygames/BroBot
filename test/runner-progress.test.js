@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { ActionRunner } from '../src/runner.js'
-import { retainOperationResult } from '../src/action-error-result.js'
+import { retainOperationResult, retainOperationProgress } from '../src/action-error-result.js'
 
 for (const frozen of [false, true]) test(`runner preserves confirmed partial work through cancellation, frozen reason=${frozen}`, async () => {
   const runner = new ActionRunner(); let release, signal
@@ -49,4 +49,21 @@ test('cancellation immediately after an operation resolves retains its completed
     return true
   })
   assert.equal(runner.active, null)
+})
+
+for (const mode of ['frozen', 'readonly', 'getter', 'setter']) test(`executor progress survives ${mode} error result`, () => {
+  const reason = Object.assign(Error('owner stopped'), { code: 'STOPPED' })
+  let setterCalls = 0
+  if (mode === 'frozen') Object.freeze(reason)
+  if (mode === 'readonly') Object.defineProperty(reason, 'result', { value: { diagnostic: 'preserved', confirmed_soil_edits: 0 } })
+  if (mode === 'getter') Object.defineProperty(reason, 'result', { get() { throw Error('must not invoke getter') } })
+  if (mode === 'setter') Object.defineProperty(reason, 'result', { get() { throw Error('must not invoke getter') }, set() { setterCalls++ } })
+  const error = retainOperationProgress(reason, { confirmed_soil_edits: 1, completed: false })
+  assert.equal(error.message, 'owner stopped')
+  assert.equal(error.code, 'STOPPED')
+  assert.equal(error.cause, reason)
+  assert.equal(setterCalls, 0)
+  assert.equal(error.result.confirmed_soil_edits, 1)
+  assert.equal(error.result.completed, false)
+  if (mode === 'readonly') assert.equal(error.result.diagnostic, 'preserved')
 })

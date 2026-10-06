@@ -71,12 +71,14 @@ test('target replacement after approach prevents mining', async () => {
   assert.equal(f.digs.length, 0)
 })
 
-test('owned cancellation after a confirmed hook preserves partial progress and removes watches', async () => {
+for (const frozen of [false, true]) test(`owned cancellation retains partial progress, frozen=${frozen}`, async () => {
   const f = fixture(), mine = f.options.mine, before = f.bot.listenerCount('blockUpdate')
-  f.options.mine = async (...args) => { await mine(...args); f.controller.abort(Error('owner stopped')) }
+  f.options.mine = async (...args) => { await mine(...args); f.controller.abort(frozen ? Object.freeze(Error('owner stopped')) : Error('owner stopped')) }
   await assert.rejects(executeSoilStair(f.options), error => {
     assert.equal(error.result.confirmed_soil_edits, 1)
+    assert.equal(error.result.unfinished_soil_target, null)
     assert.equal(error.result.completed, false)
+    if (frozen) assert.equal(error.cause, f.controller.signal.reason)
     return /owner stopped/.test(error.message)
   })
   assert.equal(f.digs.length, 1)
