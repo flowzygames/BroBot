@@ -55,3 +55,26 @@ test('cancelling an attempted private dig quarantines terrain and retains the ru
   })
   assert.equal(f.runner.active, null)
 })
+
+test('private facade jointly confirms a predictable thin-snow clearance without weakening terrain watching', async () => {
+  const f = soilActions()
+  f.overrides.set('3,65,0', 'snow')
+  const result = await f.run()
+  assert.equal(result.confirmed_soil_edits, 5)
+  assert.equal(result.confirmed_dependent_clears, 1)
+  assert.equal(result.verified_descents, 2)
+  assert.equal(terrainTrustStatus(f.bot).trusted, true)
+})
+
+test('declared thin-snow clearance does not permit an unrelated terrain change', async () => {
+  const f = soilActions(); f.overrides.set('3,65,0', 'snow')
+  const dig = f.bot.dig
+  f.bot.dig = async block => {
+    await dig(block)
+    const p = f.bot.entity.position.floored().offset(0, -1, 0), before = f.bot.blockAt(p)
+    f.overrides.set(p.toArray().join(','), 'air')
+    f.bot.emit('blockUpdate', before, f.bot.blockAt(p))
+  }
+  await assert.rejects(f.run(), /Observed soil route terrain changed/)
+  assert.equal(terrainTrustStatus(f.bot).trusted, false)
+})

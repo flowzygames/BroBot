@@ -105,6 +105,7 @@ test('each edit proof describes only the hypothetical removals already applied',
       assert.equal(dependency.name, name)
     }
     removed.add(edit.target.join(','))
+    for (const dependent of edit.dependents ?? []) removed.add(dependent.position.join(','))
     for (const dependency of edit.after.dependencies) {
       const name = removed.has(dependency.position.join(',')) ? 'air' : bot.blockAt(new Vec3(...dependency.position)).name
       assert.equal(dependency.name, name)

@@ -45,6 +45,13 @@ export function soilActions() {
     overrides.set(block.position.toArray().join(','), 'air')
     const after = bot.blockAt(block.position)
     bot.emit('blockUpdate', before, after)
+    const above = bot.blockAt(block.position.offset(0, 1, 0))
+    if (above?.name === 'snow' && above.stateId === bot.registry.blocksByName.snow.defaultState) {
+      overrides.set(above.position.toArray().join(','), 'air')
+      const cleared = bot.blockAt(above.position)
+      bot.emit('blockUpdate', above, cleared)
+      bot._client.emit('packet', { location: above.position, type: cleared.stateId }, { name: 'block_change' })
+    }
     bot._client.emit('packet', { location: block.position, type: after.stateId }, { name: 'block_change' })
   }
   let owned = true

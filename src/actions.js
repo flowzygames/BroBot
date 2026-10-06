@@ -636,7 +636,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return null
   }
 
-  async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null } = {}) {
+  async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null, dependentBlocks = [] } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
     else await approachBlock(ctx, p)
     const original = loaded(p)
@@ -671,7 +671,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const current = validateTarget()
       assert(!current.canHarvest || current.canHarvest(bot.heldItem?.type ?? null), `Need a suitable tool to harvest ${current.name}; refusing to destroy it without drops`)
       beforeDig?.()
-      return confirmedMining({ bot, block: current, signal: ctx.signal, operationDeadline:ctx.operationDeadline })
+      return confirmedMining({ bot, block: current, signal: ctx.signal, operationDeadline:ctx.operationDeadline, dependentBlocks })
     })
     assert(isAir(loaded(p)), `Confirmed mining target is no longer air`)
     return block.name
@@ -803,9 +803,9 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       bot, home, signal: ctx.signal, operationDeadline: ctx.operationDeadline,
       ownershipGuard: ownedControl, validatePolicy: validPolicy, protectedPositions: starterProtectedPositions,
       halt: () => stop(),
-      mine: async (target, expectedBlock, validate, signal, deadline) => {
+      mine: async (target, expectedBlock, validate, signal, deadline, dependents) => {
         ctx.operationDeadline = Math.min(priorDeadline, deadline)
-        try { return await harvestBlock(ctx, target, { expectedBlock, requireCurrentReach: true, beforeDig: validate }) }
+        try { return await harvestBlock(ctx, target, { expectedBlock, requireCurrentReach: true, beforeDig: validate, dependentBlocks: dependents.map(cell=>loaded(new Vec3(...cell.position))) }) }
         finally { ctx.operationDeadline = priorDeadline }
       },
       walk: async (route, stage, signal, deadline) => {

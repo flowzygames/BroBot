@@ -23,7 +23,7 @@ const sourceWorld = join(SERVER_DIR, 'benchmarks/2026-10-06T01-33-41-866Z-81d281
 const directory = join(SERVER_DIR, 'smoke', `forward-soil-${new Date().toISOString().replace(/[:.]/g, '-')}-${randomUUID().slice(0, 8)}`)
 const result = { kind: savedWorld ? 'prepared-private-forward-soil-saved-world' : 'prepared-private-forward-soil', started: new Date().toISOString(), passed: false,
   limits: 'Console-prepared Java 1.21.8 gate with supplied equipment, peaceful conditions, removed entities and random ticks disabled. Terrain is ' + (savedWorld ? 'a copy of known failed seed 1542908414, with a specified early workstation pose and original home.' : 'a flat constructed arena.') + ' Private executor only; not autonomous selection, a natural survival score, Bedrock play, or a public tool.',
-  phases: [], packets: [], commands: [], sourceHashes: {}, cleanupErrors: [] }
+  phases: [], packets: [], movementSamples: [], pathUpdates: [], serverPositions: [], forcedMoves: [], commands: [], sourceHashes: {}, cleanupErrors: [] }
 const runner = new ActionRunner({ timeoutMs: 60000 })
 const home = savedWorld ? new Vec3(112.5, 68, 96.5) : new Vec3(-3.5, 65, .5)
 const origin = savedWorld ? new Vec3(129.7, 64, 81.5) : new Vec3(.5, 65, .5)
@@ -31,7 +31,7 @@ const expectedStone = savedWorld ? [133, 60, 81] : [3, 62, 0]
 const expectedEdits = savedWorld ? [[131,62,81],[132,62,81],[132,61,81],[133,62,81],[133,61,81]] : [[1,64,0],[2,64,0],[2,63,0],[3,64,0],[3,63,0]]
 let protectedFeet = [origin, home]
 const port = 25651
-let child, bot, actions, log, output = '', interrupted, lock, owned = true
+let physicsTicks = 0, sampler, child, bot, actions, log, output = '', interrupted, lock, owned = true
 const lockPath = join(SERVER_DIR, '.diagnostic-server.lock')
 const interrupt = reason => { interrupted = new Error(reason); runner.stop(reason); actions?.stop() }
 const onInt = () => interrupt('SIGINT'), onTerm = () => interrupt('SIGTERM')
@@ -130,17 +130,34 @@ try {
   bot._client.on('packet', (data, metadata) => {
     if (['block_change', 'multi_block_change'].includes(metadata.name)) result.packets.push({ at: Date.now(), name: metadata.name, changes: decodeBlockChanges(metadata.name, data) })
   })
+  result.physics = { halfWidth: bot.physics.playerHalfWidth, height: bot.physics.playerHeight, entityWidth: bot.entity.width, entityHeight: bot.entity.height, attributes: bot.entity.attributes }
+  bot.on('physicsTick', () => { physicsTicks++ })
+  bot.on('forcedMove', () => { if (result.forcedMoves.length < 100) result.forcedMoves.push({ at: Date.now(), position: bot.entity.position.toArray() }) })
+  bot._client.on('packet', (data, metadata) => { if (metadata.name === 'position' && result.serverPositions.length < 100) result.serverPositions.push({ at: Date.now(), ...data }) })
+  bot.on('path_update', update => {
+    if (result.pathUpdates.length < 100) result.pathUpdates.push({ at: Date.now(), status: update.status, cost: update.cost, path: update.path?.slice(0, 64).map(node => [node.x, node.y, node.z]) })
+  })
+  sampler = setInterval(() => {
+    if (result.movementSamples.length < 400 && bot?.entity?.position) result.movementSamples.push({ at: Date.now(), position: bot.entity.position.toArray(), velocity: bot.entity.velocity?.toArray(), onGround: bot.entity.onGround, controls: Object.fromEntries(['forward','back','left','right','jump','sprint','sneak'].map(key => [key, bot.controlState[key]])), physicsTicks, physicsEnabled: bot.physicsEnabled, clientState: bot._client.state, goal: bot.pathfinder?.goal ? { x: bot.pathfinder.goal.x, y: bot.pathfinder.goal.y, z: bot.pathfinder.goal.z } : null })
+  }, 100)
   const supportChecks = [new Vec3(...expectedStone), origin.offset(0,-1,0).floored(), home.offset(0,-1,0).floored()].map(p => ({ position: p.toArray(), name: bot.blockAt(p)?.name }))
   assert.ok(supportChecks.every(cell => /^[a-z_]+$/.test(cell.name)))
   result.supportChecks = supportChecks
+  if (savedWorld) {
+    const snow = bot.blockAt(new Vec3(133, 63, 81))
+    assert.equal(snow?.name, 'snow'); assert.equal(snow.stateId, bot.registry.blocksByName.snow.defaultState)
+    assert.equal(snow.boundingBox, 'empty'); assert.equal(snow.shapes.length, 0)
+    result.expectedDependentSnow = { position: [133, 63, 81], stateId: snow.stateId }
+  }
   await phase('Five receipt-confirmed soil edits and two physical descents', async () => {
     const value = await runner.run('private soil gate', (signal, context) => actions.excavateSoil(signal,
       { actionDeadline: context.deadline, ownershipGuard, starterScope: 'prepared/forward-soil' }), () => actions.stop())
     assert.equal(value.confirmed_soil_edits, 5); assert.equal(value.verified_descents, 2); assert.equal(value.stone_mined, false)
     assert.deepEqual(value.exposed_stone, expectedStone)
     assert.equal(value.landing_observations.length, 2)
+    assert.equal(value.confirmed_dependent_clears, savedWorld ? 1 : 0)
     const airIds = new Set(['air', 'cave_air', 'void_air'].map(name => bot.registry.blocksByName[name].defaultState))
-    const expected = expectedEdits
+    const expected = savedWorld ? [...expectedEdits, result.expectedDependentSnow.position] : expectedEdits
     for (const p of expected) assert.ok(result.packets.some(packet => packet.changes?.some(change => change.position.x === p[0] && change.position.y === p[1] && change.position.z === p[2] && airIds.has(change.stateId))), `Missing raw air receipt at ${p}`)
     for (const cell of supportChecks) assert.equal(bot.blockAt(new Vec3(...cell.position)).name, cell.name)
     assert.equal(terrainTrustStatus(bot).trusted, true)
@@ -158,6 +175,7 @@ try {
   result.passed = true
 } catch (error) { result.error = error.stack || String(error); process.exitCode = 1; console.error(error) }
 finally {
+  clearInterval(sampler)
   try { runner.stop('Diagnostic ending'); actions?.stop(); bot?.quit('Prepared soil gate complete') } catch (error) { result.cleanupErrors.push(error.message) }
   owned = false
   if (child) {

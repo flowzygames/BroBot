@@ -1,0 +1,558 @@
+{
+  "kind": "prepared-private-soil-saved-world-development",
+  "archive": "prepared-saved-world-development.tar.gz",
+  "archiveSha256": "df39a2a4200fa66f12cb26b3edf4d922c8b75961c863db131ebc0984762e1c2b",
+  "finalTestedCommit": "ae34690642857c981f3b9a72cb30159cdc8bea38",
+  "finalTestedTree": "f5bdd7a93eef74f143d988570776b9d2c57160cd",
+  "automatedChecks": 887,
+  "limits": "Iterative prepared replays of one known saved world, not independent benchmark worlds or autonomous starter success. Supplied equipment, peaceful mode, entities removed, fixed start and random ticks disabled. No terrain fills in saved-world mode. Stone remains unmined.",
+  "runs": [
+    {
+      "directory": "forward-soil-2026-10-06T03-00-20-626Z-a456cedb",
+      "testedCommit": "6e50bc648280265472500a0c2238e214452391d0",
+      "resultSha256": "7a0ef25c99b4e425cc171d50ff785ca3ffbe36fcb6f496cbf804b42913374518",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 57,
+          "error": "No observed forward soil staircase is available",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": null
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-03-55-890Z-8cf79284",
+      "testedCommit": "762a49d4b15740147b1f58b4005cf208e0282e1c",
+      "resultSha256": "6a20c4296d6c70efff74a5c8e38c507eb60cb282850b58f48854b95192b24eda",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 61,
+          "error": "No observed forward soil staircase is available",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              },
+              {
+                "kind": "refusal",
+                "reason": "entityMoved",
+                "observedCells": 693
+              }
+            ],
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": null
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-06-20-288Z-dcb54edd",
+      "testedCommit": "f72dd93fca1d481020214014cf646cdaa8b6a277",
+      "resultSha256": "24ca2ff3e5fbd5ee13ab0532b73fe02ae5fb2a83e9cc392a6b6def4449e446d7",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 73,
+          "error": "No observed forward soil staircase is available",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 67,
+                "name": "item",
+                "own": false,
+                "position": [
+                  132.125,
+                  25,
+                  52.38902507286927
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 72,
+                "name": "item",
+                "own": false,
+                "position": [
+                  133.04736880213022,
+                  25.250692496541888,
+                  52.52524434775114
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 73,
+                "name": "item",
+                "own": false,
+                "position": [
+                  132.97170731425285,
+                  25.344392597675323,
+                  52.9039658755064
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 74,
+                "name": "item",
+                "own": false,
+                "position": [
+                  132.79798923267052,
+                  25,
+                  51.94255777947877
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 83,
+                "name": "item",
+                "own": false,
+                "position": [
+                  86.15339274632768,
+                  59.607039092338226,
+                  67.65322265028954
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 113,
+                "name": "squid",
+                "own": false,
+                "position": [
+                  148.64550315822072,
+                  58.61842567372527,
+                  39.90609097648797
+                ]
+              },
+              {
+                "kind": "entity-event",
+                "event": "entityMoved",
+                "id": 113,
+                "name": "squid",
+                "own": false,
+                "position": [
+                  148.64550315822072,
+                  58.61842567372527,
+                  39.90609097648797
+                ]
+              }
+            ],
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": null
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-15-19-602Z-bfb54c9c",
+      "testedCommit": "6721a8834e6b8c9e839ba8627f47610fe2d30d6e",
+      "resultSha256": "b98fe75320c29906895d65a74a0644f908a53f25db1659361a12aed993d80083",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 3744,
+          "error": "Walking route made no movement progress",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": null
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-18-31-523Z-fc9e1150",
+      "testedCommit": "b16eed9072632d3f8ce85661b29a00d67e9a199a",
+      "resultSha256": "c4c663cc6a99f36e36daea77ea578caf60997acc55ccdc696658927a57b12c41",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 3742,
+          "error": "Walking route made no movement progress",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": null
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-22-56-671Z-ffc1c862",
+      "testedCommit": "9265ee5014d98dfa483f03144e2bd94d52a78626",
+      "resultSha256": "a555fbbc1827fd54fea9199512547d13d3d64465065bb1fcb3a87f6420c271e8",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 3825,
+          "error": "Walking route made no movement progress",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 0,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 0,
+            "landing_observations": []
+          }
+        }
+      ],
+      "serverPositionPackets": 59
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-31-30-192Z-05e710ee",
+      "testedCommit": "556fac2341a98e3e8c864f529754a60592e0e62f",
+      "resultSha256": "be289e31ac8805e59d4363ae9f1cc5613fe4850e8c094f297c02c20c29b1260c",
+      "passed": false,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": false,
+          "elapsedMs": 6180,
+          "error": "Observed soil route terrain changed",
+          "partial": {
+            "experimental": true,
+            "completed": false,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 3,
+            "unfinished_soil_target": [
+              133,
+              62,
+              81
+            ],
+            "terrain_trusted": false,
+            "verified_descents": 2,
+            "landing_observations": [
+              {
+                "target": [
+                  131.5,
+                  62,
+                  81.5
+                ],
+                "position": [
+                  131.64422257234907,
+                  62,
+                  81.49999999999979
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T03:31:47.310Z"
+              },
+              {
+                "target": [
+                  132.5,
+                  61,
+                  81.5
+                ],
+                "position": [
+                  132.69999997,
+                  61,
+                  81.49999999999957
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T03:31:49.564Z"
+              }
+            ]
+          }
+        }
+      ],
+      "serverPositionPackets": 0
+    },
+    {
+      "directory": "forward-soil-2026-10-06T03-58-01-656Z-08a16174",
+      "testedCommit": "ae34690642857c981f3b9a72cb30159cdc8bea38",
+      "resultSha256": "99a5b8ff19d4eb591876d97fe3fbf6d0c98a2cead41413bef32a2a93cd0a2065",
+      "passed": true,
+      "serverStopped": true,
+      "sourceChanged": false,
+      "cleanupErrors": [],
+      "phases": [
+        {
+          "name": "Five receipt-confirmed soil edits and two physical descents",
+          "passed": true,
+          "elapsedMs": 6995,
+          "detail": {
+            "experimental": true,
+            "completed": true,
+            "planning_diagnostics": [
+              {
+                "kind": "start",
+                "position": [
+                  129.7,
+                  64,
+                  81.5
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "eyeHeight": 1.62
+              }
+            ],
+            "confirmed_soil_edits": 5,
+            "confirmed_dependent_clears": 1,
+            "unfinished_soil_target": null,
+            "terrain_trusted": true,
+            "verified_descents": 2,
+            "landing_observations": [
+              {
+                "target": [
+                  131.5,
+                  62,
+                  81.5
+                ],
+                "position": [
+                  131.64422257234907,
+                  62,
+                  81.49999999999979
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T03:58:19.102Z"
+              },
+              {
+                "target": [
+                  132.5,
+                  61,
+                  81.5
+                ],
+                "position": [
+                  132.69999997,
+                  61,
+                  81.49999999999957
+                ],
+                "velocity": [
+                  0,
+                  -0.0784000015258789,
+                  0
+                ],
+                "onGround": true,
+                "health": 20,
+                "food": 20,
+                "observedAt": "2026-10-06T03:58:21.356Z"
+              }
+            ],
+            "exposed_stone": [
+              133,
+              60,
+              81
+            ],
+            "position": [
+              132.69999997,
+              61,
+              81.49999999999957
+            ],
+            "stone_mined": false
+          }
+        },
+        {
+          "name": "Actual guarded return to home",
+          "passed": true,
+          "elapsedMs": 6590,
+          "detail": {
+            "arrived": true,
+            "position": {
+              "x": 112.58,
+              "y": 68,
+              "z": 96.5
+            },
+            "target": {
+              "x": 112,
+              "y": 68,
+              "z": 96
+            },
+            "radius": 0,
+            "health": 20,
+            "food": 20,
+            "trusted": true
+          }
+        }
+      ],
+      "serverPositionPackets": 0
+    }
+  ]
+}

@@ -212,12 +212,22 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
     } finally { recorder=null }
   }
   const dryStage = (v,p) => air(v.read(p)) && air(v.read(p.offset(0,1,0))) && cube(v.read(p.offset(0,-1,0))) && !HAZARDS.has(v.read(p.offset(0,-1,0)).name)
+  const dependentSnow = (v,target,footprints) => {
+    const above=v.read(target.offset(0,1,0));
+    if (!above) return null;
+    if (air(above) || cube(above)) return [];
+    if (above.name==='snow' && above.stateId===registry.blocksByName.snow?.defaultState
+      && above.boundingBox==='empty' && above.shapes.length===0
+      && above.position.distanceTo(homePoint)<=STARTER_MOVEMENT_RADIUS
+      && !footprints.some(p=>supports(above.position,p))) return [above];
+    return null;
+  }
   const safeEdit = (v,target,stage,footprints) => {
     const block=v.read(target)
     return block && SOIL.has(block.name) && cube(block) && target.distanceTo(homePoint)<=STARTER_MOVEMENT_RADIUS
       && !footprints.some(p=>supports(target,p)) && visible(v,stage,target)
       && SIDES.every(d=>{const b=v.read(target.offset(...d));return b&&!isFluidBearingBlock(b)&&!HAZARDS.has(b.name)})
-      && !FALLING.test(v.read(target.offset(0,1,0)).name)
+      && !FALLING.test(v.read(target.offset(0,1,0)).name) && dependentSnow(v,target,footprints)!==null
   }
   try {
     check();const initialView=view(new Set())
@@ -242,10 +252,11 @@ export async function planSoilStair(bot, home, { signal, protectedPositions = []
         if (!safeEdit(v,step.target,current,footprints)) {ok=false;break}
         const before=await certificate(v,current,[],()=>safeEdit(v,step.target,current,footprints))
         if (!before) {ok=false;break}
-        const expected=signature(v.read(step.target));removed.add(key(step.target))
+        const expected=signature(v.read(step.target)),dependents=dependentSnow(v,step.target,footprints).map(signature);
+        removed.add(key(step.target));for(const dependent of dependents)removed.add(dependent.position.join(','))
         const after=await certificate(v,current)
         if (!after) {ok=false;break}
-        const edit={target:step.target.toArray(),expected,before,after}
+        const edit={target:step.target.toArray(),expected,dependents,before,after}
         if (step.landing) {
           const landing=step.landing.offset(.5,0,.5)
           if (!dryStage(v,landing)) {ok=false;break}

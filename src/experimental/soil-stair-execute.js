@@ -26,9 +26,9 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
   if (!Number.isFinite(operationDeadline)) throw Error('Private soil execution requires a runner deadline')
   const owner = { entity: bot.entity, client: bot._client, world: bot.world, registry: bot.registry, pathfinder: bot.pathfinder }
   const deadline = Math.min(operationDeadline, performance.now() + 60000)
-  let failure = null, inFlight = null, confirmed = 0, landings = 0, timer, monitor, stationary = null
+  let failure = null, inFlight = null, confirmed = 0, dependentClears = 0, landings = 0, timer, monitor, stationary = null
   const listeners = [], retained = [], landingObservations = [], planningDiagnostics = []
-  const progress = () => ({ experimental: true, completed: false, planning_diagnostics: [...planningDiagnostics], confirmed_soil_edits: confirmed, unfinished_soil_target: inFlight ? [...inFlight.target] : null, terrain_trusted: terrainTrustStatus(bot).trusted, verified_descents: landings, landing_observations: landingObservations.map(sample => ({ ...sample, position: [...sample.position], velocity: [...sample.velocity], target: [...sample.target] })) })
+  const progress = () => ({ experimental: true, completed: false, planning_diagnostics: [...planningDiagnostics], confirmed_soil_edits: confirmed, confirmed_dependent_clears: dependentClears, unfinished_soil_target: inFlight ? [...inFlight.target] : null, terrain_trusted: terrainTrustStatus(bot).trusted, verified_descents: landings, landing_observations: landingObservations.map(sample => ({ ...sample, position: [...sample.position], velocity: [...sample.velocity], target: [...sample.target] })) })
   const check = () => {
     if (failure) throw failure
     signal?.throwIfAborted()
@@ -92,8 +92,8 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
         const p = after?.position, old = before?.position
         if (!finite(p) || !finite(old) || ![p.x,p.y,p.z,old.x,old.y,old.z].every(Number.isInteger)) return fail('Malformed soil terrain observation')
         if (!watched.has(cellKey(p)) && !watched.has(cellKey(old))) return
-        if (inFlight && cellKey(p) === inFlight.target.join(',') && cellKey(old) === cellKey(p)
-          && air(after) && (matches(before, inFlight.expected) || air(before))) return
+        const permitted=inFlight && [inFlight.expected,...(inFlight.dependents??[])].find(expected=>expected.position.join(',')===cellKey(p));
+        if (permitted && cellKey(old)===cellKey(p) && air(after) && (matches(before,permitted)||air(before))) return
         if (before.name !== after.name || before.stateId !== after.stateId || Boolean(before.isWaterlogged) !== Boolean(after.isWaterlogged)
           || JSON.stringify(before.shapes) !== JSON.stringify(after.shapes)) fail('Observed soil route terrain changed')
       } catch { fail('Malformed soil terrain observation') }
@@ -138,12 +138,13 @@ export async function executeSoilStair({ bot, home, signal, operationDeadline,
         dependencies(edit.before)
         atStage(stage)
         const target = new Vec3(...edit.target)
-        if (!matches(bot.blockAt(target), edit.expected) || feet().some(position => supports(target, position))) throw Error('Private soil edit target or protected support changed')
+        if (!matches(bot.blockAt(target), edit.expected) || [target,...(edit.dependents??[]).map(cell=>new Vec3(...cell.position))].some(cell=>feet().some(position => supports(cell, position)))) throw Error('Private soil edit target or protected support changed')
       }
       validate()
       inFlight = edit
-      await mine(new Vec3(...edit.target), edit.expected.name, validate, signal, deadline)
+      await mine(new Vec3(...edit.target), edit.expected.name, validate, signal, deadline, edit.dependents??[])
       confirmed++
+      dependentClears += edit.dependents?.length ?? 0
       inFlight = null
       check()
       dependencies(edit.after)
