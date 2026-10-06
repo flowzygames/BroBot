@@ -83,21 +83,26 @@ export async function planRankedRoutes(candidates, plan, { signal, budget = 1600
 
 // Item-aware navigation owns its listeners/goal. No never-ending goto promise is
 // left behind when an item is acquired, disappears, or a local budget expires.
-export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75, waitForLanding = false, safeToStop = () => true, atDestination = null } = {}) {
+export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000, stallMs = 1800, pollMs = 75, waitForLanding = false, safeToStop = () => true, atDestination = null, ownershipGuard = null } = {}) {
   return new Promise((resolve, reject) => {
+    const pathfinder = bot.pathfinder
+    const owns = () => { try { return bot.pathfinder === pathfinder && (ownershipGuard == null || (typeof ownershipGuard === 'function' && ownershipGuard() === true)) } catch { return false } }
     let settled = false, timer, lastMove = performance.now(), position = bot.entity.position.clone(), ownsGoal = false, pendingReason = null, verifiedLanding = false
     const started = performance.now()
     const exists = () => !!bot.entities?.[entity.id]
     const finish = (error, reason) => {
+      if (!error && !owns()) error = new Error('Pickup pathfinder replaced')
       if (settled) return
       settled = true; clearInterval(timer)
       signal?.removeEventListener('abort', aborted)
       bot.removeListener('entityGone', gone); bot.removeListener('playerCollect', collected)
       bot.removeListener('goal_reached', reached); bot.removeListener('goal_updated', changed); bot.removeListener('path_update', pathUpdate)
       // Serialization gives this pursuit exclusive movement ownership. Never clear a replacement goal.
-      if (ownsGoal && (bot.pathfinder.goal === undefined || bot.pathfinder.goal === goal)) {
-        try { bot.pathfinder.setGoal(null) } catch {}
-        try { bot.clearControlStates?.() } catch {}
+      if (ownsGoal && owns() && (pathfinder.goal === undefined || pathfinder.goal === goal)) {
+        try { pathfinder.setGoal(null) } catch {}
+        if (owns() && (pathfinder.goal == null || pathfinder.goal === goal)) {
+          try { bot.clearControlStates?.() } catch {}
+        }
       }
       if (error) reject(error); else resolve(waitForLanding ? { reason, started: ownsGoal, landingVerified: verifiedLanding } : { reason })
     }
@@ -112,6 +117,7 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
       } catch (error) { finish(error instanceof Error ? error : new Error('Landing safety check failed')); return false; }
     };
     const requestFinish = reason => {
+      if (!owns()) return finish(new Error('Pickup pathfinder replaced'));
       if (deadlineReached()) return finish(new Error('Pickup navigation exceeded its local time budget'));
       if (pendingReason !== 'collected') pendingReason = reason;
       if (readyToStop()) { verifiedLanding = waitForLanding; finish(null, pendingReason); }
@@ -121,11 +127,13 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
     const gone = e => { if (e.id === entity.id) requestFinish('target_gone') }
     const collected = (collector, item) => { if (collector?.id === bot.entity.id && item?.id === entity.id) requestFinish('collected') }
     const reached = g => { if (!g || g === goal) requestFinish(pendingReason || 'arrived') }
-    const changed = g => { if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Pickup navigation goal replaced')) }
+    const changed = g => { if (!owns()) return finish(new Error('Pickup pathfinder replaced')); if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Pickup navigation goal replaced')) }
     const pathUpdate = result => {
+      if (!owns()) return finish(new Error('Pickup pathfinder replaced'))
       if (result.status === 'noPath' || result.status === 'timeout') finish(new Error(`Pickup navigation ${result.status}`))
     }
     if (signal?.aborted) return aborted()
+    if (!owns()) return finish(new Error('Pickup pathfinder replaced or ownership lost'))
     if (!exists()) {
       if (!waitForLanding) return finish(null, 'target_gone');
       try {
@@ -137,6 +145,7 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
     bot.on('entityGone', gone); bot.on('playerCollect', collected); bot.on('goal_reached', reached); bot.on('goal_updated', changed); bot.on('path_update', pathUpdate)
     timer = setInterval(() => {
       if (signal?.aborted) return aborted()
+      if (!owns()) return finish(new Error('Pickup pathfinder replaced'))
       if (deadlineReached()) return finish(new Error('Pickup navigation exceeded its local time budget'))
       if (!exists()) requestFinish('target_gone')
       if (settled) return
@@ -146,47 +155,56 @@ export function pursueDroppedItem (bot, goal, entity, { signal, timeoutMs = 6000
       if (now - started >= timeoutMs) finish(new Error('Pickup navigation exceeded its local time budget'))
       else if (now - lastMove >= stallMs) finish(new Error('Pickup navigation made no movement progress'))
     }, pollMs)
-    try { ownsGoal = true; bot.pathfinder.setGoal(goal) } catch (error) { finish(error) }
+    try { if (!owns()) throw new Error('Navigation ownership changed before starting'); ownsGoal = true; pathfinder.setGoal(goal) } catch (error) { finish(error) }
   })
 }
 
 // Bound walking separately from the whole collection action, so a blocked
 // approach can be recorded and another resource tried before the action expires.
-export function walkToGoal(bot, goal, { signal, timeoutMs = 15000, stallMs = 3000, pollMs = 100 } = {}) {
+export function walkToGoal(bot, goal, { signal, timeoutMs = 15000, stallMs = 3000, pollMs = 100, ownershipGuard = null } = {}) {
   return new Promise((resolve, reject) => {
+    const pathfinder = bot.pathfinder
+    const owns = () => { try { return bot.pathfinder === pathfinder && (ownershipGuard == null || (typeof ownershipGuard === 'function' && ownershipGuard() === true)) } catch { return false } };
     let settled = false, timer, ownsGoal = false;
     let position = bot.entity.position.clone(), lastMove = performance.now();
     const started = lastMove;
     const finish = error => {
+      if (!error && !owns()) error = new Error('Walking pathfinder replaced');
       if (settled) return;
       settled = true; clearInterval(timer);
       signal?.removeEventListener('abort', aborted);
       bot.removeListener('goal_reached', reached); bot.removeListener('goal_updated', changed); bot.removeListener('path_update', pathUpdate);
-      if (ownsGoal && (bot.pathfinder.goal === undefined || bot.pathfinder.goal === goal)) {
-        try { bot.pathfinder.setGoal(null); } catch {}
-        try { bot.clearControlStates?.(); } catch {}
+      if (ownsGoal && owns() && (pathfinder.goal === undefined || pathfinder.goal === goal)) {
+        try { pathfinder.setGoal(null); } catch {}
+        // setGoal emits synchronously: another owner may start from its listener.
+        if (owns() && (pathfinder.goal == null || pathfinder.goal === goal)) {
+          try { bot.clearControlStates?.(); } catch {}
+        }
       }
       if (error) reject(error); else resolve({ arrived: true });
     };
     const aborted = () => finish(abortError());
     const reached = g => {
+      if (!owns()) return finish(new Error('Walking pathfinder replaced'));
       if (g && g !== goal) return;
       if (typeof goal.isEnd === 'function' && !goal.isEnd(bot.entity.position.floored())) return;
       finish();
     };
-    const changed = g => { if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Walking navigation goal replaced')); };
-    const pathUpdate = result => { if (['noPath', 'timeout'].includes(result.status)) finish(new Error(`Walking route ${result.status}`)); };
+    const changed = g => { if (!owns()) return finish(new Error('Walking pathfinder replaced')); if (ownsGoal && g !== goal) finish(signal?.aborted ? abortError() : new Error('Walking navigation goal replaced')); };
+    const pathUpdate = result => { if (!owns()) return finish(new Error('Walking pathfinder replaced')); if (['noPath', 'timeout'].includes(result.status)) finish(new Error(`Walking route ${result.status}`)); };
     if (signal?.aborted) return aborted();
+    if (!owns()) return finish(new Error('Walking pathfinder replaced or ownership lost'));
     if (typeof goal.isEnd === 'function' && goal.isEnd(bot.entity.position.floored())) return finish();
     signal?.addEventListener('abort', aborted, { once: true });
     bot.on('goal_reached', reached); bot.on('goal_updated', changed); bot.on('path_update', pathUpdate);
     timer = setInterval(() => {
       if (signal?.aborted) return aborted();
+      if (!owns()) return finish(new Error('Walking pathfinder replaced'));
       const now = performance.now();
       if (bot.entity.position.distanceTo(position) >= 0.35) { position = bot.entity.position.clone(); lastMove = now; }
       if (now - started >= timeoutMs) finish(new Error('Walking route exceeded its local time budget'));
       else if (now - lastMove >= stallMs) finish(new Error('Walking route made no movement progress'));
     }, pollMs);
-    try { ownsGoal = true; bot.pathfinder.setGoal(goal); } catch (error) { finish(error); }
+    try { if (!owns()) throw new Error('Navigation ownership changed before starting'); ownsGoal = true; pathfinder.setGoal(goal); } catch (error) { finish(error); }
   });
 }

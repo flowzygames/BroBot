@@ -211,3 +211,140 @@ test('native airborne arrival cleanup is not reported as a grounded verified arr
  b.entity.position=new Vec3(2.5,68,.5);b.entity.onGround=true;
  assert.equal((await pending).landingVerified,true);clean(b);
 });
+
+for (const trigger of ['abort', 'arrival', 'path failure', 'poll']) test(`walking ${trigger} preserves a replacement pathfinder even with the same goal`, async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  const b = bot(), controller = new AbortController(), original = b.pathfinder
+  const pending = walkToGoal(b, goal, { signal: controller.signal, pollMs: 2, timeoutMs: 100, stallMs: 100 })
+  let replacementClears = 0
+  b.pathfinder = { goal, setGoal() { replacementClears++ } }
+  if (trigger === 'abort') controller.abort()
+  else if (trigger === 'arrival') b.emit('goal_reached', goal)
+  else if (trigger === 'path failure') b.emit('path_update', { status: 'noPath' })
+  await assert.rejects(pending)
+  assert.equal(replacementClears, 0)
+  assert.equal(b.clears ?? 0, 0)
+  assert.equal(original.goal, goal)
+  clean(b)
+})
+
+test('walking cleanup preserves replacement pathfinder without a goal property', async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  const b = bot(), controller = new AbortController()
+  const pending = walkToGoal(b, goal, { signal: controller.signal })
+  let writes = 0
+  b.pathfinder = { setGoal() { writes++ } }
+  controller.abort()
+  await assert.rejects(pending, { name: 'AbortError' })
+  assert.equal(writes, 0)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+  b.emit('goal_reached', goal)
+  b.emit('path_update', { status: 'noPath' })
+  assert.equal(writes, 0)
+})
+
+test('walking cleanup rechecks ownership after synchronous goal-clear listeners', async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  for (const replacePathfinder of [false, true]) {
+    const b = bot(), controller = new AbortController(), successor = { x: 99 }
+    const pending = walkToGoal(b, goal, { signal: controller.signal })
+    const takeOver = cleared => {
+      if (cleared !== null) return
+      if (replacePathfinder) b.pathfinder = { goal: successor, setGoal() { assert.fail('new pathfinder must be untouched') } }
+      else b.pathfinder.goal = successor
+    }
+    b.on('goal_updated', takeOver)
+    controller.abort()
+    await assert.rejects(pending, { name: 'AbortError' })
+    assert.equal(b.pathfinder.goal, successor)
+    assert.equal(b.clears ?? 0, 0)
+    b.removeListener('goal_updated', takeOver)
+    clean(b)
+  }
+})
+
+for (const trigger of ['abort', 'collect', 'arrival', 'poll']) test(`pickup ${trigger} preserves a replacement pathfinder`, async () => {
+  const b = bot(), controller = new AbortController()
+  const pending = pursueDroppedItem(b, goal, b.entities[2], { signal: controller.signal, pollMs: 2, timeoutMs: 100, stallMs: 100 })
+  let writes = 0
+  b.pathfinder = { goal, setGoal() { writes++ } }
+  if (trigger === 'abort') controller.abort()
+  else if (trigger === 'collect') b.emit('playerCollect', b.entity, b.entities[2])
+  else if (trigger === 'arrival') b.emit('goal_reached', goal)
+  await assert.rejects(pending)
+  assert.equal(writes, 0)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+})
+
+test('pickup cleanup rechecks ownership after synchronous goal-clear listeners', async () => {
+  const b = bot(), controller = new AbortController(), successor = { x: 99 }
+  const pending = pursueDroppedItem(b, goal, b.entities[2], { signal: controller.signal })
+  const takeOver = cleared => { if (cleared === null) b.pathfinder.goal = successor }
+  b.on('goal_updated', takeOver)
+  controller.abort()
+  await assert.rejects(pending, { name: 'AbortError' })
+  assert.equal(b.pathfinder.goal, successor)
+  assert.equal(b.clears ?? 0, 0)
+  b.removeListener('goal_updated', takeOver)
+  clean(b)
+})
+
+for (const initial of [true, false]) test(`walking success predicate cannot replace its owner (${initial ? 'initial' : 'arrival'})`, async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  const b = bot(); let ready = initial, writes = 0
+  const target = { isEnd() { if (!ready) return false; b.pathfinder = { setGoal() { writes++ } }; return true } }
+  const pending = walkToGoal(b, target)
+  if (!initial) { ready = true; b.emit('goal_reached', target) }
+  await assert.rejects(pending, /pathfinder replaced/)
+  assert.equal(writes, 0)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+})
+
+test('pickup landing predicate cannot transfer ownership and claim verified landing', async () => {
+  const b = bot(); b.entity.onGround = true; let writes = 0
+  const pending = pursueDroppedItem(b, goal, b.entities[2], { waitForLanding: true, atDestination: () => true,
+    safeToStop() { b.pathfinder = { setGoal() { writes++ } }; return true } })
+  b.emit('playerCollect', b.entity, b.entities[2])
+  await assert.rejects(pending, /pathfinder replaced/)
+  assert.equal(writes, 0)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+})
+
+for (const kind of ['walk', 'pickup']) test(`${kind} respects an external owner handoff with the same pathfinder and goal`, async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  const b = bot(), controller = new AbortController(); let current = true
+  const options = { signal: controller.signal, ownershipGuard: () => current }
+  const pending = kind === 'walk' ? walkToGoal(b, goal, options) : pursueDroppedItem(b, goal, b.entities[2], options)
+  current = false
+  controller.abort()
+  await assert.rejects(pending, { name: 'AbortError' })
+  assert.equal(b.pathfinder.goal, goal)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+})
+
+for (const kind of ['walk', 'pickup']) test(`${kind} refuses malformed or throwing owner guard before setting a goal`, async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  for (const ownershipGuard of [true, () => false, () => { throw Error('retired') }]) {
+    const b = bot(), options = { ownershipGuard }
+    await assert.rejects(kind === 'walk' ? walkToGoal(b, goal, options) : pursueDroppedItem(b, goal, b.entities[2], options))
+    assert.equal(b.pathfinder.goal, null)
+    assert.equal(b.clears ?? 0, 0)
+    clean(b)
+  }
+})
+
+test('false-returning initial walking predicate cannot start a retired pathfinder', async () => {
+  const { walkToGoal } = await import('../src/navigation-guards.js')
+  const b = bot(); let oldStarts = 0
+  b.pathfinder.setGoal = () => { oldStarts++ }
+  const target = { isEnd() { b.pathfinder = { goal: target, setGoal() { assert.fail('replacement must be untouched') } }; return false } }
+  await assert.rejects(walkToGoal(b, target), /ownership changed/)
+  assert.equal(oldStarts, 0)
+  assert.equal(b.clears ?? 0, 0)
+  clean(b)
+})
