@@ -5,10 +5,15 @@ import { promisify } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { supportedNode } from './launch.js';
 import { loadConfig } from '../src/config.js';
 import { findJava, exists, eulaAccepted, SERVER_DIR, VERSION } from './server.js';
 
 const run = promisify(execFile);
+export function nodeVersionReport(version = process.versions.node) {
+  const ok = supportedNode(version);
+  return { ok, message: `${ok ? 'OK' : 'FAIL'} Node ${version}${ok ? '' : ' — install Node 22.9 or newer'}` };
+}
 export function pingTcp(host, port, timeout = 2000) {
   return new Promise(resolvePing => {
     const socket = net.connect({ host, port });
@@ -53,8 +58,9 @@ export async function doctor(log = console.log) {
   if (!Number.isInteger(bedrockPort) || bedrockPort < 1024 || bedrockPort > 65535) { log('FAIL BEDROCK_PORT must be an integer from 1024 to 65535.'); return false; }
   const memory = JSON.parse(await readFile(join(config.dataDir, 'memory.json'), 'utf8').catch(() => '{}'));
   const owner = typeof memory.owner === 'string' ? memory.owner : minecraft.owner;
-  const nodeOk = Number(process.versions.node.split('.')[0]) >= 22;
-  log(`${nodeOk ? 'OK' : 'FAIL'} Node ${process.versions.node}${nodeOk ? '' : ' — install Node 22+'}`);
+  const nodeReport = nodeVersionReport();
+  const nodeOk = nodeReport.ok;
+  log(nodeReport.message);
   let javaOk = true;
   try { const java = await findJava(); log(`OK Java ${java.major}: ${java.path}`); }
   catch (error) { javaOk = false; log(`FAIL ${error.message}`); }

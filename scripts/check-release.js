@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { join, resolve, dirname } from 'node:path'
 import { buildReleaseCandidate } from './build-release.js'
 import { extractReleaseCandidate, verifyExtractedCandidate } from './verify-release.js'
+import { launcherRefusalRecord } from './lib/launcher-refusal.js'
 
 const [commit,output='dist/artifact-check']=process.argv.slice(2)
 if(!process.env.npm_execpath)throw Error('Run through npm run check:release -- <full-commit> [fresh-directory]')
@@ -22,7 +23,13 @@ try{
     result.checks.push({command:['npm',...args].join(' '),exitCode:run.status,error:run.error?.message??null,signal:run.signal??null})
     if(run.error||run.status!==0)throw Error(`Extracted artifact failed npm ${args.join(' ')}`)
   }
+  const launcher=await launcherRefusalRecord(extracted.root)
+  result.checks.push(launcher)
+  if(!launcher.passed)throw Error(`Extracted launcher refusal failed: ${launcher.error || Object.entries(launcher.checks).filter(([,ok])=>!ok).map(([name])=>name).join(', ')}`)
   result.passed=true
+}catch(error){
+  result.error=error.message
+  throw error
 }finally{
   result.finished=new Date().toISOString()
   writeFileSync(join(directory,'verification.json'),`${JSON.stringify(result,null,2)}\n`,{flag:'wx'})

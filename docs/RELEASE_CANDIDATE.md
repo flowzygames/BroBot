@@ -19,9 +19,11 @@ The verifier accepts only this narrow archive format, validates local/central re
 
     npm run check:release -- FULL_40_CHARACTER_COMMIT_SHA "fresh acceptance directory"
 
-This creates the immutable ZIP and sidecar, extracts into a path containing spaces, verifies every file, then runs a real `npm ci` and `npm run check` inside that extracted application. It uses neither shared node_modules nor a source-checkout installation. The external verification.json binds the platform, commands and results to the ZIP checksum. The ZIP itself is never rewritten with a claimed passing score. CI runs this gate on Windows and Linux in addition to normal source checks, retaining the candidate, sidecar and verification result for 14 days with [GitHub artifact uploads](https://github.com/actions/upload-artifact).
+This creates the immutable ZIP and sidecar, extracts into a path containing spaces, verifies every file, then runs a real `npm ci` and `npm run check` inside that extracted application. It uses neither shared node_modules nor a source-checkout installation. After the checks, it executes the shipped platform launcher with piped input and no EULA acceptance. This must exit with code 1, show the explicit Minecraft EULA refusal, create only the default .env and dependency marker, and leave .server and bot data absent. It exercises noninteractive refusal, not a person typing “no”. The launcher is allowed to perform its real first-launch dependency installation; the gate does not pre-seed its marker.
 
-This gate does not launch a Minecraft graphical client, accept the EULA, create a world, charge a customer, or verify Bedrock gameplay. Those remain separate acceptance steps.
+The external verification.json binds the platform, commands and results to the ZIP checksum. The launcher refusal is a separate passed check with expectedExitCode 1; that expected nonzero exit is not an installation failure. Timeout, excessive output or interruption triggers termination of the created process group/tree. Unconfirmed cleanup and helper exceptions remain explicit failed checks; they are never reported as a safe refusal. The ZIP itself is never rewritten with a claimed passing score. CI runs this gate on Windows and Linux in addition to normal source checks, retaining the candidate, sidecar and verification result for 14 days with [GitHub artifact uploads](https://github.com/actions/upload-artifact).
+
+This gate runs the actual wrapper on each OS, but does not launch a Minecraft graphical client, accept the EULA, create a world, charge a customer, or verify Bedrock gameplay. Those remain separate acceptance steps.
 
 ## Before public release
 
