@@ -283,6 +283,8 @@ export class SurvivalJob {
       ? { foliage: observation.foliage ?? null, powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
       : retryKind === 'craft'
       ? { tableInReach: observation.tableInReach, tables: (observation.tables ?? []).map(p=>[p.x,p.y,p.z]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]), craftGeometry: observation.craftGeometry ?? observation.localTerrain ?? [], powderSnowContact: observation.powderSnowContact, lavaContact: observation.lavaContact }
+      : retryKind === 'collect' && typeof observation.emptyCollectionRetryKey === 'string'
+      ? Object.fromEntries(Object.entries(observation).filter(([key])=>key !== 'terrainRevision'))
       : observation);
     const retryContext = (state, observation, retryKind = null) => ({retryKind,inventoryKey:inventoryKey(state),observationKey:observationKey(observation,retryKind),position:{...state.position}});
     const sameContext = (saved, state, observation) => saved && inventoryKey(state)===saved.inventoryKey && observationKey(observation,saved.retryKind)===saved.observationKey && distance(state.position,saved.position)<=0.1;

@@ -1,7 +1,7 @@
 // Only callers with a proven local terrain predicate may supply this scope.
 // Generic cursors remain globally invalidated by default.
 const blockPosition = p => p && ['x','y','z'].every(k => Number.isSafeInteger(p[k]) && Math.abs(p[k]) <= 30000000)
-function normalizeDependency(scope) {
+export function normalizeDependency(scope) {
   try {
     const p=scope?.origin, origin={x:p?.x,y:p?.y,z:p?.z}, radius=scope?.radius
     if (!blockPosition(origin) || !Number.isFinite(radius) || radius < 1 || radius > 65) return null
@@ -9,7 +9,7 @@ function normalizeDependency(scope) {
     return Object.freeze({origin,radius,key:JSON.stringify([origin.x,origin.y,origin.z,radius])})
   } catch { return null }
 }
-function relevantTerrainEvent(scope,event,args) {
+export function relevantTerrainEvent(scope,event,args) {
   if (!scope) return true
   const {origin,radius} = scope, squared = radius * radius
   if (event === 'blockUpdate') {

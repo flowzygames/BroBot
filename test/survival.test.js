@@ -370,7 +370,7 @@ test('runtime tree observation is not starved by ore and returns only a nearby l
     blockAt: p => ({ name: p.equals(new Vec3(4,64,0)) ? 'oak_log' : p.equals(new Vec3(2,65,0)) ? 'oak_leaves' : 'air', position: p }),
     world: { raycast: (eye, direction, distance) => { assert.ok(Math.abs(direction.norm() - 1) < 0.001); assert.ok(distance <= 4.2); return { name: 'oak_leaves', position: new Vec3(2, 65, 0) }; } }, quit: () => {}
   };
-  try { assert.deepEqual(await runtime.survival.observe(), { terrainRevision:0, localTerrain:[], resourceEvidence: Array.from({length:64},()=>({name:'iron_ore',position:{x:2,y:60,z:0}})), powderSnowContact: false, lavaContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
+  try { assert.deepEqual(await runtime.survival.observe(), { terrainRevision:0, emptyCollectionRetryKey:null, localTerrain:[], resourceEvidence: Array.from({length:64},()=>({name:'iron_ore',position:{x:2,y:60,z:0}})), powderSnowContact: false, lavaContact: false, wood: 'oak', foliage: { x: 2, y: 65, z: 0, expected_block: 'oak_leaves' }, pickupClearance: null, tables: [], tableInReach: false }); }
   finally { await runtime.close(); await rm(dir, { recursive: true, force: true }); }
 });
 
@@ -1411,3 +1411,17 @@ for (const audit of [null, {}, [null], [{ outcome: 'success' }], [{ outcome: 're
   f.data.survivalJob.interruptedActions = audit
   assert.throws(() => new SurvivalJob({ memory: f.memory, context: 'test' }), /interrupted action audit is invalid/)
 })
+
+test('only a still-valid complete-empty hint ignores global terrain churn after a refused scout',async()=>{
+ for(const mode of ['valid','missing','invalidated','new-resource','new-hazard']){
+  const f=unchangedScoutFixture();let revision=0,key=mode==='missing'?null:'observed-empty';const observe=f.job.observe,execute=f.job.execute;
+  f.job.observe=async()=>({...await observe(),terrainRevision:revision,emptyCollectionRetryKey:key,
+    ...(revision&&mode==='new-resource'?{resourceEvidence:[{name:'stone',position:{x:2,y:60,z:0}}]}:{}),
+    ...(revision&&mode==='new-hazard'?{lavaContact:true}:{})});
+  f.job.execute=async(name,args,...rest)=>{if(name==='explore'){revision++;if(mode==='invalidated')key=null;}return execute(name,args,...rest);};
+  f.job.start();await f.job.promise;
+  if(mode==='valid')assert.deepEqual(f.actions,['collect','collect','explore','explore','explore']);
+  else if(mode==='new-hazard'){assert.deepEqual(f.actions,['collect','collect','explore']);assert.match(f.job.state().reason,/Lava/);}
+  else assert.equal(f.actions[3],'collect',mode);
+ }
+});
