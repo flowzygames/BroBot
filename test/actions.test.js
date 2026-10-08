@@ -2560,3 +2560,21 @@ for(const mode of ['stable empty','missing column','skipped history','native fal
   if(mode==='missing column')assert.ok(result.ordinary_search.unloaded_columns>0)
   if(['changed context','away and back'].includes(mode))assert.equal(result.ordinary_search.context_stable,false)
 })
+
+test('completed empty hint survives real runner cleanup and a stationary refused scout only',async t=>{
+ t.mock.method(performance,'now',()=>1000);
+ const {Runtime}=await import('../src/runtime.js');
+ for(const mode of ['distant','local','native','stop']){
+  const bot=fakeBot(),air=registry.blocksByName.air;bot.entity.velocity=new Vec3(0,0,0);
+  bot.world=mode==='native'?{}:{getColumn:()=>({sections:Array(24).fill({palette:[air.defaultState]})})};
+  const actions=createActions(bot),parent=new AbortController(),runtime={bot,actions,connection:'connected',progression:{definitions:[]},runner:new ActionRunner(),definitions:()=>definitions};
+  await assert.rejects(Runtime.prototype.execute.call(runtime,'collect',{block:'stone',count:1,radius:4},parent.signal,{starterScope:'job/hint'}));
+  const key=actions.emptyCollectionRetryKey();assert.equal(typeof key,mode==='native'?'object':'string');
+  if(mode==='stop'){actions.stop();assert.equal(actions.emptyCollectionRetryKey(),null);continue;}
+  await Runtime.prototype.execute.call(runtime,'inspect',{radius:1},parent.signal);
+  bot.pathfinder.getPathFromTo=function*(){const p=new Vec3(mode==='local'?1:1000,64,0);bot.emit('blockUpdate',{position:p},{position:p});yield{result:{status:'noPath',path:[]}};};
+  await assert.rejects(Runtime.prototype.execute.call(runtime,'explore',{direction:'east',distance:8,returnable:true},parent.signal,{starterScope:'job/hint'}));
+  assert.equal(actions.emptyCollectionRetryKey(),mode==='distant'?key:null,mode);parent.abort();actions.stop();
+  assert.equal(bot.listenerCount('blockUpdate'),0);
+ }
+});

@@ -1,3 +1,4 @@
+import { EmptyCollectionRetry } from './empty-collection-retry.js'
 import { randomUUID } from 'node:crypto'
 import { retainOperationResult } from './action-error-result.js'
 import { executeSoilStair } from './experimental/soil-stair-execute.js'
@@ -126,6 +127,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   const owns = guard => { try { return guard == null || guard() === true } catch { return false } }
   let movements = null
   const emptySearch = new EmptySearchContinuation(bot)
+  const emptyCollectionRetry = new EmptyCollectionRetry(bot,{boundary:movementBoundary})
   const dropRetryCache = new DropRetryCache(bot)
   const items = () => bot.inventory?.items() ?? []
   const itemCount = name => items().filter(i => i.name === name).reduce((n, i) => n + i.count, 0)
@@ -161,6 +163,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
   const step = async (ctx, fn) => { checked(ctx); const result = await fn(); checked(ctx); return result }
 
   function stop ({ sessionChanged = false, finishedCleanup = false } = {}) {
+    if (!finishedCleanup || active || sessionChanged || staleSession(lastSession)) emptyCollectionRetry.clear()
+    else emptyCollectionRetry.key()
     if (finishedCleanup && !active && !sessionChanged && !staleSession(lastSession)) emptySearch.finishedCleanup()
     else emptySearch.clear()
     if (sessionChanged && lastSession) lastSession.changed = true
@@ -488,6 +492,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let searchScans = 0, searchReuses = 0
     let searchEvidence = null, searchEvidenceContext = null, stopReason = 'requested_count', rankingLimited = false
     let searchLease = null, searchContinued = false, continuationSaved = false
+    const retryLease = ctx.starterScope ? emptyCollectionRetry.begin({origin:plainPos(bot.entity.position.floored()),radius,block:name,parentSignal:ctx.parentSignal}) : null
     const invalidateCandidates = () => { candidateRevision++; candidateCache = null }
     const invalidateSearchPose = () => {
       if (searchEvidenceContext && (!bot.entity?.position?.equals(searchEvidenceContext.position) || bot.world !== searchEvidenceContext.world || dimension() !== searchEvidenceContext.dimension)) searchEvidenceContext.invalidated = true
@@ -640,9 +645,11 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       complete_empty:searchEvidence.source==='cursor' && searchEvidence.coverage_complete===true && searchEvidence.termination==='traversal_complete'
         && searchEvidence.observed_candidates===0 && searchEvidence.skipped_positions===0 && contextStable && mined===0 && failures.length===0 && !searchLimited && !rankingLimited}:null
     const result = { ordinary_search:ordinarySearch, search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    emptyCollectionRetry.confirm(retryLease,ordinarySearch)
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
     } finally {
+      if (!emptyCollectionRetry.key()) emptyCollectionRetry.clear()
       if (!continuationSaved && searchLease) emptySearch.release(searchLease)
       for (const event of worldEvents) bot.removeListener(event, invalidateCandidates)
       bot.removeListener('blockUpdate', invalidateOnBlockUpdate)
@@ -1459,6 +1466,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     let operationDeadline
     try {
     emptySearch.dispatch(name, executionContext.parentSignal)
+    emptyCollectionRetry.dispatch(name, executionContext.parentSignal)
     assertTerrainTrusted(bot)
     assert(Object.hasOwn(handlers, name), `Unknown action ${name}`)
     if (name === 'private_soil_stair' || name === 'private_soil_collect') assert(executionContext.privateSoil === PRIVATE_SOIL && typeof executionContext.ownershipGuard === 'function', 'Private soil execution requires an owned internal invocation')
@@ -1471,7 +1479,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const deadlines=[executionContext.jobDeadline,executionContext.actionDeadline].filter(value=>value!==undefined)
     assert(deadlines.every(Number.isFinite),'Operation deadlines must be finite monotonic timestamps')
     operationDeadline=deadlines.length?Math.min(...deadlines):undefined
-    } catch (error) { emptySearch.clear(); throw error }
+    } catch (error) { emptySearch.clear(); emptyCollectionRetry.clear(); throw error }
     const controller = new AbortController()
     const session = { entity: bot.entity, client: bot._client, dimension: dimension(), changed: false }
     lastSession = session
@@ -1509,5 +1517,5 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     }
   }
 
-  return { execute, stop, collectExposedStone:(exposure,signal,context={})=>execute('private_soil_collect',{exposure},signal,{...context,privateSoil:PRIVATE_SOIL}), excavateSoil:(signal,context={})=>execute('private_soil_stair',{},signal,{...context,privateSoil:PRIVATE_SOIL}), invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
+  return { execute, stop, emptyCollectionRetryKey:()=>emptyCollectionRetry.key(), collectExposedStone:(exposure,signal,context={})=>execute('private_soil_collect',{exposure},signal,{...context,privateSoil:PRIVATE_SOIL}), excavateSoil:(signal,context={})=>execute('private_soil_stair',{},signal,{...context,privateSoil:PRIVATE_SOIL}), invalidateSearch:() => emptySearch.clear(), snapshot, definitions, retreatFromHostile:(args,signal,context)=>execute('starter_retreat',args,signal,context) }
 }
