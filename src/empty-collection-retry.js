@@ -54,7 +54,7 @@ export class EmptyCollectionRetry {
     const p=evidence?.origin, origin=lease?.scope.origin;
     if(!this.valid(lease) || evidence?.complete_empty!==true || evidence.source!=='cursor'
       || evidence.coverage_complete!==true || evidence.context_stable!==true || evidence.termination!=='traversal_complete'
-      || evidence.observed_candidates!==0 || evidence.skipped_positions!==0 || evidence.unloaded_columns!==0 || evidence.unknown_cells!==0
+      || evidence.observed_candidates!==0 || evidence.query_skipped_positions!==0 || !Number.isSafeInteger(evidence.skipped_positions) || evidence.skipped_positions<0 || evidence.unloaded_columns!==0 || evidence.unknown_cells!==0
       || evidence.block!==lease.block || evidence.radius!==lease.radius
       || !['x','y','z'].every(k=>p?.[k]===origin?.[k])) {
       if(this.lease===lease)this.clear();return false;

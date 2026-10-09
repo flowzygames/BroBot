@@ -2611,3 +2611,55 @@ for(const neighbor of ['air','water','unloaded'])test(`scoped radius boundary ke
   else{assert.equal(outcome.ordinary_search.observed_candidates,0);assert.equal(routes,0)}
  }finally{parent.abort();actions.stop()}
 });
+
+for (const fixture of [
+  {name:'outside sphere',pose:[0,64,0],skips:[[5,64,0]],scoped:0},
+  {name:'exact boundary',pose:[0,64,0],skips:[[4,64,0]],scoped:1},
+  {name:'mixed history',pose:[0,64,0],skips:[[4,64,0],[5,64,0]],scoped:1},
+  {name:'duplicate history',pose:[0,64,0],skips:[[4,64,0],[4,64,0]],scoped:1},
+  {name:'fractional negative outside',pose:[-0.2,64,-0.2],skips:[[4,64,-1]],scoped:0},
+  {name:'fractional negative boundary',pose:[-0.2,64,-0.2],skips:[[-5,64,-1]],scoped:1}
+]) test(`empty collection scopes skip evidence: ${fixture.name}`,async t=>{
+  t.mock.method(performance,'now',()=>1000);
+  const {Runtime}=await import('../src/runtime.js');
+  const bot=fakeBot(),air=registry.blocksByName.air;bot.entity.velocity=new Vec3(0,0,0);bot.entity.position=new Vec3(...fixture.pose);
+  bot.world={getColumn:()=>({sections:Array(24).fill({palette:[air.defaultState]})})};
+  const actions=createActions(bot),parent=new AbortController(),runtime={bot,actions,connection:'connected',progression:{definitions:[]},runner:new ActionRunner(),definitions:()=>definitions};
+  let result;
+  try {
+    await assert.rejects(Runtime.prototype.execute.call(runtime,'collect',{block:'stone',count:1,radius:4,skip_positions:fixture.skips.map(([x,y,z])=>({x,y,z}))},parent.signal,{starterScope:'skip-scope'}),error=>{result=error.result;return Boolean(result)});
+    assert.equal(result.ordinary_search.skipped_positions,new Set(fixture.skips.map(p=>p.join(','))).size);
+    assert.equal(result.ordinary_search.query_skipped_positions,fixture.scoped);
+    assert.equal(result.ordinary_search.complete_empty,fixture.scoped===0);
+    assert.equal(typeof actions.emptyCollectionRetryKey(),fixture.scoped===0?'string':'object');
+    if(fixture.scoped===0){
+      const key=actions.emptyCollectionRetryKey();
+      bot.pathfinder.getPathFromTo=function*(){const p=new Vec3(1000,64,0);bot.emit('blockUpdate',{position:p},{position:p});yield{result:{status:'noPath',path:[]}}};
+      await assert.rejects(Runtime.prototype.execute.call(runtime,'explore',{direction:'east',distance:8,returnable:true},parent.signal,{starterScope:'skip-scope'}));
+      assert.equal(actions.emptyCollectionRetryKey(),key);
+      const p=bot.entity.position.floored().offset(5,0,0);bot.emit('blockUpdate',{position:p},{position:p});
+      assert.equal(actions.emptyCollectionRetryKey(),null,'radius+1 neighbor still invalidates even outside the query');
+    }
+  } finally {parent.abort();actions.stop()}
+});
+
+for(const mode of ['outside','inside','changed'])test(`paged empty search retains scoped skip history: ${mode}`,async t=>{
+  t.mock.method(performance,'now',()=>1000);
+  const {Runtime}=await import('../src/runtime.js');const bot=fakeBot(),stone=registry.blocksByName.stone;bot.entity.velocity=new Vec3(0,0,0);
+  bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState]})})};
+  bot.blockAt=p=>({name:'stone',type:stone.id,position:p.floored(),boundingBox:'block'});
+  const actions=createActions(bot),parent=new AbortController(),runtime={bot,actions,connection:'connected',progression:{definitions:[]},runner:new ActionRunner(),definitions:()=>definitions},results=[];
+  try {
+    for(let i=0;i<(mode==='changed'?4:3);i++){
+      const skip_positions=mode==='inside'?[{x:0,y:64,z:0}]:mode==='changed'&&i===0?[]:[{x:33,y:64,z:0}];
+      await assert.rejects(Runtime.prototype.execute.call(runtime,'collect',{block:'stone',count:4,radius:32,skip_positions},parent.signal,{starterScope:'scoped/skip-pages'}),error=>{results.push(error.result);return Boolean(error.result)});
+      await Runtime.prototype.execute.call(runtime,'inspect',{radius:1},parent.signal);
+    }
+    assert.deepEqual(results.map(r=>r.search_continued),mode==='changed'?[false,false,true,true]:[false,true,true]);
+    assert.deepEqual(results.map(r=>r.search_limited),mode==='changed'?[true,true,true,false]:[true,true,false]);
+    const final=results.at(-1).ordinary_search;
+    assert.equal(final.skipped_positions,1);assert.equal(final.query_skipped_positions,mode==='inside'?1:0);
+    assert.equal(final.coverage_complete,true);assert.equal(final.complete_empty,mode!=='inside');
+    assert.equal(typeof actions.emptyCollectionRetryKey(),mode==='inside'?'object':'string');
+  } finally {parent.abort();actions.stop()}
+});
