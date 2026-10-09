@@ -2671,3 +2671,53 @@ test('distant dig requests use the mining-specific goal without changing live un
  const local=fakeBot();local.putBlock('stone',new Vec3(0,63,0));let traveled=false;local.pathfinder.goto=async()=>{traveled=true};
  await assert.rejects(createActions(local).execute('dig_at',{x:0,y:63,z:0}),/supporting the bot/);assert.equal(traveled,false);
 });
+
+test('collection failure carries forward route phase into runner journal without claiming mined work', async () => {
+ const bot=fakeBot(),logs=[];
+ for(let x=0;x<=9;x++)bot.putBlock('stone',new Vec3(x,63,0));
+ bot.putBlock('oak_log',new Vec3(9,64,0));
+ bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}}};
+ const runner=new ActionRunner({log:(...args)=>logs.push(args)}),actions=createActions(bot);
+ await assert.rejects(runner.run('collect',signal=>actions.execute('collect',{block:'oak_log',count:1,radius:12},signal)),e=>{
+  assert.equal(e.result.mined,0);assert.ok(e.result.failures.length);
+  assert.deepEqual(e.result.failures[0].route_failure,{phase:'forward',planner_status:'noPath'});return true;
+ });
+ const record=logs.findLast(args=>args[0]==='error')[2];
+ assert.deepEqual(record.failures[0],{position:{x:9,y:64,z:0},route_failure:{phase:'forward',planner_status:'noPath'}});
+});
+
+test('pickup failure carries reverse phase into per-drop records and pickup journal', async () => {
+ const bot=fakeBot(),logs=[];
+ for(const x of [0,1,2])bot.putBlock('stone',new Vec3(x,63,0));
+ bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}}};
+ const r=await createActions(bot,{log:(...args)=>logs.push(args)}).execute('pickup',{radius:8});
+ assert.ok(r.unreachable.length);assert.deepEqual(r.unreachable[0].route_failure,{phase:'reverse',planner_status:'noPath'});
+ const failure=logs.find(args=>args[0]==='pickup'&&args[1].includes('pursuit failed'));
+ assert.deepEqual(failure[2].route_failure,{phase:'reverse',planner_status:'noPath'});
+ assert.deepEqual(r.inventory_changes,{});
+});
+
+for(const operation of ['collect','pickup'])test(`${operation} cancellation retains the planner phase through checked context`,async()=>{
+ const bot=fakeBot(),controller=new AbortController();
+ for(let x=0;x<=9;x++)bot.putBlock('stone',new Vec3(x,63,0));
+ bot.putBlock('oak_log',new Vec3(9,64,0));
+ if(operation==='pickup')bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.pathfinder.getPathFromTo=function*(){controller.abort();yield{result:{status:'partial',path:[]}}};
+ const args=operation==='collect'?{block:'oak_log',count:1,radius:12}:{radius:8};
+ await assert.rejects(createActions(bot).execute(operation,args,controller.signal),error=>{
+  assert.equal(error.name,'AbortError');
+  assert.deepEqual(error.result.route_failure,{phase:operation==='collect'?'forward':'reverse'});return true;
+ });
+});
+
+test('pickup unsafe settlement preserves reverse planning diagnosis and inventory receipt',async()=>{
+ const bot=fakeBot();for(const x of [0,1,2])bot.putBlock('stone',new Vec3(x,63,0));
+ bot.entities[2]={id:2,name:'item',position:new Vec3(2.5,64,.5)};
+ bot.pathfinder.getPathFromTo=function*(){bot.entity.onGround=false;yield{result:{status:'noPath',path:[]}}};
+ await assert.rejects(createActions(bot).execute('pickup',{radius:8}),error=>{
+  assert.equal(error.code,'PICKUP_UNSAFE_SETTLEMENT');assert.equal(error.result.landing_verified,false);
+  assert.deepEqual(error.result.inventory_changes,{});
+  assert.deepEqual(error.result.route_failure,{phase:'reverse',planner_status:'noPath'});return true;
+ });
+});

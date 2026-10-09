@@ -1,3 +1,4 @@
+import { routeFailure } from './route-diagnostics.js'
 import { EmptyCollectionRetry } from './empty-collection-retry.js'
 import { randomUUID } from 'node:crypto'
 import { retainOperationResult } from './action-error-result.js'
@@ -460,7 +461,8 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
           log('pickup', `Drop ${target.id} remains after grounded arrival`, { id: target.id, code: failure.code, position: plainPos(bot.entity.position), onGround: bot.entity.onGround, navigationLandingVerified: true })
         }
       } catch (error) {
-        checked(ctx)
+        try { checked(ctx) } catch (stop) { throw retainOperationResult(stop, error) }
+        const diagnostic = routeFailure(error), routeDetails = diagnostic ? { route_failure: diagnostic } : {}
         ctx.pickupUnverified = true
         dropRetryCache.failed(target,ctx.starterScope,error.message)
         let passivelySettled = false
@@ -470,10 +472,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
           checked(ctx)
           if (passivelySettled) ctx.pickupSettledFailure = true
         }
-        log('pickup', `Drop ${target.id} pursuit failed: ${error.message}`, { id:target.id, destination:destination?plainPos(destination):null, position:plainPos(bot.entity.position), onGround:bot.entity.onGround, landingVerified:false, passivelySettled })
-        if ((neededSettlement && !passivelySettled) || !safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false}})
+        log('pickup', `Drop ${target.id} pursuit failed: ${error.message}`, { id:target.id, destination:destination?plainPos(destination):null, position:plainPos(bot.entity.position), onGround:bot.entity.onGround, landingVerified:false, passivelySettled, ...routeDetails })
+        if ((neededSettlement && !passivelySettled) || !safeLanding()) throw Object.assign(new Error('Pickup ended without a verified grounded dry stop. Work halted; the world keeps running.'), {code:'PICKUP_UNSAFE_SETTLEMENT',result:{inventory_changes:changes(before),remaining_drops:drops().map(e=>({id:e.id,position:plainPos(e.position)})),landing_verified:false,...routeDetails}})
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
-        const failure = { id: target.id, error: error.message, code: error.code ?? null }
+        const failure = { id: target.id, error: error.message, code: error.code ?? null, ...routeDetails }
         failures.push(failure)
         ctx.pickupFailures = [...(ctx.pickupFailures ?? []), failure].slice(-64)
         if (passivelySettled) break
@@ -641,11 +643,12 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         pickup = await pickupInternal(ctx, 6)
         if (ctx.pickupSettledFailure || pickup.planning_limited || pickup.pickup_limited) { planningLimited = pickup.planning_limited; stopReason=ctx.pickupSettledFailure?'pickup_unverified':pickup.planning_limited?'planning_limit':'pickup_limit'; break }
       } catch (error) {
-        checked(ctx)
+        try { checked(ctx) } catch (stop) { throw retainOperationResult(stop, error) }
+        const diagnostic = routeFailure(error)
         if(error.code===MINING_DEADLINE_INSUFFICIENT){error.result={...error.result,completed:false,mined,inventory_changes:changes(before),remaining_drops:pickup.remaining_drops};throw error}
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') { error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }; throw error }
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
-        failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null })
+        failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null, ...(diagnostic ? { route_failure: diagnostic } : {}) })
         if (planningLimited) { stopReason='planning_limit'; break }
         if (++consecutiveFailures >= 8) { stopReason='candidate_failure_limit'; break }
       }
