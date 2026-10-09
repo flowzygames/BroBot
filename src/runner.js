@@ -1,3 +1,4 @@
+import { routeFailureLog } from './route-diagnostics.js';
 import { retainOperationResult } from './action-error-result.js';
 export class ActionRunner {
   constructor({ timeoutMs = 120000, log = () => {} } = {}) {
@@ -39,7 +40,9 @@ export class ActionRunner {
       // Pathfinder rejects its pending promise with GoalChanged when Stop
       // clears the goal. Preserve the initiating cancellation/timeout reason.
       const failure = controller.signal.aborted ? retainOperationResult(controller.signal.reason, error) : error;
-      this.log('error', `${name}: ${failure.message}`);
+      const diagnostic = routeFailureLog(failure);
+      if (diagnostic) this.log('error', `${name}: ${failure.message}`, diagnostic);
+      else this.log('error', `${name}: ${failure.message}`);
       throw failure;
     } finally {
       clearTimeout(timeout);

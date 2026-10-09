@@ -1,3 +1,4 @@
+import { annotateRouteFailure, routeFailure } from './route-diagnostics.js'
 import { Vec3 } from 'vec3'
 
 // Aquatic plants and bubble columns carry water even when isWaterlogged is false.
@@ -15,23 +16,25 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
   if (typeof bot.pathfinder.getPathFromTo !== 'function') throw new Error('Return-path planning is unavailable; refusing collection travel')
   const deadline = performance.now() + planningBudget
   const check = () => { if (signal?.aborted) throw abortError(); if (performance.now() >= deadline) throw new Error('Return-path planning budget exhausted') }
-  const plan = async (start, target) => {
-    check()
-    const remaining = Math.max(1, deadline - performance.now())
-    const generator = bot.pathfinder.getPathFromTo(movements, start, target, { timeout: remaining, tickTimeout: 25, optimizePath: false })
+  const plan = async (start, target, phase) => {
     let result
     try {
-      for (const value of generator) {
-        check(); result = value.result
-        if (result.status !== 'partial') break
-        await yieldControl()
-      }
-    } finally { generator.return?.() }
-    check()
-    if (result?.status !== 'success') throw new Error(`No verified returnable walking route (${result?.status ?? 'unknown'})`)
-    if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
-    if (validateNode && result.path.some(p => !validateNode(p))) throw new Error('No verified returnable walking route (unsafe node)')
-    return result
+      check()
+      const remaining = Math.max(1, deadline - performance.now())
+      const generator = bot.pathfinder.getPathFromTo(movements, start, target, { timeout: remaining, tickTimeout: 25, optimizePath: false })
+      try {
+        for (const value of generator) {
+          check(); result = value.result
+          if (result.status !== 'partial') break
+          await yieldControl()
+        }
+      } finally { generator.return?.() }
+      check()
+      if (result?.status !== 'success') throw new Error(`No verified returnable walking route (${result?.status ?? 'unknown'})`)
+      if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
+      if (validateNode && result.path.some(p => !validateNode(p))) throw new Error('No verified returnable walking route (unsafe node)')
+      return result
+    } catch (error) { throw annotateRouteFailure(error, phase, result?.status) }
   }
   // Pickup already validates an exact standing cell. A sealed drop pocket can
   // exhaust a huge forward search even though its reverse component is tiny.
@@ -41,14 +44,14 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
     if (!['x', 'y', 'z'].every(k => Number.isInteger(fixedEndpoint[k])) || typeof goal.isEnd !== 'function') throw new Error('Fixed endpoint must be an exact standing-cell goal')
     fixed = new Vec3(fixedEndpoint.x, fixedEndpoint.y, fixedEndpoint.z)
     if (!goal.isEnd(fixed)) throw new Error('Fixed endpoint does not satisfy the walking goal')
-    reverse = await plan(fixed, origin)
+    reverse = await plan(fixed, origin, 'reverse')
   }
-  const forward = await plan(bot.entity.position.clone(), goal)
+  const forward = await plan(bot.entity.position.clone(), goal, 'forward')
   const last = forward.path.at(-1)
   const endpoint = last ? new Vec3(last.x, last.y, last.z) : bot.entity.position.floored()
   // Origin goal is supplied by the caller so the helper does not depend on an internal goal class.
   if (fixed && !endpoint.equals(fixed)) throw new Error('Forward route ended at a different fixed endpoint')
-  if (!reverse) reverse = await plan(endpoint, origin)
+  if (!reverse) reverse = await plan(endpoint, origin, 'reverse')
   if (onCertifiedPaths) { onCertifiedPaths({forward:forward.path.map(p=>({x:p.x,y:p.y,z:p.z})),reverse:reverse.path.map(p=>({x:p.x,y:p.y,z:p.z}))});check() }
   return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
 }
@@ -73,7 +76,8 @@ export async function planRankedRoutes(candidates, plan, { signal, budget = 1600
       outcomes.push({ direction: candidate, status: 'verified' });
       return { route, candidate, tried, outcomes };
     } catch (error) {
-      outcomes.push({ direction: candidate, status: signal?.aborted || error.name === 'AbortError' ? 'cancelled' : 'unverified', reason: error.message });
+      const diagnostic = routeFailure(error);
+      outcomes.push({ direction: candidate, status: signal?.aborted || error.name === 'AbortError' ? 'cancelled' : 'unverified', reason: error.message, ...(diagnostic ? { route_failure: diagnostic } : {}) });
       if (signal?.aborted || error.name === 'AbortError' || !/^(No verified returnable walking route|Return-path planning budget exhausted|Collection route would modify terrain|Scout planning budget exhausted)/.test(error.message)) throw annotate(error);
       lastError = error;
     }
