@@ -2721,3 +2721,23 @@ test('pickup unsafe settlement preserves reverse planning diagnosis and inventor
   assert.deepEqual(error.result.route_failure,{phase:'reverse',planner_status:'noPath'});return true;
  });
 });
+
+test('collection yields confirmed partial work when only the action mining allowance is short',async()=>{
+ const bot=fakeBot();bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));let digs=0;
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('oak_log');bot.digTime=()=>10000;};
+ const result=await createActions(bot).execute('collect',{block:'oak_log',count:2,radius:8},undefined,{jobDeadline:performance.now()+60000,actionDeadline:performance.now()+6500});
+ assert.equal(digs,1);assert.equal(result.mined,1);assert.equal(result.inventory_changes.oak_log,1);
+ assert.equal(result.completed,false);assert.equal(result.mining_admission_limited,true);assert.deepEqual(result.failures,[]);
+ assert.equal(bot.blockAt(new Vec3(3,64,0)).name,'oak_log');
+});
+
+for(const mode of ['job-first','tied','action-only','no-progress'])test(`mining admission still refuses without safe partial action scope: ${mode}`,async()=>{
+ const bot=fakeBot();bot.putBlock('oak_log',new Vec3(2,64,0));bot.putBlock('oak_log',new Vec3(3,64,0));let digs=0;
+ bot.dig=async block=>{digs++;bot.removeBlock(block.position);bot.addItem('oak_log');bot.digTime=()=>10000;};
+ if(mode==='no-progress')bot.digTime=()=>10000;
+ const soon=performance.now()+6500,later=performance.now()+60000;
+ const context=mode==='job-first'?{jobDeadline:soon,actionDeadline:later}:mode==='tied'?{jobDeadline:soon,actionDeadline:soon}:mode==='action-only'?{actionDeadline:soon}:{jobDeadline:later,actionDeadline:soon};
+ await assert.rejects(createActions(bot).execute('collect',{block:'oak_log',count:2,radius:8},undefined,context),error=>{
+  assert.equal(error.code,'MINING_DEADLINE_INSUFFICIENT');assert.equal(error.result.mined,mode==='no-progress'?0:1);return true;
+ });assert.equal(digs,mode==='no-progress'?0:1);
+});

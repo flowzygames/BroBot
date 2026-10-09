@@ -1456,3 +1456,24 @@ for(const mode of ['incomplete','too-short','malformed'])test(`short scout ${mod
  f.job.start();f.job.job.lastScoutSuccess={completed:true,adaptive:true,novel:false,distance:4,endpoint:{...f.state.position}};
  await f.job.promise;assert.equal(f.job.state().lastScoutSuccess.novel,false);
 });
+
+for(const gained of [true,false])test(`partial action admission yield uses fresh state under the original job deadline, inventory gain=${gained}`,async()=>{
+ let now=100;const f=fixture({now:()=>now,maxDurationMs:60000});const calls=[];
+ f.job.execute=async(name,args,signal,context)=>{
+  calls.push({name,args,deadline:context.jobDeadline});
+  if(calls.length===1){
+   if(gained)f.add('oak_log',1);now=30000;
+   f.state.entities=[{id:373,name:'item',type:'other',position:{x:1,y:64,z:0},distance:1}];
+   return{completed:false,mined:2,mining_admission_limited:true,inventory_changes:gained?{oak_log:1}:{},remaining_drops:[{id:373,position:{x:1,y:64,z:0}}]};
+  }
+  f.job.stop('fixture complete after next bounded action');signal.throwIfAborted();
+ };
+ f.job.start();await f.job.promise;
+ assert.equal(calls.length,2);assert.equal(calls[0].name,'collect');
+ assert.equal(calls[1].name,gained?'craft':'pickup');
+ if(!gained)assert.deepEqual(calls[1].args.entity_ids,[373]);
+ assert.ok(calls.every(c=>c.deadline===60100));
+ assert.equal(f.job.state().steps,2);assert.equal(f.job.state().history[0].result.mining_admission_limited,true);
+ assert.equal(f.job.state().history[0].progress,gained);
+ assert.equal(f.job.state().reason,'fixture complete after next bounded action');
+});
