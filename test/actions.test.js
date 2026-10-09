@@ -2663,3 +2663,11 @@ for(const mode of ['outside','inside','changed'])test(`paged empty search retain
     assert.equal(typeof actions.emptyCollectionRetryKey(),mode==='inside'?'object':'string');
   } finally {parent.abort();actions.stop()}
 });
+
+test('distant dig requests use the mining-specific goal without changing live underfoot refusal',async()=>{
+ const {MiningFaceGoal}=await import('../src/actions.js');const bot=fakeBot(),target=new Vec3(8,64,0);bot.putBlock('stone',target);
+ let observed=false;bot.pathfinder.goto=async goal=>{observed=true;assert.ok(goal instanceof MiningFaceGoal);assert.equal(goal.isEnd(target.offset(0,1,0)),false);throw Error('fixture stopped before travel')};
+ await assert.rejects(createActions(bot).execute('dig_at',{x:target.x,y:target.y,z:target.z}),/fixture stopped before travel/);assert.equal(observed,true);
+ const local=fakeBot();local.putBlock('stone',new Vec3(0,63,0));let traveled=false;local.pathfinder.goto=async()=>{traveled=true};
+ await assert.rejects(createActions(local).execute('dig_at',{x:0,y:63,z:0}),/supporting the bot/);assert.equal(traveled,false);
+});

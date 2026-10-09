@@ -6,7 +6,7 @@ export const MINING_NO_GOAL_SPACE = 'MINING_NO_GOAL_SPACE'
 // geometry, missing observations and exhausted time defer to normal planning.
 export function inspectMiningGoalSpace (bot, movements, goal, { budgetMs = 20, signal, now = () => performance.now() } = {}) {
   const started = now(), unknown = reason => ({ status: 'unknown', reason })
-  if (bot.version !== '1.21.8' || movements.canDig !== false || movements.canOpenDoors !== false || movements.allowParkour !== false || movements.allow1by1towers !== false || movements.allowFreeMotion !== false) return unknown('unsupported movement policy')
+  if (bot.version !== '1.21.8' || movements.canDig !== false || movements.canOpenDoors !== false || movements.allowParkour !== false || movements.allow1by1towers !== false || movements.allowFreeMotion !== false || !Array.isArray(movements.scafoldingBlocks) || movements.scafoldingBlocks.length !== 0) return unknown('unsupported movement policy')
   if (typeof bot.world?.raycast !== 'function' || !Number.isFinite(goal.reach) || goal.reach <= 0 || goal.reach > 4 || !Number.isFinite(goal.eyeHeight) || goal.eyeHeight <= 0 || goal.eyeHeight > 3 || !Number.isFinite(budgetMs) || budgetMs <= 0) return unknown('unsupported goal or budget')
   const target=goal.target
   if (!target || !['x','y','z'].every(k=>Number.isInteger(target[k]))) return unknown('invalid target')
@@ -31,14 +31,21 @@ export function inspectMiningGoalSpace (bot, movements, goal, { budgetMs = 20, s
     const radius=Math.ceil(goal.reach+1)
     const lowY=Math.floor(target.y-goal.reach-goal.eyeHeight)-1
     const highY=Math.ceil(target.y+1+goal.reach-goal.eyeHeight)+1
-    if((2*radius+1)**2*(highY-lowY+2)>4096)return unknown('enumeration cap')
+    if((2*radius+1)**2*(highY-lowY+3)>4096)return unknown('enumeration cap')
     // Load the whole ray/body envelope. No unloaded gap can be interpreted as
     // opaque terrain or empty space. Bounds deliberately overapproximate reach.
     for(let x=target.x-radius;x<=target.x+radius;x++)for(let y=lowY;y<=highY+1;y++)for(let z=target.z-radius;z<=target.z+radius;z++)read(new Vec3(x,y,z))
     let examined=0
     for(let x=target.x-radius;x<=target.x+radius;x++)for(let y=lowY;y<=highY;y++)for(let z=target.z-radius;z<=target.z+radius;z++){
       check();const node=new Vec3(x,y,z);examined++
-      if(!blocked(read(node))&&!blocked(read(node.offset(0,1,0)))&&probe.isEnd(node))return {status:'possible',examined}
+      const feet=read(node),head=read(node.offset(0,1,0))
+      if(blocked(feet)||blocked(head))continue
+      // Every noninitial terrain-preserving successor in the pinned walking
+      // planner needs physical support, except swimming or climbing. Those
+      // ambiguous modes defer through liquid handling or conservative read().
+      // A clear but unsupported air cell is not an interaction stance.
+      if(movements.liquids?.has(feet.type))return unknown('liquid stance')
+      if(fullCube(read(node.offset(0,-1,0)))&&probe.isEnd(node))return {status:'possible',examined}
     }
     check();return {status:'none',examined,observed:blocks.size}
   } catch(error) {

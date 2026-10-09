@@ -68,6 +68,16 @@ export class BlockFaceGoal extends goals.Goal {
   isEnd (node) { return visibleBlockFace(this.world, node.offset(0.5, this.eyeHeight, 0.5), this.target, this.reach) }
 }
 
+// A visible endpoint is not a mining stance if the target is below its feet
+// in the same column: harvestBlock already refuses that exact condition.
+// Keep generic block visibility for placement and workstation interactions.
+export class MiningFaceGoal extends BlockFaceGoal {
+  isEnd (node) {
+    if (this.target.x === node.x && this.target.z === node.z && this.target.y < node.y) return false
+    return super.isEnd(node)
+  }
+}
+
 export class InteractionGoal extends BlockFaceGoal {
   isEnd(node){return visibleInteractionFace(this.world,node.offset(.5,this.eyeHeight,.5),this.target,this.reach)}
 }
@@ -248,16 +258,16 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return p
   }
 
-  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false, walkingTimeoutMs = 15000, interaction = false } = {}) {
+  async function navigate (ctx, target, radius = 1, { requireLoaded = true, lookAt = false, returnable = false, walkingTimeoutMs = 15000, interaction = false, mining = false } = {}) {
     checked(ctx)
     assert(target.distanceTo(ctx.origin) <= 128, 'Target is more than 128 blocks from action start')
     assert(insideBoundary(target), 'Target is outside the current job movement boundary')
     if (requireLoaded) loaded(target)
     configureMovement()
-    const FaceGoal=interaction?InteractionGoal:BlockFaceGoal
+    const FaceGoal=interaction?InteractionGoal:mining?MiningFaceGoal:BlockFaceGoal
     let goal = lookAt ? new FaceGoal(target, bot.world, { reach: 4, eyeHeight: bot.entity.eyeHeight ?? 1.62 }) : radius === 0 ? new goals.GoalBlock(target.x, target.y, target.z) : new goals.GoalNear(target.x, target.y, target.z, radius)
     let legPlanningBudget=1600
-    if (ctx.starterScope && returnable && lookAt && !interaction) {
+    if (ctx.starterScope && returnable && lookAt && mining && !interaction) {
       const used=ctx.planningUsed??0,started=performance.now()
       if(used>=7000)throw Object.assign(Error('Collection return-path planning budget exhausted'),{code:'COLLECTION_PLANNING_LIMIT'})
       let space
@@ -299,10 +309,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     return eye.distanceTo(block.position.offset(0.5, 0.5, 0.5)) <= 4.5 && (!bot.canSeeBlock || bot.canSeeBlock(block))
   }
 
-  async function approachBlock (ctx, p, { returnable = false, interaction = false } = {}) {
+  async function approachBlock (ctx, p, { returnable = false, interaction = false, mining = false } = {}) {
     loaded(p)
     const visible = () => interaction?interactionVisible(bot,loaded(p)):visibleHere(loaded(p))
-    if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable, interaction })
+    if (!visible()) await navigate(ctx, p, 3, { lookAt: true, returnable, interaction, mining })
     assert(visible(), 'Target block remains out of reach or behind an obstruction')
   }
 
@@ -620,7 +630,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const p = choices[0]
       skipped.set(p.toString(), p.clone())
       try {
-        await approachBlock(ctx, p, { returnable: true })
+        await approachBlock(ctx, p, { returnable: true, mining: true })
         const block = loaded(p)
         if (block.name !== name) continue
         await harvestBlock(ctx, p)
@@ -682,7 +692,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
 
   async function harvestBlock (ctx, p, { expectedBlock = null, requireCurrentReach = false, beforeDig = null, dependentBlocks = [], onConfirmed = null } = {}) {
     if (requireCurrentReach) assert(visibleHere(loaded(p)), 'Mining target is no longer visible from the certified stage')
-    else await approachBlock(ctx, p)
+    else await approachBlock(ctx, p, { mining: true })
     const original = loaded(p)
     const validateTarget = () => {
       const block = loaded(p)
