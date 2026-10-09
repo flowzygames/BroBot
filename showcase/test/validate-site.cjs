@@ -4,7 +4,7 @@ const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
 const {spawnSync} = require('node:child_process');
 const root = path.resolve(__dirname, '..');
-const pages = ['index','features','benchmarks','getting-started','commands','roadmap','download'];
+const pages = ['index','features','benchmarks','getting-started','commands','roadmap','download','development'];
 let references = 0;
 for (const page of pages) {
   const html = fs.readFileSync(path.join(root, page + '.html'), 'utf8');
