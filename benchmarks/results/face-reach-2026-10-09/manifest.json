@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "7c800b971ac4acf5d0f03459ff7b556398e430bc",
+  "sourceTree": "a7ef5fa8a5b859ced586c581ef7ffa6cd85821df",
+  "equivalentLocalPreparedCommit": "89aa9d99e264088bdbc8dbcd2f3384698375da35",
+  "archive": "face-reach-evidence.tar.gz",
+  "bytes": 104600,
+  "sha256": "88642d873938ec2198e16965ae0504b7202b2fa6f810369c6bb88f4518434f93",
+  "members": {
+    "selected/1744809425/result.json": "71d3dbde9e365ee8c0105994bf573901b9d27294b139eca496696df9033122ba",
+    "selected/1744809425/server.log": "f0331a8833e6d8199731680cd01a1af2d0ab049229352b4c6955c8784f1bc15a",
+    "selected/1744809425/memory/events.jsonl": "4edb205fade790277d242488ae4fc48eb3add6ae1e787c09aebdbdb02b6053c9",
+    "selected/1744809425/memory/memory.json": "4e738900d983b0202931fc4ca2738e6b55f55cb0c415c66ad2f6fa5b8e34e031",
+    "selected/1276821265/result.json": "a21e437771f6e020637538f104fbe8ec7ec5a4b4d468b947a4892dc350cab3c6",
+    "selected/1276821265/server.log": "6a5538d525ad70e66d911d4e5b5e5e13adab27d018ec51a7e01fdd6780f61e3c",
+    "selected/1276821265/memory/events.jsonl": "227f2528c86cef7adcf661c8739d4fc864522e4c7f3513ae8880e64cccb22368",
+    "selected/1276821265/memory/memory.json": "89588854f40db7e83470ed8ec7d317680911a9a8cd3679d7a5019ff5f32e5599",
+    "prepared/result.json": "4c148f9bdc578e1812756238e5ceae688a41e6f0f3fb9a9626ca91dcd2533ec9",
+    "prepared/smoke-server.log": "e0ea47696071da127d7d8c79c0040e854fec35d147455746f5e7bdfa7587482a",
+    "harness/before.log": "8c98e337b802059e4417a763a24a4112529e145db34202a5b76058dfc5cbeef1",
+    "harness/focused.log": "f5829237e2fbbd227d5e59ff6708cbcb1e0a84fdaf772557a346f529ae37e407",
+    "harness/full-check.log": "5470fba6b67e1a44bbb526835bacca687072c6d9013f39fa1c79afed3f154f63",
+    "harness/prepared-smoke.log": "1d27954760f3002e74f70b8773768347f57df3d5351362b00210d9ac51a92d6b",
+    "harness/seed-1744809425.log": "7bfc924382bee082ad37aeea1825d54fb80c94786a1083be5c6ab1a4f3367094",
+    "harness/seed-1276821265.log": "23942edc4b01b438bfdaad52a1cc45d5790d5bed73fc4eb713b821e5208b547b",
+    "harness/selected-plan.json": "c5928ab52436440c2198388b0a0874087c336c3d7a877891c866907d9309fa3d",
+    "harness/cached-java.sh": "0a5226a43dc51a4aef0b4c42f8f45c242acf9be21bc642d1534e378c29a4c567",
+    "tested-files.json": "a00d1715d9e5c0e36d5a52644b85cb7b5f97acb5a16df2feef16b142f6022dd3"
+  },
+  "automated": {
+    "passed": 1103,
+    "total": 1103
+  },
+  "prepared": {
+    "passed": 17,
+    "total": 17
+  },
+  "selected": [
+    {
+      "seed": "1744809425",
+      "passed": false,
+      "elapsedMs": 294602,
+      "reason": "Not enough remaining time to confirm another mining operation; stopped before digging",
+      "steps": 42,
+      "scouts": 8
+    },
+    {
+      "seed": "1276821265",
+      "passed": false,
+      "elapsedMs": 76254,
+      "reason": "No bounded exploration target remains inside the job area.",
+      "steps": 40,
+      "scouts": 21
+    }
+  ],
+  "fullCohortRepeated": false
+}
