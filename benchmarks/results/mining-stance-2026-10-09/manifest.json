@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "97a6eb1895171ece9513f7cc0a59834969b3fd8d",
+  "sourceTree": "9df88cb250d65eb9ef44ce4c1df04844dd66a6e3",
+  "equivalentLocalPreparedCommit": "085f6b7ff2d4a60b1ef3e10a8d40a5371ba3568d",
+  "archive": "mining-stance-evidence.tar.gz",
+  "bytes": 169677,
+  "sha256": "e592b818f141f8fbb4d229364c9fb29a63b45e34871a30d1a06bf8f6092afe0c",
+  "members": {
+    "selected/1744809425/result.json": "074ad3558657df4210cbaaddc37bb896c782cf5d198b33c4a97931ca734ecd43",
+    "selected/1744809425/server.log": "557290fb321e3d18213a2c25b864fd3d8dc181f06cef19644141075364b84848",
+    "selected/1744809425/memory/events.jsonl": "59d41d592506165600647e0c2eb57bb3c09cbc50ec3246937ae7b97cb8ed1dff",
+    "selected/1744809425/memory/memory.json": "c393ebe7d125f6dee37abee1a516e93bbaf1065d74eecd04091ba49992aebb5f",
+    "selected/1276821265/result.json": "a8fde7e299ebfe164a2e7bbaea618f7052c42d0ffced39e674d4031d43bc4911",
+    "selected/1276821265/server.log": "22d1c851889ba7da7697e39af4f121d32043271f03a483d57af3eae0219c13e0",
+    "selected/1276821265/memory/events.jsonl": "dcf07c71a23c3b4766f61c3c8ea9ff65d3cd51732c7224b54699d59eab311095",
+    "selected/1276821265/memory/memory.json": "bae7d801c3f01f4831f73f02c78f3de702142f5f7a85f9914b43c350edb5d541",
+    "prepared/result.json": "7bb88cd8b3d2053c4689f0a20b89185f7eefc619a86b48a542f0745743a1862f",
+    "prepared/smoke-server.log": "0b62be8d4ffdf22a941f2725d517bd4aa3a830df2a0acf13566bcb1fd82f6136",
+    "harness/before.log": "aa8359a7cf9d549062cf70320ee3d7d4c306f99d103a011f22dc97e8df09fa86",
+    "harness/cached-java.sh": "f70fdaca9c5aba08bef9d16715b71ac8f500b59034d3bc7372ff41f25a3e4d86",
+    "harness/canopy-recheck.log": "5b4387f7e72e0bbd37c3f2974bb5f0eaa135d4c6156834d2c75414ec95cd1e28",
+    "harness/focused.log": "94ba2ae0904755cd9fc3009d4374b4090feb1fbadf1106a02a2d64c1f77982e1",
+    "harness/full-check-recheck.log": "d1d457e6d5b669d6ba87532972059c5b38d8026d865b547df89f5f6af862863a",
+    "harness/full-check.log": "d8d892398074bbbfab275e682fd56d96d9bc692cc7bb783eb2357fb4935151d6",
+    "harness/goals.log": "fbc203f70a6301d65bb33bfa196f10c97da883ba4bf3354a866521eb9abdacf3",
+    "harness/integration.log": "8ef22fa84ab54cb3062ab2a87e4c93a460630b98c1ae013e26b532bbef711a01",
+    "harness/prepared-smoke.log": "1434df6e5661ed68af19f3ed1de72e3ba7fb0816c5706b1b0987d54103de7573",
+    "harness/seed-1276821265.log": "6b37f7c58aa2d53f6707c88af3a278d682f9f1947658db338f852d813b76ad6e",
+    "harness/seed-1744809425.log": "5443addfd889c4119db2bffb18e518e60452bb9a942040350190cc681df385d3",
+    "harness/selected-plan.json": "766934c103ecc79e2a2e0f30419193aaa7df02bdfc6ef49c93f0ef099f0ceb61",
+    "tested-files.json": "1181287ed641889212d0d768e82293440a1e61a2758b5fd1bdd5f1bf1dc32612"
+  },
+  "automated": {
+    "initial": {
+      "passed": 1110,
+      "total": 1111
+    },
+    "isolatedCanopy": {
+      "passed": 10,
+      "total": 10
+    },
+    "unchangedRecheck": {
+      "passed": 1111,
+      "total": 1111
+    }
+  },
+  "prepared": {
+    "passed": 17,
+    "total": 17
+  },
+  "selected": [
+    {
+      "seed": "1744809425",
+      "passed": false,
+      "elapsedMs": 300041,
+      "reason": "Starter job time budget reached.",
+      "steps": 76,
+      "scouts": 17
+    },
+    {
+      "seed": "1276821265",
+      "passed": false,
+      "elapsedMs": 98196,
+      "reason": "No bounded exploration target remains inside the job area.",
+      "steps": 64,
+      "scouts": 17
+    }
+  ],
+  "interruptedAttempts": 0,
+  "sourceFiles": 172
+}
