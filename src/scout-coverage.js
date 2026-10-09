@@ -12,6 +12,15 @@ export function recordScoutObservation(history, position) {
   return points.slice(-64);
 }
 
+// A short scout can legitimately land one block before its requested target.
+// Its already observed origin must not make every four-block success non-novel.
+// This is endpoint novelty only, never proof of new resources or a safe route.
+export function isNovelScoutEndpoint(observations, endpoint, requestedDistance) {
+  if (!valid(endpoint) || !Number.isInteger(requestedDistance) || requestedDistance < 4 || requestedDistance > 64) return false;
+  const revisitRadius = Math.min(4, requestedDistance - 2);
+  return !(Array.isArray(observations) ? observations : []).filter(valid).some(p => distance(p, endpoint) <= revisitRadius);
+}
+
 export function rankScouts({ position, home, index, observations = [], attempts = [], lastSuccess = null, radius = STARTER_MOVEMENT_RADIUS, maxScouts = STARTER_SCOUT_LIMIT }) {
   if (!valid(position) || !valid(home) || !Number.isSafeInteger(index) || index < 0 || index >= maxScouts || !Number.isFinite(radius) || radius <= 0 || radius > STARTER_MOVEMENT_RADIUS || !Number.isSafeInteger(maxScouts) || maxScouts < 1 || maxScouts > STARTER_SCOUT_LIMIT) return [];
   const plannedTravel = Math.min(64, 12 * (1 + Math.floor(index / 2)));

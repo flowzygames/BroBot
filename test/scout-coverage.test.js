@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { recordScoutObservation, selectScout, rankScouts } from '../src/scout-coverage.js';
+import { recordScoutObservation, selectScout, rankScouts, isNovelScoutEndpoint } from '../src/scout-coverage.js';
 const home = { x: 0, y: 64, z: 0 };
 const pick = overrides => selectScout({ position: home, home, index: 0, radius: 90, maxScouts: 8, ...overrides });
 test('new landing-region successes keep their non-novel suppression across fractional poses',()=>{
@@ -207,4 +207,26 @@ test('endpoint equivalence handles recorded height variation and exact heuristic
  assert.equal(check(origin,origin,{...endpoint,x:4.001},20,24),true);
  assert.equal(check(origin,origin,{...endpoint,x:4},22,22),false);
  assert.equal(check(origin,origin,{...endpoint,x:4.001},22,22),true);
+});
+
+test('short scout endpoint novelty admits a new three-block landing but retains exact two-block revisits',()=>{
+ const origin={x:.5,y:64,z:.5};
+ assert.equal(isNovelScoutEndpoint([origin],{...origin,x:3.5},4),true);
+ assert.equal(isNovelScoutEndpoint([origin],{...origin,x:2.5},4),false);
+ assert.equal(isNovelScoutEndpoint([origin],{...origin,x:2.501},4),true);
+ assert.equal(isNovelScoutEndpoint([origin,{...origin,x:4.5}],{...origin,x:3.5},4),false);
+ assert.equal(isNovelScoutEndpoint([origin],{...origin,x:2.3,y:65},4),true);
+});
+test('five-block scouts narrow only their unreachable novelty gap and longer legs retain the old radius',()=>{
+ assert.equal(isNovelScoutEndpoint([home],{...home,x:3},5),false);
+ assert.equal(isNovelScoutEndpoint([home],{...home,x:3.1},5),true);
+ for(const length of [6,8,12,32,64]){
+  assert.equal(isNovelScoutEndpoint([home],{...home,x:3.9},length),false);
+  assert.equal(isNovelScoutEndpoint([home],{...home,x:4},length),false);
+  assert.equal(isNovelScoutEndpoint([home],{...home,x:4.01},length),true);
+ }
+});
+test('invalid short-leg endpoint claims cannot establish novelty',()=>{
+ for(const length of [0,3,65,4.2,NaN,Infinity,'4',null])assert.equal(isNovelScoutEndpoint([home],{...home,x:10},length),false);
+ for(const p of [null,{}, {...home,x:NaN},{...home,y:Infinity}])assert.equal(isNovelScoutEndpoint([home],p,4),false);
 });
