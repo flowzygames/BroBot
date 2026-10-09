@@ -1,3 +1,4 @@
+import { reverseRouteWitness } from './reverse-route-witness.js'
 import { annotateRouteFailure, routeFailure } from './route-diagnostics.js'
 import { Vec3 } from 'vec3'
 
@@ -51,7 +52,13 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
   const endpoint = last ? new Vec3(last.x, last.y, last.z) : bot.entity.position.floored()
   // Origin goal is supplied by the caller so the helper does not depend on an internal goal class.
   if (fixed && !endpoint.equals(fixed)) throw new Error('Forward route ended at a different fixed endpoint')
-  if (!reverse) reverse = await plan(endpoint, origin, 'reverse')
+  if (!reverse) {
+    // Try only freshly generated reverse edges on the already observed forward
+    // corridor. Inconclusive evidence keeps the original reverse search.
+    const witness = reverseRouteWitness(bot, movements, forward.path, origin, { deadline, signal, validateNode })
+    try { check() } catch (error) { throw annotateRouteFailure(error, 'reverse') }
+    reverse = witness ?? await plan(endpoint, origin, 'reverse')
+  }
   if (onCertifiedPaths) { onCertifiedPaths({forward:forward.path.map(p=>({x:p.x,y:p.y,z:p.z})),reverse:reverse.path.map(p=>({x:p.x,y:p.y,z:p.z}))});check() }
   return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
 }

@@ -502,7 +502,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       return [position.toString(), position]
     }))
     const failures = []
-    let mined = 0
+    let mined = 0, miningAdmissionLimited = false
     let searchLimited = false
     let consecutiveFailures = 0
     let pickup = { remaining_drops: [], unreachable: [], planning_limited: false }
@@ -645,7 +645,17 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       } catch (error) {
         try { checked(ctx) } catch (stop) { throw retainOperationResult(stop, error) }
         const diagnostic = routeFailure(error)
-        if(error.code===MINING_DEADLINE_INSUFFICIENT){error.result={...error.result,completed:false,mined,inventory_changes:changes(before),remaining_drops:pickup.remaining_drops};throw error}
+        if (error.code === MINING_DEADLINE_INSUFFICIENT) {
+          // No new dig was sent. Yield only already-confirmed partial work when
+          // the shorter action allowance, not the job deadline, refused it.
+          if (mined > 0 && Number.isFinite(ctx.actionDeadline) && Number.isFinite(ctx.jobDeadline)
+            && ctx.operationDeadline === ctx.actionDeadline && ctx.actionDeadline < ctx.jobDeadline
+            && performance.now() < ctx.jobDeadline) {
+            miningAdmissionLimited = true; stopReason = 'action_mining_admission'; break
+          }
+          error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before), remaining_drops:pickup.remaining_drops }
+          throw error
+        }
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') { error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }; throw error }
         planningLimited = error.code === 'COLLECTION_PLANNING_LIMIT'
         failures.push({ position: plainPos(p), error: error.message, code: error.code ?? null, ...(diagnostic ? { route_failure: diagnostic } : {}) })
@@ -653,7 +663,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         if (++consecutiveFailures >= 8) { stopReason='candidate_failure_limit'; break }
       }
     }
-    if (mined && !ctx.pickupSettledFailure && !planningLimited && !pickup.pickup_limited) {
+    if (mined && !miningAdmissionLimited && !ctx.pickupSettledFailure && !planningLimited && !pickup.pickup_limited) {
       await pause(ctx, 300)
       try { pickup = await pickupInternal(ctx, 12) } catch (error) {
         if (error.code === 'PICKUP_UNSAFE_SETTLEMENT') error.result = { ...error.result, completed:false, mined, inventory_changes:changes(before) }
@@ -668,7 +678,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const ordinarySearch=searchEvidence?{...searchEvidence,context_stable:contextStable,ranking_limited:rankingLimited,collection_loop_stop:stopReason,
       complete_empty:searchEvidence.source==='cursor' && searchEvidence.coverage_complete===true && searchEvidence.termination==='traversal_complete'
         && searchEvidence.observed_candidates===0 && searchEvidence.query_skipped_positions===0 && contextStable && mined===0 && failures.length===0 && !searchLimited && !rankingLimited}:null
-    const result = { ordinary_search:ordinarySearch, search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
+    const result = { ...(miningAdmissionLimited ? { mining_admission_limited:true } : {}), ordinary_search:ordinarySearch, search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     emptyCollectionRetry.confirm(retryLease,ordinarySearch)
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })
     return result
@@ -1509,7 +1519,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     lastSession = session
     lastOwnershipGuard = executionContext.ownershipGuard ?? null
     const allowSprinting = !(executionContext.starterScope && name === 'explore' && args.returnable === true && !hasStarterFood(items()))
-    const ctx = { privateSoil: executionContext.privateSoil, ownershipGuard: lastOwnershipGuard, parentSignal:executionContext.parentSignal, runnerSignal:signal, allowSprinting, session, operationDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
+    const ctx = { privateSoil: executionContext.privateSoil, ownershipGuard: lastOwnershipGuard, parentSignal:executionContext.parentSignal, runnerSignal:signal, allowSprinting, session, operationDeadline, actionDeadline:executionContext.actionDeadline, jobDeadline:executionContext.jobDeadline, starterScope:executionContext.starterScope, recoveryGuard:executionContext.recoveryGuard, signal: controller.signal, controller, cancelled: false, origin: bot.entity.position.clone() }
     active = ctx
     // A coordinate is meaningful only in the play session that admitted it.
     // Latch transitions even if the dimension later changes back. Stop promptly,
