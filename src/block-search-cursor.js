@@ -10,13 +10,16 @@ const { OctahedronIterator } = worldPackage.iterators
 // Geometry only: no action callback, signal, safety verdict or block object is
 // retained between pages. Its owner must invalidate it when the world changes.
 export class BlockSearchCursor {
-  constructor (bot, { matching, point, maxDistance, count = 512 }) {
+  constructor (bot, { matching, point, maxDistance, count = 512, queryRadius = null }) {
     if (!Number.isSafeInteger(matching) || !point || !['x', 'y', 'z'].every(k => Number.isFinite(point[k])) || !Number.isFinite(maxDistance) || maxDistance <= 0 || maxDistance > sectionSearchDistance(64) || !Number.isSafeInteger(count) || count < 1 || count > 512) throw Error('Invalid bounded block search')
+    if (queryRadius !== null && (!Number.isFinite(queryRadius) || queryRadius < 1 || queryRadius > 64 || sectionSearchDistance(queryRadius) > maxDistance)) throw Error('Invalid block search query radius')
     if (typeof bot.world?.getColumn !== 'function' || !Number.isSafeInteger(bot.game?.minY) || !Number.isSafeInteger(bot.game?.height) || bot.game.height <= 0 || bot.game.height > 4096) throw Error('Unsupported block search world')
     this.bot = bot
     this.matching = matching
     this.point = new Vec3(point.x, point.y, point.z).floored()
     this.maxDistance = maxDistance
+    this.queryRadius = queryRadius
+    this.queryRadiusSquared = queryRadius === null ? null : queryRadius * queryRadius
     this.count = count
     this.Block = blockLoader(bot.registry)
     this.minY = bot.game.minY
@@ -61,9 +64,21 @@ export class BlockSearchCursor {
       if (now() >= deadline) { limited = true; pauseReason = 'time_budget'; break }
       if (!this.begin) {
         const next = this.section
-        const column = this.bot.world.getColumn(next.x, next.z)
         const sectionY = next.y + Math.abs(this.minY >> 4)
         const totalSections = this.height >> 4
+        // The widened iterator protects diagonal coverage. It is not the
+        // collection sphere: irrelevant sections cannot spend its match budget
+        // or introduce missing-data uncertainty into that sphere.
+        const begin = new Vec3(next.x * 16, sectionY * 16 + this.minY, next.z * 16)
+        if (this.queryRadiusSquared !== null) {
+          let distanceSquared = 0
+          for (const axis of ['x', 'y', 'z']) {
+            const gap = Math.max(begin[axis] - this.point[axis], this.point[axis] - (begin[axis] + 15), 0)
+            distanceSquared += gap * gap
+          }
+          if (distanceSquared > this.queryRadiusSquared) { this.finishSection(positions.length); continue }
+        }
+        const column = this.bot.world.getColumn(next.x, next.z)
         if (sectionY >= 0 && sectionY < totalSections && !column) this.unloadedColumns.add(`${next.x},${next.z}`)
         if (sectionY < 0 || sectionY >= totalSections || !column || this.visited.has(next.toString())) {
           this.finishSection(positions.length)
@@ -73,9 +88,14 @@ export class BlockSearchCursor {
         const contains = section && (!section.palette || section.palette.some(state => this.Block.fromStateId(state, 0).type === this.matching))
         this.visited.add(next.toString())
         if (!contains) { this.finishSection(positions.length); continue }
-        this.begin = new Vec3(next.x * 16, sectionY * 16 + this.minY, next.z * 16)
+        this.begin = begin
       }
       const point = this.begin.offset(this.cell >> 8, (this.cell >> 4) & 15, this.cell & 15)
+      if (this.queryRadiusSquared !== null && point.distanceSquared(this.point) > this.queryRadiusSquared) {
+        this.cell++
+        if (this.cell === 4096) this.finishSection(positions.length)
+        continue
+      }
       const block = this.bot.blockAt(point, true)
       if (!block) this.unknownCells++
       if (block?.type === this.matching) {

@@ -2342,7 +2342,7 @@ test('continued empty scan discovers later exposed ore and freshly rejects its r
   const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air
   bot.entity.velocity=new Vec3(0,0,0)
   bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState,air.defaultState]})})}
-  const opening=new Vec3(-17,81,0)
+  const opening=new Vec3(-7,55,22)
   bot.blockAt=p=>{p=p.floored();const empty=p.equals(opening);return{name:empty?'air':'stone',type:empty?air.id:stone.id,position:p,boundingBox:empty?'empty':'block'}}
   let routeChecks=0,digs=0
   bot.pathfinder.getPathFromTo=function*(){routeChecks++;yield{result:{status:'noPath',path:[]}}}
@@ -2418,10 +2418,10 @@ test('starter pickup admission uses allowance left after repeated route planning
  assert.equal(result.deferred_drops.length,0);assert.equal(bot.listenerCount('playerCollect'),0)
 })
 
-for(const farEvents of [false,true])test(`real controller keeps a dense collection cursor through five pages with distant events=${farEvents}`,async t=>{
+for(const farEvents of [false,true])test(`real controller keeps a dense collection cursor through two scoped pages with distant events=${farEvents}`,async t=>{
  t.mock.method(performance,'now',()=>1000)
  const {Runtime}=await import('../src/runtime.js'),{SurvivalJob}=await import('../src/survival.js')
- const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air,opening=new Vec3(-25,48,-4)
+ const bot=fakeBot(),stone=registry.blocksByName.stone,air=registry.blocksByName.air,opening=new Vec3(-7,55,22)
  bot.addItem('wooden_pickaxe',1);bot.addItem('stick',2);bot.food=20;bot.entity.velocity=new Vec3(0,0,0)
  bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState,air.defaultState]})})}
  bot.blockAt=p=>{p=p.floored();const empty=p.equals(opening);return{name:empty?'air':'stone',type:empty?air.id:stone.id,position:p,boundingBox:empty?'empty':'block'}}
@@ -2436,11 +2436,11 @@ for(const farEvents of [false,true])test(`real controller keeps a dense collecti
   catch(error){if(name==='collect')outcomes.push(error.result);throw error}
  }
  const job=new SurvivalJob({memory:{get:(k,d)=>saved[k]??d,set:(k,v)=>{saved[k]=structuredClone(v)}},snapshot:()=>actions.snapshot(),
-  observe:async signal=>{await execute('inspect',{radius:1},signal);if(farEvents){const p=new Vec3(190,61,153);bot.emit('blockUpdate',{position:p},{position:p});bot.emit('chunkColumnLoad',new Vec3(64,0,32))}return{wood:'oak'}},execute,stopActions:()=>runner.stop(),context:'dense-pages',maxSteps:5,intervalMs:0})
+  observe:async signal=>{await execute('inspect',{radius:1},signal);if(farEvents){const p=new Vec3(190,61,153);bot.emit('blockUpdate',{position:p},{position:p});bot.emit('chunkColumnLoad',new Vec3(64,0,32))}return{wood:'oak'}},execute,stopActions:()=>runner.stop(),context:'dense-pages',maxSteps:2,intervalMs:0})
  try{
   job.start();await job.promise
-  assert.deepEqual(executed,Array(5).fill('collect'))
-  assert.ok(outcomes.slice(0,4).every(r=>r.search_continuation_saved&&r.failures.length===0))
+  assert.deepEqual(executed,Array(2).fill('collect'))
+  assert.ok(outcomes.slice(0,1).every(r=>r.search_continuation_saved&&r.failures.length===0))
   assert.equal(outcomes[0].search_continued,false)
   assert.ok(outcomes.slice(1).every(r=>r.search_continued))
   assert.ok(outcomes.at(-1).failures.length>0)
@@ -2577,4 +2577,37 @@ test('completed empty hint survives real runner cleanup and a stationary refused
   assert.equal(actions.emptyCollectionRetryKey(),mode==='distant'?key:null,mode);parent.abort();actions.stop();
   assert.equal(bot.listenerCount('blockUpdate'),0);
  }
+});
+
+test('scoped dense empty collection completes in three runner pages and leaves a watched retry hint',async t=>{
+ t.mock.method(performance,'now',()=>1000);
+ const {Runtime}=await import('../src/runtime.js');const bot=fakeBot(),stone=registry.blocksByName.stone;bot.entity.velocity=new Vec3(0,0,0);
+ bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState]})})};
+ bot.blockAt=p=>({name:'stone',type:stone.id,position:p.floored(),boundingBox:'block'});
+ const actions=createActions(bot),parent=new AbortController(),runtime={bot,actions,connection:'connected',progression:{definitions:[]},runner:new ActionRunner(),definitions:()=>definitions},results=[];
+ try{
+  for(let i=0;i<3;i++){
+   await assert.rejects(Runtime.prototype.execute.call(runtime,'collect',{block:'stone',count:4,radius:32},parent.signal,{starterScope:'scoped/dense'}),error=>{results.push(error.result);return Boolean(error.result)});
+   await Runtime.prototype.execute.call(runtime,'inspect',{radius:1},parent.signal);
+  }
+  assert.deepEqual(results.map(r=>r.search_continued),[false,true,true]);assert.deepEqual(results.map(r=>r.search_limited),[true,true,false]);
+  assert.equal(results[2].ordinary_search.complete_empty,true);assert.equal(results[2].ordinary_search.coverage_complete,true);
+  assert.equal(results[2].ordinary_search.termination,'traversal_complete');assert.equal(results[2].mined,0);assert.equal(typeof actions.emptyCollectionRetryKey(),'string');
+ }finally{parent.abort();actions.stop()}
+});
+
+for(const neighbor of ['air','water','unloaded'])test(`scoped radius boundary keeps outside-sphere ${neighbor} dependencies in mining checks`,async t=>{
+ t.mock.method(performance,'now',()=>1000);
+ const bot=fakeBot(),stone=registry.blocksByName.stone,dirt=registry.blocksByName.dirt,air=registry.blocksByName.air,water=registry.blocksByName.water,target=new Vec3(8,64,0),opening=target.offset(1,0,0);
+ bot.entity.velocity=new Vec3(0,0,0);bot.addItem('wooden_pickaxe');bot.world={getColumn:()=>({sections:Array(24).fill({palette:[stone.defaultState,dirt.defaultState,air.defaultState,water.defaultState]})})};
+ let outsideReads=0,routes=0,digs=0;
+ bot.blockAt=p=>{p=p.floored();if(p.equals(opening)){outsideReads++;if(neighbor==='unloaded')return null;}const kind=p.equals(target)?stone:p.equals(opening)?(neighbor==='water'?water:air):p.equals(opening.offset(0,1,0))?air:dirt;return{name:kind.name,type:kind.id,position:p,boundingBox:kind===air||kind===water?'empty':'block',stateId:kind.defaultState,diggable:true,canHarvest:()=>true}};
+ bot.pathfinder.getPathFromTo=function*(){routes++;yield{result:{status:'noPath',path:[]}}};bot.dig=async()=>{digs++};
+ const actions=createActions(bot),runner=new ActionRunner(),parent=new AbortController();let outcome;
+ try{
+  await assert.rejects(runner.run('collect',signal=>actions.execute('collect',{block:'stone',count:1,radius:8},signal,{parentSignal:parent.signal,starterScope:'scoped/boundary'}),()=>actions.stop(),parent.signal),error=>{outcome=error.result;return Boolean(outcome)});
+  assert.ok(outsideReads>0,'target filtering still reads the exposure neighbor outside sphere');assert.equal(digs,0);
+  if(neighbor==='air'){assert.ok(outcome.failures.some(f=>f.position?.x===target.x&&f.position?.y===target.y&&f.position?.z===target.z));assert.ok(routes>0)}
+  else{assert.equal(outcome.ordinary_search.observed_candidates,0);assert.equal(routes,0)}
+ }finally{parent.abort();actions.stop()}
 });
