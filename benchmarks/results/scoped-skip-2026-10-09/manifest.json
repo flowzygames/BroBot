@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "a57272a422b574948ff8c9ebf50717508bdc81de",
+  "sourceTree": "c2332575af23e118447e99848a6e06db4fb1e01a",
+  "equivalentRuntimeLocalPreparedCommit": "21601e76f1ff4ed2756cf18729441ea711de6385",
+  "archive": "scoped-skip-evidence.tar.gz",
+  "bytes": 99248,
+  "sha256": "30b328bb9da17b42e65f3f8519208b510ad0e13e2b8daeac0d602fdc716e5486",
+  "members": {
+    "selected/result.json": "aa600a1bd269083924cfb59bfd82a125a370e9d6a7b147fed626405dec25bff5",
+    "selected/server.log": "805598d8f7d98b7c48fa0bdd9513db82c9eb42807c38791bd10e021d78444ba3",
+    "selected/memory/memory.json": "7f11973f73da2afbe71fed7f2b8ab310487f6ebe46dcbe701d0bd2f72c6c1513",
+    "selected/memory/events.jsonl": "4fdd890c11748b9853c54335c0f3fd498157e75a3a3ba40593ace7fac06ea085",
+    "prepared/result.json": "711328b2b9088169c8147a123332b846b842331d3d15008dad9da5d0a1c4dfad",
+    "prepared/smoke-server.log": "e82184d3ca848a034607faa809b29abf0d146e03f74b2f41a0c7df3e7a201ae9",
+    "harness/before.log": "a0c1c624f9bbb5227671904522c4353ec7a9a42e8b15985cf6338fb56ab37291",
+    "harness/focused.log": "06fada95db1c0db4b92e345e2ee15797f7b80937168378a41d9faf3b1102def8",
+    "harness/affected.log": "3df9109820381e15716c320daedd2cfeb6a77cf18da119cf96f89acb10e7237b",
+    "harness/pages.log": "84c4cb30a2403823f9043d12d87bc5bf35b1ba3837995d4fe444419b1c5a1417",
+    "harness/full-check.log": "4cdc4effabd28475baca4a0826065a101fd28ad09f04bdeb7c20f407efc82971",
+    "harness/prepared-smoke.log": "e7fa5b22f14a2b7f1d199bf0a30ba4f7083c7c53fb832412215e8326d94760b7",
+    "harness/seed-1276821265.log": "63b7e7c927f45f0bae35f4558a114f913c750f281a99cc31557817f8266599a1",
+    "harness/cached-java.sh": "7c20414c8be0f909de82cc1b6502f4ad77347adc85de8095f9e21e534c4a6f79",
+    "tested-files.json": "f489f653a1511c0c4a7609111a329ede10a28d6b160be38e4befa07a7a878224"
+  },
+  "automated": {
+    "passed": 1096,
+    "total": 1096
+  },
+  "prepared": {
+    "passed": 17,
+    "total": 17
+  },
+  "selected": {
+    "seed": "1276821265",
+    "passed": false,
+    "elapsedMs": 188182,
+    "steps": 84,
+    "scouts": 24,
+    "cobblestone": 0
+  },
+  "fullCohortRepeated": false
+}
