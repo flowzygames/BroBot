@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "2557a63c466c0b80bae027b971101fe994ccf51c",
+  "sourceTree": "839b6321480335f26f2e71d47199af28917b2e8a",
+  "equivalentApplicationPreparedCommit": "94c0bf8960ddf98942ab073e5ddb91743032b895",
+  "archive": "route-phase-evidence.tar.gz",
+  "bytes": 126671,
+  "sha256": "19273c80cdc33ef305beb77308c80cffd0ba1c1465af19cfd31976d13f4d78f2",
+  "members": {
+    "selected/1276821265/result.json": "ec7e2b101c5d80fd5727c0dde3f28a7bdf7666f46b21b739ad7b6a6f3d8ed5ec",
+    "selected/1276821265/server.log": "2c47c56aa37ddfc50aa152ae0668c4e44f8aa49b25be37847089ef9a9941d5ef",
+    "selected/1276821265/memory/events.jsonl": "d46ca4d1a9b48078a8dce47bd1cf93493b1f5afd4ae6eec451cdd0ad22fbe232",
+    "selected/1276821265/memory/memory.json": "941db3b70afc412732df328d5df0b6f09918fbfad4e95ba3a6f931236f6990b3",
+    "selected/1744809425/result.json": "55d8d0e2af3a4edcafcfcdfc6fc21ce49bee06e00f8e12fe2f768cda0335b4e5",
+    "selected/1744809425/server.log": "ac62a652b7ee57930ce24c2f5d5444cdad86e4a3ff3b3e5abda6cba39afa0983",
+    "selected/1744809425/memory/events.jsonl": "e9f6439c29f1e2daa170b79f968fa06cf0b0c3fde95ba89d94e5fdcd967844fd",
+    "selected/1744809425/memory/memory.json": "556f09eda96a8a4c73d9a11178e956971790b7583bc270532963f932a4935758",
+    "prepared/result.json": "20fc74ab871d3e5f9002badbc453d3241aa6bad2212077aeaa01047e75fd86d6",
+    "prepared/smoke-server.log": "3234c9ccfb8d856667f9169b44f12f71a53756c2757a42d88888083cfdbd6ce9",
+    "harness/cached-java.sh": "e0906e31817c6150d2c1ddbf89ff888ae221bfd902f18fe47a35d525b8a94217",
+    "harness/focused.log": "439c3ba3458969623639dc14b5bbfaf232107fc2f7c3d990c49fe3aa2cc20132",
+    "harness/full-check.log": "184d7ff41211e8eb4c45b46033834cc841c63ac7c7a15e4236046801f60bf5cf",
+    "harness/integration.log": "57f30e7ccf74c7d29dd9bb05c1343722e2841441b7657a39a1226596e748969e",
+    "harness/prepared-smoke.log": "d89edad14dffd16b095b4351dd4ff99e1ed8d30379244d263ac412d0bf8f5cc3",
+    "harness/seed-1276821265.log": "82320265d0f54dfd36fd040a3eafb6a044793fdf56f952626f999b315c75fa6f",
+    "harness/seed-1744809425.log": "3200f5ab84dd54da1b8c2c280dcf7dbb9c0f1abda3c6292e0295b351ad5700c2",
+    "harness/selected-plan.json": "1e384d2e5220f9844ca299a74c8b2554b064e37079498562b83d46c0e73289af",
+    "tested-files.json": "4e2d474fe8c16ff42d6c1b806b27787b9bf43684c93bbf75bee63a7581f1365b"
+  },
+  "automated": {
+    "passed": 1133,
+    "total": 1133
+  },
+  "prepared": {
+    "passed": 17,
+    "total": 17
+  },
+  "selected": [
+    {
+      "seed": "1276821265",
+      "passed": false,
+      "elapsedMs": 176787,
+      "reason": "Exploration budget exhausted: Repeated collect failure. Look for a different approach.",
+      "steps": 83,
+      "scouts": 24
+    },
+    {
+      "seed": "1744809425",
+      "passed": false,
+      "elapsedMs": 300021,
+      "reason": "Starter job time budget reached.",
+      "steps": 43,
+      "scouts": 9
+    }
+  ],
+  "interruptedAttempts": 0,
+  "sourceFiles": 174
+}
