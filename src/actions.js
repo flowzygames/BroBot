@@ -478,9 +478,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
     const radius = numeric(args.radius, 24, 1, 64, true)
     const before = inventoryMap()
     assert(args.skip_positions == null || (Array.isArray(args.skip_positions) && args.skip_positions.length <= 128), 'skip_positions must be an array of at most 128 coordinates')
-    const skipped = new Set((args.skip_positions ?? []).map(p => {
+    const skipped = new Map((args.skip_positions ?? []).map(p => {
       assert(p && ['x', 'y', 'z'].every(k => Number.isSafeInteger(p[k]) && Math.abs(p[k]) <= (k === 'y' ? 2048 : 29999984)), 'Invalid skipped block coordinate')
-      return new Vec3(p.x, p.y, p.z).toString()
+      const position = new Vec3(p.x, p.y, p.z)
+      return [position.toString(), position]
     }))
     const failures = []
     let mined = 0
@@ -543,6 +544,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       searchScans++
       searchEvidenceContext={position:scanPosition,world:scanWorld,dimension:scanDimension,boundaryKey,revision:scanRevision}
       const searchOrigin = bot.entity.position.floored()
+      // Only skipped targets inside this exact query could suppress a candidate.
+      // Keep total history for telemetry and continuation identity; do not infer
+      // scoped history from callbacks on just the final continuation page.
+      const querySkipped = [...skipped.values()].filter(p => p.distanceTo(searchOrigin) <= radius).length
       const searchLimit = Symbol('collection search limit')
       const deadline = performance.now() + 500
       let inspected = 0
@@ -559,7 +564,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       // No route, candidate verdict, or previous action callback is retained.
       if (searchScans === 1 && ctx.starterScope && ctx.parentSignal instanceof AbortSignal && ctx.runnerSignal instanceof AbortSignal
         && typeof bot.world?.getColumn === 'function' && Number.isSafeInteger(bot.game?.minY) && Number.isSafeInteger(bot.game?.height)) {
-        const key = JSON.stringify([ctx.starterScope, definition.id, radius, count, [...skipped].sort(), boundaryKey])
+        const key = JSON.stringify([ctx.starterScope, definition.id, radius, count, [...skipped.keys()].sort(), boundaryKey])
         searchLease = emptySearch.begin({ key, parentSignal:ctx.parentSignal, actionSignal:ctx.runnerSignal,
           terrainDependency:{origin:searchOrigin,radius:radius+1},
           createCursor:() => new BlockSearchCursor(bot, { matching:definition.id, point:searchOrigin, maxDistance:sectionSearchDistance(radius), count:512, queryRadius:radius }) })
@@ -569,12 +574,12 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         const page = searchLease.cursor.scan({ accept, check:() => checked(ctx) })
         searchEvidence={source:'cursor',observation_id:randomUUID(),origin:plainPos(searchOrigin),radius,block:name,
           filter:'exposed_environment_safe_in_bounds',termination:page.termination,coverage_complete:page.coverageComplete,observed_candidates:page.accepted,
-          unloaded_columns:page.unloadedColumns,unknown_cells:page.unknownCells,skipped_positions:skipped.size}
+          unloaded_columns:page.unloadedColumns,unknown_cells:page.unknownCells,skipped_positions:skipped.size,query_skipped_positions:querySkipped}
         searchLimited ||= page.limited
         if (candidates.length || !page.resumable) { emptySearch.release(searchLease); searchLease = null }
       } else try {
         searchEvidence={source:'native',observation_id:randomUUID(),origin:plainPos(searchOrigin),radius,block:name,
-          filter:'exposed_environment_safe_in_bounds',termination:'native_unverified',coverage_complete:false,observed_candidates:0,skipped_positions:skipped.size}
+          filter:'exposed_environment_safe_in_bounds',termination:'native_unverified',coverage_complete:false,observed_candidates:0,skipped_positions:skipped.size,query_skipped_positions:querySkipped}
         const found = bot.findBlocks({ matching:definition.id, maxDistance:sectionSearchDistance(radius), count:512, useExtraInfo:block => {
           checked(ctx)
           if (++inspected > 65536 || performance.now() >= deadline) throw searchLimit
@@ -607,7 +612,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       if (candidateRevision === scanRevision) candidateCache = { positions: choices.map(p => p.clone()), position: bot.entity.position.clone(), dimension: dimension(), boundaryKey }
       if (!choices.length) { stopReason='no_ranked_candidates'; break }
       const p = choices[0]
-      skipped.add(p.toString())
+      skipped.set(p.toString(), p.clone())
       try {
         await approachBlock(ctx, p, { returnable: true })
         const block = loaded(p)
@@ -643,7 +648,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       && searchEvidenceContext.boundaryKey===JSON.stringify(movementBoundary()) && searchEvidenceContext.revision===candidateRevision)
     const ordinarySearch=searchEvidence?{...searchEvidence,context_stable:contextStable,ranking_limited:rankingLimited,collection_loop_stop:stopReason,
       complete_empty:searchEvidence.source==='cursor' && searchEvidence.coverage_complete===true && searchEvidence.termination==='traversal_complete'
-        && searchEvidence.observed_candidates===0 && searchEvidence.skipped_positions===0 && contextStable && mined===0 && failures.length===0 && !searchLimited && !rankingLimited}:null
+        && searchEvidence.observed_candidates===0 && searchEvidence.query_skipped_positions===0 && contextStable && mined===0 && failures.length===0 && !searchLimited && !rankingLimited}:null
     const result = { ordinary_search:ordinarySearch, search_continued:searchContinued, search_continuation_saved:continuationSaved, search_scans:searchScans, search_reuses:searchReuses, deferred_drops:pickup.deferred_drops??[], passive_settlement:Boolean(ctx.pickupSettledFailure), pickup_landing_verified:!ctx.pickupUnverified, pickup_pursuit_unverified:Boolean(ctx.pickupUnverified), completed: mined === count && !ctx.pickupUnverified && !planningLimited && !pickup.planning_limited && !pickup.pickup_limited && pickup.remaining_drops.length === 0, requested: count, mined, inventory_changes: changes(before), remaining_drops: pickup.remaining_drops, pickup_failures: pickup.unreachable, failures, search_limited: searchLimited, planning_limited: planningLimited || pickup.planning_limited, pickup_limited: Boolean(pickup.pickup_limited) }
     emptyCollectionRetry.confirm(retryLease,ordinarySearch)
     if (!mined) throw Object.assign(new Error(`Could not collect ${name}: ${failures[0]?.error ?? (searchLimited ? 'bounded search exhausted; try moving closer or a smaller radius' : 'no exposed loaded candidates found')}`), { result })

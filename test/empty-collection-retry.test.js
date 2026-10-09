@@ -8,13 +8,13 @@ function fixture() {
   let now=0,boundary={center:{x:0,y:64,z:0},radius:256};
   const parent=new AbortController(), tracker=new EmptyCollectionRetry(bot,{now:()=>now,boundary:()=>boundary});
   const begin=()=>tracker.begin({origin:{x:0,y:64,z:0},radius:32,block:'stone',parentSignal:parent.signal});
-  const evidence={source:'cursor',coverage_complete:true,context_stable:true,termination:'traversal_complete',complete_empty:true,observed_candidates:0,skipped_positions:0,unloaded_columns:0,unknown_cells:0,block:'stone',radius:32,origin:{x:0,y:64,z:0}};
+  const evidence={source:'cursor',coverage_complete:true,context_stable:true,termination:'traversal_complete',complete_empty:true,observed_candidates:0,skipped_positions:0,query_skipped_positions:0,unloaded_columns:0,unknown_cells:0,block:'stone',radius:32,origin:{x:0,y:64,z:0}};
   return {bot,parent,tracker,begin,evidence,setTime:value=>{now=value;},setBoundary:value=>{boundary=value;}};
 }
 test('only a confirmed empty receipt mints a transient key',()=>{
   const f=fixture(),l=f.begin();assert.equal(f.tracker.key(),null);assert.ok(f.tracker.confirm(l,f.evidence));assert.equal(typeof f.tracker.key(),'string');f.tracker.clear();assert.equal(f.bot.listenerCount('blockUpdate'),0);
 });
-for(const [key,value] of [['source','native'],['coverage_complete',false],['context_stable',false],['termination','page_limit'],['complete_empty',false],['observed_candidates',1],['skipped_positions',1],['unloaded_columns',1],['unknown_cells',1],['block','dirt'],['radius',31],['origin',{x:1,y:64,z:0}]])test(`empty retry refuses mismatched or incomplete receipt ${key}`,()=>{
+for(const [key,value] of [['source','native'],['coverage_complete',false],['context_stable',false],['termination','page_limit'],['complete_empty',false],['observed_candidates',1],['query_skipped_positions',1],['query_skipped_positions',undefined],['query_skipped_positions',null],['query_skipped_positions','0'],['query_skipped_positions',-1],['query_skipped_positions',0.5],['skipped_positions',-1],['skipped_positions',undefined],['skipped_positions',0.5],['skipped_positions',NaN],['skipped_positions','0'],['unloaded_columns',1],['unknown_cells',1],['block','dirt'],['radius',31],['origin',{x:1,y:64,z:0}]])test(`empty retry refuses mismatched or incomplete receipt ${key}`,()=>{
  const f=fixture(),l=f.begin();assert.equal(f.tracker.confirm(l,{...f.evidence,[key]:value}),false);assert.equal(f.tracker.key(),null);assert.equal(f.bot.listenerCount('blockUpdate'),0);
 });
 test('distant valid block and column updates preserve the hint through read-only dispatch',()=>{
@@ -54,4 +54,11 @@ test('real expiry releases listeners without a key read and old callbacks cannot
  await new Promise(resolve=>setTimeout(resolve,30));assert.equal(f.tracker.lease,null);assert.equal(f.bot.listenerCount('blockUpdate'),0);
  f.tracker.ttlMs=30000;const old=f.begin();f.tracker.confirm(old,f.evidence);const next=f.begin();f.tracker.confirm(next,f.evidence);const key=f.tracker.key();
  old.invalidate();expired.invalidate();assert.equal(f.tracker.key(),key);f.tracker.clear();
+});
+
+test('explicit zero query skips permits distant historical skips without weakening dependencies',()=>{
+ const f=fixture(),l=f.begin();assert.ok(f.tracker.confirm(l,{...f.evidence,skipped_positions:11,query_skipped_positions:0}));
+ const key=f.tracker.key();assert.equal(typeof key,'string');
+ f.bot.emit('blockUpdate',{position:{x:1000,y:64,z:0}},{position:{x:1000,y:64,z:0}});assert.equal(f.tracker.key(),key);
+ f.bot.emit('blockUpdate',{position:{x:33,y:64,z:0}},{position:{x:33,y:64,z:0}});assert.equal(f.tracker.key(),null);
 });
