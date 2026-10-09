@@ -562,7 +562,7 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
         const key = JSON.stringify([ctx.starterScope, definition.id, radius, count, [...skipped].sort(), boundaryKey])
         searchLease = emptySearch.begin({ key, parentSignal:ctx.parentSignal, actionSignal:ctx.runnerSignal,
           terrainDependency:{origin:searchOrigin,radius:radius+1},
-          createCursor:() => new BlockSearchCursor(bot, { matching:definition.id, point:searchOrigin, maxDistance:sectionSearchDistance(radius), count:512 }) })
+          createCursor:() => new BlockSearchCursor(bot, { matching:definition.id, point:searchOrigin, maxDistance:sectionSearchDistance(radius), count:512, queryRadius:radius }) })
       }
       if (searchLease) {
         searchContinued = searchLease.resumed

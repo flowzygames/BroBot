@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "acdf602ccf7c6c000744e67505ff2a164ceeb5d0",
+  "sourceTree": "fc54a2ebe1879eb88bc99354ec6d429f756e119d",
+  "equivalentLocalTestCommit": "3b2b32f11c7369e882b578c2b3c0e162b6ddcd23",
+  "archive": "scoped-sphere-evidence.tar.gz",
+  "bytes": 130046,
+  "sha256": "a211d2c55748ab36d357ae61ebcb4b2037c8e74e473ac2239aba19dd66628af8",
+  "members": {
+    "selected/server.log": "79a4e68936ce0916356b3399e02f1161654d04c1c1183c1fab9273576932864d",
+    "selected/memory/memory.json": "c22835cc512956688782af17c62c2945dcd99a1437c18fd5c74b4d95e23a1204",
+    "selected/memory/events.jsonl": "f6cb04f746fc662a9b5c94aea314059c35f0f3238d5c45d95b8975a07df4887b",
+    "selected/result.json": "04a644cd0b3cd738a817bc8d964b66b3ce5ffe34758f64e57360de8327ffa96e",
+    "interrupted/server.log": "d32244f58e9afeba326e120fa82d723aa12b4838eed82e40ec5ee966c0ab64d9",
+    "interrupted/memory/memory.json": "4647301245a278fc097a49ed0a1bfa832b7d68a60767c253740ae533a720062c",
+    "interrupted/memory/events.jsonl": "4c2ebc093caa600ca429e735f34f0ad85ddd452d892a5ecc224dfba8d6ddb8b8",
+    "prepared/result.json": "9bf1e925b1d0f9f3d1ded4a6f61fef58ecb7c6404cf255f9292737213476b406",
+    "prepared/smoke-server.log": "fd2ab78e7158749c8b8c30184c84f851d5c70af7785e53c7f00ed468d67128c4",
+    "harness/full-check-initial.log": "2a02670da5aeced84626d11f90a6124d93f356185490cc27e1790c19d888ab42",
+    "harness/soil-plan-recheck.log": "15d0b8034291dc89de6b564684db5670195d922131dfefabc9a050586545ed7f",
+    "harness/full-check-recheck.log": "17aee0f8de61eef0a17ea062aa55e8e6fc8a761572f92949a5e398c12733d241",
+    "harness/interruption.json": "6640abe7cc999b11872b37fa564bfcc519942f66a8105da8f7dd3bf19ce50d2a",
+    "harness/seed-1276821265.log": "6d6170089bb96808745cbf898e78410e2d405d814a3bb8907b5aca74a8a52074",
+    "harness/seed-1276821265-recovery.log": "167eb49eb077029be2e6ddb8edce5e9fe322040f7d9f64a5fd19f9dd2952c088",
+    "harness/prepared-smoke.log": "04dd0fdcd2e90088cd132b1ce2819c362628508a3cd97b716a21e69cd4b25296",
+    "harness/cached-java.sh": "8ec5aa629e716a34ef68029ae1b262ef125c0ad57d248d8e0518bd9e6d56241a",
+    "tested-files.json": "a41eed4e297ba13327a777f02e07c70923a2ef1ce3d74137fe1edf235d9a20da"
+  },
+  "automatedChecks": {
+    "initialPassed": 1067,
+    "initialTotal": 1068,
+    "unchangedRecheckPassed": 1068,
+    "unchangedRecheckTotal": 1068
+  },
+  "prepared": {
+    "passed": 17,
+    "total": 17
+  },
+  "selectedNatural": {
+    "seed": "1276821265",
+    "passed": false,
+    "elapsedMs": 140199,
+    "steps": 77,
+    "scouts": 24,
+    "boundedSearchPages": 9,
+    "status": "failed",
+    "reason": "Exploration budget exhausted: The last route probe left gathering conditions unchanged. Try another bounded approach."
+  },
+  "interruptedAttempt": "separate partial gameplay run; no result, not counted as completed"
+}

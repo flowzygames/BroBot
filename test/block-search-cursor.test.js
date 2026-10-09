@@ -116,3 +116,47 @@ test('empty continuation pages retain uncertainty until traversal actually compl
   const final=cursor.scan({now:()=>0,accept:()=>false})
   assert.equal(final.termination,'traversal_complete');assert.equal(final.coverageComplete,true)
 })
+
+for (const [origin,radius] of [[new Vec3(.9,64.5,.2),1],[new Vec3(15.9,70.2,15.9),17],[new Vec3(-16.1,76,-48.1),17],[new Vec3(-13,76,-49),32]]) test(`scoped cursor covers exactly the requested sphere at ${origin} radius ${radius}`,async()=>{
+ const {sectionSearchDistance}=await import('../src/block-search.js');const bot=fixture({point:origin,dense:true}),center=origin.floored(),visited=new Set();
+ const original=bot.blockAt;bot.blockAt=p=>{assert.ok(p.distanceTo(center)<=radius);return original(p)};
+ const cursor=new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:origin,maxDistance:sectionSearchDistance(radius),queryRadius:radius});let page;
+ do{page=cursor.scan({now:()=>0,matchLimit:8192,accept:b=>{const key=b.position.toString();assert.equal(visited.has(key),false,'no repeated evaluated cells across pages');visited.add(key);return false}})}while(page.resumable);
+ const expected=new Set();for(let x=-radius;x<=radius;x++)for(let y=-radius;y<=radius;y++)for(let z=-radius;z<=radius;z++)if(x*x+y*y+z*z<=radius*radius)expected.add(center.offset(x,y,z).toString());
+ assert.deepEqual(visited,expected);assert.equal(page.coverageComplete,true);assert.equal(page.termination,'traversal_complete');
+});
+
+test('scoped matching budget ignores irrelevant dense sections while preserving exact boundary retry',async()=>{
+ const {sectionSearchDistance}=await import('../src/block-search.js'),bot=fixture({dense:true,point:new Vec3(-13,76,-49)});
+ const make=queryRadius=>new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:sectionSearchDistance(32),queryRadius});
+ const measure=cursor=>{let page,pages=0,evaluated=0;do{page=cursor.scan({now:()=>0,accept:()=>{evaluated++;return false}});pages++}while(page.resumable);return{pages,evaluated,page}};
+ const old=measure(make(null)),scoped=measure(make(32));assert.equal(scoped.evaluated,137065);assert.equal(scoped.pages,3);assert.ok(old.pages>scoped.pages*5);assert.equal(scoped.page.coverageComplete,true);
+ const cursor=make(32),first=[];const a=cursor.scan({now:()=>0,matchLimit:2,accept:b=>{first.push(b.position.toString());return false}});assert.equal(a.inspected,3);assert.equal(first.length,2);
+ const boundary=cursor.begin.offset(cursor.cell>>8,(cursor.cell>>4)&15,cursor.cell&15).toString();let seen;
+ cursor.scan({now:()=>0,matchLimit:1,accept:b=>{seen=b.position.toString();return false}});assert.equal(seen,boundary);assert.ok(!first.includes(seen));
+});
+
+test('missing columns and cells outside query sphere do not invalidate in-scope coverage',async()=>{
+ const {sectionSearchDistance}=await import('../src/block-search.js'),bot=fixture({point:new Vec3(8,72,8),dense:true});const readColumn=bot.world.getColumn,readBlock=bot.blockAt;
+ bot.world.getColumn=(x,z)=>x===0&&z===0?readColumn(x,z):null;
+ bot.blockAt=p=>p.distanceTo(bot.entity.position)>2?null:readBlock(p);
+ const options={matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:sectionSearchDistance(2),queryRadius:2};
+ const full=new BlockSearchCursor(bot,options).scan({now:()=>0,accept:()=>false});assert.equal(full.coverageComplete,true);assert.equal(full.unknownCells,0);assert.equal(full.unloadedColumns,0);
+ bot.blockAt=p=>p.equals(new Vec3(8,72,8))?null:readBlock(p);
+ const unknown=new BlockSearchCursor(bot,options).scan({now:()=>0,accept:()=>false});assert.equal(unknown.coverageComplete,false);assert.equal(unknown.unknownCells,1);
+ bot.world.getColumn=()=>null;
+ const missing=new BlockSearchCursor(bot,options).scan({now:()=>0,accept:()=>false});assert.equal(missing.coverageComplete,false);assert.equal(missing.unloadedColumns,1);
+});
+
+test('scoped traversal retains cancellation, time limits and candidate count semantics',async()=>{
+ const {sectionSearchDistance}=await import('../src/block-search.js'),bot=fixture({dense:true});const make=()=>new BlockSearchCursor(bot,{matching:registry.blocksByName.stone.id,point:bot.entity.position,maxDistance:sectionSearchDistance(8),queryRadius:8,count:2});
+ let time=0;const cursor=make(),limited=cursor.scan({now:()=>time++,budgetMs:2,accept:()=>false});assert.equal(limited.limited,true);assert.equal(limited.coverageComplete,false);
+ const stopped=make();assert.throws(()=>stopped.scan({check:()=>{throw Error('Stop')},accept:()=>false}),/Stop/);assert.equal(stopped.resumable,false);
+ const capped=make().scan({now:()=>0,accept:()=>true});assert.equal(capped.positions.length,2);assert.equal(capped.termination,'candidate_cap');assert.equal(capped.coverageComplete,false);
+});
+
+test('scoped search rejects radius bounds that cannot guarantee widened diagonal coverage',async()=>{
+ const {sectionSearchDistance}=await import('../src/block-search.js'),bot=fixture();
+ for(const queryRadius of [0,-1,65,NaN,Infinity,'32'])assert.throws(()=>new BlockSearchCursor(bot,{matching:1,point:bot.entity.position,maxDistance:sectionSearchDistance(32),queryRadius}),/query radius/);
+ assert.throws(()=>new BlockSearchCursor(bot,{matching:1,point:bot.entity.position,maxDistance:32,queryRadius:32}),/query radius/);
+});
