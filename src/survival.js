@@ -3,7 +3,7 @@ import { MINING_NO_GOAL_SPACE } from './mining-goal-space.js';
 import { STARTER_FOODS } from './starter-foods.js';
 import { STARTER_MOVEMENT_RADIUS, STARTER_STOP_RADIUS, STARTER_SCOUT_LIMIT, STARTER_LEG_RADIUS, STARTER_MIN_HEALTH } from './starter-limits.js';
 import { randomUUID } from 'node:crypto';
-import { recordScoutObservation, rankScouts, SCOUT_GOAL_POLICY } from './scout-coverage.js';
+import { recordScoutObservation, rankScouts, isNovelScoutEndpoint, SCOUT_GOAL_POLICY } from './scout-coverage.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 export const STARTER_LOG_RADIUS = 48;
@@ -414,7 +414,7 @@ export class SurvivalJob {
           const endpoint = this.snapshot().position;
           if (endpoint && ['x','y','z'].every(k => Number.isFinite(endpoint[k])) && distance(endpoint, decision.scoutOrigin ?? before.position) >= decision.args.distance - 2) {
             completedEndpoint = { ...endpoint };
-            completedNovel = !(this.job.observedPositions ?? []).some(p => distance(p, endpoint) <= 4);
+            completedNovel = isNovelScoutEndpoint(this.job.observedPositions, endpoint, decision.args.distance);
             this.job.lastScoutSuccess = { completed: true, adaptive: decision.args.distance < Math.min(64, 12 * (1 + Math.floor((this.job.scouts - 1) / 2))), endpoint: { ...endpoint }, distance: decision.args.distance,
               novel: completedNovel };
           }

@@ -1425,3 +1425,34 @@ test('only a still-valid complete-empty hint ignores global terrain churn after 
   else assert.equal(f.actions[3],'collect',mode);
  }
 });
+
+test('a fresh short landing grows the next adaptive probe instead of remaining at four blocks',async()=>{
+ const f=fixture({maxSteps:2}),requested=[];let seeded=false;
+ f.job.observe=async()=>{if(!seeded){seeded=true;f.job.job.scouts=6;f.job.job.lastScoutSuccess={completed:true,adaptive:true,novel:false,distance:4,endpoint:{...f.state.position}};}return {}};
+ f.job.execute=async(name,args)=>{
+  assert.equal(name,'explore');requested.push(args.distance);
+  const offsets={north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]},[dx,dz]=offsets[args.direction],travel=args.distance-1;
+  f.state.position.x+=dx*travel;f.state.position.z+=dz*travel;
+  return{explored:true,distance:travel,direction:args.direction,directions_tried:[args.direction],route_attempts:[{direction:args.direction,status:'verified'}]};
+ };
+ f.job.start();await f.job.promise;assert.deepEqual(requested,[4,8]);assert.equal(f.job.state().scoutAttempts[0].novel,true);assert.equal(f.job.state().steps,2);
+});
+
+test('short scout landing near an earlier observed destination preserves non-novel continuity',async()=>{
+ const f=fixture({maxSteps:2}),requested=[];let seeded=false;
+ f.job.observe=async()=>{if(!seeded){seeded=true;f.job.job.scouts=6;f.job.job.lastScoutSuccess={completed:true,adaptive:true,novel:false,distance:4,endpoint:{...f.state.position}};}return {}};
+ f.job.execute=async(name,args)=>{
+  requested.push(args.distance);const [dx,dz]=({north:[0,-1],east:[1,0],south:[0,1],west:[-1,0]})[args.direction];
+  const endpoint={x:f.state.position.x+dx*3,y:f.state.position.y,z:f.state.position.z+dz*3};
+  f.job.job.observedPositions.push({...endpoint,x:endpoint.x+.1});f.state.position=endpoint;
+  return{explored:true,distance:3,direction:args.direction,directions_tried:[args.direction],route_attempts:[{direction:args.direction,status:'verified'}]};
+ };
+ f.job.start();await f.job.promise;assert.deepEqual(requested,[4,4]);assert.ok(f.job.state().scoutAttempts.every(a=>a.novel===false));
+});
+
+for(const mode of ['incomplete','too-short','malformed'])test(`short scout ${mode} result cannot establish adaptive growth`,async()=>{
+ const f=fixture({maxSteps:1});f.job.observe=async()=>({});
+ f.job.execute=async()=>{f.state.position.x+=mode==='too-short'?1:3;return{explored:mode==='incomplete'?false:true,distance:mode==='malformed'?NaN:3}};
+ f.job.start();f.job.job.lastScoutSuccess={completed:true,adaptive:true,novel:false,distance:4,endpoint:{...f.state.position}};
+ await f.job.promise;assert.equal(f.job.state().lastScoutSuccess.novel,false);
+});

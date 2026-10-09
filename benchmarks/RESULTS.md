@@ -1,8 +1,14 @@
+# Latest complete development evaluation — October 9, 2026
+
+Frozen source `a2bdfd00`: **1,076 automated checks**, **17/17 prepared phases**, **13/20 known worlds** and **2/3 separate original worlds**. This is below frozen `fb69b493` at 14/20 and 3/3, with no paired gains. Known loss: `1744809425`; original loss: `718224`. One interrupted original-world attempt was explicitly recovered without replacing any completed outcome. [All results, complete logs and limitations](results/short-scout-2026-10-09/README.md).
+
+The public Core 0.2 package remains unchanged at 11/20 known worlds and 1/3 originals. This is development evidence, not stable 1.0 or a claim of improved reliability. The records below are historical snapshots.
+
 # Current release and source follow-up
 
 BroBot Core0.2 download: **11/20 known worlds**, separate original trio **1/3**, prepared integration **17/17**,346 automated checks. [Complete frozen evidence](results/core02-2026-10-04/README.md). Core0.1 previously scored10/20 and2/3 respectively; the release is not uniformly better.
 
-The latest complete development evaluation used frozen source `5b66f11`: **454 automated checks**, **17/17 prepared phases**, **13/20 known worlds** and **3/3 separate originals**. All outcomes and full event journals are retained in [the complete 454-source archive](results/recovery-full454-2026-10-04/README.md). There were two paired known-world gains and no lost passes versus the prior 426 source, but run variability prevents isolated causal claims. One passing run took skeleton damage. No natural run activated canopy recovery; its controlled prepared proof remains separate. Later placement and pickup material-progress fixes are not included in these scores.
+An earlier complete development evaluation used frozen source `5b66f11`: **454 automated checks**, **17/17 prepared phases**, **13/20 known worlds** and **3/3 separate originals**. All outcomes and full event journals are retained in [the complete 454-source archive](results/recovery-full454-2026-10-04/README.md). There were two paired known-world gains and no lost passes versus the prior 426 source, but run variability prevents isolated causal claims. One passing run took skeleton damage. No natural run activated canopy recovery; its controlled prepared proof remains separate. Later placement and pickup material-progress fixes are not included in these scores.
 
 Earlier health interruption, mining preflight and injury-reporting evidence remains historical: [health](results/health-interrupt-2026-10-04/README.md), [mining](results/mining-preflight-2026-10-04/README.md), [pre-dig](results/pre-dig-recheck-2026-10-04/README.md), [injury reporting](results/injury-reporting-2026-10-04/README.md). None replaces a failed frozen release result.
 
