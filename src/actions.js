@@ -37,6 +37,12 @@ const CRAFT_HINTS = ['oak_planks', 'spruce_planks', 'birch_planks', 'jungle_plan
 const SMELTS = { raw_iron: 'iron_ingot', iron_ore: 'iron_ingot', deepslate_iron_ore: 'iron_ingot', raw_gold: 'gold_ingot', gold_ore: 'gold_ingot', deepslate_gold_ore: 'gold_ingot', nether_gold_ore: 'gold_ingot', raw_copper: 'copper_ingot', copper_ore: 'copper_ingot', deepslate_copper_ore: 'copper_ingot', sand: 'glass', red_sand: 'glass', cobblestone: 'stone', stone: 'smooth_stone', netherrack: 'nether_brick', clay_ball: 'brick', clay: 'terracotta', cactus: 'green_dye', wet_sponge: 'sponge', beef: 'cooked_beef', porkchop: 'cooked_porkchop', chicken: 'cooked_chicken', mutton: 'cooked_mutton', rabbit: 'cooked_rabbit', cod: 'cooked_cod', salmon: 'cooked_salmon', potato: 'baked_potato', kelp: 'dried_kelp' }
 
 export function visibleBlockFace (world, eye, target, reach = 4.5) {
+  // Every sampled face lies inside this cube. Reject only clearly distant
+  // eyes before allocating seven centers for each expanded pathfinding node.
+  // Keep boundary/diagonal cases and all live ray checks on the original path.
+  if (Number.isFinite(reach) && (eye.x < target.x - reach || eye.x > target.x + 1 + reach
+    || eye.y < target.y - reach || eye.y > target.y + 1 + reach
+    || eye.z < target.z - reach || eye.z > target.z + 1 + reach)) return false
   const centers = [target.offset(0.5, 0.5, 0.5), ...DIRECTIONS.map(d => target.offset(0.5 + d.x * 0.499, 0.5 + d.y * 0.499, 0.5 + d.z * 0.499))]
   for (const center of centers) {
     const delta = center.minus(eye)
