@@ -90,7 +90,7 @@ test('inconclusive witness invokes normal reverse A* and retains its failure pha
  const f=fixture();let calls=0;
  f.bot.pathfinder.getPathFromTo=function*(){yield{result:++calls===1?{status:'success',path:f.forward}:{status:'noPath',path:[]}};};
  await assert.rejects(planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(3,64,0),new pf.goals.GoalBlock(-1,64,0)),e=>{
-  assert.deepEqual(e.result.route_failure,{phase:'reverse',planner_status:'noPath'});return true;
+  assert.deepEqual(e.result.route_failure,{phase:'reverse',planner_status:'noPath',reverse_witness:{status:'declined',reason:'final_edge_unverified',forward_nodes:3,validated_edges:2}});return true;
  });assert.equal(calls,2);
 });
 test('fixed endpoint still performs reverse-first A* with no witness shortcut',async()=>{
@@ -106,7 +106,7 @@ test('cancellation during witness is checked before any fallback or acceptance',
  f.movements.getNeighbors=n=>{c.abort();return neighbors(n);};
  f.bot.pathfinder.getPathFromTo=function*(){calls++;yield{result:{status:'success',path:f.forward}};};
  await assert.rejects(planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(3,64,0),f.origin,{signal:c.signal}),e=>{
-  assert.equal(e.name,'AbortError');assert.deepEqual(e.result.route_failure,{phase:'reverse'});return true;
+  assert.equal(e.name,'AbortError');assert.deepEqual(e.result.route_failure,{phase:'reverse',reverse_witness:{status:'declined',reason:'cancelled',forward_nodes:3,validated_edges:0}});return true;
  });assert.equal(calls,1);assert.equal(f.bot.eventNames().length,0);
 });
 
@@ -122,7 +122,7 @@ test('global deadline expiry during witness refuses fallback and keeps reverse p
  f.movements.getNeighbors=n=>{const result=neighbors(n);now=2000;return result;};
  f.bot.pathfinder.getPathFromTo=function*(){calls++;yield{result:{status:'success',path:f.forward}};};
  await assert.rejects(planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(3,64,0),f.origin),e=>{
-  assert.equal(e.message,'Return-path planning budget exhausted');assert.deepEqual(e.result.route_failure,{phase:'reverse'});return true;
+  assert.equal(e.message,'Return-path planning budget exhausted');assert.deepEqual(e.result.route_failure,{phase:'reverse',reverse_witness:{status:'declined',reason:'planning_deadline',forward_nodes:3,validated_edges:0}});return true;
  });assert.equal(calls,1);assert.equal(f.bot.eventNames().length,0);
 });
 
@@ -203,4 +203,122 @@ test('blocked final diagonal is not replaced by a guessed starting cell',()=>{
  for(const [x,z] of [[0,1],[1,0]])for(const y of [64,65])f.cells.set(new Vec3(x,y,z).toString(),'stone');
  assert.equal(reverseRouteWitness(f.bot,f.movements,[new Vec3(1,64,1)],new pf.goals.GoalBlock(0,64,0),{deadline:1000,now:()=>0}),null);
  assert.equal(f.bot.eventNames().length,0);
+});
+
+const witnessRecord = (reason, forward_nodes, validated_edges = 0, extra = {}) => ({
+ status: ['initial_endpoint','retained_corridor','final_edge'].includes(reason) ? 'success' : 'declined', reason,
+ ...(forward_nodes === undefined ? {} : {forward_nodes}), validated_edges, ...extra
+});
+function observed(f, {forward=f.forward,origin=f.origin,...options}={}) {
+ const records=[];
+ const result=reverseRouteWitness(f.bot,f.movements,forward,origin,{deadline:1000,now:()=>0,...options,onDiagnostic:record=>{
+  assert.equal(f.bot.eventNames().length,0,'diagnostics run only after witness listeners are removed');records.push(record);
+ }});
+ assert.equal(records.length,1);return {result,record:records[0]};
+}
+for(const [reason,x,edges] of [['initial_endpoint',3,0],['retained_corridor',1,2],['final_edge',0,3]]) test(`witness success diagnostic ${reason} has exact validated counts`,()=>{
+ const f=fixture();let clocks=0,validators=0,neighbors=0;
+ const get=f.movements.getNeighbors.bind(f.movements);f.movements.getNeighbors=n=>{neighbors++;return get(n);};
+ const {result,record}=observed(f,{origin:new pf.goals.GoalBlock(x,64,0),now:()=>{clocks++;return 0;},validateNode:()=>{validators++;return true;}});
+ assert.deepEqual(record,witnessRecord(reason,3,edges));assert.equal(result.path.length,edges);assert.equal(neighbors,edges);
+ // Existing samples: initial budget, two refresh checks, three per edge,
+ // plus the endpoint check when accepting the initial node or a corridor node.
+ assert.equal(clocks,reason==='initial_endpoint'?4:reason==='retained_corridor'?10:12);
+ if(reason!=='final_edge')assert.equal(validators,edges);
+});
+for(const [reason,change,options,expectedNodes] of [
+ ['policy',f=>f.movements.canDig=true,{},undefined],
+ ['input',()=>{},{forward:[]},0],
+ ['input',()=>{},{forward:null},undefined],
+ ['input',()=>{},{origin:{}},3],
+ ['input',f=>f.forward[0].toBreak=[{}],{},3],
+ ['cap',()=>{},{maxNodes:2},3],
+ ['cap',()=>{},{maxNodes:NaN},3],
+ ['cap',()=>{},{budgetMs:NaN},3],
+ ['cancelled',()=>{},{signal:{aborted:true}},3],
+ ['local_deadline',()=>{},{budgetMs:0},3],
+ ['event',f=>{f.movements.getNeighbors=()=>{f.bot.emit('blockUpdate');return [];};},{},3],
+ ['context',f=>{f.movements.getNeighbors=()=>{f.bot.world={};return [];};},{},3],
+ ['corridor_unverified',f=>{f.movements.getNeighbors=()=>[];},{},3],
+ ['final_edge_unverified',()=>{},{origin:new pf.goals.GoalBlock(-1,64,0)},3],
+ ['exception',f=>{f.movements.getNeighbors=()=>{throw Error('private payload');};},{},3]
+]) test(`witness decline ${reason} reports only bounded evidence (${expectedNodes})`,()=>{
+ const f=fixture();change(f);const {result,record}=observed(f,options);
+ assert.equal(result,null);assert.deepEqual(record,witnessRecord(reason,expectedNodes,reason==='final_edge_unverified'?2:0));
+ assert.equal(JSON.stringify(record).includes('private'),false);
+});
+test('witness counts distinguish a hard-capped oversized input from an actual 64-node proof',()=>{
+ const f=fixture();
+ const oversize=observed(f,{forward:Array.from({length:65},(_,i)=>new Vec3(i+1,64,0)),maxNodes:1000});
+ assert.equal(oversize.result,null);assert.deepEqual(oversize.record,witnessRecord('cap',64,0,{forward_nodes_capped:true}));
+ const exact=observed(f,{forward:Array.from({length:64},(_,i)=>new Vec3(i+1,64,0)),origin:new pf.goals.GoalBlock(0,64,0)});
+ assert.equal(exact.result.path.length,64);assert.deepEqual(exact.record,witnessRecord('final_edge',64,64));
+});
+test('a later corridor rejection preserves only the already validated edge count',()=>{
+ const f=fixture(),get=f.movements.getNeighbors.bind(f.movements);let calls=0;
+ f.movements.getNeighbors=n=>++calls===1?get(n):[];
+ const {result,record}=observed(f);assert.equal(result,null);assert.deepEqual(record,witnessRecord('corridor_unverified',3,1));
+});
+test('diagnostic callbacks cannot change returned paths or swallow original cleanup errors',()=>{
+ for(const decline of [false,true]) {
+  const f=fixture();let callbacks=0;if(decline)f.movements.getNeighbors=()=>{throw Error('movement failed');};
+  const result=f.run({onDiagnostic:record=>{callbacks++;assert.equal(f.bot.eventNames().length,0);record.reason='tampered';throw Error('diagnostic failed');}});
+  assert.equal(callbacks,1);if(decline)assert.equal(result,null);else assert.equal(result.path.length,2);
+ }
+ const f=fixture(),original=Error('cleanup failure');let callbacks=0;
+ const remove=f.bot.removeListener.bind(f.bot);f.bot.removeListener=(...args)=>{remove(...args);throw original;};
+ assert.throws(()=>f.run({onDiagnostic:record=>{callbacks++;assert.deepEqual(record,witnessRecord('exception',3,2));throw Error('diagnostic failed');}}),e=>e===original);
+ assert.equal(callbacks,1);
+});
+test('preflight refusal retains short circuit ordering without reading later input or clock',()=>{
+ const f=fixture();f.movements.canDig=true;let inputReads=0,clocks=0;
+ const forward=new Proxy([], {get(){inputReads++;throw Error('later input inspected');}});
+ const {record}=observed(f,{forward,now:()=>{clocks++;return 0;},signal:{get aborted(){throw Error('later cancellation inspected');}}});
+ assert.deepEqual(record,witnessRecord('policy'));assert.equal(inputReads,0);assert.equal(clocks,0);
+});
+test('event, cancellation, deadline and context keep their original precedence and clock sampling',()=>{
+ for(const mode of ['event','cancelled','deadline','context']) {
+  const f=fixture();let clocks=0,abortReads=0;
+  const signal={get aborted(){abortReads++;return mode==='event'||mode==='cancelled';}};
+  // Refresh is before the second unchanged check, after the first succeeds.
+  f.movements.allowEntityDetection=true;f.movements.clearCollisionIndex=()=>{};
+  let armed=false;f.movements.updateCollisionIndex=()=>{armed=true;f.bot.world={};if(mode==='event')f.bot.emit('blockUpdate');};
+  const {record}=observed(f,{signal:{get aborted(){if(!armed)return false;return signal.aborted;}},now:()=>{clocks++;return armed&&mode==='deadline'?12:0;}});
+  assert.deepEqual(record,witnessRecord(mode==='deadline'?'local_deadline':mode,3));
+  assert.equal(clocks,['event','cancelled'].includes(mode)?2:3);assert.equal(abortReads,mode==='event'?0:1);
+ }
+});
+test('missing edge skips the original trailing guard even when its validator cancels',()=>{
+ const f=fixture(),controller=new AbortController();let clocks=0,validations=0;
+ const {result,record}=observed(f,{signal:controller.signal,now:()=>{clocks++;return 0;},validateNode:()=>{validations++;controller.abort();return false;}});
+ assert.equal(result,null);assert.deepEqual(record,witnessRecord('corridor_unverified',3));assert.equal(clocks,5);assert.equal(validations,1);
+});
+test('failed input access preserves its original throw and still reports an exception once',()=>{
+ const f=fixture(),error=Error('input accessor failed');let callbacks=0;
+ Object.defineProperty(f.movements,'canDig',{get(){throw error;}});
+ assert.throws(()=>f.run({onDiagnostic:record=>{callbacks++;assert.deepEqual(record,witnessRecord('exception'));}}),e=>e===error);
+ assert.equal(callbacks,1);
+});
+test('successful fallback retains the inconclusive witness without cross-call leakage',async t=>{
+ const {planReturnablePath}=await import('../src/navigation-guards.js');t.mock.method(performance,'now',()=>0);
+ const f=fixture();let calls=0;
+ f.movements.getNeighbors=()=>[];
+ f.bot.pathfinder.getPathFromTo=function*(){calls++;yield{result:{status:'success',path:calls%2?f.forward:[new Vec3(0,64,0)]}};};
+ const result=await planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(3,64,0),f.origin);
+ assert.equal(calls,2);assert.deepEqual(result.reverse_witness,witnessRecord('corridor_unverified',3));
+ const fixed=await planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(0,64,0),f.origin,{fixedEndpoint:new Vec3(0,64,0)});
+ assert.equal(Object.hasOwn(fixed,'reverse_witness'),false);
+ f.bot.pathfinder.getPathFromTo=function*(){yield{result:{status:'noPath',path:[]}};};
+ await assert.rejects(planReturnablePath(f.bot,f.movements,new pf.goals.GoalBlock(3,64,0),f.origin),error=>{
+  assert.deepEqual(error.result.route_failure,{phase:'forward',planner_status:'noPath'});return true;
+ });
+});
+
+test('one existing clock sample distinguishes witness slice expiry from caller planning expiry',()=>{
+ for(const [time,reason]of[[12,'local_deadline'],[1000,'planning_deadline'],[NaN,'deadline']]){
+  const f=fixture();let clocks=0,afterExpansion=false;
+  f.movements.getNeighbors=()=>{afterExpansion=true;return [];};
+  const {result,record}=observed(f,{now:()=>{clocks++;return afterExpansion?time:0;}});
+  assert.equal(result,null);assert.deepEqual(record,witnessRecord(reason,3));assert.equal(clocks,5);
+ }
 });

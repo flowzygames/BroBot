@@ -1,5 +1,5 @@
 import { reverseRouteWitness } from './reverse-route-witness.js'
-import { annotateRouteFailure, routeFailure } from './route-diagnostics.js'
+import { annotateRouteFailure, routeFailure, reverseWitness } from './route-diagnostics.js'
 import { Vec3 } from 'vec3'
 
 // Aquatic plants and bubble columns carry water even when isWaterlogged is false.
@@ -16,6 +16,7 @@ const abortError = () => Object.assign(new Error('Action cancelled'), { name: 'A
 export async function planReturnablePath (bot, movements, goal, origin, { signal, planningBudget = 1600, fixedEndpoint = null, validateNode = null, onCertifiedPaths = null, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0)) } = {}) {
   if (typeof bot.pathfinder.getPathFromTo !== 'function') throw new Error('Return-path planning is unavailable; refusing collection travel')
   const deadline = performance.now() + planningBudget
+  let witnessDiagnostic = null
   const check = () => { if (signal?.aborted) throw abortError(); if (performance.now() >= deadline) throw new Error('Return-path planning budget exhausted') }
   const plan = async (start, target, phase) => {
     let result
@@ -35,7 +36,7 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
       if (result.path.some(p => p.toBreak?.length || p.toPlace?.length)) throw new Error('Collection route would modify terrain')
       if (validateNode && result.path.some(p => !validateNode(p))) throw new Error('No verified returnable walking route (unsafe node)')
       return result
-    } catch (error) { throw annotateRouteFailure(error, phase, result?.status) }
+    } catch (error) { throw annotateRouteFailure(error, phase, result?.status, phase === 'reverse' ? witnessDiagnostic : null) }
   }
   // Pickup already validates an exact standing cell. A sealed drop pocket can
   // exhaust a huge forward search even though its reverse component is tiny.
@@ -55,12 +56,12 @@ export async function planReturnablePath (bot, movements, goal, origin, { signal
   if (!reverse) {
     // Try only freshly generated reverse edges on the already observed forward
     // corridor. Inconclusive evidence keeps the original reverse search.
-    const witness = reverseRouteWitness(bot, movements, forward.path, origin, { deadline, signal, validateNode })
-    try { check() } catch (error) { throw annotateRouteFailure(error, 'reverse') }
+    const witness = reverseRouteWitness(bot, movements, forward.path, origin, { deadline, signal, validateNode, onDiagnostic: value => { witnessDiagnostic = reverseWitness(value) } })
+    try { check() } catch (error) { throw annotateRouteFailure(error, 'reverse', undefined, witnessDiagnostic) }
     reverse = witness ?? await plan(endpoint, origin, 'reverse')
   }
   if (onCertifiedPaths) { onCertifiedPaths({forward:forward.path.map(p=>({x:p.x,y:p.y,z:p.z})),reverse:reverse.path.map(p=>({x:p.x,y:p.y,z:p.z}))});check() }
-  return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length }
+  return { endpoint, forwardNodes: forward.path.length, reverseNodes: reverse.path.length, ...(witnessDiagnostic ? { reverse_witness: witnessDiagnostic } : {}) }
 }
 
 // Ranked scout alternatives share one planning window. Failed probes never
