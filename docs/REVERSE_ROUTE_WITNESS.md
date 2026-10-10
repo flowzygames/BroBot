@@ -6,12 +6,12 @@ Selected route-phase diagnostics showed mostly reverse/partial planning exhausti
 
 After an ordinary forward route passes existing validation, the helper considers its retained nodes in reverse order. For each step it calls the pinned `Movements.getNeighbors` afresh and selects an actually generated matching neighbor. The generated Move, including remaining scaffolding and movement metadata, becomes the next source. No forward jump, drop or diagonal is assumed reversible.
 
-The certificate succeeds only when the supplied origin goal accepts a node. The forward path omits its initial node; no floored or raised start is guessed or appended. If no retained node satisfies the origin, the normal reverse search still runs. Initial endpoint acceptance follows A*'s existing initial-node exception.
+The certificate succeeds only when the supplied origin goal accepts a node. The forward path omits its initial node; no floored or raised start is guessed or appended. If the retained corridor ends outside the origin goal, one final fresh neighbor expansion may prove a valid edge into that goal. Only an actually generated, safe, validated neighbor is accepted. No second expansion or guessed connection is attempted; otherwise the normal reverse search still runs. Initial endpoint acceptance follows A*'s existing initial-node exception.
 
 ## Conservative gates
 
 - Real pinned Movements instance, digging/towers/parkour/free motion disabled, empty scaffolding, default unlimited search radius.
-- At most 64 retained forward nodes; integer coordinates and no break/place/parkour metadata.
+- At most 64 retained forward nodes and 64 reverse edges (up to 63 corridor edges plus one final edge); integer coordinates and no break/place/parkour metadata.
 - Every fresh reverse edge has finite nonnegative cost, no terrain edit and passes the caller's node validator.
 - Entity collision index refresh matches the reverse planner.
 - No awaits or certificate reuse. World, entity, connection, planner and dimension identity must remain unchanged. Observed terrain/chunk/session/entity events invalidate the proof. All temporary observers are removed.

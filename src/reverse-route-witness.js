@@ -49,8 +49,17 @@ export function reverseRouteWitness(bot, movements, forward, origin, {
       path.push(next); current = next;
       if (origin.isEnd(current)) return unchanged() ? { path } : null;
     }
-    // The forward path omits its initial node. Never invent a floored/raised one.
-    return null;
+    // The forward path omits its initial node. Do not guess that coordinate:
+    // one fresh directed edge may instead prove arrival at the caller's goal.
+    // At most (forward.length - 1) corridor edges plus this final edge, <= 64.
+    if (!unchanged()) return null;
+    const neighbors = movements.getNeighbors(current);
+    if (!unchanged()) return null;
+    const home = neighbors.find(node => clean(node) && Number.isFinite(node.cost) && node.cost >= 0 &&
+      (!validateNode || validateNode(node)) && origin.isEnd(node));
+    if (!home || !unchanged()) return null;
+    path.push(home);
+    return { path };
   } catch { return null; }
   finally { for (const event of events) bot.removeListener(event, invalidate); }
 }
