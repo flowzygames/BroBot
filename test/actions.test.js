@@ -9,6 +9,140 @@ import { ActionRunner } from '../src/runner.js'
 
 const registry = minecraftData('1.21.8')
 
+function witnessActionFixture ({ decline = false, forwardStatus = 'success', reverseStatus = 'success' } = {}) {
+  const bot = fakeBot(), logs = [], counts = { plans: 0, expansions: 0 }
+  const forward = [1, 2, 3, 4].map(x => new Vec3(x, 64, 0))
+  bot.pathfinder.searchRadius = -1
+  bot.pathfinder.setMovements = movement => {
+    movement.getNeighbors = node => {
+      counts.expansions++
+      return decline ? [] : [Object.assign(new Vec3(node.x - 1, node.y, node.z), { cost: 1 })]
+    }
+  }
+  bot.pathfinder.getPathFromTo = function * () {
+    const first = ++counts.plans === 1
+    yield { result: { status: first ? forwardStatus : reverseStatus, path: first ? forward : [new Vec3(0, 64, 0)] } }
+  }
+  const actions = createActions(bot, { log: (...args) => logs.push(args) })
+  return { bot, logs, counts, actions }
+}
+
+test('returnable route logs exactly one normalized successful reverse witness before movement', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { bot, logs, counts, actions } = witnessActionFixture()
+  const goto = bot.pathfinder.goto
+  bot.pathfinder.goto = async goal => {
+    assert.equal(logs.length, 1)
+    return goto(goal)
+  }
+  const result = await actions.execute('explore', { direction: 'east', distance: 4, returnable: true })
+  assert.equal(result.explored, true)
+  assert.equal(Object.hasOwn(result, 'reverse_witness'), false)
+  assert.deepEqual(counts, { plans: 1, expansions: 3 })
+  assert.deepEqual(logs, [['route', 'Returnable walking route verified', {
+    reverse_witness: { status: 'success', reason: 'retained_corridor', forward_nodes: 4, validated_edges: 3 }
+  }]])
+})
+
+test('returnable route logs a declined reverse witness after successful reverse A* fallback', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { logs, counts, actions } = witnessActionFixture({ decline: true })
+  const result = await actions.execute('explore', { direction: 'east', distance: 4, returnable: true })
+  assert.equal(result.explored, true)
+  assert.deepEqual(counts, { plans: 2, expansions: 1 })
+  assert.deepEqual(logs, [['route', 'Returnable walking route verified', {
+    reverse_witness: { status: 'declined', reason: 'corridor_unverified', forward_nodes: 4, validated_edges: 0 }
+  }]])
+})
+
+for (const phase of ['forward', 'reverse']) test(`failed ${phase} planning never emits a reverse-witness success log`, async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { bot, logs, counts, actions } = witnessActionFixture({ decline: true, [`${phase}Status`]: 'noPath' })
+  let moves = 0
+  bot.pathfinder.goto = async () => { moves++ }
+  await assert.rejects(actions.execute('explore', { direction: 'east', distance: 4, returnable: true }), /No verified scout route/)
+  assert.deepEqual(logs, [])
+  assert.equal(moves, 0)
+  assert.equal(counts.plans, phase === 'forward' ? 1 : 2)
+})
+
+test('post-planning ownership rejection prevents a reverse-witness success log', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { bot, logs, counts, actions } = witnessActionFixture()
+  let owned = true, moves = 0
+  const configure = bot.pathfinder.setMovements
+  bot.pathfinder.setMovements = movement => {
+    configure(movement)
+    const neighbors = movement.getNeighbors
+    movement.getNeighbors = node => {
+      const next = neighbors(node)
+      if (counts.expansions === 3) owned = false
+      return next
+    }
+  }
+  bot.pathfinder.goto = async () => { moves++ }
+  await assert.rejects(actions.execute('explore', { direction: 'east', distance: 4, returnable: true }, undefined, { ownershipGuard: () => owned }), /physical ownership changed/)
+  assert.deepEqual(counts, { plans: 1, expansions: 3 })
+  assert.deepEqual(logs, [])
+  assert.equal(moves, 0)
+})
+
+test('post-planning endpoint rejection prevents a reverse-witness success log', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  const { bot, logs, counts } = witnessActionFixture()
+  let radius = 8, moves = 0
+  const configure = bot.pathfinder.setMovements
+  bot.pathfinder.setMovements = movement => {
+    configure(movement)
+    const neighbors = movement.getNeighbors
+    movement.getNeighbors = node => {
+      const next = neighbors(node)
+      if (counts.expansions === 3) radius = 3
+      return next
+    }
+  }
+  bot.pathfinder.goto = async () => { moves++ }
+  const actions = createActions(bot, {
+    log: (...args) => logs.push(args),
+    movementBoundary: () => ({ center: new Vec3(.5, 64, .5), radius })
+  })
+  await assert.rejects(actions.execute('explore', { direction: 'east', distance: 4, returnable: true }, undefined, { starterScope: 'job/witness-log' }), /Verified route endpoint is outside/)
+  assert.deepEqual(counts, { plans: 1, expansions: 3 })
+  assert.deepEqual(logs, [])
+  assert.equal(moves, 0)
+})
+
+test('fixed pickup routes never emit reverse-witness success logs', async () => {
+  const bot = fakeBot(), logs = [], starts = []
+  for (const x of [0, 1, 2]) bot.putBlock('stone', new Vec3(x, 63, 0))
+  bot.entities[2] = { id: 2, name: 'item', position: new Vec3(2.5, 64, .5) }
+  bot.pathfinder.searchRadius = -1
+  bot.pathfinder.getPathFromTo = function * (movement, start, goal) {
+    starts.push(start.clone())
+    yield { result: { status: 'success', path: [new Vec3(goal.x, goal.y, goal.z)] } }
+  }
+  const goto = bot.pathfinder.goto
+  bot.pathfinder.goto = async goal => { await goto(goal); delete bot.entities[2]; bot.addItem('oak_log') }
+  const result = await createActions(bot, { log: (...args) => logs.push(args) }).execute('pickup', { radius: 8 })
+  assert.equal(result.inventory_changes.oak_log, 1)
+  assert.deepEqual(starts.map(p => p.toArray()), [[2, 64, 0], [.5, 64, .5]])
+  assert.equal(logs.some(args => args[0] === 'route' || Object.hasOwn(args[2] ?? {}, 'reverse_witness')), false)
+})
+
+test('throwing reverse-witness loggers cannot change successful certification or movement', async t => {
+  t.mock.method(performance, 'now', () => 1000)
+  for (const decline of [false, true]) {
+    const { bot, counts } = witnessActionFixture({ decline })
+    let logs = 0
+    const actions = createActions(bot, { log: () => { logs++; throw Error('journal unavailable') } })
+    const result = await actions.execute('explore', { direction: 'east', distance: 4, returnable: true })
+    assert.equal(result.explored, true)
+    assert.equal(logs, 1)
+    assert.deepEqual(result.position, { x: 4.5, y: 64, z: .5 })
+    assert.deepEqual(counts, decline ? { plans: 2, expansions: 1 } : { plans: 1, expansions: 3 })
+  }
+})
+
 test('foodless automatic scouting disables sprint throughout planning and execution',async()=>{
  for(const food of [20,11,undefined]){
   const bot=fakeBot();bot.food=food;const seen=[];let current;

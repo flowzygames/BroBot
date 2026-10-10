@@ -1,4 +1,4 @@
-import { routeFailure } from './route-diagnostics.js'
+import { reverseWitness, routeFailure } from './route-diagnostics.js'
 import { EmptyCollectionRetry } from './empty-collection-retry.js'
 import { randomUUID } from 'node:crypto'
 import { retainOperationResult } from './action-error-result.js'
@@ -296,6 +296,10 @@ export function createActions (bot, { memory, log = () => {}, movementBoundary =
       const planned = await planReturnablePath(bot, movements, goal, new goals.GoalNear(home.x, home.y, home.z, 1), { signal: ctx.signal, planningBudget: Math.min(1600, 7000 - used, planningBudget), fixedEndpoint, validateNode, onCertifiedPaths, yieldControl: () => pause(ctx, 0) })
       checked(ctx)
       assert(!validateNode||validateNode(planned.endpoint),'Verified route endpoint is outside the starter scout boundary')
+      try {
+        const witness = reverseWitness(planned.reverse_witness)
+        if (witness) log('route', 'Returnable walking route verified', { reverse_witness: witness })
+      } catch {}
       return new goals.GoalBlock(planned.endpoint.x, planned.endpoint.y, planned.endpoint.z)
     } catch (error) {
       if (used + performance.now() - start >= 7000) error.code = 'COLLECTION_PLANNING_LIMIT'
